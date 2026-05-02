@@ -1,0 +1,9 @@
+{
+  "nodes": [
+    {"id": "AI_Automation_Roadmap", "path": "10_Wiki/Projects/AI_System_Build/Roadmap.md", "type": "wiki", "tags": ["AI_연구", "로드맵"]}
+  ],
+  "edges": [
+    {"source": "AI_Automation_Roadmap", "target": "10_Wiki/Projects/AI_System_Build", "relationship": "parent"},
+    {"source": "AI_Automation_Roadmap", "target": "00_Raw/20260502_AI자동화시스템_로드맵.md", "relationship": "derived_from"}
+  ]
+}
