@@ -143,6 +143,21 @@
         "OneDrive",
         "Policy"
       ]
+    },
+    {
+      "id": "170be38f-6107",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_Application_UI_Refactoring_and_Dev_Environment_Stabilization.md",
+      "type": "wiki",
+      "title": "Teams Application UI Refactoring and Dev Environment Stabilization",
+      "tags": [
+        "Teams",
+        "UI/UX",
+        "React",
+        "Development",
+        "Authentication",
+        "Debugging",
+        "Koreanization"
+      ]
     }
   ],
   "edges": [
@@ -254,6 +269,16 @@
     {
       "source": "66e74800-8a59",
       "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "170be38f-6107",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "170be38f-6107",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
