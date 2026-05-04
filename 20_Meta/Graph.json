@@ -343,6 +343,20 @@
         "Governance",
         "Knowledge Management"
       ]
+    },
+    {
+      "id": "f0938dc2-a8ec",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_App_Frontend_Development_Status_Update.md",
+      "type": "wiki",
+      "title": "Teams App Frontend Development Status Update",
+      "tags": [
+        "Frontend",
+        "Teams",
+        "UI/UX",
+        "Development",
+        "Authentication",
+        "Koreanization"
+      ]
     }
   ],
   "edges": [
@@ -604,6 +618,16 @@
     {
       "source": "d1d92515-dd63",
       "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "f0938dc2-a8ec",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "f0938dc2-a8ec",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
