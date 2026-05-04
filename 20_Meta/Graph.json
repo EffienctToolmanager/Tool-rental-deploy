@@ -263,6 +263,19 @@
         "AI_Agents",
         "데이터구조화"
       ]
+    },
+    {
+      "id": "d8c3b293-14c2",
+      "path": "10_Wiki/Tools/Development_Utility/Graphify__Codebase_Knowledge_Graph_Generation_Tool.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Generation Tool",
+      "tags": [
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI",
+        "Architecture"
+      ]
     }
   ],
   "edges": [
@@ -464,6 +477,16 @@
     {
       "source": "23c10a53-9bb0",
       "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "d8c3b293-14c2",
+      "target": "10_Wiki/Tools/Development_Utility",
+      "relationship": "parent"
+    },
+    {
+      "source": "d8c3b293-14c2",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
