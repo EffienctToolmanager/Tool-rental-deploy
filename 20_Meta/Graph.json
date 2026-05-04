@@ -77,6 +77,19 @@
         "Knowledge Management",
         "System Design"
       ]
+    },
+    {
+      "id": "1f50a9d3-6a97",
+      "path": "10_Wiki/Projects/Workflow_Architecture/Hybrid_Data_Archiving_Workflow_Design.md",
+      "type": "wiki",
+      "title": "Hybrid Data Archiving Workflow Design",
+      "tags": [
+        "Data Management",
+        "Workflow",
+        "Synchronization",
+        "System Architecture",
+        "LLM-Pipeline"
+      ]
     }
   ],
   "edges": [
@@ -137,6 +150,16 @@
     },
     {
       "source": "53af8c1c-b41a",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "1f50a9d3-6a97",
+      "target": "10_Wiki/Projects/Workflow_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "1f50a9d3-6a97",
       "target": "00_Raw/System_Structure_Review_2026-05-04.md",
       "relationship": "derived_from"
     }
