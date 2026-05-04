@@ -440,6 +440,19 @@
         "DevMode",
         "Localization"
       ]
+    },
+    {
+      "id": "8eacecca-a3eb",
+      "path": "10_Wiki/Skills/Code_Analysis/Graphify__Codebase_Knowledge_Graph_Generator.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Generator",
+      "tags": [
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI",
+        "Software Architecture"
+      ]
     }
   ],
   "edges": [
@@ -771,6 +784,16 @@
     {
       "source": "fdad32ea-eefd",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "8eacecca-a3eb",
+      "target": "10_Wiki/Skills/Code_Analysis",
+      "relationship": "parent"
+    },
+    {
+      "source": "8eacecca-a3eb",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
