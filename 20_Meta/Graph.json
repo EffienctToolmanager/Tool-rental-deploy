@@ -50,6 +50,20 @@
         "영속성",
         "자동화"
       ]
+    },
+    {
+      "id": "e0846ec6-2f11",
+      "path": "10_Wiki/Projects/Teams_App/Teams_App_UI_UX_개선_및_개발_워크플로우_복구.md",
+      "type": "wiki",
+      "title": "Teams App UI/UX 개선 및 개발 워크플로우 복구",
+      "tags": [
+        "Frontend",
+        "UI/UX",
+        "Teams",
+        "Development",
+        "Localization",
+        "Debugging"
+      ]
     }
   ],
   "edges": [
@@ -91,6 +105,16 @@
     {
       "source": "8dc3fddb-bf35",
       "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "e0846ec6-2f11",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "e0846ec6-2f11",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
