@@ -301,6 +301,21 @@
         "Visualization",
         "CLI"
       ]
+    },
+    {
+      "id": "e4482975-1f1e",
+      "path": "10_Wiki/Projects/AI_Automation_Roadmap/Local_AI_Automation_System_Roadmap_(Enterprise_&_Personal).md",
+      "type": "wiki",
+      "title": "Local AI Automation System Roadmap (Enterprise & Personal)",
+      "tags": [
+        "AI",
+        "Automation",
+        "LocalLLM",
+        "Roadmap",
+        "Obsidian",
+        "Enterprise",
+        "Agentic"
+      ]
     }
   ],
   "edges": [
@@ -532,6 +547,16 @@
     {
       "source": "52d15170-ded6",
       "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "e4482975-1f1e",
+      "target": "10_Wiki/Projects/AI_Automation_Roadmap",
+      "relationship": "parent"
+    },
+    {
+      "source": "e4482975-1f1e",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
       "relationship": "derived_from"
     }
   ]
