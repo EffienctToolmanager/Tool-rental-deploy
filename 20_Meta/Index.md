@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-05 07:04]** `00_Raw/20260505_Excel_Date_Header_Fix.md` 문서를 `10_Wiki/Projects/Data_Processing/PowerShell_기반_엑셀_데이터_동적_추출_및_헤더_자동화_구조.md` 로 변환 및 배치 완료. (분류: Projects/Data_Processing)
+
 - **[2026-05-05 07:02]** `00_Raw/20260505_UI_Layout_Pivot.md` 문서를 `10_Wiki/Decisions/UI_UX/High-Density_Dashboard_Layout_Adoption.md` 로 변환 및 배치 완료. (분류: Decisions/UI_UX)
 
 - **[2026-05-04 13:43]** `00_Raw/System_Structure_Review_2026-05-04.md` 문서를 `10_Wiki/Decisions/Workflow/Optimal_Hybrid_Knowledge_Archiving_Workflow.md` 로 변환 및 배치 완료. (분류: Decisions/Workflow)

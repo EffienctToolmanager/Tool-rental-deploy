@@ -382,6 +382,20 @@
         "Data Visualization",
         "High-Density"
       ]
+    },
+    {
+      "id": "7c238200-29d8",
+      "path": "10_Wiki/Projects/Data_Processing/PowerShell_기반_엑셀_데이터_동적_추출_및_헤더_자동화_구조.md",
+      "type": "wiki",
+      "title": "PowerShell 기반 엑셀 데이터 동적 추출 및 헤더 자동화 구조",
+      "tags": [
+        "powershell",
+        "excel",
+        "data-types",
+        "dynamic-header",
+        "json",
+        "data-extraction"
+      ]
     }
   ],
   "edges": [
@@ -673,6 +687,16 @@
     {
       "source": "509d4e5e-cf8f",
       "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "7c238200-29d8",
+      "target": "10_Wiki/Projects/Data_Processing",
+      "relationship": "parent"
+    },
+    {
+      "source": "7c238200-29d8",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
       "relationship": "derived_from"
     }
   ]
