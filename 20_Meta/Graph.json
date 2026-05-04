@@ -426,6 +426,20 @@
         "Enterprise_AI",
         "System_Design"
       ]
+    },
+    {
+      "id": "fdad32ea-eefd",
+      "path": "10_Wiki/Projects/Teams_App/Teams_앱_UI_UX_및_개발_환경_개선_로그.md",
+      "type": "wiki",
+      "title": "Teams 앱 UI/UX 및 개발 환경 개선 로그",
+      "tags": [
+        "Teams",
+        "UI/UX",
+        "개발",
+        "Dependency",
+        "DevMode",
+        "Localization"
+      ]
     }
   ],
   "edges": [
@@ -747,6 +761,16 @@
     {
       "source": "10844e24-09a3",
       "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "fdad32ea-eefd",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "fdad32ea-eefd",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
