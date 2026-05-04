@@ -250,6 +250,19 @@
         "시스템 아키텍처",
         "자율 학습"
       ]
+    },
+    {
+      "id": "23c10a53-9bb0",
+      "path": "10_Wiki/Projects/Knowledge_System/유기적_지식_베이스_구축_마일스톤_(Knowledge_Graph).md",
+      "type": "wiki",
+      "title": "유기적 지식 베이스 구축 마일스톤 (Knowledge Graph)",
+      "tags": [
+        "지식관리",
+        "지식그래프",
+        "Obsidian",
+        "AI_Agents",
+        "데이터구조화"
+      ]
     }
   ],
   "edges": [
@@ -440,6 +453,16 @@
     },
     {
       "source": "9ba84592-e522",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "23c10a53-9bb0",
+      "target": "10_Wiki/Projects/Knowledge_System",
+      "relationship": "parent"
+    },
+    {
+      "source": "23c10a53-9bb0",
       "target": "00_Raw/Archive_2026-05-04_1125.md",
       "relationship": "derived_from"
     }
