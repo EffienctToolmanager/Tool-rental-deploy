@@ -478,6 +478,19 @@
         "인간기술통합",
         "생활필수재"
       ]
+    },
+    {
+      "id": "09ca7bf8-257f",
+      "path": "10_Wiki/Decisions/Workflow/AI_Assistant_Autonomous_Knowledge_Archiving_Policy.md",
+      "type": "wiki",
+      "title": "AI Assistant Autonomous Knowledge Archiving Policy",
+      "tags": [
+        "Policy",
+        "AI Assistant",
+        "Autonomy",
+        "Knowledge Management",
+        "Persistence"
+      ]
     }
   ],
   "edges": [
@@ -839,6 +852,16 @@
     {
       "source": "433014ea-328a",
       "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "09ca7bf8-257f",
+      "target": "10_Wiki/Decisions/Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "09ca7bf8-257f",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
       "relationship": "derived_from"
     }
   ]
