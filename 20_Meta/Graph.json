@@ -130,6 +130,19 @@
         "Development",
         "Localization"
       ]
+    },
+    {
+      "id": "66e74800-8a59",
+      "path": "10_Wiki/Decisions/Data_Sync_Policy/지식_아카이브_로컬-클라우드_동기화_정책.md",
+      "type": "wiki",
+      "title": "지식 아카이브 로컬-클라우드 동기화 정책",
+      "tags": [
+        "Sync",
+        "Knowledge Management",
+        "Cloud Computing",
+        "OneDrive",
+        "Policy"
+      ]
     }
   ],
   "edges": [
@@ -231,6 +244,16 @@
     {
       "source": "a12325fe-2aa0",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "66e74800-8a59",
+      "target": "10_Wiki/Decisions/Data_Sync_Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "66e74800-8a59",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
