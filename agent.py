@@ -45,9 +45,13 @@ class RawFolderHandler(FileSystemEventHandler):
             os.makedirs(target_dir, exist_ok=True)
             
             # Prepare Target File
-            safe_title = parsed_data.get('title', 'Untitled').replace(' ', '_').replace('/', '_')
+            # Windows에서 금지된 문자(:, ?, *, <, >, |, ") 등을 언더바로 대체
+            safe_title = parsed_data.get('title', 'Untitled')
+            for char in [' ', '/', ':', '?', '*', '<', '>', '|', '"', '\\']:
+                safe_title = safe_title.replace(char, '_')
             output_filename = f"{safe_title}.md"
             output_path = os.path.join(target_dir, output_filename)
+
             relative_output_path = f"10_Wiki/{target_category}/{output_filename}"
             
             # Write Markdown

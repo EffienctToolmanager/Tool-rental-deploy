@@ -116,6 +116,20 @@
         "Knowledge Management",
         "Architecture"
       ]
+    },
+    {
+      "id": "a12325fe-2aa0",
+      "path": "10_Wiki/Projects/Teams_App/Teams_앱_UI_개발_및_로컬_테스트_개선.md",
+      "type": "wiki",
+      "title": "Teams 앱 UI 개발 및 로컬 테스트 개선",
+      "tags": [
+        "Teams",
+        "Frontend",
+        "React",
+        "UI/UX",
+        "Development",
+        "Localization"
+      ]
     }
   ],
   "edges": [
@@ -207,6 +221,16 @@
     {
       "source": "ed299178-8736",
       "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "a12325fe-2aa0",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "a12325fe-2aa0",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
