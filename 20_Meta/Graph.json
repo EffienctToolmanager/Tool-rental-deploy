@@ -210,6 +210,21 @@
         "Azure AD",
         "Frontend"
       ]
+    },
+    {
+      "id": "b8389275-76c3",
+      "path": "10_Wiki/Projects/AI_Automation_Architecture/AI_자동화_시스템_구축_로드맵_(로컬_기반).md",
+      "type": "wiki",
+      "title": "AI 자동화 시스템 구축 로드맵 (로컬 기반)",
+      "tags": [
+        "AI",
+        "자동화",
+        "Ollama",
+        "로컬",
+        "Obsidian",
+        "Agent",
+        "워크플로우"
+      ]
     }
   ],
   "edges": [
@@ -371,6 +386,16 @@
     {
       "source": "0b5500ec-99fb",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "b8389275-76c3",
+      "target": "10_Wiki/Projects/AI_Automation_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "b8389275-76c3",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
       "relationship": "derived_from"
     }
   ]
