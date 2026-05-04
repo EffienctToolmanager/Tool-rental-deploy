@@ -276,6 +276,19 @@
         "CLI",
         "Architecture"
       ]
+    },
+    {
+      "id": "89a00adb-233c",
+      "path": "10_Wiki/Skills/Development_Tools/Graphify__Codebase_Knowledge_Graph_Analyzer.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Analyzer",
+      "tags": [
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI",
+        "Development Tools"
+      ]
     }
   ],
   "edges": [
@@ -486,6 +499,16 @@
     },
     {
       "source": "d8c3b293-14c2",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "89a00adb-233c",
+      "target": "10_Wiki/Skills/Development_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "89a00adb-233c",
       "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
       "relationship": "derived_from"
     }
