@@ -158,6 +158,20 @@
         "Debugging",
         "Koreanization"
       ]
+    },
+    {
+      "id": "def1cf71-86b1",
+      "path": "10_Wiki/Projects/Teams_App/Teams_앱_개발_환경_구축_및_UI_UX_개선_(2026-05-04).md",
+      "type": "wiki",
+      "title": "Teams 앱 개발 환경 구축 및 UI/UX 개선 (2026-05-04)",
+      "tags": [
+        "Teams",
+        "Frontend",
+        "UI/UX",
+        "React",
+        "Localization",
+        "DevOps"
+      ]
     }
   ],
   "edges": [
@@ -278,6 +292,16 @@
     },
     {
       "source": "170be38f-6107",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "def1cf71-86b1",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "def1cf71-86b1",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
