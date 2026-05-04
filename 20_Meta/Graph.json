@@ -172,6 +172,19 @@
         "Localization",
         "DevOps"
       ]
+    },
+    {
+      "id": "f7f27e67-574f",
+      "path": "10_Wiki/Decisions/Workflow/Knowledge_Sync_Policy_Implementation_(Local_to_Cloud).md",
+      "type": "wiki",
+      "title": "Knowledge Sync Policy Implementation (Local to Cloud)",
+      "tags": [
+        "Synchronization",
+        "Knowledge Management",
+        "Google Drive",
+        "Workflow",
+        "Archiving"
+      ]
     }
   ],
   "edges": [
@@ -303,6 +316,16 @@
     {
       "source": "def1cf71-86b1",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "f7f27e67-574f",
+      "target": "10_Wiki/Decisions/Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "f7f27e67-574f",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
