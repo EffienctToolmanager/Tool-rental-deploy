@@ -1,0 +1,74 @@
+:root {
+  /* 브랜드 가이드라인 기반 변수 */
+  --primary-color: #0047AB;
+  --accent-color: #64ffda;
+  --logo-padding: 20px;
+  --border-radius: 8px;
+  
+  /* 기본 라이트 테마 */
+  --bg-color: #ffffff;
+  --text-color: #242424;
+  --card-bg: #f9f9f9;
+  --border-color: #e1e1e1;
+}
+
+[data-theme="dark"] {
+  /* 팀즈 다크 테마 대응 */
+  --bg-color: #1f1f1f;
+  --text-color: #f5f5f5;
+  --card-bg: #2d2d2d;
+  --border-color: #3d3d3d;
+}
+
+.app-container {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  padding: var(--logo-padding);
+  transition: all 0.3s ease;
+}
+
+.app-header {
+  border-bottom: 2px solid var(--primary-color);
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+}
+
+.app-header h1 {
+  margin: 0;
+  color: var(--primary-color);
+}
+
+.placeholder-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+.cta-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: opacity 0.2s;
+}
+
+.cta-btn:hover {
+  opacity: 0.9;
+}
