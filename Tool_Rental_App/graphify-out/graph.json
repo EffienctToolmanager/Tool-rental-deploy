@@ -1,0 +1,132 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "app.py",
+      "file_type": "code",
+      "source_file": "app.py",
+      "source_location": "L1",
+      "id": "app_py",
+      "community": 0,
+      "norm_label": "app.py"
+    },
+    {
+      "label": "get_wiki_tools()",
+      "file_type": "code",
+      "source_file": "app.py",
+      "source_location": "L18",
+      "id": "tool_rental_app_app_get_wiki_tools",
+      "community": 0,
+      "norm_label": "get_wiki_tools()"
+    },
+    {
+      "label": "\uc704\ud0a4\uc758 Tools \ud3f4\ub354\uc5d0\uc11c \uc7a5\ube44 \ubaa9\ub85d\uc744 \ub3d9\uc801\uc73c\ub85c \uac00\uc838\uc635\ub2c8\ub2e4.",
+      "file_type": "rationale",
+      "source_file": "app.py",
+      "source_location": "L19",
+      "id": "tool_rental_app_app_rationale_19",
+      "community": 0,
+      "norm_label": "\u110b\u1171\u110f\u1175\u110b\u1174 tools \u1111\u1169\u11af\u1103\u1165\u110b\u1166\u1109\u1165 \u110c\u1161\u11bc\u1107\u1175 \u1106\u1169\u11a8\u1105\u1169\u11a8\u110b\u1173\u11af \u1103\u1169\u11bc\u110c\u1165\u11a8\u110b\u1173\u1105\u1169 \u1100\u1161\u110c\u1167\u110b\u1169\u11b8\u1102\u1175\u1103\u1161."
+    },
+    {
+      "label": "eslint.config.js",
+      "file_type": "code",
+      "source_file": "teams-app/eslint.config.js",
+      "source_location": "L1",
+      "id": "teams_app_eslint_config_js",
+      "community": 2,
+      "norm_label": "eslint.config.js"
+    },
+    {
+      "label": "vite.config.ts",
+      "file_type": "code",
+      "source_file": "teams-app/vite.config.ts",
+      "source_location": "L1",
+      "id": "teams_app_vite_config_ts",
+      "community": 3,
+      "norm_label": "vite.config.ts"
+    },
+    {
+      "label": "App.tsx",
+      "file_type": "code",
+      "source_file": "teams-app/src/App.tsx",
+      "source_location": "L1",
+      "id": "teams_app_src_app_tsx",
+      "community": 1,
+      "norm_label": "app.tsx"
+    },
+    {
+      "label": "Dashboard()",
+      "file_type": "code",
+      "source_file": "teams-app/src/App.tsx",
+      "source_location": "L13",
+      "id": "src_app_dashboard",
+      "community": 1,
+      "norm_label": "dashboard()"
+    },
+    {
+      "label": "authConfig.ts",
+      "file_type": "code",
+      "source_file": "teams-app/src/authConfig.ts",
+      "source_location": "L1",
+      "id": "teams_app_src_authconfig_ts",
+      "community": 4,
+      "norm_label": "authconfig.ts"
+    },
+    {
+      "label": "main.tsx",
+      "file_type": "code",
+      "source_file": "teams-app/src/main.tsx",
+      "source_location": "L1",
+      "id": "teams_app_src_main_tsx",
+      "community": 1,
+      "norm_label": "main.tsx"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "app_py",
+      "target": "tool_rental_app_app_get_wiki_tools",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "tool_rental_app_app_rationale_19",
+      "target": "tool_rental_app_app_get_wiki_tools",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teams-app/src/App.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "teams_app_src_app_tsx",
+      "target": "src_app_dashboard"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "teams-app/src/main.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "teams_app_src_main_tsx",
+      "target": "teams_app_src_app_tsx"
+    }
+  ],
+  "hyperedges": []
+}

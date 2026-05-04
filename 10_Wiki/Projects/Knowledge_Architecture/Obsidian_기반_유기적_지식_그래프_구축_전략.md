@@ -1,8 +1,14 @@
 ---
 id: 9ba84592-e522
-category: "[[10_Wiki/Projects/Knowledge_Architecture]]"
+category: "[[Knowledge_Architecture]]"
 confidence_score: 0.98
-tags: [지식 그래프, Obsidian, 지식 관리, 시스템 아키텍처, 자율 학습]
+
+tags:
+  - 지식 그래프
+  - Obsidian
+  - 지식 관리
+  - 시스템 아키텍처
+  - 자율 학습
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -26,6 +32,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Projects/Knowledge_Architecture]]
+- **Parent:** [[Knowledge_Architecture]]
 - **Related:** [[Graphify]], [[지식 자동화 엔진]], [[Obsidian]], [[내부 링크]], [[YAML Frontmatter]]
-- **Raw Source:** [[00_Raw/Archive_2026-05-04_1125.md]]
+- **Raw Source:** [[Archive_2026-05-04_1125.md]]

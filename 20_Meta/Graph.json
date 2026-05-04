@@ -289,6 +289,18 @@
         "CLI",
         "Development Tools"
       ]
+    },
+    {
+      "id": "52d15170-ded6",
+      "path": "10_Wiki/Skills/Development_Tools/Graphify__Code_Knowledge_Graph_Generation_and_Analysis_Guide.md",
+      "type": "wiki",
+      "title": "Graphify: Code Knowledge Graph Generation and Analysis Guide",
+      "tags": [
+        "KnowledgeGraph",
+        "CodeAnalysis",
+        "Visualization",
+        "CLI"
+      ]
     }
   ],
   "edges": [
@@ -509,6 +521,16 @@
     },
     {
       "source": "89a00adb-233c",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "52d15170-ded6",
+      "target": "10_Wiki/Skills/Development_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "52d15170-ded6",
       "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
       "relationship": "derived_from"
     }

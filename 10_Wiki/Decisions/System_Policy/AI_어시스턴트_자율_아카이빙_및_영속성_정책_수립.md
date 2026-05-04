@@ -1,8 +1,14 @@
 ---
 id: 8dc3fddb-bf35
-category: "[[10_Wiki/Decisions/System_Policy]]"
+category: "[[System_Policy]]"
 confidence_score: 0.98
-tags: [정책, AI 어시스턴트, 지식관리, 영속성, 자동화]
+
+tags:
+  - 정책
+  - AI 어시스턴트
+  - 지식관리
+  - 영속성
+  - 자동화
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -26,6 +32,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Decisions/System_Policy]]
+- **Parent:** [[System_Policy]]
 - **Related:** [[지식베이스]], [[AI 어시스턴트]], [[위키 에이전트]], [[정책 명문화]]
-- **Raw Source:** [[00_Raw/Policy_Update_2026-05-04_1018.md]]
+- **Raw Source:** [[Policy_Update_2026-05-04_1018.md]]

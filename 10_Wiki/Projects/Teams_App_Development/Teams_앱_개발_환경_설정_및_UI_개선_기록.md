@@ -1,8 +1,14 @@
 ---
 id: 0b5500ec-99fb
-category: "[[10_Wiki/Projects/Teams_App_Development]]"
+category: "[[Teams_App_Development]]"
 confidence_score: 0.98
-tags: [Teams, Development, UI/UX, Azure AD, Frontend]
+
+tags:
+  - Teams
+  - Development
+  - UI/UX
+  - Azure AD
+  - Frontend
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -25,6 +31,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Projects/Teams_App_Development]]
+- **Parent:** [[Teams_App_Development]]
 - **Related:** [[npm]], [[React]], [[UI/UX 디자인 원칙]], [[Microsoft Entra ID]]
-- **Raw Source:** [[00_Raw/Conversation_Log_2026-05-04.md]]
+- **Raw Source:** [[Conversation_Log_2026-05-04.md]]

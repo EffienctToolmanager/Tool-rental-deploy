@@ -1,8 +1,15 @@
 ---
 id: 5f4e-2a8d-1c9b
-category: "[[10_Wiki/Projects/AI_System_Build]]"
+category: "[[AI_System_Build]]"
 confidence_score: 0.95
-tags: [AI_연구, 로드맵, 자동화, Ollama, Obsidian, 아이디어]
+
+tags:
+  - AI_연구
+  - 로드맵
+  - 자동화
+  - Ollama
+  - Obsidian
+  - 아이디어
 last_reinforced: 2026-05-02
 github_commit: "pending"
 ---
@@ -27,6 +34,6 @@ github_commit: "pending"
 - **정책 변화:** 사용자의 메모 원문에 따라 `AI_연구`라는 새로운 카테고리 수요가 감지됨. 정책 가중치에 따라 이를 목표 중심인 `Projects` 하위에 `AI_System_Build` 디렉토리로 신규 생성 및 배치함.
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Projects/AI_System_Build]]
+- **Parent:** [[AI_System_Build]]
 - **Related:** [[로컬 LLM (Ollama)]], [[Obsidian 활용법]]
-- **Raw Source:** [[00_Raw/20260502_AI자동화시스템_로드맵.md]]
+- **Raw Source:** [[20260502_AI자동화시스템_로드맵.md]]

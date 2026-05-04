@@ -1,8 +1,14 @@
 ---
 id: 23c10a53-9bb0
-category: "[[10_Wiki/Projects/Knowledge_System]]"
+category: "[[Knowledge_System]]"
 confidence_score: 0.98
-tags: [지식관리, 지식그래프, Obsidian, AI_Agents, 데이터구조화]
+
+tags:
+  - 지식관리
+  - 지식그래프
+  - Obsidian
+  - AI_Agents
+  - 데이터구조화
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -25,6 +31,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Projects/Knowledge_System]]
+- **Parent:** [[Knowledge_System]]
 - **Related:** [[Obsidian]], [[지식 그래프]], [[LLM_Tooling]], [[데이터 구조화]]
-- **Raw Source:** [[00_Raw/Archive_2026-05-04_1125.md]]
+- **Raw Source:** [[Archive_2026-05-04_1125.md]]

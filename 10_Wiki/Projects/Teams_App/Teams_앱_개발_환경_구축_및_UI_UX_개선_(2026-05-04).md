@@ -1,8 +1,15 @@
 ---
 id: def1cf71-86b1
-category: "[[10_Wiki/Projects/Teams_App]]"
+category: "[[Teams_App]]"
 confidence_score: 0.99
-tags: [Teams, Frontend, UI/UX, React, Localization, DevOps]
+
+tags:
+  - Teams
+  - Frontend
+  - UI/UX
+  - React
+  - Localization
+  - DevOps
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -25,6 +32,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Projects/Teams_App]]
+- **Parent:** [[Teams_App]]
 - **Related:** [[Microsoft Entra ID]], [[SPA 개발 흐름]], [[Component Isolation]], [[Streamlit]]
-- **Raw Source:** [[00_Raw/Conversation_Log_2026-05-04.md]]
+- **Raw Source:** [[Conversation_Log_2026-05-04.md]]

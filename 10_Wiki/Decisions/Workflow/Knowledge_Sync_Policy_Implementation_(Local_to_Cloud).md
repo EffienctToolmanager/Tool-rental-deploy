@@ -1,8 +1,14 @@
 ---
 id: f7f27e67-574f
-category: "[[10_Wiki/Decisions/Workflow]]"
+category: "[[Workflow]]"
 confidence_score: 0.98
-tags: [Synchronization, Knowledge Management, Google Drive, Workflow, Archiving]
+
+tags:
+  - Synchronization
+  - Knowledge Management
+  - Google Drive
+  - Workflow
+  - Archiving
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -25,6 +31,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Decisions/Workflow]]
+- **Parent:** [[Workflow]]
 - **Related:** [[Knowledge Graph]], [[Offline First Design]], [[Version Control Strategy]], [[OneDrive Synchronization]]
-- **Raw Source:** [[00_Raw/Sync_Policy_Implementation_2026-05-04.md]]
+- **Raw Source:** [[Sync_Policy_Implementation_2026-05-04.md]]

@@ -1,8 +1,14 @@
 ---
 id: 53af8c1c-b41a
-category: "[[10_Wiki/Topics/Knowledge_Management]]"
+category: "[[Knowledge_Management]]"
 confidence_score: 0.98
-tags: [Data Architecture, Workflow, Sync, Knowledge Management, System Design]
+
+tags:
+  - Data Architecture
+  - Workflow
+  - Sync
+  - Knowledge Management
+  - System Design
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -26,6 +32,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Topics/Knowledge_Management]]
+- **Parent:** [[Knowledge_Management]]
 - **Related:** [[Obsidian]], [[Version Control System]], [[Data Synchronization]], [[Local Computing Environment]]
-- **Raw Source:** [[00_Raw/System_Structure_Review_2026-05-04.md]]
+- **Raw Source:** [[System_Structure_Review_2026-05-04.md]]

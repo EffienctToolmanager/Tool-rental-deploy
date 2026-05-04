@@ -1,8 +1,16 @@
 ---
 id: b8389275-76c3
-category: "[[10_Wiki/Projects/AI_Automation_Architecture]]"
+category: "[[AI_Automation_Architecture]]"
 confidence_score: 0.98
-tags: [AI, 자동화, Ollama, 로컬, Obsidian, Agent, 워크플로우]
+
+tags:
+  - AI
+  - 자동화
+  - Ollama
+  - 로컬
+  - Obsidian
+  - Agent
+  - 워크플로우
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -27,6 +35,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Projects/AI_Automation_Architecture]]
+- **Parent:** [[AI_Automation_Architecture]]
 - **Related:** [[Ollama]], [[Obsidian]], [[Agent Workflow]], [[Local LLM Implementation]], [[Data Scraping]]
-- **Raw Source:** [[00_Raw/20260502_AI자동화시스템_로드맵.md]]
+- **Raw Source:** [[20260502_AI자동화시스템_로드맵.md]]

@@ -1,8 +1,15 @@
 ---
 id: e0846ec6-2f11
-category: "[[10_Wiki/Projects/Teams_App]]"
+category: "[[Teams_App]]"
 confidence_score: 0.98
-tags: [Frontend, UI/UX, Teams, Development, Localization, Debugging]
+
+tags:
+  - Frontend
+  - UI/UX
+  - Teams
+  - Development
+  - Localization
+  - Debugging
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -26,6 +33,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Projects/Teams_App]]
+- **Parent:** [[Teams_App]]
 - **Related:** [[npm]], [[MSAL]], [[Streamlit]], [[개발자 환경 설정]], [[로컬라이제이션]]
-- **Raw Source:** [[00_Raw/Conversation_Log_2026-05-04.md]]
+- **Raw Source:** [[Conversation_Log_2026-05-04.md]]

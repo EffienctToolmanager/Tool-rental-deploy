@@ -1,8 +1,14 @@
 ---
 id: 89a00adb-233c
-category: "[[10_Wiki/Skills/Development_Tools]]"
+category: "[[Development_Tools]]"
 confidence_score: 0.98
-tags: [Knowledge Graph, Code Analysis, Visualization, CLI, Development Tools]
+
+tags:
+  - Knowledge Graph
+  - Code Analysis
+  - Visualization
+  - CLI
+  - Development Tools
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -26,6 +32,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Skills/Development_Tools]]
+- **Parent:** [[Development_Tools]]
 - **Related:** [[지식 그래프]], [[Obsidian_Optimization]], [[agent.py]], [[meta_manager.py]]
-- **Raw Source:** [[00_Raw/Graphify_Skill_Guide_2026-05-04.md]]
+- **Raw Source:** [[Graphify_Skill_Guide_2026-05-04.md]]

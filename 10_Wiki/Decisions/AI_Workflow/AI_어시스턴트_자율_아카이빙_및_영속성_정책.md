@@ -1,8 +1,13 @@
 ---
 id: 55df2c2e-d610
-category: "[[10_Wiki/Decisions/AI_Workflow]]"
+category: "[[AI_Workflow]]"
 confidence_score: 0.98
-tags: [AI, Policy, Architecture, Self-Archiving]
+
+tags:
+  - AI
+  - Policy
+  - Architecture
+  - Self-Archiving
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -25,6 +30,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Decisions/AI_Workflow]]
+- **Parent:** [[AI_Workflow]]
 - **Related:** [[Knowledge Management]], [[AI Agent Workflow]], [[Git Synchronization]]
-- **Raw Source:** [[00_Raw/Policy_Update_2026-05-04_1018.md]]
+- **Raw Source:** [[Policy_Update_2026-05-04_1018.md]]

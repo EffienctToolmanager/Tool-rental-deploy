@@ -1,8 +1,16 @@
 ---
 id: 170be38f-6107
-category: "[[10_Wiki/Projects/Teams_App_Development]]"
+category: "[[Teams_App_Development]]"
 confidence_score: 0.98
-tags: [Teams, UI/UX, React, Development, Authentication, Debugging, Koreanization]
+
+tags:
+  - Teams
+  - UI/UX
+  - React
+  - Development
+  - Authentication
+  - Debugging
+  - Koreanization
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -28,6 +36,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Projects/Teams_App_Development]]
+- **Parent:** [[Teams_App_Development]]
 - **Related:** [[Authentication Flow]], [[Streamlit]], [[Frontend Design Principles]], [[Dependency Management]]
-- **Raw Source:** [[00_Raw/Conversation_Log_2026-05-04.md]]
+- **Raw Source:** [[Conversation_Log_2026-05-04.md]]

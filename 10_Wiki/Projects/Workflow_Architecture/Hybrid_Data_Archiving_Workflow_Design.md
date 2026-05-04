@@ -1,8 +1,14 @@
 ---
 id: 1f50a9d3-6a97
-category: "[[10_Wiki/Projects/Workflow_Architecture]]"
+category: "[[Workflow_Architecture]]"
 confidence_score: 0.98
-tags: [Data Management, Workflow, Synchronization, System Architecture, LLM-Pipeline]
+
+tags:
+  - Data Management
+  - Workflow
+  - Synchronization
+  - System Architecture
+  - LLM-Pipeline
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -26,6 +32,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Projects/Workflow_Architecture]]
+- **Parent:** [[Workflow_Architecture]]
 - **Related:** [[Knowledge Graph]], [[Synchronization Protocols]], [[Edge Computing]]
-- **Raw Source:** [[00_Raw/System_Structure_Review_2026-05-04.md]]
+- **Raw Source:** [[System_Structure_Review_2026-05-04.md]]

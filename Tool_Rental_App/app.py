@@ -15,12 +15,23 @@ st.set_page_config(page_title="Tool Rental App", page_icon="🛠️", layout="ce
 st.title("🛠️ 사내 장비 대여/반납 신청서")
 st.markdown("프로젝트에 필요한 장비를 대여하거나 반납할 때 작성하는 폼입니다. 제출 시 Outlook을 통해 승인권자에게 메일이 발송됩니다.")
 
-# --- 예시 장비 리스트 ---
-EQUIPMENT_LIST = [
-    "노트북 (MacBook Pro)", "노트북 (ThinkPad)", "테스트용 스마트폰 (Galaxy S24)", 
-    "테스트용 스마트폰 (iPhone 15)", "HDMI 케이블", "빔 프로젝터", 
-    "측정 장비 (오실로스코프)", "기타 (직접 입력란 참고)"
-]
+def get_wiki_tools():
+    """위키의 Tools 폴더에서 장비 목록을 동적으로 가져옵니다."""
+    tools_path = r"C:\Users\cfpcl\OneDrive\Desktop\Dev_Workspace\위키 에이전트\10_Wiki\Topics\Tools"
+    if not os.path.exists(tools_path):
+        return ["기본 장비 (위키 연결 필요)"]
+    
+    tools = []
+    for file in os.listdir(tools_path):
+        if file.endswith(".md"):
+            # 파일명에서 확장자 제거 및 언더바를 공백으로 치환하여 표시
+            tool_name = file.replace(".md", "").replace("_", " ")
+            tools.append(tool_name)
+    return sorted(tools) if tools else ["등록된 장비 없음 (위키 확인)"]
+
+# --- 위키 연동 장비 리스트 ---
+EQUIPMENT_LIST = get_wiki_tools()
+
 
 with st.form("rental_form"):
     st.subheader("1. 기본 정보")

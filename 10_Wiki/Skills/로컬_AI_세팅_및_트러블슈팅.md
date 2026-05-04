@@ -2,7 +2,13 @@
 title: 로컬 AI 코딩 에이전트(Aider/Cline) 구축 및 트러블슈팅
 category: Skills
 date: 2026-05-03
-tags: [AI, Local-LLM, Python, VS-Code, Troubleshooting]
+
+tags:
+  - AI
+  - Local-LLM
+  - Python
+  - VS-Code
+  - Troubleshooting
 ---
 
 # 로컬 AI 코딩 에이전트 구축 가이드

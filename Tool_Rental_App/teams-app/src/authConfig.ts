@@ -1,15 +1,15 @@
-import { Configuration, LogLevel } from "@azure/msal-browser";
+import { LogLevel } from "@azure/msal-browser";
+import type { Configuration } from "@azure/msal-browser";
 
 export const msalConfig: Configuration = {
   auth: {
-    clientId: import.meta.env.VITE_MSAL_CLIENT_ID,
-    authority: `https://login.microsoftonline.com/${import.meta.env.VITE_MSAL_TENANT_ID}`,
+    clientId: import.meta.env.VITE_MSAL_CLIENT_ID || "",
+    authority: `https://login.microsoftonline.com/${import.meta.env.VITE_MSAL_TENANT_ID || "common"}`,
     redirectUri: "/",
     postLogoutRedirectUri: "/",
   },
   cache: {
     cacheLocation: "sessionStorage",
-    storeAuthStateInCookie: false,
   },
   system: {
     loggerOptions: {

@@ -1,8 +1,13 @@
 ---
 id: 437a12fb-6181
-category: "[[10_Wiki/Topics/Philosophy]]"
+category: "[[Philosophy]]"
 confidence_score: 0.92
-tags: [AI, Philosophy, Technology Adoption, Personal Mandate]
+
+tags:
+  - AI
+  - Philosophy
+  - Technology Adoption
+  - Personal Mandate
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -24,6 +29,6 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/Topics/Philosophy]]
+- **Parent:** [[Philosophy]]
 - **Related:** [[Technological Determinism]], [[Human-AI Interaction]], [[Future of Work]], [[AI Ethics]]
-- **Raw Source:** [[00_Raw/무제 끝.md]]
+- **Raw Source:** [[무제 끝.md]]
