@@ -1,9 +1,49 @@
 {
   "nodes": [
-    {"id": "AI_Automation_Roadmap", "path": "10_Wiki/Projects/AI_System_Build/Roadmap.md", "type": "wiki", "tags": ["AI_연구", "로드맵"]}
+    {
+      "id": "AI_Automation_Roadmap",
+      "path": "10_Wiki/Projects/AI_System_Build/Roadmap.md",
+      "type": "wiki",
+      "tags": [
+        "AI_연구",
+        "로드맵"
+      ]
+    },
+    {
+      "id": "573adc52-12cc",
+      "path": "10_Wiki/Decisions/System_Policy/AI_어시스턴트_자율_아카이빙_및_영속성_정책_수립.md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 영속성 정책 수립",
+      "tags": [
+        "AI",
+        "Agent",
+        "Policy",
+        "Persistence",
+        "Automation",
+        "Knowledge_Management"
+      ]
+    }
   ],
   "edges": [
-    {"source": "AI_Automation_Roadmap", "target": "10_Wiki/Projects/AI_System_Build", "relationship": "parent"},
-    {"source": "AI_Automation_Roadmap", "target": "00_Raw/20260502_AI자동화시스템_로드맵.md", "relationship": "derived_from"}
+    {
+      "source": "AI_Automation_Roadmap",
+      "target": "10_Wiki/Projects/AI_System_Build",
+      "relationship": "parent"
+    },
+    {
+      "source": "AI_Automation_Roadmap",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "573adc52-12cc",
+      "target": "10_Wiki/Decisions/System_Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "573adc52-12cc",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    }
   ]
 }
