@@ -316,6 +316,19 @@
         "Enterprise",
         "Agentic"
       ]
+    },
+    {
+      "id": "0a3ea7da-df26",
+      "path": "10_Wiki/Topics/AI Philosophy/AI_Integration_Manifesto__The_Inseparability_of_AI.md",
+      "type": "wiki",
+      "title": "AI Integration Manifesto: The Inseparability of AI",
+      "tags": [
+        "AI",
+        "Philosophy",
+        "Future",
+        "Adoption",
+        "Mandate"
+      ]
     }
   ],
   "edges": [
@@ -557,6 +570,16 @@
     {
       "source": "e4482975-1f1e",
       "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "0a3ea7da-df26",
+      "target": "10_Wiki/Topics/AI Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "0a3ea7da-df26",
+      "target": "00_Raw/무제 끝.md",
       "relationship": "derived_from"
     }
   ]
