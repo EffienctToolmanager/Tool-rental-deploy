@@ -396,6 +396,20 @@
         "json",
         "data-extraction"
       ]
+    },
+    {
+      "id": "59df9a44-80cb",
+      "path": "10_Wiki/Decisions/System_Policy/Autonomous_Agent_Skill_Operation_Policy.md",
+      "type": "wiki",
+      "title": "Autonomous Agent Skill Operation Policy",
+      "tags": [
+        "agent",
+        "skill",
+        "policy",
+        "UI/UX",
+        "MS365",
+        "architecture"
+      ]
     }
   ],
   "edges": [
@@ -697,6 +711,16 @@
     {
       "source": "7c238200-29d8",
       "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "59df9a44-80cb",
+      "target": "10_Wiki/Decisions/System_Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "59df9a44-80cb",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
       "relationship": "derived_from"
     }
   ]
