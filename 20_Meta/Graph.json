@@ -64,6 +64,19 @@
         "Localization",
         "Debugging"
       ]
+    },
+    {
+      "id": "53af8c1c-b41a",
+      "path": "10_Wiki/Topics/Knowledge_Management/Hybrid_Data_Architecture_and_Knowledge_Pipeline_Review.md",
+      "type": "wiki",
+      "title": "Hybrid Data Architecture and Knowledge Pipeline Review",
+      "tags": [
+        "Data Architecture",
+        "Workflow",
+        "Sync",
+        "Knowledge Management",
+        "System Design"
+      ]
     }
   ],
   "edges": [
@@ -115,6 +128,16 @@
     {
       "source": "e0846ec6-2f11",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "53af8c1c-b41a",
+      "target": "10_Wiki/Topics/Knowledge_Management",
+      "relationship": "parent"
+    },
+    {
+      "source": "53af8c1c-b41a",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
