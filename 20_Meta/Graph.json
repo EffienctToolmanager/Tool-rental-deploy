@@ -197,6 +197,19 @@
         "Technology Adoption",
         "Personal Mandate"
       ]
+    },
+    {
+      "id": "0b5500ec-99fb",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_앱_개발_환경_설정_및_UI_개선_기록.md",
+      "type": "wiki",
+      "title": "Teams 앱 개발 환경 설정 및 UI 개선 기록",
+      "tags": [
+        "Teams",
+        "Development",
+        "UI/UX",
+        "Azure AD",
+        "Frontend"
+      ]
     }
   ],
   "edges": [
@@ -348,6 +361,16 @@
     {
       "source": "437a12fb-6181",
       "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "0b5500ec-99fb",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "0b5500ec-99fb",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
