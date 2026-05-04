@@ -37,6 +37,19 @@
         "Authentication",
         "Streamlit"
       ]
+    },
+    {
+      "id": "8dc3fddb-bf35",
+      "path": "10_Wiki/Decisions/System_Policy/AI_어시스턴트_자율_아카이빙_및_영속성_정책_수립.md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 영속성 정책 수립",
+      "tags": [
+        "정책",
+        "AI 어시스턴트",
+        "지식관리",
+        "영속성",
+        "자동화"
+      ]
     }
   ],
   "edges": [
@@ -68,6 +81,16 @@
     {
       "source": "6772a893-2af0",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "8dc3fddb-bf35",
+      "target": "10_Wiki/Decisions/System_Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "8dc3fddb-bf35",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
       "relationship": "derived_from"
     }
   ]

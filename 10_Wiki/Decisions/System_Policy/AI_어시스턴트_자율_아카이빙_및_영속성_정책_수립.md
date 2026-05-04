@@ -1,8 +1,8 @@
 ---
-id: 573adc52-12cc
+id: 8dc3fddb-bf35
 category: "[[10_Wiki/Decisions/System_Policy]]"
 confidence_score: 0.98
-tags: [AI, Agent, Policy, Persistence, Automation, Knowledge_Management]
+tags: [정책, AI 어시스턴트, 지식관리, 영속성, 자동화]
 last_reinforced: 2026-05-04
 github_commit: "pending"
 ---
@@ -10,14 +10,16 @@ github_commit: "pending"
 # [[AI 어시스턴트 자율 아카이빙 및 영속성 정책 수립]]
 
 ## 📌 한 줄 통찰 (The Karpathy Summary)
-> AI 어시스턴트는 사용자 명시적 지시 없이도 대화의 중요 마일스톤과 핵심 의사결정 과정을 자율적으로 기록하고 공유함으로써 지식의 영속성을 확보해야 한다.
+> AI 어시스턴트가 사용자 명령 없이도 대화의 주요 맥락과 마일스톤을 자율적으로 판단하여 기록하고 공유 지식베이스에 업로드하는 정책을 수립한다.
 
 ## 📖 구조화된 지식 (Synthesized Content)
-- **추출된 패턴:** 지속 가능한 지식 시스템을 구축하려면, 프로세스 자체가 아카이빙을 주도하는 자율적인 메커니즘(Self-Documenting Loop)이 필수적이다.
+- **추출된 패턴:** 시스템의 장기적인 지식 보존(영속성)을 위해서는 사용자의 개입을 최소화하고 AI 주도 하에 아카이빙 및 규칙 명문화가 필수적이다.
 - **세부 내용:**
-- 자율성 원칙: 모든 주요 의사결정, 기술적 해결 방안, 정책 수립 내용은 즉시 지정된 `00_Raw` 채널에 기록되어야 한다.
-- 영속성 확보: 핵심 운영 원칙은 `.clinerules` 파일과 `20_Meta/Policy.md`를 통해 명문화되어 모든 AI 인스턴스가 공유하는 공통 자산이 되어야 한다.
-- 연동 및 지식화: 모든 기록은 위키 에이전트(`agent.py`)를 경유하여 공식 지식으로 체계화되고 GitHub에 동기화되는 프로세스를 거친다.
+- AI 어시스턴트(안티그라비티)가 대화 맥락과 주요 마일스톤을 자율적으로 판단하여 기록 및 업로드함.
+- 사용자 개입에 따른 누락 방지 및 프로젝트 영속성 유지를 목표로 함.
+- 자율성은 의사결정, 기술적 해결, 정책 수립 시 즉시 `00_Raw`에 기록하는 원칙을 따름.
+- 영속성 확보를 위해 핵심 규칙을 `.clinerules` 및 `20_Meta/Policy.md`에 명문화하고 모든 AI 인스턴스가 공유함.
+- 모든 기록은 위키 에이전트(`agent.py`)를 통해 지식화되고 GitHub에 동기화되는 체계를 갖춤.
 
 ## ⚠️ 모순 및 업데이트 (Contradictions & RL Update)
 - **과거 데이터와의 충돌:** None
@@ -25,5 +27,5 @@ github_commit: "pending"
 
 ## 🔗 지식 연결 (Graph)
 - **Parent:** [[10_Wiki/Decisions/System_Policy]]
-- **Related:** [[AI Agent Workflow]], [[Knowledge Persistence]], [[Policy Implementation]], [[GitHub Synchronization]]
+- **Related:** [[지식베이스]], [[AI 어시스턴트]], [[위키 에이전트]], [[정책 명문화]]
 - **Raw Source:** [[00_Raw/Policy_Update_2026-05-04_1018.md]]
