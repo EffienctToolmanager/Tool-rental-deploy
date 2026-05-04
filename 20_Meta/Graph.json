@@ -329,6 +329,20 @@
         "Adoption",
         "Mandate"
       ]
+    },
+    {
+      "id": "d1d92515-dd63",
+      "path": "10_Wiki/Decisions/Policy_Management/Autonomous_Archiving_Policy_for_AI_Assistants.md",
+      "type": "wiki",
+      "title": "Autonomous Archiving Policy for AI Assistants",
+      "tags": [
+        "AI",
+        "Policy",
+        "Archiving",
+        "Autonomy",
+        "Governance",
+        "Knowledge Management"
+      ]
     }
   ],
   "edges": [
@@ -580,6 +594,16 @@
     {
       "source": "0a3ea7da-df26",
       "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "d1d92515-dd63",
+      "target": "10_Wiki/Decisions/Policy_Management",
+      "relationship": "parent"
+    },
+    {
+      "source": "d1d92515-dd63",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
       "relationship": "derived_from"
     }
   ]
