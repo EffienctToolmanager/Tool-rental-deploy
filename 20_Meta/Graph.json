@@ -22,6 +22,21 @@
         "Automation",
         "Knowledge_Management"
       ]
+    },
+    {
+      "id": "6772a893-2af0",
+      "path": "10_Wiki/Projects/Teams_App/Teams_Application_UI_UX_Refactoring_and_Dependency_Resolution.md",
+      "type": "wiki",
+      "title": "Teams Application UI/UX Refactoring and Dependency Resolution",
+      "tags": [
+        "Teams",
+        "React",
+        "Frontend",
+        "UI/UX",
+        "NPM",
+        "Authentication",
+        "Streamlit"
+      ]
     }
   ],
   "edges": [
@@ -43,6 +58,16 @@
     {
       "source": "573adc52-12cc",
       "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "6772a893-2af0",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "6772a893-2af0",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
