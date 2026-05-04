@@ -185,6 +185,18 @@
         "Workflow",
         "Archiving"
       ]
+    },
+    {
+      "id": "437a12fb-6181",
+      "path": "10_Wiki/Topics/Philosophy/AI_Integration_as_a_Life_Mandate.md",
+      "type": "wiki",
+      "title": "AI Integration as a Life Mandate",
+      "tags": [
+        "AI",
+        "Philosophy",
+        "Technology Adoption",
+        "Personal Mandate"
+      ]
     }
   ],
   "edges": [
@@ -326,6 +338,16 @@
     {
       "source": "f7f27e67-574f",
       "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "437a12fb-6181",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "437a12fb-6181",
+      "target": "00_Raw/무제 끝.md",
       "relationship": "derived_from"
     }
   ]

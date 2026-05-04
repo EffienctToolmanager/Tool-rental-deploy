@@ -69,16 +69,32 @@ def generate_wiki_content(raw_text: str, filename: str) -> dict:
 def format_markdown(data: dict, original_filename: str) -> str:
     """
     Converts the structured dictionary into the standard P-Reinforce Markdown format.
+    Optimized for Obsidian Graph View.
     """
-    tags_str = ", ".join(data.get('tags', []))
+    # 태그 형식 최적화 (#tag1, #tag2)
+    tags_list = data.get('tags', [])
+    tags_str = "\n".join([f"  - {t}" for t in tags_list])
+    
+    # 세부 내용 불렛 포인트
     details_str = "\n".join([f"- {d}" for d in data.get('details', [])])
-    related_str = ", ".join(data.get('related_links', []))
+    
+    # 연관 지식 링크 자동 처리 (텍스트 -> [[텍스트]])
+    related_links = data.get('related_links', [])
+    processed_links = []
+    for link in related_links:
+        clean_link = link.replace("[[", "").replace("]]", "")
+        processed_links.append(f"[[{clean_link}]]")
+    related_str = ", ".join(processed_links)
+    
+    # 상위 카테고리 이름만 추출 (예: Topics/AI -> AI)
+    category_name = data.get('category', 'Uncategorized').split('/')[-1]
     
     md = f"""---
 id: {data['id']}
-category: "[[10_Wiki/{data['category']}]]"
+category: "[[{category_name}]]"
 confidence_score: {data.get('confidence_score', 0.9)}
-tags: [{tags_str}]
+tags:
+{tags_str}
 last_reinforced: {data['last_reinforced']}
 github_commit: "pending"
 ---
@@ -98,8 +114,9 @@ github_commit: "pending"
 - **정책 변화:** (자동화 로직에 의한 신규 편입)
 
 ## 🔗 지식 연결 (Graph)
-- **Parent:** [[10_Wiki/{data['category']}]]
+- **Parent:** [[{category_name}]]
 - **Related:** {related_str}
-- **Raw Source:** [[00_Raw/{original_filename}]]
+- **Raw Source:** [[{original_filename}]]
 """
     return md
+
