@@ -95,23 +95,26 @@ def update_graph(raw_filename: str, parsed_data: dict, output_path: str):
 
 def git_sync(title: str):
     """
-    Commits and pushes changes to GitHub.
+    Commits and pushes changes to GitHub, and triggers Graphify analysis.
     """
-    print("Starting Git sync...")
+    print("Starting Git sync and Project Analysis...")
     try:
-        # Add all
+        # 1. Graphify 분석 실행 (지식 그래프 최신화)
+        print("Running Graphify analysis on Tool_Rental_App...")
+        subprocess.run(["python", "-m", "graphify", "Tool_Rental_App", "--obsidian", "--wiki", "--no-viz"], cwd=BASE_DIR)
+        
+        # 2. Git 작업
         subprocess.run(["git", "add", "."], cwd=BASE_DIR, check=True)
-        # Commit
-        commit_msg = f"[P-Reinforce] auto: '{title}' 지식화 완료"
+        commit_msg = f"[P-Reinforce] auto: '{title}' 지식화 및 Graphify 분석 완료"
         subprocess.run(["git", "commit", "-m", commit_msg], cwd=BASE_DIR, check=True)
-        # Push
+        
         print("Pushing to GitHub...")
         result = subprocess.run(["git", "push"], cwd=BASE_DIR, capture_output=True, text=True)
         if result.returncode == 0:
-            print("Git Push successful.")
+            print("Git Push and Analysis successful.")
         else:
             print(f"Git Push failed: {result.stderr}")
-            print("Please check your git credentials or internet connection.")
     except Exception as e:
-        print(f"Git sync error: {e}")
+        print(f"Git sync/Analysis error: {e}")
+
 

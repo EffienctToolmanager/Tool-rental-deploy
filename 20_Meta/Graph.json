@@ -237,6 +237,19 @@
         "Architecture",
         "Self-Archiving"
       ]
+    },
+    {
+      "id": "9ba84592-e522",
+      "path": "10_Wiki/Projects/Knowledge_Architecture/Obsidian_기반_유기적_지식_그래프_구축_전략.md",
+      "type": "wiki",
+      "title": "Obsidian 기반 유기적 지식 그래프 구축 전략",
+      "tags": [
+        "지식 그래프",
+        "Obsidian",
+        "지식 관리",
+        "시스템 아키텍처",
+        "자율 학습"
+      ]
     }
   ],
   "edges": [
@@ -418,6 +431,16 @@
     {
       "source": "55df2c2e-d610",
       "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "9ba84592-e522",
+      "target": "10_Wiki/Projects/Knowledge_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "9ba84592-e522",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
       "relationship": "derived_from"
     }
   ]
