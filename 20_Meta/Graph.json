@@ -466,6 +466,18 @@
         "Knowledge_Architecture",
         "Automation"
       ]
+    },
+    {
+      "id": "433014ea-328a",
+      "path": "10_Wiki/Topics/Technology_Adoption/AI와의_생활_통합_선언_(Manifesto).md",
+      "type": "wiki",
+      "title": "AI와의 생활 통합 선언 (Manifesto)",
+      "tags": [
+        "AI",
+        "미래",
+        "인간기술통합",
+        "생활필수재"
+      ]
     }
   ],
   "edges": [
@@ -817,6 +829,16 @@
     {
       "source": "8439dc4b-21fe",
       "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "433014ea-328a",
+      "target": "10_Wiki/Topics/Technology_Adoption",
+      "relationship": "parent"
+    },
+    {
+      "source": "433014ea-328a",
+      "target": "00_Raw/무제 끝.md",
       "relationship": "derived_from"
     }
   ]
