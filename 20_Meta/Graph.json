@@ -453,6 +453,19 @@
         "CLI",
         "Software Architecture"
       ]
+    },
+    {
+      "id": "8439dc4b-21fe",
+      "path": "10_Wiki/Projects/Knowledge_System/지식_그래프_구축_및_옵시디언_아키텍처_최적화.md",
+      "type": "wiki",
+      "title": "지식 그래프 구축 및 옵시디언 아키텍처 최적화",
+      "tags": [
+        "Knowledge_Graph",
+        "Obsidian",
+        "Graphify",
+        "Knowledge_Architecture",
+        "Automation"
+      ]
     }
   ],
   "edges": [
@@ -794,6 +807,16 @@
     {
       "source": "8eacecca-a3eb",
       "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "8439dc4b-21fe",
+      "target": "10_Wiki/Projects/Knowledge_System",
+      "relationship": "parent"
+    },
+    {
+      "source": "8439dc4b-21fe",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
       "relationship": "derived_from"
     }
   ]

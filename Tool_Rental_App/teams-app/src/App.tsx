@@ -69,11 +69,11 @@ const App: React.FC = () => {
         
         {selectedTools.size > 0 ? (
           <button onClick={handleBatchRental} className="rental-btn batch-btn">
-             🚀 Rent Selected ({selectedTools.size} items)
+             🚀 Rent Selected ({selectedTools.size})
           </button>
         ) : (
           <a href={baseFormUrl} target="_blank" rel="noreferrer" className="rental-btn">
-            + New Request Form
+            + New Request
           </a>
         )}
       </header>
@@ -100,8 +100,8 @@ const App: React.FC = () => {
               />
               <select value={filter} onChange={(e) => setFilter(e.target.value)} className="search-input">
                 <option value="All">All Status</option>
-                <option value="Warehouse">Warehouse (Available)</option>
-                <option value="On Site">On Site (In Use)</option>
+                <option value="Warehouse">Warehouse</option>
+                <option value="On Site">On Site</option>
               </select>
             </div>
 
@@ -109,7 +109,7 @@ const App: React.FC = () => {
               <table>
                 <thead>
                   <tr>
-                    <th style={{ width: '40px' }}>Select</th>
+                    <th style={{ width: '40px' }}>Sel</th>
                     <th>Status</th>
                     {displayHeaders.map((label, idx) => (
                       <th key={idx}>{label}</th>
@@ -120,7 +120,7 @@ const App: React.FC = () => {
                 <tbody>
                   {filteredTools.map((tool, idx) => (
                     <tr key={idx} className={selectedTools.has(tool[dataKeys[0]]) ? 'selected-row' : ''}>
-                      <td style={{ textAlign: 'center' }}>
+                      <td data-label="Select" style={{ textAlign: 'center' }}>
                         {tool.Status === 'Available' && (
                           <input 
                             type="checkbox" 
@@ -130,30 +130,30 @@ const App: React.FC = () => {
                           />
                         )}
                       </td>
-                      <td>
+                      <td data-label="Status">
                         <span className={`status-tag ${tool.Status === 'Available' ? 'tag-available' : 'tag-inuse'}`}>
                           {tool.Status === 'Available' ? '● Warehouse' : '● On Site'}
                         </span>
                       </td>
                       {dataKeys.map((key, kIdx) => (
-                        <td key={kIdx} style={{ 
+                        <td key={kIdx} data-label={displayHeaders[kIdx]} style={{ 
                           fontWeight: (kIdx === 0 || kIdx === 8) ? 800 : 400,
                           color: (kIdx === 2 && tool.Status === 'In Use') ? 'var(--status-inuse)' : 'inherit'
                         }}>
                           {tool[key]}
                         </td>
                       ))}
-                      <td style={{ textAlign: 'center' }}>
+                      <td data-label="Action" style={{ textAlign: 'center' }}>
                         {tool.Status === 'Available' ? (
                           <button 
                             onClick={() => { setSelectedTools(new Set([tool[dataKeys[0]]])); handleBatchRental(); }} 
                             className="rent-link" 
                             style={{ background: 'none', border: 'none', padding: 0 }}
                           >
-                            Quick Rent
+                            Rent Now
                           </button>
                         ) : (
-                          <span style={{ color: '#cbd5e1' }}>-</span>
+                          <span style={{ color: '#cbd5e1' }}>Rented</span>
                         )}
                       </td>
                     </tr>
