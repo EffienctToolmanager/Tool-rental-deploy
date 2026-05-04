@@ -410,6 +410,22 @@
         "MS365",
         "architecture"
       ]
+    },
+    {
+      "id": "10844e24-09a3",
+      "path": "10_Wiki/Projects/AI_Automation/Integrated_AI_Automation_System_Roadmap_(Local-First_Architecture).md",
+      "type": "wiki",
+      "title": "Integrated AI Automation System Roadmap (Local-First Architecture)",
+      "tags": [
+        "AI",
+        "자동화",
+        "로드맵",
+        "Local_AI",
+        "Agent",
+        "Obsidian",
+        "Enterprise_AI",
+        "System_Design"
+      ]
     }
   ],
   "edges": [
@@ -721,6 +737,16 @@
     {
       "source": "59df9a44-80cb",
       "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "10844e24-09a3",
+      "target": "10_Wiki/Projects/AI_Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "10844e24-09a3",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
       "relationship": "derived_from"
     }
   ]
