@@ -103,6 +103,19 @@
         "Local_Dev",
         "Google_Drive"
       ]
+    },
+    {
+      "id": "ed299178-8736",
+      "path": "10_Wiki/Decisions/Synchronization_Policy/Knowledge_Sync_Policy:_Local_PC_to_Google_Drive.md",
+      "type": "wiki",
+      "title": "Knowledge Sync Policy: Local PC to Google Drive",
+      "tags": [
+        "Synchronization",
+        "Google Drive",
+        "Workflow",
+        "Knowledge Management",
+        "Architecture"
+      ]
     }
   ],
   "edges": [
@@ -183,6 +196,16 @@
     },
     {
       "source": "34c89e99-9b5a",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "ed299178-8736",
+      "target": "10_Wiki/Decisions/Synchronization_Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "ed299178-8736",
       "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
       "relationship": "derived_from"
     }
