@@ -1,11 +1,30 @@
 import json
 import os
+import shutil
 from datetime import datetime
 import subprocess
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 INDEX_PATH = os.path.join(BASE_DIR, "20_Meta", "Index.md")
 GRAPH_PATH = os.path.join(BASE_DIR, "20_Meta", "Graph.json")
+G_DRIVE_PATH = r"G:\내 드라이브\Family_Archive"
+
+def sync_to_gdrive():
+    """
+    10_Wiki와 20_Meta 폴더를 구글 드라이브로 동기화합니다.
+    (모바일 열람 및 가족 공유용)
+    """
+    print(f"Syncing to Google Drive: {G_DRIVE_PATH}...")
+    try:
+        for folder in ["10_Wiki", "20_Meta"]:
+            src = os.path.join(BASE_DIR, folder)
+            dst = os.path.join(G_DRIVE_PATH, folder)
+            if os.path.exists(src):
+                # Python 3.8+ 이상에서 dirs_exist_ok=True 사용 가능
+                shutil.copytree(src, dst, dirs_exist_ok=True)
+        print("Google Drive Sync successful.")
+    except Exception as e:
+        print(f"Google Drive Sync error: {e}")
 
 def update_dashboard(raw_filename: str, parsed_data: dict, output_path: str):
     """
@@ -29,6 +48,8 @@ def update_dashboard(raw_filename: str, parsed_data: dict, output_path: str):
             with open(INDEX_PATH, 'w', encoding='utf-8') as f:
                 f.writelines(lines)
             print("Dashboard updated successfully.")
+            # 업데이트 성공 시 구글 드라이브 동기화 실행
+            sync_to_gdrive()
         else:
             print("Could not find the log section in Index.md.")
     except Exception as e:
@@ -67,6 +88,8 @@ def update_graph(raw_filename: str, parsed_data: dict, output_path: str):
         with open(GRAPH_PATH, 'w', encoding='utf-8') as f:
             json.dump(graph, f, ensure_ascii=False, indent=2)
         print("Graph updated successfully.")
+        # 업데이트 성공 시 구글 드라이브 동기화 실행
+        sync_to_gdrive()
     except Exception as e:
         print(f"Error updating graph: {e}")
 
@@ -91,3 +114,4 @@ def git_sync(title: str):
             print("Please check your git credentials or internet connection.")
     except Exception as e:
         print(f"Git sync error: {e}")
+
