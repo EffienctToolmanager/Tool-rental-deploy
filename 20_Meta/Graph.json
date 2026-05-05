@@ -679,6 +679,19 @@
         "Automation",
         "Data Validation"
       ]
+    },
+    {
+      "id": "ba95ba16-66b8",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_앱_개발_환경_설정_및_UI_개선_로깅.md",
+      "type": "wiki",
+      "title": "Teams 앱 개발 환경 설정 및 UI 개선 로깅",
+      "tags": [
+        "FrontEnd",
+        "Azure AD",
+        "DevTools",
+        "React",
+        "Koreanization"
+      ]
     }
   ],
   "edges": [
@@ -1190,6 +1203,16 @@
     {
       "source": "0649b35d-de1a",
       "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "ba95ba16-66b8",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "ba95ba16-66b8",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
