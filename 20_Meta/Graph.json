@@ -745,6 +745,19 @@
         "Workflow",
         "Synchronization"
       ]
+    },
+    {
+      "id": "76ea87ac-aabb",
+      "path": "10_Wiki/Projects/Teams_App_Deployment/GEV_Teams_App_Packaging_and_Branding_Guide.md",
+      "type": "wiki",
+      "title": "GEV Teams App Packaging and Branding Guide",
+      "tags": [
+        "Productivity",
+        "Deployment",
+        "Branding",
+        "Teams",
+        "Packaging"
+      ]
     }
   ],
   "edges": [
@@ -1306,6 +1319,16 @@
     {
       "source": "6b097ad1-e289",
       "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "76ea87ac-aabb",
+      "target": "10_Wiki/Projects/Teams_App_Deployment",
+      "relationship": "parent"
+    },
+    {
+      "source": "76ea87ac-aabb",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
       "relationship": "derived_from"
     }
   ]
