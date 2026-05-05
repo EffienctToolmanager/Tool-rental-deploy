@@ -785,6 +785,19 @@
         "standardization",
         "UI"
       ]
+    },
+    {
+      "id": "bc4bf0f6-c8c3",
+      "path": "10_Wiki/Decisions/Policy/AI_어시스턴트_자율_아카이빙_및_영속성_정책.md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 영속성 정책",
+      "tags": [
+        "Policy",
+        "AI",
+        "Archiving",
+        "Persistence",
+        "KnowledgeManagement"
+      ]
     }
   ],
   "edges": [
@@ -1376,6 +1389,16 @@
     {
       "source": "88dbaa29-114e",
       "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "bc4bf0f6-c8c3",
+      "target": "10_Wiki/Decisions/Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "bc4bf0f6-c8c3",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
       "relationship": "derived_from"
     }
   ]
