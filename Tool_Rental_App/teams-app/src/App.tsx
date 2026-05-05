@@ -40,23 +40,38 @@ const App: React.FC = () => {
 
   const openForms = (url: string) => {
     const { microsoftTeams } = window as any;
-    console.log("Attempting to open:", url);
+    console.log("Teams Task Attempt:", url);
     
-    // Multi-layer fallback for Teams Mobile
-    try {
-      if (microsoftTeams && microsoftTeams.app && microsoftTeams.app.openLink) {
-        microsoftTeams.app.openLink(url);
-      } else if (microsoftTeams && microsoftTeams.executeDeepLink) {
-        microsoftTeams.executeDeepLink(url);
-      } else {
-        // Last resort: If SDK fails, use browser redirect
-        const win = window.open(url, '_blank');
-        if (!win) window.location.href = url;
+    if (microsoftTeams) {
+      try {
+        // Method 1: Task Module (Best for staying inside Teams)
+        if (microsoftTeams.tasks && microsoftTeams.tasks.startTask) {
+          const taskInfo = {
+            url: url,
+            title: "GEV Request Form",
+            height: "large",
+            width: "large",
+            fallbackUrl: url
+          };
+          microsoftTeams.tasks.startTask(taskInfo, (err: any) => {
+            if (err) console.error("Task Module failed", err);
+          });
+          return;
+        }
+        
+        // Method 2: App OpenLink
+        if (microsoftTeams.app && microsoftTeams.app.openLink) {
+          microsoftTeams.app.openLink(url);
+          return;
+        }
+      } catch (e) {
+        console.error("SDK Task failed", e);
       }
-    } catch (e) {
-      console.error("SDK Error, falling back to redirect", e);
-      window.location.href = url;
     }
+
+    // Final Fallback
+    const win = window.open(url, '_blank');
+    if (!win) window.location.href = url;
   };
 
   useEffect(() => {
