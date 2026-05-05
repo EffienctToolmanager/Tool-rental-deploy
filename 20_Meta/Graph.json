@@ -732,6 +732,19 @@
         "Obsidian",
         "Roadmap"
       ]
+    },
+    {
+      "id": "6b097ad1-e289",
+      "path": "10_Wiki/Projects/Infrastructure/Project_Data_Architecture_and_Knowledge_Workflow_Definition.md",
+      "type": "wiki",
+      "title": "Project Data Architecture and Knowledge Workflow Definition",
+      "tags": [
+        "Data Flow",
+        "Architecture",
+        "Knowledge Management",
+        "Workflow",
+        "Synchronization"
+      ]
     }
   ],
   "edges": [
@@ -1283,6 +1296,16 @@
     {
       "source": "ff944bd2-384b",
       "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "6b097ad1-e289",
+      "target": "10_Wiki/Projects/Infrastructure",
+      "relationship": "parent"
+    },
+    {
+      "source": "6b097ad1-e289",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
