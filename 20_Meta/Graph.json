@@ -718,6 +718,20 @@
         "정보 구조화",
         "지식 관리"
       ]
+    },
+    {
+      "id": "ff944bd2-384b",
+      "path": "10_Wiki/Projects/AI_System_Design/로컬_중심의_통합_AI_자동화_시스템_로드맵.md",
+      "type": "wiki",
+      "title": "로컬 중심의 통합 AI 자동화 시스템 로드맵",
+      "tags": [
+        "AI",
+        "자동화",
+        "Agent",
+        "Local_AI",
+        "Obsidian",
+        "Roadmap"
+      ]
     }
   ],
   "edges": [
@@ -1259,6 +1273,16 @@
     {
       "source": "065c0f30-6a95",
       "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "ff944bd2-384b",
+      "target": "10_Wiki/Projects/AI_System_Design",
+      "relationship": "parent"
+    },
+    {
+      "source": "ff944bd2-384b",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
       "relationship": "derived_from"
     }
   ]
