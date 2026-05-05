@@ -877,6 +877,19 @@
         "CLI",
         "Software Engineering"
       ]
+    },
+    {
+      "id": "aadc2bf3-4536",
+      "path": "10_Wiki/Decisions/Knowledge_Governance/AI_어시스턴트_자율_아카이빙_및_영속성_정책_(Autonomous_Archiving_Policy).md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 영속성 정책 (Autonomous Archiving Policy)",
+      "tags": [
+        "Policy",
+        "AI",
+        "Archiving",
+        "Permanence",
+        "Knowledge Management"
+      ]
     }
   ],
   "edges": [
@@ -1538,6 +1551,16 @@
     {
       "source": "a8b0aae8-0962",
       "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "aadc2bf3-4536",
+      "target": "10_Wiki/Decisions/Knowledge_Governance",
+      "relationship": "parent"
+    },
+    {
+      "source": "aadc2bf3-4536",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
       "relationship": "derived_from"
     }
   ]
