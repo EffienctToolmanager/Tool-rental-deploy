@@ -10,8 +10,8 @@ const App: React.FC = () => {
   const [selectedTools, setSelectedTools] = useState<Set<string>>(new Set());
   const [copyMsg, setCopyMsg] = useState('');
 
-  // Use the verified short URL
-  const baseFormUrl = "https://forms.office.com/r/HQfa3nDmZu"; 
+  // Use the FULL Long URL for MS Forms
+  const baseFormUrl = "https://forms.office.com/Pages/ResponsePage.aspx?id=0bbMFTXTlkm2-XtpJfCBIYcZG22FI4NKt0EK7qOu0vRUMllQUVRSOUEwNFI5UElWVlRBWDM5RUxZRy4u"; 
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -82,7 +82,8 @@ const App: React.FC = () => {
 
   const handleBatchRental = () => {
     const codes = Array.from(selectedTools).join(', ');
-    const url = `${baseFormUrl}?id=${encodeURIComponent(codes)}`;
+    // IMPORTANT: Use '&' instead of '?' because baseFormUrl already has parameters
+    const url = `${baseFormUrl}&id=${encodeURIComponent(codes)}`;
     openForms(url);
   };
 

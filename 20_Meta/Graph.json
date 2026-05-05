@@ -958,6 +958,18 @@
         "Architecture",
         "Data Flow"
       ]
+    },
+    {
+      "id": "46b2c889-4f5d",
+      "path": "10_Wiki/Topics/Philosophy/AI와_삶의_통합_선언.md",
+      "type": "wiki",
+      "title": "AI와 삶의 통합 선언",
+      "tags": [
+        "AI",
+        "철학",
+        "기술적 의존성",
+        "미래"
+      ]
     }
   ],
   "edges": [
@@ -1679,6 +1691,16 @@
     {
       "source": "2f72e79f-ba16",
       "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "46b2c889-4f5d",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "46b2c889-4f5d",
+      "target": "00_Raw/무제 끝.md",
       "relationship": "derived_from"
     }
   ]
