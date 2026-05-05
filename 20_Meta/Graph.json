@@ -665,6 +665,20 @@
         "Automation",
         "Microsoft 365"
       ]
+    },
+    {
+      "id": "0649b35d-de1a",
+      "path": "10_Wiki/Projects/UI_UX_Improvements/Equipment_ID_Click-to-Copy_&_Feedback_System.md",
+      "type": "wiki",
+      "title": "Equipment ID Click-to-Copy & Feedback System",
+      "tags": [
+        "UI/UX",
+        "React",
+        "Clipboard API",
+        "Frontend",
+        "Automation",
+        "Data Validation"
+      ]
     }
   ],
   "edges": [
@@ -1166,6 +1180,16 @@
     {
       "source": "0f8b3dc2-4da1",
       "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "0649b35d-de1a",
+      "target": "10_Wiki/Projects/UI_UX_Improvements",
+      "relationship": "parent"
+    },
+    {
+      "source": "0649b35d-de1a",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
       "relationship": "derived_from"
     }
   ]
