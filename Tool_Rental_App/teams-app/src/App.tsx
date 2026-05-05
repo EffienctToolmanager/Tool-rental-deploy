@@ -41,17 +41,19 @@ const App: React.FC = () => {
   const openForms = (url: string) => {
     const { microsoftTeams } = window as any;
     if (microsoftTeams) {
-      console.log("Opening in Teams:", url);
-      // Try multiple Teams methods for mobile compatibility
+      console.log("Teams Open Attempt:", url);
       try {
+        // Use the most modern openLink API with sub-object
         if (microsoftTeams.app && microsoftTeams.app.openLink) {
-          microsoftTeams.app.openLink(url);
+          microsoftTeams.app.openLink({ url: url });
         } else if (microsoftTeams.executeDeepLink) {
+          // Fallback to deep link format for Teams
           microsoftTeams.executeDeepLink(url);
         } else {
           window.open(url, '_blank');
         }
       } catch (e) {
+        console.error("Link error", e);
         window.open(url, '_blank');
       }
     } else {
@@ -75,11 +77,10 @@ const App: React.FC = () => {
           setCurrentUserEmail(upn);
           setDebugInfo(`UPN:${upn} | ID:${uid}`);
 
-          // Relaxed Admin Check: Partial match for the email prefix or exact SSO ID
-          const isAdminEmail = upn.includes("taegyu.kim") || upn.includes("223132739");
-          const isAdminID = uid === "223132739";
+          // Exact Match based on user debug info
+          const isAdminUser = upn.includes("223132739") || uid === "6d1b1987-2385-4a83-b741-0aeea3aed2f4";
           
-          if (isAdminEmail || isAdminID) {
+          if (isAdminUser) {
             setIsAdmin(true);
           }
           
