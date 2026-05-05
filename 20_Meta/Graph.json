@@ -758,6 +758,18 @@
         "Teams",
         "Packaging"
       ]
+    },
+    {
+      "id": "140abc9f-e536",
+      "path": "10_Wiki/Topics/Philosophy/The_Inescapable_Presence_of_AI_in_Daily_Life.md",
+      "type": "wiki",
+      "title": "The Inescapable Presence of AI in Daily Life",
+      "tags": [
+        "AI",
+        "Philosophy",
+        "Integration",
+        "Future"
+      ]
     }
   ],
   "edges": [
@@ -1329,6 +1341,16 @@
     {
       "source": "76ea87ac-aabb",
       "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "140abc9f-e536",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "140abc9f-e536",
+      "target": "00_Raw/무제 끝.md",
       "relationship": "derived_from"
     }
   ]
