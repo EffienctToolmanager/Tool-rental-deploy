@@ -626,6 +626,19 @@
         "CLI",
         "Software Architecture"
       ]
+    },
+    {
+      "id": "61afbdc3-4738",
+      "path": "10_Wiki/Topics/Knowledge_Architecture/Hybrid_Knowledge_Archiving_System_Architecture_Review.md",
+      "type": "wiki",
+      "title": "Hybrid Knowledge Archiving System Architecture Review",
+      "tags": [
+        "Knowledge Management",
+        "Data Flow",
+        "Architecture",
+        "Synchronization",
+        "AI Agent"
+      ]
     }
   ],
   "edges": [
@@ -1097,6 +1110,16 @@
     {
       "source": "d91819a6-f1fe",
       "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "61afbdc3-4738",
+      "target": "10_Wiki/Topics/Knowledge_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "61afbdc3-4738",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
