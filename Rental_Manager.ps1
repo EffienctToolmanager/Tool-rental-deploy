@@ -28,9 +28,9 @@ function Export-ToJson {
         $lastRow = $sheet.UsedRange.Rows.Count
         
         for ($i = 2; $i -le $lastRow; $i++) {
-            $id = [string]$sheet.Cells.Item($i, 1).Value2
-            if ([string]::IsNullOrWhiteSpace($id)) { continue }
-
+            # Skip only if the entire row is likely empty (optional, but let's keep it safe)
+            # Removed the strict ID check to preserve all rows
+            
             $currentLoc = [string]$sheet.Cells.Item($i, 3).Value2
             $status = if ([string]::IsNullOrWhiteSpace($currentLoc)) { "Available" } else { "In Use" }
             
@@ -39,7 +39,6 @@ function Export-ToJson {
             $rowObj["Location"] = if ($status -eq "Available") { "Warehouse" } else { $currentLoc.Trim() }
             
             for ($idx = 0; $idx -lt $headerList.Count; $idx++) {
-                # Use .Text instead of .Value2 to get formatted Date (e.g., '2024-05-04' instead of 45416)
                 $val = [string]$sheet.Cells.Item($i, $idx + 1).Text
                 $rowObj[$headerList[$idx]] = if ($val) { $val.Trim() } else { "-" }
             }
