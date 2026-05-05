@@ -601,6 +601,18 @@
         "Debugging",
         "UI/UX"
       ]
+    },
+    {
+      "id": "d273a98f-a50c",
+      "path": "10_Wiki/Topics/Philosophy/AI와의_필수적_결합_선언.md",
+      "type": "wiki",
+      "title": "AI와의 필수적 결합 선언",
+      "tags": [
+        "AI",
+        "철학",
+        "미래",
+        "기술의_도구화"
+      ]
     }
   ],
   "edges": [
@@ -1052,6 +1064,16 @@
     {
       "source": "eec98e40-d20e",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "d273a98f-a50c",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "d273a98f-a50c",
+      "target": "00_Raw/무제 끝.md",
       "relationship": "derived_from"
     }
   ]
