@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-05 13:29]** `00_Raw/Graphify_Skill_Guide_2026-05-04.md` 문서를 `10_Wiki/Skills/Tooling/Graphify__Codebase_Knowledge_Graph_Generator.md` 로 변환 및 배치 완료. (분류: Skills/Tooling)
+
 - **[2026-05-05 13:27]** `00_Raw/무제 끝.md` 문서를 `10_Wiki/Topics/Philosophy/AI와의_필수적_결합_선언.md` 로 변환 및 배치 완료. (분류: Topics/Philosophy)
 
 - **[2026-05-05 13:26]** `00_Raw/Conversation_Log_2026-05-04.md` 문서를 `10_Wiki/Projects/Teams_Integration/Teams_앱_UI_개발_및_디버깅_로그.md` 로 변환 및 배치 완료. (분류: Projects/Teams_Integration)
