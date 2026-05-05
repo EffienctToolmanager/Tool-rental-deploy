@@ -45,15 +45,15 @@ const App: React.FC = () => {
     if (microsoftTeams) {
       try {
         // Method 1: Task Module
-        if (microsoftTeams.tasks && microsoftTeams.tasks.startTask) {
-          const taskInfo = {
+        if (microsoftTeams.tasks && (microsoftTeams.tasks as any).startTask) {
+          const taskInfo: any = {
             url: url,
             title: "GEV Request Form",
-            height: "large",
-            width: "large",
+            height: 600,
+            width: 600,
             fallbackUrl: url
           };
-          microsoftTeams.tasks.startTask(taskInfo, (err: any) => {
+          (microsoftTeams.tasks as any).startTask(taskInfo, (err: any) => {
             if (err) console.error("Task Module failed", err);
           });
           return;
@@ -80,7 +80,7 @@ const App: React.FC = () => {
         await microsoftTeams.app.initialize();
         const context = await microsoftTeams.app.getContext();
         
-        const rawUPN = (context.user?.userPrincipalName || context.upn || (context as any).loginHint || "Unknown");
+        const rawUPN = (context.user?.userPrincipalName || (context as any).upn || (context as any).loginHint || "Unknown");
         const upn = rawUPN.toLowerCase().trim();
         const uid = (context.user?.id || (context.user as any)?.aadObjectId || "").trim();
         
