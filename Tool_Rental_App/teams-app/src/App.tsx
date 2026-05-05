@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import * as microsoftTeams from "@microsoft/teams-js";
 
 // Build Version: 2026-05-05-2026 (Force Refresh)
 const App: React.FC = () => {
@@ -39,12 +40,11 @@ const App: React.FC = () => {
   };
 
   const openForms = (url: string) => {
-    const { microsoftTeams } = window as any;
     console.log("Teams Task Attempt:", url);
     
     if (microsoftTeams) {
       try {
-        // Method 1: Task Module (Best for staying inside Teams)
+        // Method 1: Task Module
         if (microsoftTeams.tasks && microsoftTeams.tasks.startTask) {
           const taskInfo = {
             url: url,
@@ -75,36 +75,33 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const { microsoftTeams } = window as any;
-    
     const initializeApp = async () => {
-      if (microsoftTeams) {
-        try {
-          await microsoftTeams.app.initialize();
-          const context = await microsoftTeams.app.getContext();
-          
-          const rawUPN = (context.user?.userPrincipalName || context.upn || context.loginHint || "Unknown");
-          const upn = rawUPN.toLowerCase().trim();
-          const uid = (context.user?.id || context.user?.aadObjectId || "").trim();
-          
-          setCurrentUserEmail(upn);
-          setDebugInfo(`UPN:${upn} | ID:${uid}`);
+      try {
+        await microsoftTeams.app.initialize();
+        const context = await microsoftTeams.app.getContext();
+        
+        const rawUPN = (context.user?.userPrincipalName || context.upn || (context as any).loginHint || "Unknown");
+        const upn = rawUPN.toLowerCase().trim();
+        const uid = (context.user?.id || (context.user as any)?.aadObjectId || "").trim();
+        
+        setCurrentUserEmail(upn);
+        setDebugInfo(`UPN:${upn} | ID:${uid}`);
 
-          // Exact Match based on user debug info
-          const isAdminUser = upn.includes("223132739") || uid === "6d1b1987-2385-4a83-b741-0aeea3aed2f4";
-          
-          if (isAdminUser) {
-            setIsAdmin(true);
-          }
-          
-          await Promise.all([fetchData(), fetchLogs()]);
-        } catch (err) {
-          console.error("Init failed", err);
-        } finally {
-          setTimeout(() => setIsLoading(false), 500);
+        // Exact Match based on user debug info
+        const isAdminUser = upn.includes("223132739") || uid === "6d1b1987-2385-4a83-b741-0aeea3aed2f4";
+        
+        if (isAdminUser) {
+          setIsAdmin(true);
         }
-      } else {
-        setIsLoading(false);
+        
+        await Promise.all([fetchData(), fetchLogs()]);
+      } catch (err) {
+        console.error("Init failed", err);
+        // If SDK fails (e.g. browser testing), still load data
+        setCurrentUserEmail("Local/Browser User");
+        await Promise.all([fetchData(), fetchLogs()]);
+      } finally {
+        setTimeout(() => setIsLoading(false), 500);
       }
     };
 
