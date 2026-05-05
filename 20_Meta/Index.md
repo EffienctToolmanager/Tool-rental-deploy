@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-05 13:22]** `00_Raw/20260505_Antigravity_Skill_Policy.md` 문서를 `10_Wiki/Decisions/Operational_Policies/Agent_Skills_Operating_Policy_and_Global_Guidelines.md` 로 변환 및 배치 완료. (분류: Decisions/Operational_Policies)
+
 - **[2026-05-05 13:20]** `00_Raw/20260505_UI_Layout_Pivot.md` 문서를 `10_Wiki/Decisions/UI_UX_Design/Dashboard_Layout_Pivot__High-Density_Table_Design_Standard.md` 로 변환 및 배치 완료. (분류: Decisions/UI_UX_Design)
 
 - **[2026-05-05 13:18]** `00_Raw/20260505_Excel_Date_Header_Fix.md` 문서를 `10_Wiki/Projects/Data_Handling/PowerShell_기반_엑셀_데이터_추출_및_동적_헤더_구현.md` 로 변환 및 배치 완료. (분류: Projects/Data_Handling)

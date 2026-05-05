@@ -560,6 +560,20 @@
         "High-Density",
         "Information Architecture"
       ]
+    },
+    {
+      "id": "3ecc9ce8-c84e",
+      "path": "10_Wiki/Decisions/Operational_Policies/Agent_Skills_Operating_Policy_and_Global_Guidelines.md",
+      "type": "wiki",
+      "title": "Agent Skills Operating Policy and Global Guidelines",
+      "tags": [
+        "Agent",
+        "Skill",
+        "Policy",
+        "Automation",
+        "Branding",
+        "System_Architecture"
+      ]
     }
   ],
   "edges": [
@@ -981,6 +995,16 @@
     {
       "source": "567021dd-e576",
       "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3ecc9ce8-c84e",
+      "target": "10_Wiki/Decisions/Operational_Policies",
+      "relationship": "parent"
+    },
+    {
+      "source": "3ecc9ce8-c84e",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
       "relationship": "derived_from"
     }
   ]
