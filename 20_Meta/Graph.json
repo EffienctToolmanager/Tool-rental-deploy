@@ -705,6 +705,19 @@
         "Information Design",
         "High-Density"
       ]
+    },
+    {
+      "id": "065c0f30-6a95",
+      "path": "10_Wiki/Projects/Knowledge_System/지식_그래프_기반_지식_관리_체계_고도화_아키텍처.md",
+      "type": "wiki",
+      "title": "지식 그래프 기반 지식 관리 체계 고도화 아키텍처",
+      "tags": [
+        "지식 그래프",
+        "옵시디언",
+        "아키텍처",
+        "정보 구조화",
+        "지식 관리"
+      ]
     }
   ],
   "edges": [
@@ -1236,6 +1249,16 @@
     {
       "source": "84322ba1-b4aa",
       "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "065c0f30-6a95",
+      "target": "10_Wiki/Projects/Knowledge_System",
+      "relationship": "parent"
+    },
+    {
+      "source": "065c0f30-6a95",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
       "relationship": "derived_from"
     }
   ]
