@@ -40,23 +40,22 @@ const App: React.FC = () => {
 
   const openForms = (url: string) => {
     const { microsoftTeams } = window as any;
-    if (microsoftTeams) {
-      console.log("Teams Open Attempt:", url);
-      try {
-        if (microsoftTeams.app && microsoftTeams.app.openLink) {
-          // SDK v2 expects a string URL
-          microsoftTeams.app.openLink(url);
-        } else if (microsoftTeams.executeDeepLink) {
-          microsoftTeams.executeDeepLink(url);
-        } else {
-          window.open(url, '_blank');
-        }
-      } catch (e) {
-        alert("Link Error: " + e);
-        window.open(url, '_blank');
+    console.log("Attempting to open:", url);
+    
+    // Multi-layer fallback for Teams Mobile
+    try {
+      if (microsoftTeams && microsoftTeams.app && microsoftTeams.app.openLink) {
+        microsoftTeams.app.openLink(url);
+      } else if (microsoftTeams && microsoftTeams.executeDeepLink) {
+        microsoftTeams.executeDeepLink(url);
+      } else {
+        // Last resort: If SDK fails, use browser redirect
+        const win = window.open(url, '_blank');
+        if (!win) window.location.href = url;
       }
-    } else {
-      window.open(url, '_blank');
+    } catch (e) {
+      console.error("SDK Error, falling back to redirect", e);
+      window.location.href = url;
     }
   };
 
@@ -432,7 +431,14 @@ const App: React.FC = () => {
                       ● {tool.Status === 'Available' ? 'Warehouse' : 'On Site'}
                     </span>
                     {tool.Status === 'Available' ? (
-                      <button onClick={() => { setSelectedTools(new Set([tool[dataKeys[0]]])); handleBatchRental(); }} style={{ background: 'var(--evergreen)', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '8px', fontWeight: 700 }}>
+                      <button 
+                        onClick={(e) => { 
+                          e.stopPropagation();
+                          setSelectedTools(new Set([tool[dataKeys[0]]])); 
+                          setTimeout(() => handleBatchRental(), 50); 
+                        }} 
+                        style={{ background: 'var(--evergreen)', color: 'white', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', position: 'relative', zIndex: 10 }}
+                      >
                         Rent Now
                       </button>
                     ) : <span style={{ color: '#64748b', fontSize: '0.85rem' }}>Currently Rented</span>}
