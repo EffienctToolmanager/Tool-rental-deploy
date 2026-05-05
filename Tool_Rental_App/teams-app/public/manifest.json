@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.15/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.15",
+  "version": "1.0.0",
+  "id": "e6f4e588-debb-521c-dce8-da40d77c47e6",
+  "packageName": "com.toolrental.ops",
+  "developer": {
+    "name": "GE Innovation Team",
+    "websiteUrl": "https://github.com/EffienctToolmanager/Tool-rental-deploy",
+    "privacyUrl": "https://github.com/EffienctToolmanager/Tool-rental-deploy/privacy",
+    "termsOfUseUrl": "https://github.com/EffienctToolmanager/Tool-rental-deploy/terms"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "GEV Tool List",
+    "full": "GEV Power Conversion Asia_Tool list"
+  },
+  "description": {
+    "short": "Real-time tool tracking and rental management system.",
+    "full": "A premium enterprise-grade system for tracking high-value tool rentals, integrated with MS Excel and Teams Dashboard."
+  },
+  "accentColor": "#6366f1",
+  "staticTabs": [
+    {
+      "entityId": "dashboard",
+      "name": "Dashboard",
+      "contentUrl": "https://effienctToolmanager.github.io/Tool-rental-deploy/",
+      "websiteUrl": "https://effienctToolmanager.github.io/Tool-rental-deploy/",
+      "scopes": ["personal"]
+    }
+  ],
+  "permissions": ["identity", "messageTeamMembers"],
+  "validDomains": ["effiencttoolmanager.github.io"]
+}

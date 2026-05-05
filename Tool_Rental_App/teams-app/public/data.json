@@ -1,0 +1,41 @@
+[
+    {
+        "Status": "Status Label",
+        "Location": "Location Label",
+        "Column1": "Equipment ID",
+        "Column2": "Warehouse Loc",
+        "Column3": "Site Loc",
+        "Column4": "Item Description",
+        "Column5": "Model Number",
+        "Column6": "Calibration Date",
+        "Column7": "Remaining Days",
+        "Column8": "Serial Number",
+        "Column9": "Asset Tag"
+    },
+    {
+        "Status": "Available",
+        "Location": "Warehouse",
+        "Column1": "DSP01",
+        "Column2": "A1",
+        "Column3": "-",
+        "Column4": "MAERSK SERVICE TOOL",
+        "Column5": "DSP & ALTERA & FLASH CARD",
+        "Column6": "2027-01-27",
+        "Column7": "268 Days",
+        "Column8": "35606506-556873-8",
+        "Column9": "GEPC"
+    },
+    {
+        "Status": "In Use",
+        "Location": "Shinshu Maru DD",
+        "Column1": "ADX01",
+        "Column2": "A0",
+        "Column3": "Shinshu Maru DD",
+        "Column4": "AUTOMATED STATIC MOTOR ANALYZER",
+        "Column5": "ADX-15",
+        "Column6": "2026-08-22",
+        "Column7": "110 Days",
+        "Column8": "102386600",
+        "Column9": "None"
+    }
+]

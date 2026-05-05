@@ -2,8 +2,9 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 # --- Paths Configuration ---
-$boxPath = "C:\Users\223132739\Box\Shared with Field Service Engineers\Tool Management"
-$dbPath = "$boxPath\Tool management_ Teams_(TEST).xlsx"
+$currentDir = $PSScriptRoot
+$boxPath = "$currentDir\Tool_Rental_App\teams-app\public"
+$dbPath = "$currentDir\deploy_tmp\Tool management_ Teams_(TEST).xlsx"
 
 function Export-ToJson {
     Write-Host "`n[V4.9] Extracting Master Inventory (Excel Text Format)..." -ForegroundColor Cyan
