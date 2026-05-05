@@ -851,6 +851,19 @@
         "Workflow",
         "Data Synchronization"
       ]
+    },
+    {
+      "id": "85ccb9ce-3a49",
+      "path": "10_Wiki/Projects/UI_UX/Equipment_ID_Click-to-Copy_Feature_Implementation.md",
+      "type": "wiki",
+      "title": "Equipment ID Click-to-Copy Feature Implementation",
+      "tags": [
+        "React",
+        "UX/UI",
+        "Clipboard API",
+        "Automation",
+        "Design System"
+      ]
     }
   ],
   "edges": [
@@ -1492,6 +1505,16 @@
     {
       "source": "13df768f-f94a",
       "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "85ccb9ce-3a49",
+      "target": "10_Wiki/Projects/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "85ccb9ce-3a49",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
       "relationship": "derived_from"
     }
   ]
