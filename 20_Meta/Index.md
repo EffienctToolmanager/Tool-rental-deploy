@@ -5,6 +5,18 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-06 00:29]** `00_Raw/20260505_Excel_Date_Header_Fix.md` 문서를 `10_Wiki/Projects/Data_Engineering/PowerShell_Excel_Data_Extraction_and_Dynamic_Header_Sync.md` 로 변환 및 배치 완료. (분류: Projects/Data_Engineering)
+
+- **[2026-05-06 00:21]** `00_Raw/Archive_2026-05-04_1125.md` 문서를 `10_Wiki/Projects/Knowledge_Architecture/유기적_지식_그래프_구축_마일스톤.md` 로 변환 및 배치 완료. (분류: Projects/Knowledge_Architecture)
+
+- **[2026-05-05 23:14]** `00_Raw/20260505_UI_Layout_Pivot.md` 문서를 `10_Wiki/Decisions/UX_Design/Dashboard_UI_Paradigm_Shift__Grid_to_High-Density_Table.md` 로 변환 및 배치 완료. (분류: Decisions/UX_Design)
+
+- **[2026-05-05 23:11]** `00_Raw/무제 끝.md` 문서를 `10_Wiki/Topics/AI_Adoption/AI와의_생활_밀착성_선언.md` 로 변환 및 배치 완료. (분류: Topics/AI_Adoption)
+
+- **[2026-05-05 23:08]** `00_Raw/Conversation_Log_2026-05-04.md` 문서를 `10_Wiki/Projects/Teams_Application/Teams_Application_UI_Enhancement_and_Dev_Mode_Implementation.md` 로 변환 및 배치 완료. (분류: Projects/Teams_Application)
+
+- **[2026-05-05 22:50]** `00_Raw/20260505_UI_Enhancement_Copy_ID.md` 문서를 `10_Wiki/Projects/UI_UX/Equipment_ID_Click-to-Copy_&_Feedback_System_Implementation.md` 로 변환 및 배치 완료. (분류: Projects/UI_UX)
+
 - **[2026-05-05 22:43]** `00_Raw/System_Structure_Review_2026-05-04.md` 문서를 `10_Wiki/Decisions/System Architecture/하이브리드_데이터_아키텍처_및_워크플로우_정의.md` 로 변환 및 배치 완료. (분류: Decisions/System Architecture)
 
 - **[2026-05-05 22:41]** `00_Raw/Graphify_Skill_Guide_2026-05-04.md` 문서를 `10_Wiki/Skills/Development_Tools/Graphify__Codebase_Analysis_and_Knowledge_Graph_Generation.md` 로 변환 및 배치 완료. (분류: Skills/Development_Tools)
