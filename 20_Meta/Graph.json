@@ -652,6 +652,19 @@
         "Automation",
         "Knowledge Management"
       ]
+    },
+    {
+      "id": "0f8b3dc2-4da1",
+      "path": "10_Wiki/Skills/Automation_Workflow/MS_Forms_to_Excel_Automation_using_Power_Automate.md",
+      "type": "wiki",
+      "title": "MS Forms to Excel Automation using Power Automate",
+      "tags": [
+        "Power Automate",
+        "MS Forms",
+        "Excel Online",
+        "Automation",
+        "Microsoft 365"
+      ]
     }
   ],
   "edges": [
@@ -1143,6 +1156,16 @@
     {
       "source": "17ea0a32-7c55",
       "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "0f8b3dc2-4da1",
+      "target": "10_Wiki/Skills/Automation_Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "0f8b3dc2-4da1",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
       "relationship": "derived_from"
     }
   ]

@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-05 13:35]** `00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md` 문서를 `10_Wiki/Skills/Automation_Workflow/MS_Forms_to_Excel_Automation_using_Power_Automate.md` 로 변환 및 배치 완료. (분류: Skills/Automation_Workflow)
+
 - **[2026-05-05 13:33]** `00_Raw/Policy_Update_2026-05-04_1018.md` 문서를 `10_Wiki/Decisions/AI_Operation/AI_어시스턴트_자율_아카이빙_및_운영_정책.md` 로 변환 및 배치 완료. (분류: Decisions/AI_Operation)
 
 - **[2026-05-05 13:31]** `00_Raw/System_Structure_Review_2026-05-04.md` 문서를 `10_Wiki/Topics/Knowledge_Architecture/Hybrid_Knowledge_Archiving_System_Architecture_Review.md` 로 변환 및 배치 완료. (분류: Topics/Knowledge_Architecture)
