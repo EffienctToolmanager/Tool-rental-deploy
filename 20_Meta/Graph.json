@@ -1024,6 +1024,19 @@
         "Automation",
         "UI/UX"
       ]
+    },
+    {
+      "id": "cb230e33-e161",
+      "path": "10_Wiki/Skills/Development_Tools/Graphify__Codebase_Analysis_and_Knowledge_Graph_Generation.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Analysis and Knowledge Graph Generation",
+      "tags": [
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI",
+        "Software Architecture"
+      ]
     }
   ],
   "edges": [
@@ -1795,6 +1808,16 @@
     {
       "source": "b508c075-0822",
       "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "cb230e33-e161",
+      "target": "10_Wiki/Skills/Development_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "cb230e33-e161",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
