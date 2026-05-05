@@ -5,6 +5,14 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-06 02:21]** `00_Raw/20260505_Teams_App_Packaging_and_Branding.md` 문서를 `10_Wiki/Projects/GEV_Teams_Integration/GEV_Teams_App_Packaging_and_Branding_Guide.md` 로 변환 및 배치 완료. (분류: Projects/GEV_Teams_Integration)
+
+- **[2026-05-06 01:57]** `00_Raw/20260505_Antigravity_Skill_Policy.md` 문서를 `10_Wiki/Decisions/Architecture/Antigravity_Skill_Operating_Policy_and_Global_Guidelines.md` 로 변환 및 배치 완료. (분류: Decisions/Architecture)
+
+- **[2026-05-06 01:51]** `00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md` 문서를 `10_Wiki/Projects/Automation_Workflow/MS_Forms_&_Power_Automate_Data_Synchronization_Workflow.md` 로 변환 및 배치 완료. (분류: Projects/Automation_Workflow)
+
+- **[2026-05-06 01:43]** `00_Raw/20260502_AI자동화시스템_로드맵.md` 문서를 `10_Wiki/Projects/AI_Architecture/Local_AI_Automation_System_Blueprint.md` 로 변환 및 배치 완료. (분류: Projects/AI_Architecture)
+
 - **[2026-05-06 00:29]** `00_Raw/20260505_Excel_Date_Header_Fix.md` 문서를 `10_Wiki/Projects/Data_Engineering/PowerShell_Excel_Data_Extraction_and_Dynamic_Header_Sync.md` 로 변환 및 배치 완료. (분류: Projects/Data_Engineering)
 
 - **[2026-05-06 00:21]** `00_Raw/Archive_2026-05-04_1125.md` 문서를 `10_Wiki/Projects/Knowledge_Architecture/유기적_지식_그래프_구축_마일스톤.md` 로 변환 및 배치 완료. (분류: Projects/Knowledge_Architecture)
