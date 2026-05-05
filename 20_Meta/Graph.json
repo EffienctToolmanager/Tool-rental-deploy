@@ -798,6 +798,20 @@
         "Persistence",
         "KnowledgeManagement"
       ]
+    },
+    {
+      "id": "2ae6a111-ec61",
+      "path": "10_Wiki/Projects/Data_Ingestion/Robust_Excel_Data_Ingestion__Dynamic_Header_&_Date_Parsing_Fix.md",
+      "type": "wiki",
+      "title": "Robust Excel Data Ingestion: Dynamic Header & Date Parsing Fix",
+      "tags": [
+        "PowerShell",
+        "Excel",
+        "Data Handling",
+        "React",
+        "Dynamic UI",
+        "JSON"
+      ]
     }
   ],
   "edges": [
@@ -1399,6 +1413,16 @@
     {
       "source": "bc4bf0f6-c8c3",
       "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "2ae6a111-ec61",
+      "target": "10_Wiki/Projects/Data_Ingestion",
+      "relationship": "parent"
+    },
+    {
+      "source": "2ae6a111-ec61",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
       "relationship": "derived_from"
     }
   ]

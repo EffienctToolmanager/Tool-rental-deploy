@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-05 14:31]** `00_Raw/20260505_Excel_Date_Header_Fix.md` 문서를 `10_Wiki/Projects/Data_Ingestion/Robust_Excel_Data_Ingestion__Dynamic_Header_&_Date_Parsing_Fix.md` 로 변환 및 배치 완료. (분류: Projects/Data_Ingestion)
+
 - **[2026-05-05 14:29]** `00_Raw/Policy_Update_2026-05-04_1018.md` 문서를 `10_Wiki/Decisions/Policy/AI_어시스턴트_자율_아카이빙_및_영속성_정책.md` 로 변환 및 배치 완료. (분류: Decisions/Policy)
 
 - **[2026-05-05 14:28]** `00_Raw/20260505_Antigravity_Skill_Policy.md` 문서를 `10_Wiki/Decisions/Policy/Agent_Skill_Operating_Policy_and_Global_Standards.md` 로 변환 및 배치 완료. (분류: Decisions/Policy)
