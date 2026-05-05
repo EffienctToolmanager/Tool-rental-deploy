@@ -533,6 +533,20 @@
         "Obsidian",
         "Agent"
       ]
+    },
+    {
+      "id": "de3b22a3-7a9e",
+      "path": "10_Wiki/Projects/Data_Handling/PowerShell_기반_엑셀_데이터_추출_및_동적_헤더_구현.md",
+      "type": "wiki",
+      "title": "PowerShell 기반 엑셀 데이터 추출 및 동적 헤더 구현",
+      "tags": [
+        "PowerShell",
+        "Excel-COM",
+        "Data_Extraction",
+        "Dynamic_Header",
+        "JSON",
+        "React"
+      ]
     }
   ],
   "edges": [
@@ -934,6 +948,16 @@
     {
       "source": "9e52c5ff-5411",
       "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "de3b22a3-7a9e",
+      "target": "10_Wiki/Projects/Data_Handling",
+      "relationship": "parent"
+    },
+    {
+      "source": "de3b22a3-7a9e",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
       "relationship": "derived_from"
     }
   ]
