@@ -838,6 +838,19 @@
         "CLI",
         "Software Architecture"
       ]
+    },
+    {
+      "id": "13df768f-f94a",
+      "path": "10_Wiki/Topics/Automation/MS_Forms_to_Excel_Automation_Workflow_Guide_(Power_Automate).md",
+      "type": "wiki",
+      "title": "MS Forms to Excel Automation Workflow Guide (Power Automate)",
+      "tags": [
+        "Power Automate",
+        "MS Forms",
+        "Excel",
+        "Workflow",
+        "Data Synchronization"
+      ]
     }
   ],
   "edges": [
@@ -1469,6 +1482,16 @@
     {
       "source": "97ec79f0-8139",
       "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "13df768f-f94a",
+      "target": "10_Wiki/Topics/Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "13df768f-f94a",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
       "relationship": "derived_from"
     }
   ]
