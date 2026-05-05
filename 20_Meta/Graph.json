@@ -864,6 +864,19 @@
         "Automation",
         "Design System"
       ]
+    },
+    {
+      "id": "a8b0aae8-0962",
+      "path": "10_Wiki/Skills/Codebase_Analysis/Graphify_Skill_Guide__Codebase_Knowledge_Graph_Generation.md",
+      "type": "wiki",
+      "title": "Graphify Skill Guide: Codebase Knowledge Graph Generation",
+      "tags": [
+        "Knowledge Graph",
+        "Codebase Analysis",
+        "Visualization",
+        "CLI",
+        "Software Engineering"
+      ]
     }
   ],
   "edges": [
@@ -1515,6 +1528,16 @@
     {
       "source": "85ccb9ce-3a49",
       "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "a8b0aae8-0962",
+      "target": "10_Wiki/Skills/Codebase_Analysis",
+      "relationship": "parent"
+    },
+    {
+      "source": "a8b0aae8-0962",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
