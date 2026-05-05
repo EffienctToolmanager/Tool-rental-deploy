@@ -8,8 +8,15 @@ const App: React.FC = () => {
   const [filter, setFilter] = useState('All');
   const [activeTab, setActiveTab] = useState('Inventory');
   const [selectedTools, setSelectedTools] = useState<Set<string>>(new Set());
+  const [copyMsg, setCopyMsg] = useState('');
 
   const baseFormUrl = "https://forms.office.com/r/yourformid"; 
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopyMsg(`Copied: ${text}`);
+    setTimeout(() => setCopyMsg(''), 2000);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,7 +67,22 @@ const App: React.FC = () => {
     <div className="container">
       <header>
         <div className="logo-area">
-          <h1>GEV TOOL Master</h1>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '1.5rem' }}>
+            <h1>GEV TOOL Master</h1>
+            {copyMsg && (
+              <div className="animate-fade-in" style={{ 
+                background: 'rgba(255,255,255,0.2)', 
+                padding: '0.4rem 1rem', 
+                borderRadius: '20px', 
+                fontSize: '0.8rem',
+                backdropFilter: 'blur(5px)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                color: '#fff'
+              }}>
+                ✅ {copyMsg}
+              </div>
+            )}
+          </div>
           <nav className="nav-tabs">
             <button className={activeTab === 'Inventory' ? 'active' : ''} onClick={() => setActiveTab('Inventory')}>Master Inventory</button>
             <button className={activeTab === 'Dashboard' ? 'active' : ''} onClick={() => setActiveTab('Dashboard')}>System Stats</button>
@@ -136,10 +158,17 @@ const App: React.FC = () => {
                         </span>
                       </td>
                       {dataKeys.map((key, kIdx) => (
-                        <td key={kIdx} data-label={displayHeaders[kIdx]} style={{ 
-                          fontWeight: (kIdx === 0 || kIdx === 8) ? 800 : 400,
-                          color: (kIdx === 2 && tool.Status === 'In Use') ? 'var(--status-inuse)' : 'inherit'
-                        }}>
+                        <td 
+                          key={kIdx} 
+                          data-label={displayHeaders[kIdx]} 
+                          onClick={() => kIdx === 0 && copyToClipboard(tool[key])}
+                          style={{ 
+                            fontWeight: (kIdx === 0 || kIdx === 8) ? 800 : 400,
+                            color: kIdx === 0 ? 'var(--gev-blue)' : ((kIdx === 2 && tool.Status === 'In Use') ? 'var(--status-inuse)' : 'inherit'),
+                            cursor: kIdx === 0 ? 'pointer' : 'default'
+                          }}
+                          title={kIdx === 0 ? "Click to copy ID" : ""}
+                        >
                           {tool[key]}
                         </td>
                       ))}

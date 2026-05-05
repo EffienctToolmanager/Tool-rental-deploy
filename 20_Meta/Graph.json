@@ -587,6 +587,20 @@
         "DataStructuring",
         "Automation"
       ]
+    },
+    {
+      "id": "eec98e40-d20e",
+      "path": "10_Wiki/Projects/Teams_Integration/Teams_앱_UI_개발_및_디버깅_로그.md",
+      "type": "wiki",
+      "title": "Teams 앱 UI 개발 및 디버깅 로그",
+      "tags": [
+        "Frontend",
+        "Teams",
+        "React",
+        "Development",
+        "Debugging",
+        "UI/UX"
+      ]
     }
   ],
   "edges": [
@@ -1028,6 +1042,16 @@
     {
       "source": "c88606f8-f168",
       "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "eec98e40-d20e",
+      "target": "10_Wiki/Projects/Teams_Integration",
+      "relationship": "parent"
+    },
+    {
+      "source": "eec98e40-d20e",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
