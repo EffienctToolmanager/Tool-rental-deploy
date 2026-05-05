@@ -825,6 +825,19 @@
         "Google Drive",
         "Knowledge Base"
       ]
+    },
+    {
+      "id": "97ec79f0-8139",
+      "path": "10_Wiki/Skills/Code Analysis/Graphify__Codebase_Knowledge_Graph_Generation.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Generation",
+      "tags": [
+        "Knowledge Graph",
+        "Codebase Analysis",
+        "Visualization",
+        "CLI",
+        "Software Architecture"
+      ]
     }
   ],
   "edges": [
@@ -1446,6 +1459,16 @@
     {
       "source": "667310dd-1de9",
       "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "97ec79f0-8139",
+      "target": "10_Wiki/Skills/Code Analysis",
+      "relationship": "parent"
+    },
+    {
+      "source": "97ec79f0-8139",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
