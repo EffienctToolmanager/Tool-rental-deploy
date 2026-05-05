@@ -43,17 +43,16 @@ const App: React.FC = () => {
     if (microsoftTeams) {
       console.log("Teams Open Attempt:", url);
       try {
-        // Use the most modern openLink API with sub-object
         if (microsoftTeams.app && microsoftTeams.app.openLink) {
-          microsoftTeams.app.openLink({ url: url });
+          // SDK v2 expects a string URL
+          microsoftTeams.app.openLink(url);
         } else if (microsoftTeams.executeDeepLink) {
-          // Fallback to deep link format for Teams
           microsoftTeams.executeDeepLink(url);
         } else {
           window.open(url, '_blank');
         }
       } catch (e) {
-        console.error("Link error", e);
+        alert("Link Error: " + e);
         window.open(url, '_blank');
       }
     } else {
