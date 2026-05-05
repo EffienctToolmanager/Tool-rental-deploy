@@ -1010,6 +1010,20 @@
         "Microsoft365",
         "LowCode"
       ]
+    },
+    {
+      "id": "b508c075-0822",
+      "path": "10_Wiki/Projects/UI_UX/UI_UX_Enhancement__Equipment_ID_Auto-Copy_Feature_Implementation.md",
+      "type": "wiki",
+      "title": "UI/UX Enhancement: Equipment ID Auto-Copy Feature Implementation",
+      "tags": [
+        "React",
+        "UX",
+        "Frontend",
+        "ClipboardAPI",
+        "Automation",
+        "UI/UX"
+      ]
     }
   ],
   "edges": [
@@ -1771,6 +1785,16 @@
     {
       "source": "37c702cd-1d98",
       "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "b508c075-0822",
+      "target": "10_Wiki/Projects/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "b508c075-0822",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
       "relationship": "derived_from"
     }
   ]

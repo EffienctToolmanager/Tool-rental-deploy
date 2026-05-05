@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-05 15:54]** `00_Raw/20260505_UI_Enhancement_Copy_ID.md` 문서를 `10_Wiki/Projects/UI_UX/UI_UX_Enhancement__Equipment_ID_Auto-Copy_Feature_Implementation.md` 로 변환 및 배치 완료. (분류: Projects/UI_UX)
+
 - **[2026-05-05 15:52]** `00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md` 문서를 `10_Wiki/Topics/Automation/MS_Forms_to_Excel_Automation_Workflow_(Power_Automate).md` 로 변환 및 배치 완료. (분류: Topics/Automation)
 
 - **[2026-05-05 15:51]** `00_Raw/System_Structure_Review_2026-05-04.md` 문서를 `10_Wiki/Topics/Workflow/Hybrid_Knowledge_Archiving_Workflow_Design.md` 로 변환 및 배치 완료. (분류: Topics/Workflow)
