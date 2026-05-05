@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-05 15:38]** `00_Raw/20260502_AI자동화시스템_로드맵.md` 문서를 `10_Wiki/Projects/AI_Automation/AI_자동화_시스템_통합_로드맵_및_설계_기록.md` 로 변환 및 배치 완료. (분류: Projects/AI_Automation)
+
 - **[2026-05-05 15:37]** `00_Raw/20260505_UI_Layout_Pivot.md` 문서를 `10_Wiki/Decisions/UI_UX/Dashboard_UI_Layout__Pivot_to_High-Density_Table.md` 로 변환 및 배치 완료. (분류: Decisions/UI_UX)
 
 - **[2026-05-05 15:35]** `00_Raw/Policy_Update_2026-05-04_1018.md` 문서를 `10_Wiki/Decisions/Knowledge_Governance/AI_어시스턴트_자율_아카이빙_및_영속성_정책_(Autonomous_Archiving_Policy).md` 로 변환 및 배치 완료. (분류: Decisions/Knowledge_Governance)

@@ -904,6 +904,20 @@
         "Data Visualization",
         "Product Design"
       ]
+    },
+    {
+      "id": "e67125d4-8471",
+      "path": "10_Wiki/Projects/AI_Automation/AI_자동화_시스템_통합_로드맵_및_설계_기록.md",
+      "type": "wiki",
+      "title": "AI 자동화 시스템 통합 로드맵 및 설계 기록",
+      "tags": [
+        "AI",
+        "자동화",
+        "로컬AI",
+        "로드맵",
+        "Obsidian",
+        "에이전트"
+      ]
     }
   ],
   "edges": [
@@ -1585,6 +1599,16 @@
     {
       "source": "5e43f441-38d1",
       "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "e67125d4-8471",
+      "target": "10_Wiki/Projects/AI_Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "e67125d4-8471",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
       "relationship": "derived_from"
     }
   ]
