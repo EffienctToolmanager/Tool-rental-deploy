@@ -945,6 +945,19 @@
         "GEV",
         "Packaging"
       ]
+    },
+    {
+      "id": "2f72e79f-ba16",
+      "path": "10_Wiki/Decisions/Knowledge_Architecture/지식_베이스_동기화_정책_(로컬-클라우드_아키텍처).md",
+      "type": "wiki",
+      "title": "지식 베이스 동기화 정책 (로컬-클라우드 아키텍처)",
+      "tags": [
+        "Sync",
+        "Google Drive",
+        "Knowledge Management",
+        "Architecture",
+        "Data Flow"
+      ]
     }
   ],
   "edges": [
@@ -1656,6 +1669,16 @@
     {
       "source": "3b88687f-0b8b",
       "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "2f72e79f-ba16",
+      "target": "10_Wiki/Decisions/Knowledge_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "2f72e79f-ba16",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
