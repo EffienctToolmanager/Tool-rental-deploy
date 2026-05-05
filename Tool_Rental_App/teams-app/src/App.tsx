@@ -151,9 +151,8 @@ const App: React.FC = () => {
 
 
   const handleBatchRental = () => {
-    const codes = Array.from(selectedTools).join(', ');
-    const url = `${baseFormUrl}&toolcode=${encodeURIComponent(codes)}`;
-    openForms(url);
+    // TEMPORARY TEST: Open RAW URL without parameters to check if Form loads
+    openForms(baseFormUrl);
   };
 
   const filteredTools = tools.filter(tool => {
@@ -464,14 +463,17 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <footer className="debug-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          User: <strong>{currentUserEmail}</strong> | Role: {isAdmin ? <span style={{color:'var(--admin-gold)'}}>Admin</span> : 'User'}
+      <footer className="debug-footer" style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            User: <strong>{currentUserEmail}</strong> | Role: {isAdmin ? <span style={{color:'var(--admin-gold)'}}>Admin</span> : 'User'}
+          </div>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button onClick={() => window.location.reload()} style={{ background: '#cbd5e1', border: 'none', padding: '2px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.6rem' }}>Reload App</button>
+            <span style={{ fontSize: '0.55rem', opacity: 0.5 }}>Build: 22:38 (Raw URL Test)</span>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={() => window.location.reload()} style={{ background: '#cbd5e1', border: 'none', padding: '2px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.6rem' }}>Reload App</button>
-          <span style={{ fontSize: '0.55rem', opacity: 0.5 }}>{debugInfo}</span>
-        </div>
+        <div style={{ fontSize: '0.5rem', opacity: 0.4, textAlign: 'left' }}>{debugInfo}</div>
       </footer>
     </div>
   );
