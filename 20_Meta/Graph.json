@@ -519,6 +519,20 @@
         "GEV",
         "Packaging"
       ]
+    },
+    {
+      "id": "9e52c5ff-5411",
+      "path": "10_Wiki/Projects/Automation_Architecture/통합_AI_자동화_시스템_구축_로드맵_(Local_&_Knowledge-Driven).md",
+      "type": "wiki",
+      "title": "통합 AI 자동화 시스템 구축 로드맵 (Local & Knowledge-Driven)",
+      "tags": [
+        "AI",
+        "자동화",
+        "로드맵",
+        "Local_AI",
+        "Obsidian",
+        "Agent"
+      ]
     }
   ],
   "edges": [
@@ -910,6 +924,16 @@
     {
       "source": "898aa506-7db6",
       "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "9e52c5ff-5411",
+      "target": "10_Wiki/Projects/Automation_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "9e52c5ff-5411",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
       "relationship": "derived_from"
     }
   ]
