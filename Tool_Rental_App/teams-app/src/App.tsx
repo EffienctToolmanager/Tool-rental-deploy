@@ -152,7 +152,7 @@ const App: React.FC = () => {
 
   const handleBatchRental = () => {
     const codes = Array.from(selectedTools).join(', ');
-    const url = `${baseFormUrl}&id=${encodeURIComponent(codes)}`;
+    const url = `${baseFormUrl}&toolcode=${encodeURIComponent(codes)}`;
     openForms(url);
   };
 
