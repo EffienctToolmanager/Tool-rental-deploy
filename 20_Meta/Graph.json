@@ -812,6 +812,19 @@
         "Dynamic UI",
         "JSON"
       ]
+    },
+    {
+      "id": "667310dd-1de9",
+      "path": "10_Wiki/Decisions/Knowledge_Sync/지식_아카이브_동기화_정책__로컬_PC_↔_클라우드.md",
+      "type": "wiki",
+      "title": "지식 아카이브 동기화 정책: 로컬 PC ↔ 클라우드",
+      "tags": [
+        "지식관리",
+        "동기화",
+        "Workflow",
+        "Google Drive",
+        "Knowledge Base"
+      ]
     }
   ],
   "edges": [
@@ -1423,6 +1436,16 @@
     {
       "source": "2ae6a111-ec61",
       "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "667310dd-1de9",
+      "target": "10_Wiki/Decisions/Knowledge_Sync",
+      "relationship": "parent"
+    },
+    {
+      "source": "667310dd-1de9",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
