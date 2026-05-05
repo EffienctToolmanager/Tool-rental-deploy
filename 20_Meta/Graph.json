@@ -692,6 +692,19 @@
         "React",
         "Koreanization"
       ]
+    },
+    {
+      "id": "84322ba1-b4aa",
+      "path": "10_Wiki/Decisions/UI_UX/Dashboard_UI__Pivot_from_Cards_to_High-Density_Tables.md",
+      "type": "wiki",
+      "title": "Dashboard UI: Pivot from Cards to High-Density Tables",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "Information Design",
+        "High-Density"
+      ]
     }
   ],
   "edges": [
@@ -1213,6 +1226,16 @@
     {
       "source": "ba95ba16-66b8",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "84322ba1-b4aa",
+      "target": "10_Wiki/Decisions/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "84322ba1-b4aa",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
       "relationship": "derived_from"
     }
   ]
