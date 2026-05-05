@@ -890,6 +890,20 @@
         "Permanence",
         "Knowledge Management"
       ]
+    },
+    {
+      "id": "5e43f441-38d1",
+      "path": "10_Wiki/Decisions/UI_UX/Dashboard_UI_Layout__Pivot_to_High-Density_Table.md",
+      "type": "wiki",
+      "title": "Dashboard UI Layout: Pivot to High-Density Table",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "High-Density",
+        "Data Visualization",
+        "Product Design"
+      ]
     }
   ],
   "edges": [
@@ -1561,6 +1575,16 @@
     {
       "source": "aadc2bf3-4536",
       "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "5e43f441-38d1",
+      "target": "10_Wiki/Decisions/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "5e43f441-38d1",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
       "relationship": "derived_from"
     }
   ]

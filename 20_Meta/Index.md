@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-05 15:37]** `00_Raw/20260505_UI_Layout_Pivot.md` 문서를 `10_Wiki/Decisions/UI_UX/Dashboard_UI_Layout__Pivot_to_High-Density_Table.md` 로 변환 및 배치 완료. (분류: Decisions/UI_UX)
+
 - **[2026-05-05 15:35]** `00_Raw/Policy_Update_2026-05-04_1018.md` 문서를 `10_Wiki/Decisions/Knowledge_Governance/AI_어시스턴트_자율_아카이빙_및_영속성_정책_(Autonomous_Archiving_Policy).md` 로 변환 및 배치 완료. (분류: Decisions/Knowledge_Governance)
 
 - **[2026-05-05 15:34]** `00_Raw/Graphify_Skill_Guide_2026-05-04.md` 문서를 `10_Wiki/Skills/Codebase_Analysis/Graphify_Skill_Guide__Codebase_Knowledge_Graph_Generation.md` 로 변환 및 배치 완료. (분류: Skills/Codebase_Analysis)

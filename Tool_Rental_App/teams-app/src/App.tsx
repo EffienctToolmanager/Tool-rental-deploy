@@ -20,6 +20,12 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
+    // Initialize Teams SDK if available
+    const { microsoftTeams } = window as any;
+    if (microsoftTeams) {
+      microsoftTeams.app.initialize().catch((err: any) => console.error("Teams SDK init error:", err));
+    }
+
     const fetchData = async () => {
       try {
         const response = await fetch('./data.json');
@@ -58,11 +64,26 @@ const App: React.FC = () => {
     return matchesSearch && matchesFilter;
   });
 
+  const openForms = (url: string) => {
+    const { microsoftTeams } = window as any;
+    if (microsoftTeams) {
+      // Open as a Teams Dialog (Task Module)
+      microsoftTeams.dialog.url.open({
+        url: url,
+        height: 'large',
+        width: 'large',
+        title: "Tool Rental Request"
+      });
+    } else {
+      // Fallback for non-Teams environment
+      window.open(url, '_blank');
+    }
+  };
+
   const handleBatchRental = () => {
     const codes = Array.from(selectedTools).join(', ');
     const url = `${baseFormUrl}?id=${encodeURIComponent(codes)}`;
-    // Using window.open with _blank but also providing a fallback for mobile Teams
-    window.open(url, '_blank');
+    openForms(url);
   };
 
   // SVG Icon Components to avoid encoding issues (??)
@@ -96,7 +117,8 @@ const App: React.FC = () => {
           font-weight: 700;
           padding: 0.6rem 1.2rem;
           border-radius: 8px;
-          text-decoration: none;
+          border: none;
+          cursor: pointer;
           transition: all 0.2s;
         }
         .rental-btn:hover {
@@ -161,9 +183,9 @@ const App: React.FC = () => {
              🚀 Rent Selected ({selectedTools.size})
           </button>
         ) : (
-          <a href={baseFormUrl} target="_blank" rel="noreferrer" className="rental-btn">
+          <button onClick={() => openForms(baseFormUrl)} className="rental-btn">
             + New Request
-          </a>
+          </button>
         )}
       </header>
 
