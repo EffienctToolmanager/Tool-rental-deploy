@@ -547,6 +547,19 @@
         "JSON",
         "React"
       ]
+    },
+    {
+      "id": "567021dd-e576",
+      "path": "10_Wiki/Decisions/UI_UX_Design/Dashboard_Layout_Pivot__High-Density_Table_Design_Standard.md",
+      "type": "wiki",
+      "title": "Dashboard Layout Pivot: High-Density Table Design Standard",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "High-Density",
+        "Information Architecture"
+      ]
     }
   ],
   "edges": [
@@ -958,6 +971,16 @@
     {
       "source": "de3b22a3-7a9e",
       "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "567021dd-e576",
+      "target": "10_Wiki/Decisions/UI_UX_Design",
+      "relationship": "parent"
+    },
+    {
+      "source": "567021dd-e576",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
       "relationship": "derived_from"
     }
   ]
