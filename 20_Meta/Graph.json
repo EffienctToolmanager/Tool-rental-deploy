@@ -997,6 +997,19 @@
         "Knowledge Archiving",
         "System Design"
       ]
+    },
+    {
+      "id": "37c702cd-1d98",
+      "path": "10_Wiki/Topics/Automation/MS_Forms_to_Excel_Automation_Workflow_(Power_Automate).md",
+      "type": "wiki",
+      "title": "MS Forms to Excel Automation Workflow (Power Automate)",
+      "tags": [
+        "PowerAutomate",
+        "MSForms",
+        "Excel",
+        "Microsoft365",
+        "LowCode"
+      ]
     }
   ],
   "edges": [
@@ -1748,6 +1761,16 @@
     {
       "source": "cd455302-178a",
       "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "37c702cd-1d98",
+      "target": "10_Wiki/Topics/Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "37c702cd-1d98",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
       "relationship": "derived_from"
     }
   ]
