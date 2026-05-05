@@ -931,6 +931,20 @@
         "Dependency",
         "Authentication"
       ]
+    },
+    {
+      "id": "3b88687f-0b8b",
+      "path": "10_Wiki/Projects/Application_Development/GEV_Teams_Application_Deployment_and_Branding_Protocol.md",
+      "type": "wiki",
+      "title": "GEV Teams Application Deployment and Branding Protocol",
+      "tags": [
+        "Teams",
+        "App",
+        "Branding",
+        "Deployment",
+        "GEV",
+        "Packaging"
+      ]
     }
   ],
   "edges": [
@@ -1632,6 +1646,16 @@
     {
       "source": "34e39462-9450",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3b88687f-0b8b",
+      "target": "10_Wiki/Projects/Application_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "3b88687f-0b8b",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
       "relationship": "derived_from"
     }
   ]
