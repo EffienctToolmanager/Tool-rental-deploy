@@ -574,6 +574,19 @@
         "Branding",
         "System_Architecture"
       ]
+    },
+    {
+      "id": "c88606f8-f168",
+      "path": "10_Wiki/Topics/Knowledge_Management/Knowledge_Graph_System_Architecture_Upgrade.md",
+      "type": "wiki",
+      "title": "Knowledge Graph System Architecture Upgrade",
+      "tags": [
+        "KnowledgeGraph",
+        "Obsidian",
+        "SystemArchitecture",
+        "DataStructuring",
+        "Automation"
+      ]
     }
   ],
   "edges": [
@@ -1005,6 +1018,16 @@
     {
       "source": "3ecc9ce8-c84e",
       "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "c88606f8-f168",
+      "target": "10_Wiki/Topics/Knowledge_Management",
+      "relationship": "parent"
+    },
+    {
+      "source": "c88606f8-f168",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
       "relationship": "derived_from"
     }
   ]
