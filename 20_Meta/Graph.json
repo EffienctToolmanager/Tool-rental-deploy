@@ -918,6 +918,19 @@
         "Obsidian",
         "에이전트"
       ]
+    },
+    {
+      "id": "34e39462-9450",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_앱_개발_환경_설정_및_UI_UX_개선_로그.md",
+      "type": "wiki",
+      "title": "Teams 앱 개발 환경 설정 및 UI/UX 개선 로그",
+      "tags": [
+        "Development",
+        "UI/UX",
+        "React",
+        "Dependency",
+        "Authentication"
+      ]
     }
   ],
   "edges": [
@@ -1609,6 +1622,16 @@
     {
       "source": "e67125d4-8471",
       "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "34e39462-9450",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "34e39462-9450",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
