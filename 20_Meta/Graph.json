@@ -639,6 +639,19 @@
         "Synchronization",
         "AI Agent"
       ]
+    },
+    {
+      "id": "17ea0a32-7c55",
+      "path": "10_Wiki/Decisions/AI_Operation/AI_어시스턴트_자율_아카이빙_및_운영_정책.md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 운영 정책",
+      "tags": [
+        "AI",
+        "Policy",
+        "Persistence",
+        "Automation",
+        "Knowledge Management"
+      ]
     }
   ],
   "edges": [
@@ -1120,6 +1133,16 @@
     {
       "source": "61afbdc3-4738",
       "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "17ea0a32-7c55",
+      "target": "10_Wiki/Decisions/AI_Operation",
+      "relationship": "parent"
+    },
+    {
+      "source": "17ea0a32-7c55",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
       "relationship": "derived_from"
     }
   ]
