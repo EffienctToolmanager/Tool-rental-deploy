@@ -970,6 +970,20 @@
         "기술적 의존성",
         "미래"
       ]
+    },
+    {
+      "id": "80d584a2-d5b1",
+      "path": "10_Wiki/Policies/Agent_Operation/Antigravity_Autonomous_Skill_Policy.md",
+      "type": "wiki",
+      "title": "Antigravity Autonomous Skill Policy",
+      "tags": [
+        "agent",
+        "skill",
+        "policy",
+        "automation",
+        "governance",
+        "brand-guidelines"
+      ]
     }
   ],
   "edges": [
@@ -1701,6 +1715,16 @@
     {
       "source": "46b2c889-4f5d",
       "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "80d584a2-d5b1",
+      "target": "10_Wiki/Policies/Agent_Operation",
+      "relationship": "parent"
+    },
+    {
+      "source": "80d584a2-d5b1",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
       "relationship": "derived_from"
     }
   ]
