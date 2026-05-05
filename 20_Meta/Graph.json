@@ -770,6 +770,21 @@
         "Integration",
         "Future"
       ]
+    },
+    {
+      "id": "88dbaa29-114e",
+      "path": "10_Wiki/Decisions/Policy/Agent_Skill_Operating_Policy_and_Global_Standards.md",
+      "type": "wiki",
+      "title": "Agent Skill Operating Policy and Global Standards",
+      "tags": [
+        "policy",
+        "agent",
+        "skills",
+        "governance",
+        "automation",
+        "standardization",
+        "UI"
+      ]
     }
   ],
   "edges": [
@@ -1351,6 +1366,16 @@
     {
       "source": "140abc9f-e536",
       "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "88dbaa29-114e",
+      "target": "10_Wiki/Decisions/Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "88dbaa29-114e",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
       "relationship": "derived_from"
     }
   ]

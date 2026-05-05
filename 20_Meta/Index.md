@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-05 14:28]** `00_Raw/20260505_Antigravity_Skill_Policy.md` 문서를 `10_Wiki/Decisions/Policy/Agent_Skill_Operating_Policy_and_Global_Standards.md` 로 변환 및 배치 완료. (분류: Decisions/Policy)
+
 - **[2026-05-05 14:26]** `00_Raw/무제 끝.md` 문서를 `10_Wiki/Topics/Philosophy/The_Inescapable_Presence_of_AI_in_Daily_Life.md` 로 변환 및 배치 완료. (분류: Topics/Philosophy)
 
 - **[2026-05-05 14:25]** `00_Raw/20260505_Teams_App_Packaging_and_Branding.md` 문서를 `10_Wiki/Projects/Teams_App_Deployment/GEV_Teams_App_Packaging_and_Branding_Guide.md` 로 변환 및 배치 완료. (분류: Projects/Teams_App_Deployment)
