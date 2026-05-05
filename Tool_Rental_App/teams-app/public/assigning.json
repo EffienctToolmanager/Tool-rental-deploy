@@ -1,0 +1,20 @@
+[
+    {
+        "Date": "2026-05-05",
+        "CaseID": "GEV-20260505-001",
+        "UserName": "Kim Tae-gyu",
+        "ToolCode": "DSP01",
+        "Project": "Shinshu Maru Repair",
+        "Action": "Rental",
+        "PhotoUrl": "https://gevernova.sharepoint.com/sites/ToolManagement/Photos/DSP01_Rent.jpg"
+    },
+    {
+        "Date": "2026-05-04",
+        "CaseID": "GEV-20260504-042",
+        "UserName": "Lee Min-ho",
+        "ToolCode": "ADX01",
+        "Project": "Global Project A",
+        "Action": "Return",
+        "PhotoUrl": "https://gevernova.sharepoint.com/sites/ToolManagement/Photos/ADX01_Return.jpg"
+    }
+]
