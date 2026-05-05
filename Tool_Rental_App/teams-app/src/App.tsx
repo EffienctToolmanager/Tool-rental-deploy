@@ -75,33 +75,42 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
+    let isMounted = true;
+    const safetyTimer = setTimeout(() => {
+      if (isMounted) {
+        console.warn("Safety timeout triggered");
+        setIsLoading(false);
+        fetchData();
+        fetchLogs();
+      }
+    }, 3000);
+
     const initializeApp = async () => {
       try {
         await microsoftTeams.app.initialize();
         const context = await microsoftTeams.app.getContext();
-        
+        if (!isMounted) return;
+        clearTimeout(safetyTimer);
         const rawUPN = (context.user?.userPrincipalName || (context as any).upn || (context as any).loginHint || "Unknown");
         const upn = rawUPN.toLowerCase().trim();
         const uid = (context.user?.id || (context.user as any)?.aadObjectId || "").trim();
-        
         setCurrentUserEmail(upn);
         setDebugInfo(`UPN:${upn} | ID:${uid}`);
-
-        // Exact Match based on user debug info
-        const isAdminUser = upn.includes("223132739") || uid === "6d1b1987-2385-4a83-b741-0aeea3aed2f4";
-        
-        if (isAdminUser) {
+        if (upn.includes("223132739") || uid === "6d1b1987-2385-4a83-b741-0aeea3aed2f4") {
           setIsAdmin(true);
         }
-        
         await Promise.all([fetchData(), fetchLogs()]);
       } catch (err) {
         console.error("Init failed", err);
-        // If SDK fails (e.g. browser testing), still load data
-        setCurrentUserEmail("Local/Browser User");
-        await Promise.all([fetchData(), fetchLogs()]);
+        if (isMounted) {
+          setCurrentUserEmail("Offline Mode");
+          await Promise.all([fetchData(), fetchLogs()]);
+        }
       } finally {
-        setTimeout(() => setIsLoading(false), 500);
+        if (isMounted) {
+          clearTimeout(safetyTimer);
+          setTimeout(() => setIsLoading(false), 500);
+        }
       }
     };
 
@@ -117,16 +126,11 @@ const App: React.FC = () => {
           setDataKeys(keys);
           setTools(data.slice(1));
         }
-      } catch (e) { 
-        console.error("Data fetch error, using dummy");
-        // Fallback dummy for testing
+      } catch (e) {
+        console.error("Data error", e);
         setDisplayHeaders(["Code", "Tool Name", "Category"]);
         setDataKeys(["Code", "Name", "Category"]);
-        setTools([
-          { Code: "T001", Name: "Hydraulic Jack", Category: "Lifting", Status: "Available" },
-          { Code: "T002", Name: "Impact Wrench", Category: "Power Tools", Status: "In Use" },
-          { Code: "T003", Name: "Torque Wrench", Category: "Precision", Status: "Available" }
-        ]);
+        setTools([{ Code: "T001", Name: "Hydraulic Jack", Category: "Lifting", Status: "Available" }]);
       }
     };
 
@@ -136,15 +140,13 @@ const App: React.FC = () => {
         if (!response.ok) throw new Error();
         const data = await response.json();
         setAssigningLogs(data);
-      } catch (e) { 
-        console.error("Logs fetch error, using dummy");
-        setAssigningLogs([
-          { Date: "2026-05-05", CaseID: "CASE-101", UserName: "Test User", ToolCode: "T001", Project: "GEV-Solar", Action: "Rental", PhotoUrl: "#" }
-        ]);
+      } catch (e) {
+        setAssigningLogs([{ Date: "2026-05-05", CaseID: "CASE-101", UserName: "Test User", ToolCode: "T001", Project: "GEV", Action: "Rental", PhotoUrl: "#" }]);
       }
     };
 
     initializeApp();
+    return () => { isMounted = false; clearTimeout(safetyTimer); };
   }, []);
 
 
