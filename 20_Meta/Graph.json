@@ -1318,6 +1318,20 @@
         "JSON",
         "Data Formatting"
       ]
+    },
+    {
+      "id": "6c170545-6bfd",
+      "path": "10_Wiki/Decisions/Agent_Governance/Agent_Skills_Architecture_and_Operational_Governance.md",
+      "type": "wiki",
+      "title": "Agent Skills Architecture and Operational Governance",
+      "tags": [
+        "Agent",
+        "Policy",
+        "Skills",
+        "Governance",
+        "UX/UI",
+        "Data_Structure"
+      ]
     }
   ],
   "edges": [
@@ -2309,6 +2323,16 @@
     {
       "source": "e149e24b-8508",
       "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "6c170545-6bfd",
+      "target": "10_Wiki/Decisions/Agent_Governance",
+      "relationship": "parent"
+    },
+    {
+      "source": "6c170545-6bfd",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
       "relationship": "derived_from"
     }
   ]
