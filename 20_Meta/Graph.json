@@ -1345,6 +1345,19 @@
         "CLI",
         "Software Architecture"
       ]
+    },
+    {
+      "id": "58e93d77-8747",
+      "path": "10_Wiki/Projects/Knowledge_System/유기적_지식_베이스_구축_및_그래프화_(2026-05-04).md",
+      "type": "wiki",
+      "title": "유기적 지식 베이스 구축 및 그래프화 (2026-05-04)",
+      "tags": [
+        "지식 그래프",
+        "옵시디언",
+        "Graphify",
+        "데이터 구조화",
+        "지식 아카이빙"
+      ]
     }
   ],
   "edges": [
@@ -2356,6 +2369,16 @@
     {
       "source": "68c34cf7-f95f",
       "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "58e93d77-8747",
+      "target": "10_Wiki/Projects/Knowledge_System",
+      "relationship": "parent"
+    },
+    {
+      "source": "58e93d77-8747",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
       "relationship": "derived_from"
     }
   ]
