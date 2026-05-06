@@ -1265,6 +1265,20 @@
         "워킹플로우",
         "아카이빙"
       ]
+    },
+    {
+      "id": "f5206ea1-1cb4",
+      "path": "10_Wiki/Projects/UI_Enhancements/Click-to-Copy_기능_구현을_통한_데이터_입력_오류_감소.md",
+      "type": "wiki",
+      "title": "Click-to-Copy 기능 구현을 통한 데이터 입력 오류 감소",
+      "tags": [
+        "React",
+        "UX/UI",
+        "Frontend Development",
+        "Automation",
+        "Clipboard API",
+        "Accessibility"
+      ]
     }
   ],
   "edges": [
@@ -2216,6 +2230,16 @@
     {
       "source": "68f46967-d189",
       "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "f5206ea1-1cb4",
+      "target": "10_Wiki/Projects/UI_Enhancements",
+      "relationship": "parent"
+    },
+    {
+      "source": "f5206ea1-1cb4",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
       "relationship": "derived_from"
     }
   ]
