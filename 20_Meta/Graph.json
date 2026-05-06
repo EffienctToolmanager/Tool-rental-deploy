@@ -1358,6 +1358,19 @@
         "데이터 구조화",
         "지식 아카이빙"
       ]
+    },
+    {
+      "id": "6c17f83b-e146",
+      "path": "10_Wiki/Projects/Microsoft_Automation/MS_Forms_and_Power_Automate_Data_Synchronization_Workflow.md",
+      "type": "wiki",
+      "title": "MS Forms and Power Automate Data Synchronization Workflow",
+      "tags": [
+        "Power Automate",
+        "MS Forms",
+        "Excel Online",
+        "Automation",
+        "Workflow"
+      ]
     }
   ],
   "edges": [
@@ -2379,6 +2392,16 @@
     {
       "source": "58e93d77-8747",
       "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "6c17f83b-e146",
+      "target": "10_Wiki/Projects/Microsoft_Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "6c17f83b-e146",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
       "relationship": "derived_from"
     }
   ]
