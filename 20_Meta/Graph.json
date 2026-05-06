@@ -1291,6 +1291,19 @@
         "Future",
         "Dependency"
       ]
+    },
+    {
+      "id": "ad9b103e-44f2",
+      "path": "10_Wiki/Decisions/UI_UX/Dashboard_UI_Paradigm_Shift__Grid_Card_to_High-Density_Table.md",
+      "type": "wiki",
+      "title": "Dashboard UI Paradigm Shift: Grid Card to High-Density Table",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "Design",
+        "Information Density"
+      ]
     }
   ],
   "edges": [
@@ -2262,6 +2275,16 @@
     {
       "source": "f7a88609-bd3a",
       "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "ad9b103e-44f2",
+      "target": "10_Wiki/Decisions/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "ad9b103e-44f2",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
       "relationship": "derived_from"
     }
   ]
