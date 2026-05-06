@@ -1185,6 +1185,20 @@
         "Deployment",
         "Windows"
       ]
+    },
+    {
+      "id": "3e756164-4bb3",
+      "path": "10_Wiki/Projects/AI_System/AI_자동화_시스템_통합_로드맵_(Local_&_Secure).md",
+      "type": "wiki",
+      "title": "AI 자동화 시스템 통합 로드맵 (Local & Secure)",
+      "tags": [
+        "AI",
+        "Automation",
+        "Local LLM",
+        "Roadmap",
+        "지식관리",
+        "엔터프라이즈"
+      ]
     }
   ],
   "edges": [
@@ -2076,6 +2090,16 @@
     {
       "source": "de6b3816-be5e",
       "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3e756164-4bb3",
+      "target": "10_Wiki/Projects/AI_System",
+      "relationship": "parent"
+    },
+    {
+      "source": "3e756164-4bb3",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
       "relationship": "derived_from"
     }
   ]

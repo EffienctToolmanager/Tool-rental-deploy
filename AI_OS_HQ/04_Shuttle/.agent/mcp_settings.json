@@ -1,0 +1,25 @@
+﻿{
+    "mcpServers":  {
+                       "memory":  {
+                                      "args":  [
+                                                   "-y",
+                                                   "@modelcontextprotocol/server-memory"
+                                               ],
+                                      "command":  "npx"
+                                  },
+                       "docling":  {
+                                       "args":  [
+                                                    "-y",
+                                                    "@modelcontextprotocol/server-docling"
+                                                ],
+                                       "command":  "npx"
+                                   },
+                       "github":  {
+                                      "args":  [
+                                                   "-y",
+                                                   "@modelcontextprotocol/server-github"
+                                               ],
+                                      "command":  "npx"
+                                  }
+                   }
+}

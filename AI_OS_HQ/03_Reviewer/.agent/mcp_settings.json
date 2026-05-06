@@ -1,0 +1,18 @@
+﻿{
+    "mcpServers":  {
+                       "memory":  {
+                                      "args":  [
+                                                   "-y",
+                                                   "@modelcontextprotocol/server-memory"
+                                               ],
+                                      "command":  "npx"
+                                  },
+                       "ripgrep":  {
+                                       "args":  [
+                                                    "-y",
+                                                    "@modelcontextprotocol/server-ripgrep"
+                                                ],
+                                       "command":  "npx"
+                                   }
+                   }
+}

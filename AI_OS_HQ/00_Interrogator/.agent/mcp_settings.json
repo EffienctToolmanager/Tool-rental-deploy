@@ -1,0 +1,25 @@
+﻿{
+    "mcpServers":  {
+                       "fabric":  {
+                                      "args":  [
+                                                   "-y",
+                                                   "@modelcontextprotocol/server-fabric"
+                                               ],
+                                      "command":  "npx"
+                                  },
+                       "memory":  {
+                                      "args":  [
+                                                   "-y",
+                                                   "@modelcontextprotocol/server-memory"
+                                               ],
+                                      "command":  "npx"
+                                  },
+                       "brave-search":  {
+                                            "args":  [
+                                                         "-y",
+                                                         "@modelcontextprotocol/server-brave-search"
+                                                     ],
+                                            "command":  "npx"
+                                        }
+                   }
+}
