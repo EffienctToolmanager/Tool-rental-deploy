@@ -1523,6 +1523,20 @@
         "시스템 아키텍처",
         "AI 에이전트"
       ]
+    },
+    {
+      "id": "7aeacd58-4fbe",
+      "path": "10_Wiki/Projects/System_Architecture/통합_AI_자동화_시스템_구축_로드맵.md",
+      "type": "wiki",
+      "title": "통합 AI 자동화 시스템 구축 로드맵",
+      "tags": [
+        "AI",
+        "자동화",
+        "로드맵",
+        "Local_AI",
+        "Obsidian",
+        "Agent"
+      ]
     }
   ],
   "edges": [
@@ -2664,6 +2678,16 @@
     {
       "source": "3a4b5845-5404",
       "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "7aeacd58-4fbe",
+      "target": "10_Wiki/Projects/System_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "7aeacd58-4fbe",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
       "relationship": "derived_from"
     }
   ]

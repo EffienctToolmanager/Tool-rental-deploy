@@ -1,12 +1,17 @@
-# GEV Tool Rental System Master Deployment Script
-# Created by Antigravity (Integrated Commander Mode)
+# GEV Tool Rental System Master Deployment Script (Robust Version)
+# Created by Antigravity - Encoding & Path Safe
 
 $ErrorActionPreference = "Stop"
-$root = "c:\Users\cfpcl\OneDrive\Desktop\Dev_Workspace\위키 에이전트"
-$appPath = "$root\Tool_Rental_App\teams-app"
-$deployPath = "$root\deploy_tmp"
+
+# 현재 스크립트가 실행되는 '위키 에이전트' 폴더를 자동으로 잡습니다.
+$root = $PSScriptRoot
+$appPath = Join-Path $root "Tool_Rental_App\teams-app"
+$deployPath = Join-Path $root "deploy_tmp"
 
 Write-Host "`n>>> 🚀 [1/4] React 프로젝트 빌드 시작 (Vite)..." -ForegroundColor Cyan
+if (!(Test-Path $appPath)) {
+    Write-Error "Path not found: $appPath"
+}
 Set-Location $appPath
 npm run build
 
@@ -24,7 +29,7 @@ Write-Host "`n>>> ☁️ [4/4] GitHub 저장소 업데이트 (deploy_tmp)..." -F
 Set-Location $deployPath
 git add .
 try {
-    git commit -m "Auto-Deploy: GEV Tool App V1.0.2 (Master Script)"
+    git commit -m "Auto-Deploy: GEV Tool App V1.0.2 (Robust Script)"
 } catch {
     Write-Host "No changes to commit." -ForegroundColor Yellow
 }
