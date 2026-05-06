@@ -1458,6 +1458,19 @@
         "JSON",
         "React"
       ]
+    },
+    {
+      "id": "f2c4db6b-7a71",
+      "path": "10_Wiki/Skills/Development_Tools/Graphify__코드베이스_분석_및_지식_그래프_생성_가이드.md",
+      "type": "wiki",
+      "title": "Graphify: 코드베이스 분석 및 지식 그래프 생성 가이드",
+      "tags": [
+        "Graphify",
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI"
+      ]
     }
   ],
   "edges": [
@@ -2549,6 +2562,16 @@
     {
       "source": "9bab2dd9-e6d3",
       "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "f2c4db6b-7a71",
+      "target": "10_Wiki/Skills/Development_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "f2c4db6b-7a71",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
