@@ -1279,6 +1279,18 @@
         "Clipboard API",
         "Accessibility"
       ]
+    },
+    {
+      "id": "f7a88609-bd3a",
+      "path": "10_Wiki/Topics/Philosophy/AI-Human_Coexistence_Philosophy.md",
+      "type": "wiki",
+      "title": "AI-Human Coexistence Philosophy",
+      "tags": [
+        "AI",
+        "Philosophy",
+        "Future",
+        "Dependency"
+      ]
     }
   ],
   "edges": [
@@ -2240,6 +2252,16 @@
     {
       "source": "f5206ea1-1cb4",
       "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "f7a88609-bd3a",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "f7a88609-bd3a",
+      "target": "00_Raw/무제 끝.md",
       "relationship": "derived_from"
     }
   ]
