@@ -1415,6 +1415,21 @@
         "Architecture",
         "로드맵"
       ]
+    },
+    {
+      "id": "008d69c1-910e",
+      "path": "10_Wiki/Projects/Enterprise_Systems/GEV_Tool_Rental_System__SharePoint_Migration_and_Optimization_Report.md",
+      "type": "wiki",
+      "title": "GEV Tool Rental System: SharePoint Migration and Optimization Report",
+      "tags": [
+        "M365",
+        "SharePoint",
+        "Teams",
+        "Architecture",
+        "Database",
+        "BugFix",
+        "GraphAPI"
+      ]
     }
   ],
   "edges": [
@@ -2476,6 +2491,16 @@
     {
       "source": "a423d718-8bbd",
       "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "008d69c1-910e",
+      "target": "10_Wiki/Projects/Enterprise_Systems",
+      "relationship": "parent"
+    },
+    {
+      "source": "008d69c1-910e",
+      "target": "00_Raw/20260506_Investigation_Report.md",
       "relationship": "derived_from"
     }
   ]

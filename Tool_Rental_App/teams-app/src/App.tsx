@@ -31,7 +31,7 @@ const App: React.FC = () => {
     }
   };
 
-  const baseFormUrl = "https://forms.office.com/Pages/ResponsePage.aspx?id=0bbMFTXTlkm2-XtpJfCBIYcZG22FI4NKt0EK7qOu0vRUMllQUVRSOUEwNFI5UElWVlRBWDM5RUxZRy4u"; 
+  const baseFormUrl = "https://forms.office.com/Pages/ResponsePage.aspx?id=0bbMFTXTlkm2-XtpJfCBIYcZG22FI4NKt0EK7qOu0vRUMllQUTVSOUEwNFI5UElWUlRBWDM5RUxZRy4u"; 
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -116,7 +116,7 @@ const App: React.FC = () => {
 
     const fetchData = async () => {
       try {
-        const response = await fetch('./data.json');
+        const response = await fetch(`./data.json?t=${Date.now()}`);
         if (!response.ok) throw new Error();
         const data = await response.json();
         if (data.length > 0) {
@@ -136,7 +136,7 @@ const App: React.FC = () => {
 
     const fetchLogs = async () => {
       try {
-        const response = await fetch('./assigning.json');
+        const response = await fetch(`./assigning.json?t=${Date.now()}`);
         if (!response.ok) throw new Error();
         const data = await response.json();
         setAssigningLogs(data);
@@ -150,10 +150,8 @@ const App: React.FC = () => {
   }, []);
 
 
-  const handleBatchRental = () => {
-    // TEMPORARY TEST: Open RAW URL without parameters to check if Form loads
-    openForms(baseFormUrl);
-  };
+    // Use &id= because baseFormUrl already contains ?id=
+    openForms(`${baseFormUrl}&id=${Array.from(selectedTools).join(',')}`);
 
   const filteredTools = tools.filter(tool => {
     const searchStr = Object.values(tool).join(' ').toLowerCase();
@@ -408,7 +406,7 @@ const App: React.FC = () => {
                       ))}
                       <td style={{ textAlign: 'center' }}>
                         {tool.Status === 'Available' ? (
-                          <button onClick={() => { setSelectedTools(new Set([tool[dataKeys[0]]])); handleBatchRental(); }} style={{ background: 'none', border: 'none', color: 'var(--evergreen)', fontWeight: 800, textDecoration: 'underline', cursor: 'pointer' }}>Rent Now</button>
+                          <button onClick={() => { setSelectedTools(new Set([tool[dataKeys[0]]])); setTimeout(() => handleBatchRental(), 50); }} style={{ background: 'none', border: 'none', color: 'var(--evergreen)', fontWeight: 800, textDecoration: 'underline', cursor: 'pointer' }}>Rent Now</button>
                         ) : <span style={{ color: '#cbd5e1' }}>Rented</span>}
                       </td>
                     </tr>
