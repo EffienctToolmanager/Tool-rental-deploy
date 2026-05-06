@@ -150,8 +150,10 @@ const App: React.FC = () => {
   }, []);
 
 
+  const handleBatchRental = () => {
     // Use &id= because baseFormUrl already contains ?id=
     openForms(`${baseFormUrl}&id=${Array.from(selectedTools).join(',')}`);
+  };
 
   const filteredTools = tools.filter(tool => {
     const searchStr = Object.values(tool).join(' ').toLowerCase();
@@ -187,7 +189,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="container" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div className="container" style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: '100vh', position: 'relative' }}>
       <style>{`
         :root {
           --evergreen: #054141;
@@ -221,7 +223,7 @@ const App: React.FC = () => {
         .main-content { flex: 1; overflow-y: auto; padding: 1rem; background: var(--bg-light); }
         
         .stat-card { background: white; padding: 1.2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.05); width: 100%; }
         
         table { width: 100%; border-collapse: collapse; }
         th { background: #f1f5f9; padding: 0.8rem; text-align: left; font-size: 0.75rem; font-weight: 800; color: #475569; }
