@@ -1430,6 +1430,20 @@
         "BugFix",
         "GraphAPI"
       ]
+    },
+    {
+      "id": "3e94eaa8-8fa7",
+      "path": "10_Wiki/Topics/Knowledge_Management/유기적_지식_베이스_아키텍처_고도화_(Obsidian-First).md",
+      "type": "wiki",
+      "title": "유기적 지식 베이스 아키텍처 고도화 (Obsidian-First)",
+      "tags": [
+        "Knowledge Graph",
+        "Obsidian",
+        "지식 자동화",
+        "시스템 설계",
+        "데이터 구조화",
+        "Graphify"
+      ]
     }
   ],
   "edges": [
@@ -2501,6 +2515,16 @@
     {
       "source": "008d69c1-910e",
       "target": "00_Raw/20260506_Investigation_Report.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3e94eaa8-8fa7",
+      "target": "10_Wiki/Topics/Knowledge_Management",
+      "relationship": "parent"
+    },
+    {
+      "source": "3e94eaa8-8fa7",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
       "relationship": "derived_from"
     }
   ]
