@@ -1537,6 +1537,20 @@
         "Obsidian",
         "Agent"
       ]
+    },
+    {
+      "id": "a835a51e-36a2",
+      "path": "10_Wiki/Projects/Automation/MS_Forms_to_Excel_Inventory_Automation_Workflow.md",
+      "type": "wiki",
+      "title": "MS Forms to Excel Inventory Automation Workflow",
+      "tags": [
+        "Automation",
+        "PowerAutomate",
+        "MSForms",
+        "Excel",
+        "LowCode",
+        "Inventory Management"
+      ]
     }
   ],
   "edges": [
@@ -2688,6 +2702,16 @@
     {
       "source": "7aeacd58-4fbe",
       "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "a835a51e-36a2",
+      "target": "10_Wiki/Projects/Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "a835a51e-36a2",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
       "relationship": "derived_from"
     }
   ]
