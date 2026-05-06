@@ -1,6 +1,12 @@
-# 🧠 [회사PC] 팀즈 앱 패키징 완성 및 GEV 브랜드 통합 가이드
+---
+title: "[회사PC] 팀즈 앱 패키징 완성 및 GEV 브랜드 통합 가이드"
+date: 2026-05-05
+tags: ["#GEV", "#TeamsApp", "#Deployment", "#Branding", "#Automation"]
+type: "guide"
+status: "completed"
+---
 
-#Knowledge #GEV #TeamsApp #Deployment #Branding
+# 🧠 [[Teams]] 앱 패키징 완성 및 [[GEV]] 브랜드 통합 가이드
 
 ## 🔍 개요
 사용자 재접속 후 중단되었던 팀즈 앱 배포 작업을 재개함. `manifest.json` 및 아이콘 파일 누락으로 인한 패키징 오류를 해결하고, 신규 브랜드 정책([[20260505_Antigravity_Skill_Policy]])을 반영하여 GEV 전용 대시보드 환경을 완성함.

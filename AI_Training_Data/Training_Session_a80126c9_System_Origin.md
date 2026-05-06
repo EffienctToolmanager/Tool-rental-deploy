@@ -3,6 +3,7 @@ session_id: "a80126c9-c606-4227-9463-c7552ab929d8"
 task_type: "System Origin & Document Standardization"
 tech_stack: ["Ollama", "PowerShell", "CSV/Excel", "Obsidian", "Regular Expressions"]
 date: 2026-05-01
+tags: ["#Session", "#Origin", "#Governance", "#PowerShell", "#Obsidian"]
 status: "Completed"
 ---
 

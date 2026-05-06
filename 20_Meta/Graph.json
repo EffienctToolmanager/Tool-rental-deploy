@@ -1226,6 +1226,20 @@
         "GEV",
         "Workflow"
       ]
+    },
+    {
+      "id": "60fc93f2-8d28",
+      "path": "10_Wiki/Projects/Teams_App/Teams_App_UI_UX_Enhancement_and_Development_Setup_Refinements.md",
+      "type": "wiki",
+      "title": "Teams App UI/UX Enhancement and Development Setup Refinements",
+      "tags": [
+        "Teams",
+        "UI/UX",
+        "Frontend",
+        "Development",
+        "Dependency Management",
+        "Localization"
+      ]
     }
   ],
   "edges": [
@@ -2147,6 +2161,16 @@
     {
       "source": "be2cd23f-8951",
       "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "60fc93f2-8d28",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "60fc93f2-8d28",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
