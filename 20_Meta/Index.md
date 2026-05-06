@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-06 09:35]** `00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md` 문서를 `10_Wiki/HowTo/Microsoft_365/MS_Forms_to_Excel_Automation_Workflow_Guide.md` 로 변환 및 배치 완료. (분류: HowTo/Microsoft_365)
+
 - **[2026-05-06 09:34]** `00_Raw/20260502_AI자동화시스템_로드맵.md` 문서를 `10_Wiki/Projects/AI_System/AI_자동화_시스템_통합_로드맵_(Local_&_Secure).md` 로 변환 및 배치 완료. (분류: Projects/AI_System)
 
 - **[2026-05-06 02:21]** `00_Raw/20260505_Teams_App_Packaging_and_Branding.md` 문서를 `10_Wiki/Projects/GEV_Teams_Integration/GEV_Teams_App_Packaging_and_Branding_Guide.md` 로 변환 및 배치 완료. (분류: Projects/GEV_Teams_Integration)
