@@ -1371,6 +1371,20 @@
         "Automation",
         "Workflow"
       ]
+    },
+    {
+      "id": "abb272ce-dbc2",
+      "path": "10_Wiki/Projects/Business_Automation/MS_Forms_&_Power_Automate_Workflow_for_Asset_Tracking.md",
+      "type": "wiki",
+      "title": "MS Forms & Power Automate Workflow for Asset Tracking",
+      "tags": [
+        "Power Automate",
+        "MS Forms",
+        "Excel",
+        "Automation",
+        "Workflow",
+        "Asset Management"
+      ]
     }
   ],
   "edges": [
@@ -2401,6 +2415,16 @@
     },
     {
       "source": "6c17f83b-e146",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "abb272ce-dbc2",
+      "target": "10_Wiki/Projects/Business_Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "abb272ce-dbc2",
       "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
       "relationship": "derived_from"
     }
