@@ -1,5 +1,9 @@
-# GEV Tool Rental System Master Deployment Script (Robust Version)
-# Created by Antigravity - Encoding & Path Safe + Auto Zipping
+# GEV Tool Rental System Master Deployment Script (Robust & Encoding Safe)
+# Created by Antigravity - UTF8 Encoding Fixed
+
+# 파워쉘 한글 깨짐 방지를 위한 인코딩 설정
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
 
 $ErrorActionPreference = "Stop"
 
@@ -11,14 +15,14 @@ $zipPath = Join-Path $root "GEV_Tool_App_V102.zip"
 
 Write-Host "`n>>> 🚀 [1/5] React 프로젝트 빌드 시작 (Vite)..." -ForegroundColor Cyan
 if (!(Test-Path $appPath)) {
-    Write-Error "Path not found: $appPath"
+    Write-Error "경로를 찾을 수 없습니다: $appPath"
 }
 Set-Location $appPath
 npm run build
 
 Write-Host "`n>>> 📦 [2/5] 빌드 파일을 배포 폴더(deploy_tmp)로 복사 중..." -ForegroundColor Cyan
 if (!(Test-Path "$appPath\dist")) {
-    Write-Error "Build failed: dist folder not found."
+    Write-Error "빌드 실패: dist 폴더가 없습니다."
 }
 xcopy /E /Y "$appPath\dist\*" "$deployPath\"
 
@@ -30,19 +34,18 @@ Write-Host "`n>>> 🤐 [4/5] Teams 앱 패키지(ZIP) 생성 중..." -Foreground
 if (Test-Path $zipPath) { 
     Remove-Item $zipPath -Force
 }
-# PowerShell 기본 명령어로 App_Package 내 파일들을 압축
 Compress-Archive -Path "$appPath\App_Package\*" -DestinationPath $zipPath
 
 Write-Host "`n>>> ☁️ [5/5] GitHub 저장소 업데이트 (deploy_tmp)..." -ForegroundColor Cyan
 Set-Location $deployPath
 git add .
 try {
-    git commit -m "Auto-Deploy: GEV Tool App V1.0.2 (Robust Script + ZIP)"
+    git commit -m "Auto-Deploy: GEV Tool App V1.0.2 (Encoding Fixed + ZIP)"
 } catch {
-    Write-Host "No changes to commit." -ForegroundColor Yellow
+    Write-Host "커밋할 변경 사항이 없습니다." -ForegroundColor Yellow
 }
 git push origin main
 
 Write-Host "`n✅ 모든 배포 및 패키징 작업이 성공적으로 완료되었습니다!" -ForegroundColor Green
-Write-Host "생성된 패키지: $zipPath" -ForegroundColor Magenta
+Write-Host "생성된 패키지 경로: $zipPath" -ForegroundColor Magenta
 Set-Location $root
