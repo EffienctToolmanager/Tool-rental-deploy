@@ -1444,6 +1444,20 @@
         "데이터 구조화",
         "Graphify"
       ]
+    },
+    {
+      "id": "9bab2dd9-e6d3",
+      "path": "10_Wiki/Projects/Automation_Utilities/PowerShell_기반_엑셀_데이터_추출_및_동적_헤더_자동_동기화_구조_구축.md",
+      "type": "wiki",
+      "title": "PowerShell 기반 엑셀 데이터 추출 및 동적 헤더 자동 동기화 구조 구축",
+      "tags": [
+        "PowerShell",
+        "Excel",
+        "DataExtraction",
+        "DynamicHeader",
+        "JSON",
+        "React"
+      ]
     }
   ],
   "edges": [
@@ -2525,6 +2539,16 @@
     {
       "source": "3e94eaa8-8fa7",
       "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "9bab2dd9-e6d3",
+      "target": "10_Wiki/Projects/Automation_Utilities",
+      "relationship": "parent"
+    },
+    {
+      "source": "9bab2dd9-e6d3",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
       "relationship": "derived_from"
     }
   ]
