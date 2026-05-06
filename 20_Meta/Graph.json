@@ -1332,6 +1332,19 @@
         "UX/UI",
         "Data_Structure"
       ]
+    },
+    {
+      "id": "68c34cf7-f95f",
+      "path": "10_Wiki/Projects/Development_Tools/Graphify__Codebase_Knowledge_Graph_Generator.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Generator",
+      "tags": [
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI",
+        "Software Architecture"
+      ]
     }
   ],
   "edges": [
@@ -2333,6 +2346,16 @@
     {
       "source": "6c170545-6bfd",
       "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "68c34cf7-f95f",
+      "target": "10_Wiki/Projects/Development_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "68c34cf7-f95f",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
