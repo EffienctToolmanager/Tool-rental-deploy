@@ -1212,6 +1212,20 @@
         "Excel",
         "Integration"
       ]
+    },
+    {
+      "id": "be2cd23f-8951",
+      "path": "10_Wiki/Projects/Internal_Tools/GEV_Teams_App_Packaging,_Branding,_and_Deployment_Protocol.md",
+      "type": "wiki",
+      "title": "GEV Teams App Packaging, Branding, and Deployment Protocol",
+      "tags": [
+        "TeamsApp",
+        "Deployment",
+        "Branding",
+        "Packaging",
+        "GEV",
+        "Workflow"
+      ]
     }
   ],
   "edges": [
@@ -2123,6 +2137,16 @@
     {
       "source": "141cc7d4-3fde",
       "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "be2cd23f-8951",
+      "target": "10_Wiki/Projects/Internal_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "be2cd23f-8951",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
       "relationship": "derived_from"
     }
   ]
