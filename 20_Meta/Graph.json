@@ -1497,6 +1497,19 @@
         "Technology Adoption",
         "Future"
       ]
+    },
+    {
+      "id": "dbf08255-cb1d",
+      "path": "10_Wiki/Decisions/UI_UX/Dashboard_UI_Design_Paradigm_Shift__High-Density_Table_Implementation.md",
+      "type": "wiki",
+      "title": "Dashboard UI Design Paradigm Shift: High-Density Table Implementation",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "Data Visualization",
+        "High-Density"
+      ]
     }
   ],
   "edges": [
@@ -2618,6 +2631,16 @@
     {
       "source": "0c4332a0-6f98",
       "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "dbf08255-cb1d",
+      "target": "10_Wiki/Decisions/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "dbf08255-cb1d",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
       "relationship": "derived_from"
     }
   ]

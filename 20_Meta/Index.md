@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-06 10:45]** `00_Raw/20260505_UI_Layout_Pivot.md` 문서를 `10_Wiki/Decisions/UI_UX/Dashboard_UI_Design_Paradigm_Shift__High-Density_Table_Implementation.md` 로 변환 및 배치 완료. (분류: Decisions/UI_UX)
+
 - **[2026-05-06 10:43]** `00_Raw/무제 끝.md` 문서를 `10_Wiki/Topics/Philosophy/AI_Integration_Philosophy__Inseparability.md` 로 변환 및 배치 완료. (분류: Topics/Philosophy)
 
 - **[2026-05-06 10:42]** `00_Raw/20260505_Antigravity_Skill_Policy.md` 문서를 `10_Wiki/Decisions/Operational_Policies/Antigravity_Skill_Operation_Policy_and_Global_Guidelines.md` 로 변환 및 배치 완료. (분류: Decisions/Operational_Policies)
