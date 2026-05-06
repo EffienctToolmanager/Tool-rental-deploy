@@ -1252,6 +1252,19 @@
         "Architecture",
         "System Design"
       ]
+    },
+    {
+      "id": "68f46967-d189",
+      "path": "10_Wiki/Projects/Knowledge_Infra/지식_아카이브_동기화_정책_수립_(로컬-클라우드).md",
+      "type": "wiki",
+      "title": "지식 아카이브 동기화 정책 수립 (로컬-클라우드)",
+      "tags": [
+        "동기화",
+        "지식관리시스템",
+        "Google Drive",
+        "워킹플로우",
+        "아카이빙"
+      ]
     }
   ],
   "edges": [
@@ -2193,6 +2206,16 @@
     {
       "source": "a1ef7dd9-5435",
       "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "68f46967-d189",
+      "target": "10_Wiki/Projects/Knowledge_Infra",
+      "relationship": "parent"
+    },
+    {
+      "source": "68f46967-d189",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
