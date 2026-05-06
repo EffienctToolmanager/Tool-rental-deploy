@@ -1400,6 +1400,21 @@
         "Deployment",
         "Automation"
       ]
+    },
+    {
+      "id": "a423d718-8bbd",
+      "path": "10_Wiki/Projects/Automation_Systems/AI_자동화_시스템_통합_아키텍처_로드맵.md",
+      "type": "wiki",
+      "title": "AI 자동화 시스템 통합 아키텍처 로드맵",
+      "tags": [
+        "AI",
+        "Automation",
+        "LocalAI",
+        "Ollama",
+        "Obsidian",
+        "Architecture",
+        "로드맵"
+      ]
     }
   ],
   "edges": [
@@ -2451,6 +2466,16 @@
     {
       "source": "45554384-f271",
       "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "a423d718-8bbd",
+      "target": "10_Wiki/Projects/Automation_Systems",
+      "relationship": "parent"
+    },
+    {
+      "source": "a423d718-8bbd",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
       "relationship": "derived_from"
     }
   ]
