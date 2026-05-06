@@ -1591,6 +1591,20 @@
         "DevOps",
         "Authentication"
       ]
+    },
+    {
+      "id": "af220e76-b007",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_App_Packaging_and_GEV_Brand_Integration_Guide.md",
+      "type": "wiki",
+      "title": "Teams App Packaging and GEV Brand Integration Guide",
+      "tags": [
+        "Teams",
+        "App",
+        "Packaging",
+        "Branding",
+        "Deployment",
+        "GEV"
+      ]
     }
   ],
   "edges": [
@@ -2782,6 +2796,16 @@
     {
       "source": "52d9e590-b9db",
       "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "af220e76-b007",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "af220e76-b007",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
       "relationship": "derived_from"
     }
   ]
