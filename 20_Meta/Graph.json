@@ -1577,6 +1577,20 @@
         "Clipboard API",
         "Frontend Development"
       ]
+    },
+    {
+      "id": "52d9e590-b9db",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_App_UI_Refactoring_and_Debugging_Log.md",
+      "type": "wiki",
+      "title": "Teams App UI Refactoring and Debugging Log",
+      "tags": [
+        "React",
+        "Teams",
+        "UI/UX",
+        "Frontend",
+        "DevOps",
+        "Authentication"
+      ]
     }
   ],
   "edges": [
@@ -2758,6 +2772,16 @@
     {
       "source": "b8d3c585-8b0d",
       "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "52d9e590-b9db",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "52d9e590-b9db",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
