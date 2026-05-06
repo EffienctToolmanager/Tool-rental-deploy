@@ -1385,6 +1385,21 @@
         "Workflow",
         "Asset Management"
       ]
+    },
+    {
+      "id": "45554384-f271",
+      "path": "10_Wiki/Projects/Enterprise_Tooling/Teams_App_Packaging_and_GEV_Branding_Integration_Guide.md",
+      "type": "wiki",
+      "title": "Teams App Packaging and GEV Branding Integration Guide",
+      "tags": [
+        "Teams",
+        "App",
+        "Packaging",
+        "Branding",
+        "GEV",
+        "Deployment",
+        "Automation"
+      ]
     }
   ],
   "edges": [
@@ -2426,6 +2441,16 @@
     {
       "source": "abb272ce-dbc2",
       "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "45554384-f271",
+      "target": "10_Wiki/Projects/Enterprise_Tooling",
+      "relationship": "parent"
+    },
+    {
+      "source": "45554384-f271",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
       "relationship": "derived_from"
     }
   ]
