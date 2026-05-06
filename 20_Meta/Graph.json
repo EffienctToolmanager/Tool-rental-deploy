@@ -1471,6 +1471,20 @@
         "Visualization",
         "CLI"
       ]
+    },
+    {
+      "id": "7e50282a-d511",
+      "path": "10_Wiki/Decisions/Operational_Policies/Antigravity_Skill_Operation_Policy_and_Global_Guidelines.md",
+      "type": "wiki",
+      "title": "Antigravity Skill Operation Policy and Global Guidelines",
+      "tags": [
+        "Agent",
+        "Skill",
+        "Policy",
+        "Architecture",
+        "UI/UX",
+        "Knowledge Management"
+      ]
     }
   ],
   "edges": [
@@ -2572,6 +2586,16 @@
     {
       "source": "f2c4db6b-7a71",
       "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "7e50282a-d511",
+      "target": "10_Wiki/Decisions/Operational_Policies",
+      "relationship": "parent"
+    },
+    {
+      "source": "7e50282a-d511",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
       "relationship": "derived_from"
     }
   ]
