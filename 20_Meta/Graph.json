@@ -1564,6 +1564,19 @@
         "Persistence",
         "Workflow"
       ]
+    },
+    {
+      "id": "b8d3c585-8b0d",
+      "path": "10_Wiki/Projects/UI_Enhancement/Equipment_ID_Click-to-Copy_and_Feedback_System_Implementation.md",
+      "type": "wiki",
+      "title": "Equipment ID Click-to-Copy and Feedback System Implementation",
+      "tags": [
+        "React",
+        "UX",
+        "Automation",
+        "Clipboard API",
+        "Frontend Development"
+      ]
     }
   ],
   "edges": [
@@ -2735,6 +2748,16 @@
     {
       "source": "1038c560-b500",
       "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "b8d3c585-8b0d",
+      "target": "10_Wiki/Projects/UI_Enhancement",
+      "relationship": "parent"
+    },
+    {
+      "source": "b8d3c585-8b0d",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
       "relationship": "derived_from"
     }
   ]
