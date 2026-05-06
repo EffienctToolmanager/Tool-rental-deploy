@@ -1485,6 +1485,18 @@
         "UI/UX",
         "Knowledge Management"
       ]
+    },
+    {
+      "id": "0c4332a0-6f98",
+      "path": "10_Wiki/Topics/Philosophy/AI_Integration_Philosophy__Inseparability.md",
+      "type": "wiki",
+      "title": "AI Integration Philosophy: Inseparability",
+      "tags": [
+        "AI",
+        "Philosophy",
+        "Technology Adoption",
+        "Future"
+      ]
     }
   ],
   "edges": [
@@ -2596,6 +2608,16 @@
     {
       "source": "7e50282a-d511",
       "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "0c4332a0-6f98",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "0c4332a0-6f98",
+      "target": "00_Raw/무제 끝.md",
       "relationship": "derived_from"
     }
   ]
