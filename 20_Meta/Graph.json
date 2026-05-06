@@ -1510,6 +1510,19 @@
         "Data Visualization",
         "High-Density"
       ]
+    },
+    {
+      "id": "3a4b5845-5404",
+      "path": "10_Wiki/Projects/System_Architecture/하이브리드_지식_아카이빙_워크플로우_정의.md",
+      "type": "wiki",
+      "title": "하이브리드 지식 아카이빙 워크플로우 정의",
+      "tags": [
+        "워크플로우",
+        "데이터 동기화",
+        "지식 관리",
+        "시스템 아키텍처",
+        "AI 에이전트"
+      ]
     }
   ],
   "edges": [
@@ -2641,6 +2654,16 @@
     {
       "source": "dbf08255-cb1d",
       "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3a4b5845-5404",
+      "target": "10_Wiki/Projects/System_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "3a4b5845-5404",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
       "relationship": "derived_from"
     }
   ]
