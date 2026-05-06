@@ -1551,6 +1551,19 @@
         "LowCode",
         "Inventory Management"
       ]
+    },
+    {
+      "id": "1038c560-b500",
+      "path": "10_Wiki/Decisions/Policy_Automation/AI_Assistant_Autonomous_Archiving_and_Persistence_Policy.md",
+      "type": "wiki",
+      "title": "AI Assistant Autonomous Archiving and Persistence Policy",
+      "tags": [
+        "Policy",
+        "AI",
+        "Archiving",
+        "Persistence",
+        "Workflow"
+      ]
     }
   ],
   "edges": [
@@ -2712,6 +2725,16 @@
     {
       "source": "a835a51e-36a2",
       "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "1038c560-b500",
+      "target": "10_Wiki/Decisions/Policy_Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "1038c560-b500",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
       "relationship": "derived_from"
     }
   ]

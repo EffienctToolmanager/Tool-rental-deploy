@@ -5,6 +5,8 @@
 ## ⚡ 최근 자동화 처리 로그 (Recent Automation Logs)
 > 옵시디언을 켰을 때 가장 먼저 확인하세요!
 
+- **[2026-05-06 10:53]** `00_Raw/Policy_Update_2026-05-04_1018.md` 문서를 `10_Wiki/Decisions/Policy_Automation/AI_Assistant_Autonomous_Archiving_and_Persistence_Policy.md` 로 변환 및 배치 완료. (분류: Decisions/Policy_Automation)
+
 - **[2026-05-06 10:51]** `00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md` 문서를 `10_Wiki/Projects/Automation/MS_Forms_to_Excel_Inventory_Automation_Workflow.md` 로 변환 및 배치 완료. (분류: Projects/Automation)
 
 - **[2026-05-06 10:49]** `00_Raw/20260502_AI자동화시스템_로드맵.md` 문서를 `10_Wiki/Projects/System_Architecture/통합_AI_자동화_시스템_구축_로드맵.md` 로 변환 및 배치 완료. (분류: Projects/System_Architecture)
