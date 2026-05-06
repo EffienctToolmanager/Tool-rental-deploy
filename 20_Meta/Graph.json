@@ -1304,6 +1304,20 @@
         "Design",
         "Information Density"
       ]
+    },
+    {
+      "id": "e149e24b-8508",
+      "path": "10_Wiki/Projects/Data_Integration/Excel_데이터_추출_파이프라인_고도화__동적_헤더_및_형식_처리.md",
+      "type": "wiki",
+      "title": "Excel 데이터 추출 파이프라인 고도화: 동적 헤더 및 형식 처리",
+      "tags": [
+        "PowerShell",
+        "Excel-COM",
+        "Data Extraction",
+        "Dynamic UI",
+        "JSON",
+        "Data Formatting"
+      ]
     }
   ],
   "edges": [
@@ -2285,6 +2299,16 @@
     {
       "source": "ad9b103e-44f2",
       "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "e149e24b-8508",
+      "target": "10_Wiki/Projects/Data_Integration",
+      "relationship": "parent"
+    },
+    {
+      "source": "e149e24b-8508",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
       "relationship": "derived_from"
     }
   ]
