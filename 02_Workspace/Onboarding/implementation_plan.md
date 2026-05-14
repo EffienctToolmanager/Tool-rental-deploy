@@ -109,12 +109,18 @@ Excel보다 안정적인 SharePoint List를 권장합니다. 'Onboarding Master'
     - **Assigned To**: `varManagerEmail` (Action 3에서 만든 변수)
     - **Title**: `[Tool Approval] Purchase Request from: [Your Email]`
     - **Details**: "아래 품목 구매를 승인해 주세요." + (Action 6의 `Output` 삽입)
-9.  **Action 8 (Condition)**: `Outcome`이 `Approve`와 같은지 확인
-    - **If Yes**:
-      - **Action 8.1 (Bulk Update)**: `Apply to each` (Action 5의 `value`를 입력으로 사용)
-        - **Sub-Action**: `Update item` (해당 유저의 SharePoint 행에 구매 내역 업데이트)
-      - **Action 8.2 (Admin Alert)**: `Post message in chat or channel` (구매 담당 팀즈 채널에 "구매 실행" 알림)
-      - **Action 8.3 (Completion Notify)**: `Send an email (V2)` (신입사원에게 최종 완료 및 3단계 프로그래스 바 전송)
+9.  **Action 8 (Condition)**: 매니저의 승인 여부 판정
+    - **Value**: `Outcome` (Action 7의 승인 결과)
+    - **Operator**: `is equal to` / **Value**: `Approve`
+    - **If Yes (승인 시)**:
+      - **Action 8.1 (Bulk Processing)**: `Apply to each` 액션 추가
+        - **Output**: Action 5의 `value` (엑셀의 모든 행 데이터)
+      - **Sub-Action (Update DB)**: 루프 내부에 `Update item` 추가
+        - **Id**: Action 2(`Get items`)에서 찾은 유저의 `ID` (절대 고정값 아님!)
+        - **Tool_Brand/Model/Price**: `items('Apply_to_each')?['엑셀_컬럼명']` 매핑
+        - **Tool_Status**: `Approved`로 상태 변경
+      - **Action 8.2 (Admin Alert)**: Teams 채널에 "구매 승인 완료" 포스팅
+      - **Action 8.3 (Completion Notify)**: 신입사원에게 최종 완료 메일 발송 (Resource Kit의 3단계 HTML 코드 사용)
 
 ---
 
