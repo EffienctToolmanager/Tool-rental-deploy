@@ -131,11 +131,12 @@ Excel보다 안정적인 SharePoint List를 권장합니다. 'Onboarding Master'
 </div>
 ```
 
-#### 2단계: PPE 승인 완료 및 Tool 신청 안내 (가이드 첨부용)
+#### 2단계: PPE 승인 완료 및 Tool 신청 안내 (버튼 포함 최종 버전)
 ```html
 <div style="font-family: 'Segoe UI', sans-serif; padding: 20px; border: 1px solid #e1e1e1; border-radius: 8px; background-color: #ffffff; max-width: 600px;">
   <h3 style="color: #004d40; margin-top: 0;">Onboarding Phase 2: Tool Procurement Request</h3>
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; display: table; width: 100%;">
+  
+  <div style="display: table; width: 100%; margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 20px;">
     <div style="display: table-cell; text-align: center; width: 33%;">
       <div style="width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background-color: #004d40; color: white; margin: 0 auto; font-weight: bold;">✓</div>
       <div style="font-size: 12px; margin-top: 8px; color: #004d40; font-weight: bold;">PPE Account (Done)</div>
@@ -149,7 +150,25 @@ Excel보다 안정적인 SharePoint List를 권장합니다. 'Onboarding Master'
       <div style="font-size: 12px; margin-top: 8px; color: #605e5c;">Final Approval</div>
     </div>
   </div>
-  <p style="margin-top: 20px; color: #333;">축하합니다! PPE 승인이 완료되었습니다. 이제 첨부된 엑셀 가이드를 참고하여 업무용 Tool 신청(Form 2)을 완료해 주세요.</p>
+
+  <p style="margin-top: 25px; color: #333; line-height: 1.6;">
+    축하합니다! <b>1단계 PPE 승인이 완료</b>되었습니다. <br>
+    이제 팀 합류를 위한 마지막 단계로 업무용 Tool 신청이 필요합니다.
+  </p>
+  
+  <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+    <p style="margin: 0; font-size: 14px; color: #555;">
+      📌 <b>수행 방법:</b><br>
+      1. 본 메일에 첨부된 <b>2개의 가이드 엑셀 파일</b>을 확인합니다.<br>
+      2. 아래 버튼을 클릭하여 신청서(Form 2)를 작성해 주세요.
+    </p>
+  </div>
+
+  <div style="text-align: center; margin: 30px 0;">
+    <a href="여기에_복사한_Form2_링크_붙여넣기" style="display: inline-block; padding: 15px 30px; background-color: #0078d4; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">업무용 Tool 신청하기 (Form 2)</a>
+  </div>
+
+  <p style="color: #888; font-size: 12px; text-align: center;">본 이메일은 시스템에 의해 자동 발송되었습니다.</p>
 </div>
 ```
 
