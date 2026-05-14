@@ -1,0 +1,171 @@
+body {
+    background-color: #1e2a40;
+    /* Dark navy/indigo tone */
+    color: #ffffff;
+    /* White text for readability */
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Link font adjustments from index.html's head to ensure proper use */
+h1,
+h2,
+h3 {
+    color: #e0f7fa;
+    /* Light blue/cyan for headings for contrast */
+}
+
+/* Style for navigation bar */
+.navbar {
+    background-color: #12192a;
+    border-bottom: 1px solid #3a4a60;
+}
+
+.navbar a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #64ffda;
+    /* Light accent color on hover */
+}
+
+/* Style for hero section */
+.hero {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 2.5em;
+    color: #ffffff;
+}
+
+.hero-content .highlight {
+    color: #64ffda;
+    /* Highlight color */
+}
+
+.hero-content .subtitle {
+    color: #b0c4de;
+    /* Light gray for subtitle */
+    max-width: 700px;
+    margin: 20px auto 30px auto;
+}
+
+.hero-buttons .cta-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border: 2px solid #64ffda;
+    color: #64ffda;
+    background-color: transparent;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.hero-buttons .cta-btn:hover {
+    background-color: #64ffda;
+    color: #1e2a40;
+}
+
+/* Style for features section */
+.features-section {
+    padding: 60px 20px;
+    background-color: #12192a;
+    /* Slightly different background for contrast if needed, or keep body color */
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.feature-card {
+    background-color: #1e2a40;
+    /* Card background */
+    border: 1px solid #3a4a60;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.feature-card h3 {
+    color: #64ffda;
+}
+
+.feature-card .icon {
+    margin-right: 10px;
+}
+
+/* Style for workflow section (Timeline) */
+.workflow-section {
+    padding: 60px 20px;
+}
+
+.timeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 3px solid #3a4a60;
+    padding-left: 20px;
+}
+
+.step {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #3a4a60;
+    border-radius: 5px;
+}
+
+.step-icon {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #64ffda;
+    color: #12192a;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Style for CTA section */
+.cta-section {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #12192a;
+}
+
+.cta-section h2 {
+    color: #64ffda;
+}
+
+.cta-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    margin-top: 15px;
+    background-color: #64ffda;
+    color: #12192a;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.cta-btn:hover {
+    background-color: #4c9e8d;
+    color: #ffffff;
+}
+
+/* Style for footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid #3a4a60;
+    color: #b0c4de;
+}

@@ -1,0 +1,14 @@
+According to the receipt image provided:
+{
+"store_name": "\u30e1\u30a2\u30b7\u30c6\u30fc",
+"date": "2010-03-24 21:17",
+"total_amount": "27,600",
+"items": [
+{"item_number": "\u8d95\u8981\u30a3", "name": "A3 \u30c4\u30b9\u30e1\u30f3\u30ca (200\u6570)", "quantity": 1, "price": "\u30d5\u30ea\u30a2\u30ad\u30d0 \u84c0", "amount": null},
+{"item_number": "A3 \u30c4\u30b9\u30e1\u30f3\u30ca (70mm)", "name": "\u6570", "quantity": 2, "price": "\u30d5\u30ea\u30a2\u30ad\u30d0 \u84c0", "amount": null},
+{"item_number": "A1 C3 \u30cf\u30b9\u30e0", "name": "\u76f8\u5402 (1,300)", "quantity": 2, "price": "\u30d5\u30ea\u30a2\u30ad\u30d0 \u4eab", "amount": null},
+{"item_number": "A3 \u30c4\u30b9\u30e1\u30f3\u30ca (70mm)", "name": "\u5ea6", "quantity": 2, "price": "\u30d5\u30ea\u30a2\u30ad\u30d0 \u84c0", "amount": null},
+{"item_number": "A1 C3 \u30cf\u30b9\u30e0", "name": "\u76f8\u5402 (2,500)", "quantity": 10, "price": "\u30d5\u30ea\u30a2\u30ad\u30d0 \u4eab", "amount": null},
+{"item_number": "A1 C3 \u30cf\u30b9\u30e0 (70mm)", "name": "\u5ea6", "quantity": 2, "price": "\u30d5\u30ea\u30a2\u30ad\u30d0 \u84c0", "amount": null}
+]
+}

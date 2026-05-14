@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.02em;
+  }
+}

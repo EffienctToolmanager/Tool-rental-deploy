@@ -1,0 +1,26 @@
+{
+  "store_name": "E·MART",
+  "date": [
+    {
+      "date_string": "2010-03-24"
+    },
+    {
+      "time": "21:17"
+    }
+  ],
+  "total_amount": "28,600",
+  "items": [
+    {
+      "item_number": "*A3D3949546(2001)",
+      "quantity": "2.5Kg",
+      "unit_price": null,
+      "sub_total": null
+    },
+    {
+      "item_number": "*A3D37810(70mm)",
+      "quantity": "1/70mm",
+      "unit_price": 4968,
+      "sub_total": "2,5Kg"
+    }
+  ]
+}

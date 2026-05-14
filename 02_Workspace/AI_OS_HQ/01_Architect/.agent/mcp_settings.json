@@ -1,0 +1,18 @@
+﻿{
+    "mcpServers":  {
+                       "memory":  {
+                                      "args":  [
+                                                   "-y",
+                                                   "@modelcontextprotocol/server-memory"
+                                               ],
+                                      "command":  "npx"
+                                  },
+                       "mermaid":  {
+                                       "args":  [
+                                                    "-y",
+                                                    "@modelcontextprotocol/server-mermaid"
+                                                ],
+                                       "command":  "npx"
+                                   }
+                   }
+}

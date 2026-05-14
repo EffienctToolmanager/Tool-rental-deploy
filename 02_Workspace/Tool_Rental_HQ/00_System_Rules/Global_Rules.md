@@ -1,0 +1,1 @@
+# 🌏 AI_OS_HQ Global Rules

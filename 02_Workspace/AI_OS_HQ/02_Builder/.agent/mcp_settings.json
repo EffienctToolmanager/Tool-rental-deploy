@@ -1,0 +1,27 @@
+{
+    "mcpServers":  {
+                       "filesystem":  {
+                                          "args":  [
+                                                       "-y",
+                                                       "@modelcontextprotocol/server-filesystem",
+                                                       "c:\\Users\\cfpcl\\OneDrive\\Desktop\\Dev_Workspace\\위키 에이전트\\AI_OS_HQ",
+                                                       "c:\\Users\\cfpcl\\OneDrive\\Desktop\\Dev_Workspace"
+                                                   ],
+                                          "command":  "npx"
+                                      },
+                       "memory":  {
+                                      "args":  [
+                                                   "-y",
+                                                   "@modelcontextprotocol/server-memory"
+                                               ],
+                                      "command":  "npx"
+                                  },
+                       "bash":  {
+                                    "args":  [
+                                                 "-y",
+                                                 "@modelcontextprotocol/server-bash"
+                                             ],
+                                    "command":  "npx"
+                                }
+                   }
+}

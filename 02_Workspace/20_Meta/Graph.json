@@ -1,0 +1,2812 @@
+{
+  "nodes": [
+    {
+      "id": "AI_Automation_Roadmap",
+      "path": "10_Wiki/Projects/AI_System_Build/Roadmap.md",
+      "type": "wiki",
+      "tags": [
+        "AI_연구",
+        "로드맵"
+      ]
+    },
+    {
+      "id": "573adc52-12cc",
+      "path": "10_Wiki/Decisions/System_Policy/AI_어시스턴트_자율_아카이빙_및_영속성_정책_수립.md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 영속성 정책 수립",
+      "tags": [
+        "AI",
+        "Agent",
+        "Policy",
+        "Persistence",
+        "Automation",
+        "Knowledge_Management"
+      ]
+    },
+    {
+      "id": "6772a893-2af0",
+      "path": "10_Wiki/Projects/Teams_App/Teams_Application_UI_UX_Refactoring_and_Dependency_Resolution.md",
+      "type": "wiki",
+      "title": "Teams Application UI/UX Refactoring and Dependency Resolution",
+      "tags": [
+        "Teams",
+        "React",
+        "Frontend",
+        "UI/UX",
+        "NPM",
+        "Authentication",
+        "Streamlit"
+      ]
+    },
+    {
+      "id": "8dc3fddb-bf35",
+      "path": "10_Wiki/Decisions/System_Policy/AI_어시스턴트_자율_아카이빙_및_영속성_정책_수립.md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 영속성 정책 수립",
+      "tags": [
+        "정책",
+        "AI 어시스턴트",
+        "지식관리",
+        "영속성",
+        "자동화"
+      ]
+    },
+    {
+      "id": "e0846ec6-2f11",
+      "path": "10_Wiki/Projects/Teams_App/Teams_App_UI_UX_개선_및_개발_워크플로우_복구.md",
+      "type": "wiki",
+      "title": "Teams App UI/UX 개선 및 개발 워크플로우 복구",
+      "tags": [
+        "Frontend",
+        "UI/UX",
+        "Teams",
+        "Development",
+        "Localization",
+        "Debugging"
+      ]
+    },
+    {
+      "id": "53af8c1c-b41a",
+      "path": "10_Wiki/Topics/Knowledge_Management/Hybrid_Data_Architecture_and_Knowledge_Pipeline_Review.md",
+      "type": "wiki",
+      "title": "Hybrid Data Architecture and Knowledge Pipeline Review",
+      "tags": [
+        "Data Architecture",
+        "Workflow",
+        "Sync",
+        "Knowledge Management",
+        "System Design"
+      ]
+    },
+    {
+      "id": "1f50a9d3-6a97",
+      "path": "10_Wiki/Projects/Workflow_Architecture/Hybrid_Data_Archiving_Workflow_Design.md",
+      "type": "wiki",
+      "title": "Hybrid Data Archiving Workflow Design",
+      "tags": [
+        "Data Management",
+        "Workflow",
+        "Synchronization",
+        "System Architecture",
+        "LLM-Pipeline"
+      ]
+    },
+    {
+      "id": "34c89e99-9b5a",
+      "path": "10_Wiki/Decisions/Knowledge_Workflow/지식_아카이브_동기화_정책:_로컬-클라우드_연동.md",
+      "type": "wiki",
+      "title": "지식 아카이브 동기화 정책: 로컬-클라우드 연동",
+      "tags": [
+        "Knowledge_Management",
+        "Sync",
+        "Cloud_Computing",
+        "Local_Dev",
+        "Google_Drive"
+      ]
+    },
+    {
+      "id": "ed299178-8736",
+      "path": "10_Wiki/Decisions/Synchronization_Policy/Knowledge_Sync_Policy:_Local_PC_to_Google_Drive.md",
+      "type": "wiki",
+      "title": "Knowledge Sync Policy: Local PC to Google Drive",
+      "tags": [
+        "Synchronization",
+        "Google Drive",
+        "Workflow",
+        "Knowledge Management",
+        "Architecture"
+      ]
+    },
+    {
+      "id": "a12325fe-2aa0",
+      "path": "10_Wiki/Projects/Teams_App/Teams_앱_UI_개발_및_로컬_테스트_개선.md",
+      "type": "wiki",
+      "title": "Teams 앱 UI 개발 및 로컬 테스트 개선",
+      "tags": [
+        "Teams",
+        "Frontend",
+        "React",
+        "UI/UX",
+        "Development",
+        "Localization"
+      ]
+    },
+    {
+      "id": "66e74800-8a59",
+      "path": "10_Wiki/Decisions/Data_Sync_Policy/지식_아카이브_로컬-클라우드_동기화_정책.md",
+      "type": "wiki",
+      "title": "지식 아카이브 로컬-클라우드 동기화 정책",
+      "tags": [
+        "Sync",
+        "Knowledge Management",
+        "Cloud Computing",
+        "OneDrive",
+        "Policy"
+      ]
+    },
+    {
+      "id": "170be38f-6107",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_Application_UI_Refactoring_and_Dev_Environment_Stabilization.md",
+      "type": "wiki",
+      "title": "Teams Application UI Refactoring and Dev Environment Stabilization",
+      "tags": [
+        "Teams",
+        "UI/UX",
+        "React",
+        "Development",
+        "Authentication",
+        "Debugging",
+        "Koreanization"
+      ]
+    },
+    {
+      "id": "def1cf71-86b1",
+      "path": "10_Wiki/Projects/Teams_App/Teams_앱_개발_환경_구축_및_UI_UX_개선_(2026-05-04).md",
+      "type": "wiki",
+      "title": "Teams 앱 개발 환경 구축 및 UI/UX 개선 (2026-05-04)",
+      "tags": [
+        "Teams",
+        "Frontend",
+        "UI/UX",
+        "React",
+        "Localization",
+        "DevOps"
+      ]
+    },
+    {
+      "id": "f7f27e67-574f",
+      "path": "10_Wiki/Decisions/Workflow/Knowledge_Sync_Policy_Implementation_(Local_to_Cloud).md",
+      "type": "wiki",
+      "title": "Knowledge Sync Policy Implementation (Local to Cloud)",
+      "tags": [
+        "Synchronization",
+        "Knowledge Management",
+        "Google Drive",
+        "Workflow",
+        "Archiving"
+      ]
+    },
+    {
+      "id": "437a12fb-6181",
+      "path": "10_Wiki/Topics/Philosophy/AI_Integration_as_a_Life_Mandate.md",
+      "type": "wiki",
+      "title": "AI Integration as a Life Mandate",
+      "tags": [
+        "AI",
+        "Philosophy",
+        "Technology Adoption",
+        "Personal Mandate"
+      ]
+    },
+    {
+      "id": "0b5500ec-99fb",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_앱_개발_환경_설정_및_UI_개선_기록.md",
+      "type": "wiki",
+      "title": "Teams 앱 개발 환경 설정 및 UI 개선 기록",
+      "tags": [
+        "Teams",
+        "Development",
+        "UI/UX",
+        "Azure AD",
+        "Frontend"
+      ]
+    },
+    {
+      "id": "b8389275-76c3",
+      "path": "10_Wiki/Projects/AI_Automation_Architecture/AI_자동화_시스템_구축_로드맵_(로컬_기반).md",
+      "type": "wiki",
+      "title": "AI 자동화 시스템 구축 로드맵 (로컬 기반)",
+      "tags": [
+        "AI",
+        "자동화",
+        "Ollama",
+        "로컬",
+        "Obsidian",
+        "Agent",
+        "워크플로우"
+      ]
+    },
+    {
+      "id": "55df2c2e-d610",
+      "path": "10_Wiki/Decisions/AI_Workflow/AI_어시스턴트_자율_아카이빙_및_영속성_정책.md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 영속성 정책",
+      "tags": [
+        "AI",
+        "Policy",
+        "Architecture",
+        "Self-Archiving"
+      ]
+    },
+    {
+      "id": "9ba84592-e522",
+      "path": "10_Wiki/Projects/Knowledge_Architecture/Obsidian_기반_유기적_지식_그래프_구축_전략.md",
+      "type": "wiki",
+      "title": "Obsidian 기반 유기적 지식 그래프 구축 전략",
+      "tags": [
+        "지식 그래프",
+        "Obsidian",
+        "지식 관리",
+        "시스템 아키텍처",
+        "자율 학습"
+      ]
+    },
+    {
+      "id": "23c10a53-9bb0",
+      "path": "10_Wiki/Projects/Knowledge_System/유기적_지식_베이스_구축_마일스톤_(Knowledge_Graph).md",
+      "type": "wiki",
+      "title": "유기적 지식 베이스 구축 마일스톤 (Knowledge Graph)",
+      "tags": [
+        "지식관리",
+        "지식그래프",
+        "Obsidian",
+        "AI_Agents",
+        "데이터구조화"
+      ]
+    },
+    {
+      "id": "d8c3b293-14c2",
+      "path": "10_Wiki/Tools/Development_Utility/Graphify__Codebase_Knowledge_Graph_Generation_Tool.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Generation Tool",
+      "tags": [
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI",
+        "Architecture"
+      ]
+    },
+    {
+      "id": "89a00adb-233c",
+      "path": "10_Wiki/Skills/Development_Tools/Graphify__Codebase_Knowledge_Graph_Analyzer.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Analyzer",
+      "tags": [
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI",
+        "Development Tools"
+      ]
+    },
+    {
+      "id": "52d15170-ded6",
+      "path": "10_Wiki/Skills/Development_Tools/Graphify__Code_Knowledge_Graph_Generation_and_Analysis_Guide.md",
+      "type": "wiki",
+      "title": "Graphify: Code Knowledge Graph Generation and Analysis Guide",
+      "tags": [
+        "KnowledgeGraph",
+        "CodeAnalysis",
+        "Visualization",
+        "CLI"
+      ]
+    },
+    {
+      "id": "e4482975-1f1e",
+      "path": "10_Wiki/Projects/AI_Automation_Roadmap/Local_AI_Automation_System_Roadmap_(Enterprise_&_Personal).md",
+      "type": "wiki",
+      "title": "Local AI Automation System Roadmap (Enterprise & Personal)",
+      "tags": [
+        "AI",
+        "Automation",
+        "LocalLLM",
+        "Roadmap",
+        "Obsidian",
+        "Enterprise",
+        "Agentic"
+      ]
+    },
+    {
+      "id": "0a3ea7da-df26",
+      "path": "10_Wiki/Topics/AI Philosophy/AI_Integration_Manifesto__The_Inseparability_of_AI.md",
+      "type": "wiki",
+      "title": "AI Integration Manifesto: The Inseparability of AI",
+      "tags": [
+        "AI",
+        "Philosophy",
+        "Future",
+        "Adoption",
+        "Mandate"
+      ]
+    },
+    {
+      "id": "d1d92515-dd63",
+      "path": "10_Wiki/Decisions/Policy_Management/Autonomous_Archiving_Policy_for_AI_Assistants.md",
+      "type": "wiki",
+      "title": "Autonomous Archiving Policy for AI Assistants",
+      "tags": [
+        "AI",
+        "Policy",
+        "Archiving",
+        "Autonomy",
+        "Governance",
+        "Knowledge Management"
+      ]
+    },
+    {
+      "id": "f0938dc2-a8ec",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_App_Frontend_Development_Status_Update.md",
+      "type": "wiki",
+      "title": "Teams App Frontend Development Status Update",
+      "tags": [
+        "Frontend",
+        "Teams",
+        "UI/UX",
+        "Development",
+        "Authentication",
+        "Koreanization"
+      ]
+    },
+    {
+      "id": "c6e82cef-8e2e",
+      "path": "10_Wiki/Decisions/Workflow/Optimal_Hybrid_Knowledge_Archiving_Workflow.md",
+      "type": "wiki",
+      "title": "Optimal Hybrid Knowledge Archiving Workflow",
+      "tags": [
+        "Workflow",
+        "Data Management",
+        "Archiving",
+        "System Design"
+      ]
+    },
+    {
+      "id": "509d4e5e-cf8f",
+      "path": "10_Wiki/Decisions/UI_UX/High-Density_Dashboard_Layout_Adoption.md",
+      "type": "wiki",
+      "title": "High-Density Dashboard Layout Adoption",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "Data Visualization",
+        "High-Density"
+      ]
+    },
+    {
+      "id": "7c238200-29d8",
+      "path": "10_Wiki/Projects/Data_Processing/PowerShell_기반_엑셀_데이터_동적_추출_및_헤더_자동화_구조.md",
+      "type": "wiki",
+      "title": "PowerShell 기반 엑셀 데이터 동적 추출 및 헤더 자동화 구조",
+      "tags": [
+        "powershell",
+        "excel",
+        "data-types",
+        "dynamic-header",
+        "json",
+        "data-extraction"
+      ]
+    },
+    {
+      "id": "59df9a44-80cb",
+      "path": "10_Wiki/Decisions/System_Policy/Autonomous_Agent_Skill_Operation_Policy.md",
+      "type": "wiki",
+      "title": "Autonomous Agent Skill Operation Policy",
+      "tags": [
+        "agent",
+        "skill",
+        "policy",
+        "UI/UX",
+        "MS365",
+        "architecture"
+      ]
+    },
+    {
+      "id": "10844e24-09a3",
+      "path": "10_Wiki/Projects/AI_Automation/Integrated_AI_Automation_System_Roadmap_(Local-First_Architecture).md",
+      "type": "wiki",
+      "title": "Integrated AI Automation System Roadmap (Local-First Architecture)",
+      "tags": [
+        "AI",
+        "자동화",
+        "로드맵",
+        "Local_AI",
+        "Agent",
+        "Obsidian",
+        "Enterprise_AI",
+        "System_Design"
+      ]
+    },
+    {
+      "id": "fdad32ea-eefd",
+      "path": "10_Wiki/Projects/Teams_App/Teams_앱_UI_UX_및_개발_환경_개선_로그.md",
+      "type": "wiki",
+      "title": "Teams 앱 UI/UX 및 개발 환경 개선 로그",
+      "tags": [
+        "Teams",
+        "UI/UX",
+        "개발",
+        "Dependency",
+        "DevMode",
+        "Localization"
+      ]
+    },
+    {
+      "id": "8eacecca-a3eb",
+      "path": "10_Wiki/Skills/Code_Analysis/Graphify__Codebase_Knowledge_Graph_Generator.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Generator",
+      "tags": [
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI",
+        "Software Architecture"
+      ]
+    },
+    {
+      "id": "8439dc4b-21fe",
+      "path": "10_Wiki/Projects/Knowledge_System/지식_그래프_구축_및_옵시디언_아키텍처_최적화.md",
+      "type": "wiki",
+      "title": "지식 그래프 구축 및 옵시디언 아키텍처 최적화",
+      "tags": [
+        "Knowledge_Graph",
+        "Obsidian",
+        "Graphify",
+        "Knowledge_Architecture",
+        "Automation"
+      ]
+    },
+    {
+      "id": "433014ea-328a",
+      "path": "10_Wiki/Topics/Technology_Adoption/AI와의_생활_통합_선언_(Manifesto).md",
+      "type": "wiki",
+      "title": "AI와의 생활 통합 선언 (Manifesto)",
+      "tags": [
+        "AI",
+        "미래",
+        "인간기술통합",
+        "생활필수재"
+      ]
+    },
+    {
+      "id": "09ca7bf8-257f",
+      "path": "10_Wiki/Decisions/Workflow/AI_Assistant_Autonomous_Knowledge_Archiving_Policy.md",
+      "type": "wiki",
+      "title": "AI Assistant Autonomous Knowledge Archiving Policy",
+      "tags": [
+        "Policy",
+        "AI Assistant",
+        "Autonomy",
+        "Knowledge Management",
+        "Persistence"
+      ]
+    },
+    {
+      "id": "c47363a8-9e48",
+      "path": "10_Wiki/Projects/System Architecture/Hybrid_Knowledge_Workflow_Architecture.md",
+      "type": "wiki",
+      "title": "Hybrid Knowledge Workflow Architecture",
+      "tags": [
+        "Workflow",
+        "DataSync",
+        "Knowledge Management",
+        "Obsidian",
+        "Git",
+        "AI_Pipeline"
+      ]
+    },
+    {
+      "id": "898aa506-7db6",
+      "path": "10_Wiki/Projects/Software_Development/GEV_Teams_App_Deployment_and_Branding_Guide.md",
+      "type": "wiki",
+      "title": "GEV Teams App Deployment and Branding Guide",
+      "tags": [
+        "Teams",
+        "App_Development",
+        "Branding",
+        "Deployment",
+        "GEV",
+        "Packaging"
+      ]
+    },
+    {
+      "id": "9e52c5ff-5411",
+      "path": "10_Wiki/Projects/Automation_Architecture/통합_AI_자동화_시스템_구축_로드맵_(Local_&_Knowledge-Driven).md",
+      "type": "wiki",
+      "title": "통합 AI 자동화 시스템 구축 로드맵 (Local & Knowledge-Driven)",
+      "tags": [
+        "AI",
+        "자동화",
+        "로드맵",
+        "Local_AI",
+        "Obsidian",
+        "Agent"
+      ]
+    },
+    {
+      "id": "de3b22a3-7a9e",
+      "path": "10_Wiki/Projects/Data_Handling/PowerShell_기반_엑셀_데이터_추출_및_동적_헤더_구현.md",
+      "type": "wiki",
+      "title": "PowerShell 기반 엑셀 데이터 추출 및 동적 헤더 구현",
+      "tags": [
+        "PowerShell",
+        "Excel-COM",
+        "Data_Extraction",
+        "Dynamic_Header",
+        "JSON",
+        "React"
+      ]
+    },
+    {
+      "id": "567021dd-e576",
+      "path": "10_Wiki/Decisions/UI_UX_Design/Dashboard_Layout_Pivot__High-Density_Table_Design_Standard.md",
+      "type": "wiki",
+      "title": "Dashboard Layout Pivot: High-Density Table Design Standard",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "High-Density",
+        "Information Architecture"
+      ]
+    },
+    {
+      "id": "3ecc9ce8-c84e",
+      "path": "10_Wiki/Decisions/Operational_Policies/Agent_Skills_Operating_Policy_and_Global_Guidelines.md",
+      "type": "wiki",
+      "title": "Agent Skills Operating Policy and Global Guidelines",
+      "tags": [
+        "Agent",
+        "Skill",
+        "Policy",
+        "Automation",
+        "Branding",
+        "System_Architecture"
+      ]
+    },
+    {
+      "id": "c88606f8-f168",
+      "path": "10_Wiki/Topics/Knowledge_Management/Knowledge_Graph_System_Architecture_Upgrade.md",
+      "type": "wiki",
+      "title": "Knowledge Graph System Architecture Upgrade",
+      "tags": [
+        "KnowledgeGraph",
+        "Obsidian",
+        "SystemArchitecture",
+        "DataStructuring",
+        "Automation"
+      ]
+    },
+    {
+      "id": "eec98e40-d20e",
+      "path": "10_Wiki/Projects/Teams_Integration/Teams_앱_UI_개발_및_디버깅_로그.md",
+      "type": "wiki",
+      "title": "Teams 앱 UI 개발 및 디버깅 로그",
+      "tags": [
+        "Frontend",
+        "Teams",
+        "React",
+        "Development",
+        "Debugging",
+        "UI/UX"
+      ]
+    },
+    {
+      "id": "d273a98f-a50c",
+      "path": "10_Wiki/Topics/Philosophy/AI와의_필수적_결합_선언.md",
+      "type": "wiki",
+      "title": "AI와의 필수적 결합 선언",
+      "tags": [
+        "AI",
+        "철학",
+        "미래",
+        "기술의_도구화"
+      ]
+    },
+    {
+      "id": "d91819a6-f1fe",
+      "path": "10_Wiki/Skills/Tooling/Graphify__Codebase_Knowledge_Graph_Generator.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Generator",
+      "tags": [
+        "Code Analysis",
+        "Knowledge Graph",
+        "Visualization",
+        "CLI",
+        "Software Architecture"
+      ]
+    },
+    {
+      "id": "61afbdc3-4738",
+      "path": "10_Wiki/Topics/Knowledge_Architecture/Hybrid_Knowledge_Archiving_System_Architecture_Review.md",
+      "type": "wiki",
+      "title": "Hybrid Knowledge Archiving System Architecture Review",
+      "tags": [
+        "Knowledge Management",
+        "Data Flow",
+        "Architecture",
+        "Synchronization",
+        "AI Agent"
+      ]
+    },
+    {
+      "id": "17ea0a32-7c55",
+      "path": "10_Wiki/Decisions/AI_Operation/AI_어시스턴트_자율_아카이빙_및_운영_정책.md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 운영 정책",
+      "tags": [
+        "AI",
+        "Policy",
+        "Persistence",
+        "Automation",
+        "Knowledge Management"
+      ]
+    },
+    {
+      "id": "0f8b3dc2-4da1",
+      "path": "10_Wiki/Skills/Automation_Workflow/MS_Forms_to_Excel_Automation_using_Power_Automate.md",
+      "type": "wiki",
+      "title": "MS Forms to Excel Automation using Power Automate",
+      "tags": [
+        "Power Automate",
+        "MS Forms",
+        "Excel Online",
+        "Automation",
+        "Microsoft 365"
+      ]
+    },
+    {
+      "id": "0649b35d-de1a",
+      "path": "10_Wiki/Projects/UI_UX_Improvements/Equipment_ID_Click-to-Copy_&_Feedback_System.md",
+      "type": "wiki",
+      "title": "Equipment ID Click-to-Copy & Feedback System",
+      "tags": [
+        "UI/UX",
+        "React",
+        "Clipboard API",
+        "Frontend",
+        "Automation",
+        "Data Validation"
+      ]
+    },
+    {
+      "id": "ba95ba16-66b8",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_앱_개발_환경_설정_및_UI_개선_로깅.md",
+      "type": "wiki",
+      "title": "Teams 앱 개발 환경 설정 및 UI 개선 로깅",
+      "tags": [
+        "FrontEnd",
+        "Azure AD",
+        "DevTools",
+        "React",
+        "Koreanization"
+      ]
+    },
+    {
+      "id": "84322ba1-b4aa",
+      "path": "10_Wiki/Decisions/UI_UX/Dashboard_UI__Pivot_from_Cards_to_High-Density_Tables.md",
+      "type": "wiki",
+      "title": "Dashboard UI: Pivot from Cards to High-Density Tables",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "Information Design",
+        "High-Density"
+      ]
+    },
+    {
+      "id": "065c0f30-6a95",
+      "path": "10_Wiki/Projects/Knowledge_System/지식_그래프_기반_지식_관리_체계_고도화_아키텍처.md",
+      "type": "wiki",
+      "title": "지식 그래프 기반 지식 관리 체계 고도화 아키텍처",
+      "tags": [
+        "지식 그래프",
+        "옵시디언",
+        "아키텍처",
+        "정보 구조화",
+        "지식 관리"
+      ]
+    },
+    {
+      "id": "ff944bd2-384b",
+      "path": "10_Wiki/Projects/AI_System_Design/로컬_중심의_통합_AI_자동화_시스템_로드맵.md",
+      "type": "wiki",
+      "title": "로컬 중심의 통합 AI 자동화 시스템 로드맵",
+      "tags": [
+        "AI",
+        "자동화",
+        "Agent",
+        "Local_AI",
+        "Obsidian",
+        "Roadmap"
+      ]
+    },
+    {
+      "id": "6b097ad1-e289",
+      "path": "10_Wiki/Projects/Infrastructure/Project_Data_Architecture_and_Knowledge_Workflow_Definition.md",
+      "type": "wiki",
+      "title": "Project Data Architecture and Knowledge Workflow Definition",
+      "tags": [
+        "Data Flow",
+        "Architecture",
+        "Knowledge Management",
+        "Workflow",
+        "Synchronization"
+      ]
+    },
+    {
+      "id": "76ea87ac-aabb",
+      "path": "10_Wiki/Projects/Teams_App_Deployment/GEV_Teams_App_Packaging_and_Branding_Guide.md",
+      "type": "wiki",
+      "title": "GEV Teams App Packaging and Branding Guide",
+      "tags": [
+        "Productivity",
+        "Deployment",
+        "Branding",
+        "Teams",
+        "Packaging"
+      ]
+    },
+    {
+      "id": "140abc9f-e536",
+      "path": "10_Wiki/Topics/Philosophy/The_Inescapable_Presence_of_AI_in_Daily_Life.md",
+      "type": "wiki",
+      "title": "The Inescapable Presence of AI in Daily Life",
+      "tags": [
+        "AI",
+        "Philosophy",
+        "Integration",
+        "Future"
+      ]
+    },
+    {
+      "id": "88dbaa29-114e",
+      "path": "10_Wiki/Decisions/Policy/Agent_Skill_Operating_Policy_and_Global_Standards.md",
+      "type": "wiki",
+      "title": "Agent Skill Operating Policy and Global Standards",
+      "tags": [
+        "policy",
+        "agent",
+        "skills",
+        "governance",
+        "automation",
+        "standardization",
+        "UI"
+      ]
+    },
+    {
+      "id": "bc4bf0f6-c8c3",
+      "path": "10_Wiki/Decisions/Policy/AI_어시스턴트_자율_아카이빙_및_영속성_정책.md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 영속성 정책",
+      "tags": [
+        "Policy",
+        "AI",
+        "Archiving",
+        "Persistence",
+        "KnowledgeManagement"
+      ]
+    },
+    {
+      "id": "2ae6a111-ec61",
+      "path": "10_Wiki/Projects/Data_Ingestion/Robust_Excel_Data_Ingestion__Dynamic_Header_&_Date_Parsing_Fix.md",
+      "type": "wiki",
+      "title": "Robust Excel Data Ingestion: Dynamic Header & Date Parsing Fix",
+      "tags": [
+        "PowerShell",
+        "Excel",
+        "Data Handling",
+        "React",
+        "Dynamic UI",
+        "JSON"
+      ]
+    },
+    {
+      "id": "667310dd-1de9",
+      "path": "10_Wiki/Decisions/Knowledge_Sync/지식_아카이브_동기화_정책__로컬_PC_↔_클라우드.md",
+      "type": "wiki",
+      "title": "지식 아카이브 동기화 정책: 로컬 PC ↔ 클라우드",
+      "tags": [
+        "지식관리",
+        "동기화",
+        "Workflow",
+        "Google Drive",
+        "Knowledge Base"
+      ]
+    },
+    {
+      "id": "97ec79f0-8139",
+      "path": "10_Wiki/Skills/Code Analysis/Graphify__Codebase_Knowledge_Graph_Generation.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Generation",
+      "tags": [
+        "Knowledge Graph",
+        "Codebase Analysis",
+        "Visualization",
+        "CLI",
+        "Software Architecture"
+      ]
+    },
+    {
+      "id": "13df768f-f94a",
+      "path": "10_Wiki/Topics/Automation/MS_Forms_to_Excel_Automation_Workflow_Guide_(Power_Automate).md",
+      "type": "wiki",
+      "title": "MS Forms to Excel Automation Workflow Guide (Power Automate)",
+      "tags": [
+        "Power Automate",
+        "MS Forms",
+        "Excel",
+        "Workflow",
+        "Data Synchronization"
+      ]
+    },
+    {
+      "id": "85ccb9ce-3a49",
+      "path": "10_Wiki/Projects/UI_UX/Equipment_ID_Click-to-Copy_Feature_Implementation.md",
+      "type": "wiki",
+      "title": "Equipment ID Click-to-Copy Feature Implementation",
+      "tags": [
+        "React",
+        "UX/UI",
+        "Clipboard API",
+        "Automation",
+        "Design System"
+      ]
+    },
+    {
+      "id": "a8b0aae8-0962",
+      "path": "10_Wiki/Skills/Codebase_Analysis/Graphify_Skill_Guide__Codebase_Knowledge_Graph_Generation.md",
+      "type": "wiki",
+      "title": "Graphify Skill Guide: Codebase Knowledge Graph Generation",
+      "tags": [
+        "Knowledge Graph",
+        "Codebase Analysis",
+        "Visualization",
+        "CLI",
+        "Software Engineering"
+      ]
+    },
+    {
+      "id": "aadc2bf3-4536",
+      "path": "10_Wiki/Decisions/Knowledge_Governance/AI_어시스턴트_자율_아카이빙_및_영속성_정책_(Autonomous_Archiving_Policy).md",
+      "type": "wiki",
+      "title": "AI 어시스턴트 자율 아카이빙 및 영속성 정책 (Autonomous Archiving Policy)",
+      "tags": [
+        "Policy",
+        "AI",
+        "Archiving",
+        "Permanence",
+        "Knowledge Management"
+      ]
+    },
+    {
+      "id": "5e43f441-38d1",
+      "path": "10_Wiki/Decisions/UI_UX/Dashboard_UI_Layout__Pivot_to_High-Density_Table.md",
+      "type": "wiki",
+      "title": "Dashboard UI Layout: Pivot to High-Density Table",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "High-Density",
+        "Data Visualization",
+        "Product Design"
+      ]
+    },
+    {
+      "id": "e67125d4-8471",
+      "path": "10_Wiki/Projects/AI_Automation/AI_자동화_시스템_통합_로드맵_및_설계_기록.md",
+      "type": "wiki",
+      "title": "AI 자동화 시스템 통합 로드맵 및 설계 기록",
+      "tags": [
+        "AI",
+        "자동화",
+        "로컬AI",
+        "로드맵",
+        "Obsidian",
+        "에이전트"
+      ]
+    },
+    {
+      "id": "34e39462-9450",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_앱_개발_환경_설정_및_UI_UX_개선_로그.md",
+      "type": "wiki",
+      "title": "Teams 앱 개발 환경 설정 및 UI/UX 개선 로그",
+      "tags": [
+        "Development",
+        "UI/UX",
+        "React",
+        "Dependency",
+        "Authentication"
+      ]
+    },
+    {
+      "id": "3b88687f-0b8b",
+      "path": "10_Wiki/Projects/Application_Development/GEV_Teams_Application_Deployment_and_Branding_Protocol.md",
+      "type": "wiki",
+      "title": "GEV Teams Application Deployment and Branding Protocol",
+      "tags": [
+        "Teams",
+        "App",
+        "Branding",
+        "Deployment",
+        "GEV",
+        "Packaging"
+      ]
+    },
+    {
+      "id": "2f72e79f-ba16",
+      "path": "10_Wiki/Decisions/Knowledge_Architecture/지식_베이스_동기화_정책_(로컬-클라우드_아키텍처).md",
+      "type": "wiki",
+      "title": "지식 베이스 동기화 정책 (로컬-클라우드 아키텍처)",
+      "tags": [
+        "Sync",
+        "Google Drive",
+        "Knowledge Management",
+        "Architecture",
+        "Data Flow"
+      ]
+    },
+    {
+      "id": "46b2c889-4f5d",
+      "path": "10_Wiki/Topics/Philosophy/AI와_삶의_통합_선언.md",
+      "type": "wiki",
+      "title": "AI와 삶의 통합 선언",
+      "tags": [
+        "AI",
+        "철학",
+        "기술적 의존성",
+        "미래"
+      ]
+    },
+    {
+      "id": "80d584a2-d5b1",
+      "path": "10_Wiki/Policies/Agent_Operation/Antigravity_Autonomous_Skill_Policy.md",
+      "type": "wiki",
+      "title": "Antigravity Autonomous Skill Policy",
+      "tags": [
+        "agent",
+        "skill",
+        "policy",
+        "automation",
+        "governance",
+        "brand-guidelines"
+      ]
+    },
+    {
+      "id": "cd455302-178a",
+      "path": "10_Wiki/Topics/Workflow/Hybrid_Knowledge_Archiving_Workflow_Design.md",
+      "type": "wiki",
+      "title": "Hybrid Knowledge Archiving Workflow Design",
+      "tags": [
+        "Workflow",
+        "Data Management",
+        "Sync",
+        "Knowledge Archiving",
+        "System Design"
+      ]
+    },
+    {
+      "id": "37c702cd-1d98",
+      "path": "10_Wiki/Topics/Automation/MS_Forms_to_Excel_Automation_Workflow_(Power_Automate).md",
+      "type": "wiki",
+      "title": "MS Forms to Excel Automation Workflow (Power Automate)",
+      "tags": [
+        "PowerAutomate",
+        "MSForms",
+        "Excel",
+        "Microsoft365",
+        "LowCode"
+      ]
+    },
+    {
+      "id": "b508c075-0822",
+      "path": "10_Wiki/Projects/UI_UX/UI_UX_Enhancement__Equipment_ID_Auto-Copy_Feature_Implementation.md",
+      "type": "wiki",
+      "title": "UI/UX Enhancement: Equipment ID Auto-Copy Feature Implementation",
+      "tags": [
+        "React",
+        "UX",
+        "Frontend",
+        "ClipboardAPI",
+        "Automation",
+        "UI/UX"
+      ]
+    },
+    {
+      "id": "cb230e33-e161",
+      "path": "10_Wiki/Skills/Development_Tools/Graphify__Codebase_Analysis_and_Knowledge_Graph_Generation.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Analysis and Knowledge Graph Generation",
+      "tags": [
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI",
+        "Software Architecture"
+      ]
+    },
+    {
+      "id": "977db0fd-0cc1",
+      "path": "10_Wiki/Decisions/System Architecture/하이브리드_데이터_아키텍처_및_워크플로우_정의.md",
+      "type": "wiki",
+      "title": "하이브리드 데이터 아키텍처 및 워크플로우 정의",
+      "tags": [
+        "데이터 아키텍처",
+        "워크플로우",
+        "동기화",
+        "지식 관리",
+        "AI 파이프라인"
+      ]
+    },
+    {
+      "id": "de5c120e-3c94",
+      "path": "10_Wiki/Projects/UI_UX/Equipment_ID_Click-to-Copy_&_Feedback_System_Implementation.md",
+      "type": "wiki",
+      "title": "Equipment ID Click-to-Copy & Feedback System Implementation",
+      "tags": [
+        "UI/UX",
+        "React",
+        "Clipboard API",
+        "Data Accuracy",
+        "Automation"
+      ]
+    },
+    {
+      "id": "e5d72636-8672",
+      "path": "10_Wiki/Projects/Teams_Application/Teams_Application_UI_Enhancement_and_Dev_Mode_Implementation.md",
+      "type": "wiki",
+      "title": "Teams Application UI Enhancement and Dev Mode Implementation",
+      "tags": [
+        "Teams",
+        "Front-end",
+        "UI/UX",
+        "Development",
+        "NPM",
+        "Localization",
+        "Debugging"
+      ]
+    },
+    {
+      "id": "010941a9-d7c5",
+      "path": "10_Wiki/Topics/AI_Adoption/AI와의_생활_밀착성_선언.md",
+      "type": "wiki",
+      "title": "AI와의 생활 밀착성 선언",
+      "tags": [
+        "AI",
+        "기술",
+        "생활융합",
+        "미래"
+      ]
+    },
+    {
+      "id": "2e53770a-be17",
+      "path": "10_Wiki/Decisions/UX_Design/Dashboard_UI_Paradigm_Shift__Grid_to_High-Density_Table.md",
+      "type": "wiki",
+      "title": "Dashboard UI Paradigm Shift: Grid to High-Density Table",
+      "tags": [
+        "UI",
+        "Dashboard",
+        "UX",
+        "Information Density",
+        "Data Visualization"
+      ]
+    },
+    {
+      "id": "bdc9551a-840f",
+      "path": "10_Wiki/Projects/Knowledge_Architecture/유기적_지식_그래프_구축_마일스톤.md",
+      "type": "wiki",
+      "title": "유기적 지식 그래프 구축 마일스톤",
+      "tags": [
+        "지식 그래프",
+        "옵시디언",
+        "지식 자동화",
+        "데이터 구조화",
+        "지식 아카이빙"
+      ]
+    },
+    {
+      "id": "ad5a759a-8106",
+      "path": "10_Wiki/Projects/Data_Engineering/PowerShell_Excel_Data_Extraction_and_Dynamic_Header_Sync.md",
+      "type": "wiki",
+      "title": "PowerShell Excel Data Extraction and Dynamic Header Sync",
+      "tags": [
+        "powershell",
+        "excel",
+        "data-extraction",
+        "dynamic-header",
+        "json",
+        "api"
+      ]
+    },
+    {
+      "id": "5dce1190-7ff7",
+      "path": "10_Wiki/Projects/AI_Architecture/Local_AI_Automation_System_Blueprint.md",
+      "type": "wiki",
+      "title": "Local AI Automation System Blueprint",
+      "tags": [
+        "AI",
+        "Automation",
+        "Local",
+        "Obsidian",
+        "Architecture",
+        "Roadmap"
+      ]
+    },
+    {
+      "id": "3cc49e52-70ee",
+      "path": "10_Wiki/Projects/Automation_Workflow/MS_Forms_&_Power_Automate_Data_Synchronization_Workflow.md",
+      "type": "wiki",
+      "title": "MS Forms & Power Automate Data Synchronization Workflow",
+      "tags": [
+        "PowerAutomate",
+        "MSForms",
+        "ExcelOnline",
+        "Automation",
+        "Workflow",
+        "DataSync"
+      ]
+    },
+    {
+      "id": "e0121c7e-2ac2",
+      "path": "10_Wiki/Decisions/Architecture/Antigravity_Skill_Operating_Policy_and_Global_Guidelines.md",
+      "type": "wiki",
+      "title": "Antigravity Skill Operating Policy and Global Guidelines",
+      "tags": [
+        "Policy",
+        "Agent",
+        "Skills",
+        "UX/UI",
+        "DataStandards",
+        "Consistency"
+      ]
+    },
+    {
+      "id": "de6b3816-be5e",
+      "path": "10_Wiki/Projects/GEV_Teams_Integration/GEV_Teams_App_Packaging_and_Branding_Guide.md",
+      "type": "wiki",
+      "title": "GEV Teams App Packaging and Branding Guide",
+      "tags": [
+        "Teams",
+        "App",
+        "Branding",
+        "Deployment",
+        "Windows"
+      ]
+    },
+    {
+      "id": "3e756164-4bb3",
+      "path": "10_Wiki/Projects/AI_System/AI_자동화_시스템_통합_로드맵_(Local_&_Secure).md",
+      "type": "wiki",
+      "title": "AI 자동화 시스템 통합 로드맵 (Local & Secure)",
+      "tags": [
+        "AI",
+        "Automation",
+        "Local LLM",
+        "Roadmap",
+        "지식관리",
+        "엔터프라이즈"
+      ]
+    },
+    {
+      "id": "141cc7d4-3fde",
+      "path": "10_Wiki/HowTo/Microsoft_365/MS_Forms_to_Excel_Automation_Workflow_Guide.md",
+      "type": "wiki",
+      "title": "MS Forms to Excel Automation Workflow Guide",
+      "tags": [
+        "PowerAutomate",
+        "MSForms",
+        "Automation",
+        "Excel",
+        "Integration"
+      ]
+    },
+    {
+      "id": "be2cd23f-8951",
+      "path": "10_Wiki/Projects/Internal_Tools/GEV_Teams_App_Packaging,_Branding,_and_Deployment_Protocol.md",
+      "type": "wiki",
+      "title": "GEV Teams App Packaging, Branding, and Deployment Protocol",
+      "tags": [
+        "TeamsApp",
+        "Deployment",
+        "Branding",
+        "Packaging",
+        "GEV",
+        "Workflow"
+      ]
+    },
+    {
+      "id": "60fc93f2-8d28",
+      "path": "10_Wiki/Projects/Teams_App/Teams_App_UI_UX_Enhancement_and_Development_Setup_Refinements.md",
+      "type": "wiki",
+      "title": "Teams App UI/UX Enhancement and Development Setup Refinements",
+      "tags": [
+        "Teams",
+        "UI/UX",
+        "Frontend",
+        "Development",
+        "Dependency Management",
+        "Localization"
+      ]
+    },
+    {
+      "id": "a1ef7dd9-5435",
+      "path": "10_Wiki/Decisions/Workflow/Optimal_Knowledge_Repository_Workflow_Definition.md",
+      "type": "wiki",
+      "title": "Optimal Knowledge Repository Workflow Definition",
+      "tags": [
+        "Workflow",
+        "Data Management",
+        "Architecture",
+        "System Design"
+      ]
+    },
+    {
+      "id": "68f46967-d189",
+      "path": "10_Wiki/Projects/Knowledge_Infra/지식_아카이브_동기화_정책_수립_(로컬-클라우드).md",
+      "type": "wiki",
+      "title": "지식 아카이브 동기화 정책 수립 (로컬-클라우드)",
+      "tags": [
+        "동기화",
+        "지식관리시스템",
+        "Google Drive",
+        "워킹플로우",
+        "아카이빙"
+      ]
+    },
+    {
+      "id": "f5206ea1-1cb4",
+      "path": "10_Wiki/Projects/UI_Enhancements/Click-to-Copy_기능_구현을_통한_데이터_입력_오류_감소.md",
+      "type": "wiki",
+      "title": "Click-to-Copy 기능 구현을 통한 데이터 입력 오류 감소",
+      "tags": [
+        "React",
+        "UX/UI",
+        "Frontend Development",
+        "Automation",
+        "Clipboard API",
+        "Accessibility"
+      ]
+    },
+    {
+      "id": "f7a88609-bd3a",
+      "path": "10_Wiki/Topics/Philosophy/AI-Human_Coexistence_Philosophy.md",
+      "type": "wiki",
+      "title": "AI-Human Coexistence Philosophy",
+      "tags": [
+        "AI",
+        "Philosophy",
+        "Future",
+        "Dependency"
+      ]
+    },
+    {
+      "id": "ad9b103e-44f2",
+      "path": "10_Wiki/Decisions/UI_UX/Dashboard_UI_Paradigm_Shift__Grid_Card_to_High-Density_Table.md",
+      "type": "wiki",
+      "title": "Dashboard UI Paradigm Shift: Grid Card to High-Density Table",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "Design",
+        "Information Density"
+      ]
+    },
+    {
+      "id": "e149e24b-8508",
+      "path": "10_Wiki/Projects/Data_Integration/Excel_데이터_추출_파이프라인_고도화__동적_헤더_및_형식_처리.md",
+      "type": "wiki",
+      "title": "Excel 데이터 추출 파이프라인 고도화: 동적 헤더 및 형식 처리",
+      "tags": [
+        "PowerShell",
+        "Excel-COM",
+        "Data Extraction",
+        "Dynamic UI",
+        "JSON",
+        "Data Formatting"
+      ]
+    },
+    {
+      "id": "6c170545-6bfd",
+      "path": "10_Wiki/Decisions/Agent_Governance/Agent_Skills_Architecture_and_Operational_Governance.md",
+      "type": "wiki",
+      "title": "Agent Skills Architecture and Operational Governance",
+      "tags": [
+        "Agent",
+        "Policy",
+        "Skills",
+        "Governance",
+        "UX/UI",
+        "Data_Structure"
+      ]
+    },
+    {
+      "id": "68c34cf7-f95f",
+      "path": "10_Wiki/Projects/Development_Tools/Graphify__Codebase_Knowledge_Graph_Generator.md",
+      "type": "wiki",
+      "title": "Graphify: Codebase Knowledge Graph Generator",
+      "tags": [
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI",
+        "Software Architecture"
+      ]
+    },
+    {
+      "id": "58e93d77-8747",
+      "path": "10_Wiki/Projects/Knowledge_System/유기적_지식_베이스_구축_및_그래프화_(2026-05-04).md",
+      "type": "wiki",
+      "title": "유기적 지식 베이스 구축 및 그래프화 (2026-05-04)",
+      "tags": [
+        "지식 그래프",
+        "옵시디언",
+        "Graphify",
+        "데이터 구조화",
+        "지식 아카이빙"
+      ]
+    },
+    {
+      "id": "6c17f83b-e146",
+      "path": "10_Wiki/Projects/Microsoft_Automation/MS_Forms_and_Power_Automate_Data_Synchronization_Workflow.md",
+      "type": "wiki",
+      "title": "MS Forms and Power Automate Data Synchronization Workflow",
+      "tags": [
+        "Power Automate",
+        "MS Forms",
+        "Excel Online",
+        "Automation",
+        "Workflow"
+      ]
+    },
+    {
+      "id": "abb272ce-dbc2",
+      "path": "10_Wiki/Projects/Business_Automation/MS_Forms_&_Power_Automate_Workflow_for_Asset_Tracking.md",
+      "type": "wiki",
+      "title": "MS Forms & Power Automate Workflow for Asset Tracking",
+      "tags": [
+        "Power Automate",
+        "MS Forms",
+        "Excel",
+        "Automation",
+        "Workflow",
+        "Asset Management"
+      ]
+    },
+    {
+      "id": "45554384-f271",
+      "path": "10_Wiki/Projects/Enterprise_Tooling/Teams_App_Packaging_and_GEV_Branding_Integration_Guide.md",
+      "type": "wiki",
+      "title": "Teams App Packaging and GEV Branding Integration Guide",
+      "tags": [
+        "Teams",
+        "App",
+        "Packaging",
+        "Branding",
+        "GEV",
+        "Deployment",
+        "Automation"
+      ]
+    },
+    {
+      "id": "a423d718-8bbd",
+      "path": "10_Wiki/Projects/Automation_Systems/AI_자동화_시스템_통합_아키텍처_로드맵.md",
+      "type": "wiki",
+      "title": "AI 자동화 시스템 통합 아키텍처 로드맵",
+      "tags": [
+        "AI",
+        "Automation",
+        "LocalAI",
+        "Ollama",
+        "Obsidian",
+        "Architecture",
+        "로드맵"
+      ]
+    },
+    {
+      "id": "008d69c1-910e",
+      "path": "10_Wiki/Projects/Enterprise_Systems/GEV_Tool_Rental_System__SharePoint_Migration_and_Optimization_Report.md",
+      "type": "wiki",
+      "title": "GEV Tool Rental System: SharePoint Migration and Optimization Report",
+      "tags": [
+        "M365",
+        "SharePoint",
+        "Teams",
+        "Architecture",
+        "Database",
+        "BugFix",
+        "GraphAPI"
+      ]
+    },
+    {
+      "id": "3e94eaa8-8fa7",
+      "path": "10_Wiki/Topics/Knowledge_Management/유기적_지식_베이스_아키텍처_고도화_(Obsidian-First).md",
+      "type": "wiki",
+      "title": "유기적 지식 베이스 아키텍처 고도화 (Obsidian-First)",
+      "tags": [
+        "Knowledge Graph",
+        "Obsidian",
+        "지식 자동화",
+        "시스템 설계",
+        "데이터 구조화",
+        "Graphify"
+      ]
+    },
+    {
+      "id": "9bab2dd9-e6d3",
+      "path": "10_Wiki/Projects/Automation_Utilities/PowerShell_기반_엑셀_데이터_추출_및_동적_헤더_자동_동기화_구조_구축.md",
+      "type": "wiki",
+      "title": "PowerShell 기반 엑셀 데이터 추출 및 동적 헤더 자동 동기화 구조 구축",
+      "tags": [
+        "PowerShell",
+        "Excel",
+        "DataExtraction",
+        "DynamicHeader",
+        "JSON",
+        "React"
+      ]
+    },
+    {
+      "id": "f2c4db6b-7a71",
+      "path": "10_Wiki/Skills/Development_Tools/Graphify__코드베이스_분석_및_지식_그래프_생성_가이드.md",
+      "type": "wiki",
+      "title": "Graphify: 코드베이스 분석 및 지식 그래프 생성 가이드",
+      "tags": [
+        "Graphify",
+        "Knowledge Graph",
+        "Code Analysis",
+        "Visualization",
+        "CLI"
+      ]
+    },
+    {
+      "id": "7e50282a-d511",
+      "path": "10_Wiki/Decisions/Operational_Policies/Antigravity_Skill_Operation_Policy_and_Global_Guidelines.md",
+      "type": "wiki",
+      "title": "Antigravity Skill Operation Policy and Global Guidelines",
+      "tags": [
+        "Agent",
+        "Skill",
+        "Policy",
+        "Architecture",
+        "UI/UX",
+        "Knowledge Management"
+      ]
+    },
+    {
+      "id": "0c4332a0-6f98",
+      "path": "10_Wiki/Topics/Philosophy/AI_Integration_Philosophy__Inseparability.md",
+      "type": "wiki",
+      "title": "AI Integration Philosophy: Inseparability",
+      "tags": [
+        "AI",
+        "Philosophy",
+        "Technology Adoption",
+        "Future"
+      ]
+    },
+    {
+      "id": "dbf08255-cb1d",
+      "path": "10_Wiki/Decisions/UI_UX/Dashboard_UI_Design_Paradigm_Shift__High-Density_Table_Implementation.md",
+      "type": "wiki",
+      "title": "Dashboard UI Design Paradigm Shift: High-Density Table Implementation",
+      "tags": [
+        "UI",
+        "UX",
+        "Dashboard",
+        "Data Visualization",
+        "High-Density"
+      ]
+    },
+    {
+      "id": "3a4b5845-5404",
+      "path": "10_Wiki/Projects/System_Architecture/하이브리드_지식_아카이빙_워크플로우_정의.md",
+      "type": "wiki",
+      "title": "하이브리드 지식 아카이빙 워크플로우 정의",
+      "tags": [
+        "워크플로우",
+        "데이터 동기화",
+        "지식 관리",
+        "시스템 아키텍처",
+        "AI 에이전트"
+      ]
+    },
+    {
+      "id": "7aeacd58-4fbe",
+      "path": "10_Wiki/Projects/System_Architecture/통합_AI_자동화_시스템_구축_로드맵.md",
+      "type": "wiki",
+      "title": "통합 AI 자동화 시스템 구축 로드맵",
+      "tags": [
+        "AI",
+        "자동화",
+        "로드맵",
+        "Local_AI",
+        "Obsidian",
+        "Agent"
+      ]
+    },
+    {
+      "id": "a835a51e-36a2",
+      "path": "10_Wiki/Projects/Automation/MS_Forms_to_Excel_Inventory_Automation_Workflow.md",
+      "type": "wiki",
+      "title": "MS Forms to Excel Inventory Automation Workflow",
+      "tags": [
+        "Automation",
+        "PowerAutomate",
+        "MSForms",
+        "Excel",
+        "LowCode",
+        "Inventory Management"
+      ]
+    },
+    {
+      "id": "1038c560-b500",
+      "path": "10_Wiki/Decisions/Policy_Automation/AI_Assistant_Autonomous_Archiving_and_Persistence_Policy.md",
+      "type": "wiki",
+      "title": "AI Assistant Autonomous Archiving and Persistence Policy",
+      "tags": [
+        "Policy",
+        "AI",
+        "Archiving",
+        "Persistence",
+        "Workflow"
+      ]
+    },
+    {
+      "id": "b8d3c585-8b0d",
+      "path": "10_Wiki/Projects/UI_Enhancement/Equipment_ID_Click-to-Copy_and_Feedback_System_Implementation.md",
+      "type": "wiki",
+      "title": "Equipment ID Click-to-Copy and Feedback System Implementation",
+      "tags": [
+        "React",
+        "UX",
+        "Automation",
+        "Clipboard API",
+        "Frontend Development"
+      ]
+    },
+    {
+      "id": "52d9e590-b9db",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_App_UI_Refactoring_and_Debugging_Log.md",
+      "type": "wiki",
+      "title": "Teams App UI Refactoring and Debugging Log",
+      "tags": [
+        "React",
+        "Teams",
+        "UI/UX",
+        "Frontend",
+        "DevOps",
+        "Authentication"
+      ]
+    },
+    {
+      "id": "af220e76-b007",
+      "path": "10_Wiki/Projects/Teams_App_Development/Teams_App_Packaging_and_GEV_Brand_Integration_Guide.md",
+      "type": "wiki",
+      "title": "Teams App Packaging and GEV Brand Integration Guide",
+      "tags": [
+        "Teams",
+        "App",
+        "Packaging",
+        "Branding",
+        "Deployment",
+        "GEV"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "AI_Automation_Roadmap",
+      "target": "10_Wiki/Projects/AI_System_Build",
+      "relationship": "parent"
+    },
+    {
+      "source": "AI_Automation_Roadmap",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "573adc52-12cc",
+      "target": "10_Wiki/Decisions/System_Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "573adc52-12cc",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "6772a893-2af0",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "6772a893-2af0",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "8dc3fddb-bf35",
+      "target": "10_Wiki/Decisions/System_Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "8dc3fddb-bf35",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "e0846ec6-2f11",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "e0846ec6-2f11",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "53af8c1c-b41a",
+      "target": "10_Wiki/Topics/Knowledge_Management",
+      "relationship": "parent"
+    },
+    {
+      "source": "53af8c1c-b41a",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "1f50a9d3-6a97",
+      "target": "10_Wiki/Projects/Workflow_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "1f50a9d3-6a97",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "34c89e99-9b5a",
+      "target": "10_Wiki/Decisions/Knowledge_Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "34c89e99-9b5a",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "ed299178-8736",
+      "target": "10_Wiki/Decisions/Synchronization_Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "ed299178-8736",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "a12325fe-2aa0",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "a12325fe-2aa0",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "66e74800-8a59",
+      "target": "10_Wiki/Decisions/Data_Sync_Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "66e74800-8a59",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "170be38f-6107",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "170be38f-6107",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "def1cf71-86b1",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "def1cf71-86b1",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "f7f27e67-574f",
+      "target": "10_Wiki/Decisions/Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "f7f27e67-574f",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "437a12fb-6181",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "437a12fb-6181",
+      "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "0b5500ec-99fb",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "0b5500ec-99fb",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "b8389275-76c3",
+      "target": "10_Wiki/Projects/AI_Automation_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "b8389275-76c3",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "55df2c2e-d610",
+      "target": "10_Wiki/Decisions/AI_Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "55df2c2e-d610",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "9ba84592-e522",
+      "target": "10_Wiki/Projects/Knowledge_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "9ba84592-e522",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "23c10a53-9bb0",
+      "target": "10_Wiki/Projects/Knowledge_System",
+      "relationship": "parent"
+    },
+    {
+      "source": "23c10a53-9bb0",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "d8c3b293-14c2",
+      "target": "10_Wiki/Tools/Development_Utility",
+      "relationship": "parent"
+    },
+    {
+      "source": "d8c3b293-14c2",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "89a00adb-233c",
+      "target": "10_Wiki/Skills/Development_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "89a00adb-233c",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "52d15170-ded6",
+      "target": "10_Wiki/Skills/Development_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "52d15170-ded6",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "e4482975-1f1e",
+      "target": "10_Wiki/Projects/AI_Automation_Roadmap",
+      "relationship": "parent"
+    },
+    {
+      "source": "e4482975-1f1e",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "0a3ea7da-df26",
+      "target": "10_Wiki/Topics/AI Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "0a3ea7da-df26",
+      "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "d1d92515-dd63",
+      "target": "10_Wiki/Decisions/Policy_Management",
+      "relationship": "parent"
+    },
+    {
+      "source": "d1d92515-dd63",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "f0938dc2-a8ec",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "f0938dc2-a8ec",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "c6e82cef-8e2e",
+      "target": "10_Wiki/Decisions/Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "c6e82cef-8e2e",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "509d4e5e-cf8f",
+      "target": "10_Wiki/Decisions/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "509d4e5e-cf8f",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "7c238200-29d8",
+      "target": "10_Wiki/Projects/Data_Processing",
+      "relationship": "parent"
+    },
+    {
+      "source": "7c238200-29d8",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "59df9a44-80cb",
+      "target": "10_Wiki/Decisions/System_Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "59df9a44-80cb",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "10844e24-09a3",
+      "target": "10_Wiki/Projects/AI_Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "10844e24-09a3",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "fdad32ea-eefd",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "fdad32ea-eefd",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "8eacecca-a3eb",
+      "target": "10_Wiki/Skills/Code_Analysis",
+      "relationship": "parent"
+    },
+    {
+      "source": "8eacecca-a3eb",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "8439dc4b-21fe",
+      "target": "10_Wiki/Projects/Knowledge_System",
+      "relationship": "parent"
+    },
+    {
+      "source": "8439dc4b-21fe",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "433014ea-328a",
+      "target": "10_Wiki/Topics/Technology_Adoption",
+      "relationship": "parent"
+    },
+    {
+      "source": "433014ea-328a",
+      "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "09ca7bf8-257f",
+      "target": "10_Wiki/Decisions/Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "09ca7bf8-257f",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "c47363a8-9e48",
+      "target": "10_Wiki/Projects/System Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "c47363a8-9e48",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "898aa506-7db6",
+      "target": "10_Wiki/Projects/Software_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "898aa506-7db6",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "9e52c5ff-5411",
+      "target": "10_Wiki/Projects/Automation_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "9e52c5ff-5411",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "de3b22a3-7a9e",
+      "target": "10_Wiki/Projects/Data_Handling",
+      "relationship": "parent"
+    },
+    {
+      "source": "de3b22a3-7a9e",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "567021dd-e576",
+      "target": "10_Wiki/Decisions/UI_UX_Design",
+      "relationship": "parent"
+    },
+    {
+      "source": "567021dd-e576",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3ecc9ce8-c84e",
+      "target": "10_Wiki/Decisions/Operational_Policies",
+      "relationship": "parent"
+    },
+    {
+      "source": "3ecc9ce8-c84e",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "c88606f8-f168",
+      "target": "10_Wiki/Topics/Knowledge_Management",
+      "relationship": "parent"
+    },
+    {
+      "source": "c88606f8-f168",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "eec98e40-d20e",
+      "target": "10_Wiki/Projects/Teams_Integration",
+      "relationship": "parent"
+    },
+    {
+      "source": "eec98e40-d20e",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "d273a98f-a50c",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "d273a98f-a50c",
+      "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "d91819a6-f1fe",
+      "target": "10_Wiki/Skills/Tooling",
+      "relationship": "parent"
+    },
+    {
+      "source": "d91819a6-f1fe",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "61afbdc3-4738",
+      "target": "10_Wiki/Topics/Knowledge_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "61afbdc3-4738",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "17ea0a32-7c55",
+      "target": "10_Wiki/Decisions/AI_Operation",
+      "relationship": "parent"
+    },
+    {
+      "source": "17ea0a32-7c55",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "0f8b3dc2-4da1",
+      "target": "10_Wiki/Skills/Automation_Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "0f8b3dc2-4da1",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "0649b35d-de1a",
+      "target": "10_Wiki/Projects/UI_UX_Improvements",
+      "relationship": "parent"
+    },
+    {
+      "source": "0649b35d-de1a",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "ba95ba16-66b8",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "ba95ba16-66b8",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "84322ba1-b4aa",
+      "target": "10_Wiki/Decisions/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "84322ba1-b4aa",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "065c0f30-6a95",
+      "target": "10_Wiki/Projects/Knowledge_System",
+      "relationship": "parent"
+    },
+    {
+      "source": "065c0f30-6a95",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "ff944bd2-384b",
+      "target": "10_Wiki/Projects/AI_System_Design",
+      "relationship": "parent"
+    },
+    {
+      "source": "ff944bd2-384b",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "6b097ad1-e289",
+      "target": "10_Wiki/Projects/Infrastructure",
+      "relationship": "parent"
+    },
+    {
+      "source": "6b097ad1-e289",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "76ea87ac-aabb",
+      "target": "10_Wiki/Projects/Teams_App_Deployment",
+      "relationship": "parent"
+    },
+    {
+      "source": "76ea87ac-aabb",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "140abc9f-e536",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "140abc9f-e536",
+      "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "88dbaa29-114e",
+      "target": "10_Wiki/Decisions/Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "88dbaa29-114e",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "bc4bf0f6-c8c3",
+      "target": "10_Wiki/Decisions/Policy",
+      "relationship": "parent"
+    },
+    {
+      "source": "bc4bf0f6-c8c3",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "2ae6a111-ec61",
+      "target": "10_Wiki/Projects/Data_Ingestion",
+      "relationship": "parent"
+    },
+    {
+      "source": "2ae6a111-ec61",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "667310dd-1de9",
+      "target": "10_Wiki/Decisions/Knowledge_Sync",
+      "relationship": "parent"
+    },
+    {
+      "source": "667310dd-1de9",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "97ec79f0-8139",
+      "target": "10_Wiki/Skills/Code Analysis",
+      "relationship": "parent"
+    },
+    {
+      "source": "97ec79f0-8139",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "13df768f-f94a",
+      "target": "10_Wiki/Topics/Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "13df768f-f94a",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "85ccb9ce-3a49",
+      "target": "10_Wiki/Projects/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "85ccb9ce-3a49",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "a8b0aae8-0962",
+      "target": "10_Wiki/Skills/Codebase_Analysis",
+      "relationship": "parent"
+    },
+    {
+      "source": "a8b0aae8-0962",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "aadc2bf3-4536",
+      "target": "10_Wiki/Decisions/Knowledge_Governance",
+      "relationship": "parent"
+    },
+    {
+      "source": "aadc2bf3-4536",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "5e43f441-38d1",
+      "target": "10_Wiki/Decisions/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "5e43f441-38d1",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "e67125d4-8471",
+      "target": "10_Wiki/Projects/AI_Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "e67125d4-8471",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "34e39462-9450",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "34e39462-9450",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3b88687f-0b8b",
+      "target": "10_Wiki/Projects/Application_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "3b88687f-0b8b",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "2f72e79f-ba16",
+      "target": "10_Wiki/Decisions/Knowledge_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "2f72e79f-ba16",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "46b2c889-4f5d",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "46b2c889-4f5d",
+      "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "80d584a2-d5b1",
+      "target": "10_Wiki/Policies/Agent_Operation",
+      "relationship": "parent"
+    },
+    {
+      "source": "80d584a2-d5b1",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "cd455302-178a",
+      "target": "10_Wiki/Topics/Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "cd455302-178a",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "37c702cd-1d98",
+      "target": "10_Wiki/Topics/Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "37c702cd-1d98",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "b508c075-0822",
+      "target": "10_Wiki/Projects/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "b508c075-0822",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "cb230e33-e161",
+      "target": "10_Wiki/Skills/Development_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "cb230e33-e161",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "977db0fd-0cc1",
+      "target": "10_Wiki/Decisions/System Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "977db0fd-0cc1",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "de5c120e-3c94",
+      "target": "10_Wiki/Projects/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "de5c120e-3c94",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "e5d72636-8672",
+      "target": "10_Wiki/Projects/Teams_Application",
+      "relationship": "parent"
+    },
+    {
+      "source": "e5d72636-8672",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "010941a9-d7c5",
+      "target": "10_Wiki/Topics/AI_Adoption",
+      "relationship": "parent"
+    },
+    {
+      "source": "010941a9-d7c5",
+      "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "2e53770a-be17",
+      "target": "10_Wiki/Decisions/UX_Design",
+      "relationship": "parent"
+    },
+    {
+      "source": "2e53770a-be17",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "bdc9551a-840f",
+      "target": "10_Wiki/Projects/Knowledge_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "bdc9551a-840f",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "ad5a759a-8106",
+      "target": "10_Wiki/Projects/Data_Engineering",
+      "relationship": "parent"
+    },
+    {
+      "source": "ad5a759a-8106",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "5dce1190-7ff7",
+      "target": "10_Wiki/Projects/AI_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "5dce1190-7ff7",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3cc49e52-70ee",
+      "target": "10_Wiki/Projects/Automation_Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "3cc49e52-70ee",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "e0121c7e-2ac2",
+      "target": "10_Wiki/Decisions/Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "e0121c7e-2ac2",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "de6b3816-be5e",
+      "target": "10_Wiki/Projects/GEV_Teams_Integration",
+      "relationship": "parent"
+    },
+    {
+      "source": "de6b3816-be5e",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3e756164-4bb3",
+      "target": "10_Wiki/Projects/AI_System",
+      "relationship": "parent"
+    },
+    {
+      "source": "3e756164-4bb3",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "141cc7d4-3fde",
+      "target": "10_Wiki/HowTo/Microsoft_365",
+      "relationship": "parent"
+    },
+    {
+      "source": "141cc7d4-3fde",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "be2cd23f-8951",
+      "target": "10_Wiki/Projects/Internal_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "be2cd23f-8951",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "60fc93f2-8d28",
+      "target": "10_Wiki/Projects/Teams_App",
+      "relationship": "parent"
+    },
+    {
+      "source": "60fc93f2-8d28",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "a1ef7dd9-5435",
+      "target": "10_Wiki/Decisions/Workflow",
+      "relationship": "parent"
+    },
+    {
+      "source": "a1ef7dd9-5435",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "68f46967-d189",
+      "target": "10_Wiki/Projects/Knowledge_Infra",
+      "relationship": "parent"
+    },
+    {
+      "source": "68f46967-d189",
+      "target": "00_Raw/Sync_Policy_Implementation_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "f5206ea1-1cb4",
+      "target": "10_Wiki/Projects/UI_Enhancements",
+      "relationship": "parent"
+    },
+    {
+      "source": "f5206ea1-1cb4",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "f7a88609-bd3a",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "f7a88609-bd3a",
+      "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "ad9b103e-44f2",
+      "target": "10_Wiki/Decisions/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "ad9b103e-44f2",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "e149e24b-8508",
+      "target": "10_Wiki/Projects/Data_Integration",
+      "relationship": "parent"
+    },
+    {
+      "source": "e149e24b-8508",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "6c170545-6bfd",
+      "target": "10_Wiki/Decisions/Agent_Governance",
+      "relationship": "parent"
+    },
+    {
+      "source": "6c170545-6bfd",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "68c34cf7-f95f",
+      "target": "10_Wiki/Projects/Development_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "68c34cf7-f95f",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "58e93d77-8747",
+      "target": "10_Wiki/Projects/Knowledge_System",
+      "relationship": "parent"
+    },
+    {
+      "source": "58e93d77-8747",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "6c17f83b-e146",
+      "target": "10_Wiki/Projects/Microsoft_Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "6c17f83b-e146",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "abb272ce-dbc2",
+      "target": "10_Wiki/Projects/Business_Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "abb272ce-dbc2",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "45554384-f271",
+      "target": "10_Wiki/Projects/Enterprise_Tooling",
+      "relationship": "parent"
+    },
+    {
+      "source": "45554384-f271",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "a423d718-8bbd",
+      "target": "10_Wiki/Projects/Automation_Systems",
+      "relationship": "parent"
+    },
+    {
+      "source": "a423d718-8bbd",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "008d69c1-910e",
+      "target": "10_Wiki/Projects/Enterprise_Systems",
+      "relationship": "parent"
+    },
+    {
+      "source": "008d69c1-910e",
+      "target": "00_Raw/20260506_Investigation_Report.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3e94eaa8-8fa7",
+      "target": "10_Wiki/Topics/Knowledge_Management",
+      "relationship": "parent"
+    },
+    {
+      "source": "3e94eaa8-8fa7",
+      "target": "00_Raw/Archive_2026-05-04_1125.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "9bab2dd9-e6d3",
+      "target": "10_Wiki/Projects/Automation_Utilities",
+      "relationship": "parent"
+    },
+    {
+      "source": "9bab2dd9-e6d3",
+      "target": "00_Raw/20260505_Excel_Date_Header_Fix.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "f2c4db6b-7a71",
+      "target": "10_Wiki/Skills/Development_Tools",
+      "relationship": "parent"
+    },
+    {
+      "source": "f2c4db6b-7a71",
+      "target": "00_Raw/Graphify_Skill_Guide_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "7e50282a-d511",
+      "target": "10_Wiki/Decisions/Operational_Policies",
+      "relationship": "parent"
+    },
+    {
+      "source": "7e50282a-d511",
+      "target": "00_Raw/20260505_Antigravity_Skill_Policy.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "0c4332a0-6f98",
+      "target": "10_Wiki/Topics/Philosophy",
+      "relationship": "parent"
+    },
+    {
+      "source": "0c4332a0-6f98",
+      "target": "00_Raw/무제 끝.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "dbf08255-cb1d",
+      "target": "10_Wiki/Decisions/UI_UX",
+      "relationship": "parent"
+    },
+    {
+      "source": "dbf08255-cb1d",
+      "target": "00_Raw/20260505_UI_Layout_Pivot.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "3a4b5845-5404",
+      "target": "10_Wiki/Projects/System_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "3a4b5845-5404",
+      "target": "00_Raw/System_Structure_Review_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "7aeacd58-4fbe",
+      "target": "10_Wiki/Projects/System_Architecture",
+      "relationship": "parent"
+    },
+    {
+      "source": "7aeacd58-4fbe",
+      "target": "00_Raw/20260502_AI자동화시스템_로드맵.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "a835a51e-36a2",
+      "target": "10_Wiki/Projects/Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "a835a51e-36a2",
+      "target": "00_Raw/20260505_MS_Forms_PowerAutomate_Guide.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "1038c560-b500",
+      "target": "10_Wiki/Decisions/Policy_Automation",
+      "relationship": "parent"
+    },
+    {
+      "source": "1038c560-b500",
+      "target": "00_Raw/Policy_Update_2026-05-04_1018.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "b8d3c585-8b0d",
+      "target": "10_Wiki/Projects/UI_Enhancement",
+      "relationship": "parent"
+    },
+    {
+      "source": "b8d3c585-8b0d",
+      "target": "00_Raw/20260505_UI_Enhancement_Copy_ID.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "52d9e590-b9db",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "52d9e590-b9db",
+      "target": "00_Raw/Conversation_Log_2026-05-04.md",
+      "relationship": "derived_from"
+    },
+    {
+      "source": "af220e76-b007",
+      "target": "10_Wiki/Projects/Teams_App_Development",
+      "relationship": "parent"
+    },
+    {
+      "source": "af220e76-b007",
+      "target": "00_Raw/20260505_Teams_App_Packaging_and_Branding.md",
+      "relationship": "derived_from"
+    }
+  ]
+}
