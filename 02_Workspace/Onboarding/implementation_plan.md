@@ -77,29 +77,39 @@ Excel보다 안정적인 SharePoint List를 권장합니다. 'Onboarding Master'
 ---
 
 ### [Flow B] Tool 신청 및 대량 데이터 처리 프로세스
-이 플로우는 엑셀 파일 업로드를 처리하며, 매니저 자동 매칭 및 데이터 반복 기록을 수행합니다.
+이 플로우는 신입사원이 업로드한 엑셀 파일을 읽어와 매니저를 자동으로 찾아 승인을 요청하는 'Zero-Touch'의 핵심입니다.
 
 1.  **Trigger**: `When a new response is submitted`
     - **Form Id**: [Form 2 선택]
 2.  **Action 1**: `Get response details`
-3.  **Action 2 (Auth)**: `Get items` (SharePoint List)
-    - **Filter Query**: `Email eq '[Your Email]'` (Form 2의 이메일과 일치하는 항목 검색)
-4.  **Action 3 (Variables)**: `Initialize variable` (매니저 이메일 저장용)
-    - **Value**: `first(outputs('Get_items')?['body/value'])?['ManagerEmail']`
-5.  **Action 4 (File)**: `Get file content` (Forms를 통해 업로드된 파일)
-    - **File Identifier**: `json(outputs('Get_response_details')?['body/아이디_값'])[0]['id']`
-6.  **Action 5 (Excel Data)**: `List rows present in a table`
-    - **File**: (Action 4의 결과값) / **Table**: `Table1`
-7.  **Action 6 (Table UI)**: `Create HTML table`
-    - **From**: (Action 6의 가공된 데이터)
-8.  **Action 7 (Approval)**: `Start and wait for an approval`
-    - **Assigned To**: (Action 4에서 추출한 매니저 이메일 변수)
-    - **Details**: "아래 Tool 구매 리스트를 승인해 주세요." + Action 7의 HTML Table
-9.  **Action 8 (Condition)**: If Outcome is `Approve`
-    - **Action 8.1 (Loop)**: `Apply to each` (Action 6의 행 데이터 반복)
-      - **Sub-Action**: `Update item` (SharePoint List의 해당 사용자 행에 Tool 정보 누적 기록)
-    - **Action 8.2 (Notify Admin)**: `Post message in chat or channel` (Teams)
-    - **Action 8.3 (Final Notify)**: `Send an email (V2)` (신입사원에게 최종 완료 및 프로그래스 바 3단계 전송)
+    - **Response Id**: `Response Id`
+3.  **Action 2 (User Lookup)**: `Get items` (SharePoint List)
+    - **Site Address / List Name**: 온보딩 마스터 리스트 선택
+    - **Filter Query**: `Email eq '[Your Email]'` (중요: 작은따옴표로 감싸야 함. Form 2에서 제출된 이메일과 일치하는 행을 찾습니다.)
+4.  **Action 3 (Manager Variable)**: `Initialize variable`
+    - **Name**: `varManagerEmail` / **Type**: `String`
+    - **Value (Expression)**: `first(outputs('Get_items')?['body/value'])?['ManagerEmail']`
+      - *설명*: DB에서 찾은 유저의 매니저 이메일만 쏙 뽑아내는 수식입니다.
+5.  **Action 4 (Get File)**: `Get file content` (OneDrive 또는 SharePoint)
+    - **File Identifier**: `first(json(outputs('Get_response_details')?['body/아이디_값']))?['id']`
+      - *설명*: MS Forms를 통해 업로드된 파일의 고유 ID를 추출하여 파일 내용을 가져옵니다.
+6.  **Action 5 (Extract Table)**: `List rows present in a table`
+    - **Location / Document Library**: 파일이 임시 저장된 위치 선택
+    - **File**: (Action 4의 결과값) / **Table**: `Table1` (가이드 엑셀 내 표 이름)
+7.  **Action 6 (UI Creation)**: `Create HTML table`
+    - **From**: (Action 5의 `value`)
+    - **Columns**: `Automatic` (또는 필요시 품목명, 가격 등만 Custom 설정)
+      - *설명*: 매니저가 승인 메일에서 리스트를 한눈에 볼 수 있게 표로 만듭니다.
+8.  **Action 7 (Approval Request)**: `Start and wait for an approval`
+    - **Assigned To**: `varManagerEmail` (Action 3에서 만든 변수)
+    - **Title**: `[Tool Approval] Purchase Request from: [Your Email]`
+    - **Details**: "아래 품목 구매를 승인해 주세요." + (Action 6의 `Output` 삽입)
+9.  **Action 8 (Condition)**: `Outcome`이 `Approve`와 같은지 확인
+    - **If Yes**:
+      - **Action 8.1 (Bulk Update)**: `Apply to each` (Action 5의 `value`를 입력으로 사용)
+        - **Sub-Action**: `Update item` (해당 유저의 SharePoint 행에 구매 내역 업데이트)
+      - **Action 8.2 (Admin Alert)**: `Post message in chat or channel` (구매 담당 팀즈 채널에 "구매 실행" 알림)
+      - **Action 8.3 (Completion Notify)**: `Send an email (V2)` (신입사원에게 최종 완료 및 3단계 프로그래스 바 전송)
 
 ---
 
