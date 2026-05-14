@@ -94,8 +94,13 @@ Excel보다 안정적인 SharePoint List를 권장합니다. 'Onboarding Master'
     - **File Identifier**: `first(json(outputs('Get_response_details')?['body/아이디_값']))?['id']`
       - *설명*: MS Forms를 통해 업로드된 파일의 고유 ID를 추출하여 파일 내용을 가져옵니다.
 6.  **Action 5 (Extract Table)**: `List rows present in a table`
-    - **Location / Document Library**: 파일이 임시 저장된 위치 선택
-    - **File**: (Action 4의 결과값) / **Table**: `Table1` (가이드 엑셀 내 표 이름)
+    - **Location**: 파일이 저장되는 '종착지'를 선택합니다.
+      - *Case A (개인 폼)*: `OneDrive for Business` 선택
+      - *Case B (그룹 폼)*: 해당 SharePoint 사이트 이름 검색 후 선택
+    - **Document Library**: 
+      - `OneDrive` (개인 폼일 경우) 또는 `Documents` (SharePoint일 경우)
+    - **File**: (중요) 폴더 아이콘으로 직접 선택하지 말고, **Action 4의 동적 콘텐츠 `Id`**를 삽입하세요.
+    - **Table**: 가이드 엑셀 파일 내 정의된 표 이름 (기본값: `Table1`)
 7.  **Action 6 (UI Creation)**: `Create HTML table`
     - **From**: (Action 5의 `value`)
     - **Columns**: `Automatic` (또는 필요시 품목명, 가격 등만 Custom 설정)
