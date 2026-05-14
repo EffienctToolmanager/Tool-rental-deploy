@@ -1,0 +1,13 @@
+# Task: Investigate blank screen at http://localhost:5173/
+
+## Progress Tracking
+- [x] Open http://localhost:5173/ - **Page is blank**
+- [ ] Check console logs for errors
+- [ ] Capture screenshot of the blank page (done automatically in previous step, but will do explicitly if needed)
+- [ ] Identify root cause (e.g., failed imports, backend connection issues)
+- [ ] Report findings to the user
+
+## Findings
+- Page loads but shows nothing.
+- DOM is empty.
+- User reported backend failed with `ModuleNotFoundError: No module named 'aiofiles'`.

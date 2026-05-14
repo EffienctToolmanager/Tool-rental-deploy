@@ -1,0 +1,211 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+:root {
+  --f-primary: #5B5FC7;
+  --f-primary-hover: #4F52B2;
+  --f-bg-gray: #F5F5F5;
+  --f-bg-white: #FFFFFF;
+  --f-border: #E1E1E1;
+  --f-text: #242424;
+  --f-text-secondary: #616161;
+  --f-error: #D1110A;
+  --f-warning: #FFF9C4;
+  --f-warning-border: #FBC02D;
+  --f-danger-bg: #FFCDD2;
+  --f-shadow: 0px 2px 4px rgba(0, 0, 0, 0.14), 0px 0px 2px rgba(0, 0, 0, 0.12);
+  --f-radius: 4px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--f-bg-gray);
+  color: var(--f-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  flex: 1;
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-weight: 600;
+  color: var(--f-text);
+}
+
+/* Buttons */
+.f-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  border-radius: var(--f-radius);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.f-button-primary {
+  background-color: var(--f-primary);
+  color: white;
+}
+
+.f-button-primary:hover {
+  background-color: var(--f-primary-hover);
+}
+
+.f-button-primary:disabled {
+  background-color: var(--f-border);
+  cursor: not-allowed;
+}
+
+/* Cards */
+.f-card {
+  background: var(--f-bg-white);
+  border-radius: 8px;
+  box-shadow: var(--f-shadow);
+  padding: 16px;
+  border: 1px solid var(--f-border);
+}
+
+/* Form Elements */
+.f-form-group {
+  margin-bottom: 16px;
+}
+
+.f-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--f-text-secondary);
+}
+
+.f-input, .f-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--f-border);
+  border-radius: var(--f-radius);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.f-input:focus, .f-select:focus {
+  border-color: var(--f-primary);
+}
+
+.f-input:disabled {
+  background-color: var(--f-bg-gray);
+  color: var(--f-text-secondary);
+}
+
+/* Table */
+.f-table-container {
+  overflow-x: auto;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--f-border);
+}
+
+.f-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.f-table th {
+  text-align: left;
+  padding: 12px 16px;
+  background: #FAFAFA;
+  border-bottom: 1px solid var(--f-border);
+  font-weight: 600;
+  color: var(--f-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.f-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--f-border);
+}
+
+.f-table tr:hover {
+  background-color: #F8F8F8;
+}
+
+/* Tabs */
+.f-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--f-border);
+  margin-bottom: 24px;
+}
+
+.f-tab {
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--f-text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.f-tab:hover {
+  color: var(--f-text);
+  background: #F0F0F0;
+}
+
+.f-tab.active {
+  color: var(--f-primary);
+  font-weight: 600;
+  border-bottom-color: var(--f-primary);
+}
+
+/* Status Badges */
+.f-badge {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.f-badge-available {
+  background-color: #E7F4E9;
+  color: #107C10;
+}
+
+.f-badge-rented {
+  background-color: #FDE7E9;
+  color: #A80000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 16px;
+  }
+}
+
+</current_dom>

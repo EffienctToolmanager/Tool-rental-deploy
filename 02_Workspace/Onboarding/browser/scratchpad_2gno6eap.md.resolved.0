@@ -1,0 +1,15 @@
+# Task: Debug Blank Screen at http://localhost:5173/
+
+## Plan
+- [x] Navigate to http://localhost:5173/
+- [x] Check console logs for errors
+- [ ] Check network requests for failed loads (Tool failing)
+- [x] Capture screenshots
+- [ ] Report findings
+
+## Findings
+- Page title "Project AssetFlow" is loaded.
+- Screen is completely blank (white).
+- Console logs show Vite HMR connected, but no other errors or logs.
+- Network request tool is currently failing with "server name chrome-devtools not found".
+- DOM is empty.

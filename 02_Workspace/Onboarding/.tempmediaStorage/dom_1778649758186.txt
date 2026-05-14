@@ -1,0 +1,29 @@
+[0] (836,39)<a aria-label='Gmail ' class='gb_4' href='https://mail.google.com/mail/&ogbl'>Gmail />
+[1] (873,39)<a aria-label='Search for Images ' class='gb_4' href='https://www.google.com/imghp?hl=en&ogbl'>Images />
+[2] (913,39)<a aria-label='Search Labs' class='gb_C' href='https://labs.google.com/search?source=hp' />
+[3] (946,39)<a aria-label='Google apps' class='gb_C' href='https://www.google.co.kr/intl/en/about/products' role='button' />
+[4] (979,39)<a aria-label='Google Account: Taegyu Kim  
+(cfpclinic@gmail.com)' class='gb_C gb_5a' href='https://accounts.google.com/SignOutOptions?hl=en&continue=https://www.google.com/&ec=futura_exp_og_si_72776762_e' role='button' />
+[5] (278,386)<button aria-label='Upload files or images' class='UbbAWe' />
+	[6] (278,386)<span  />
+[7] (449,387)<textarea aria-label='Search' class='gLFyf' id='APjFqb' role='combobox' title='Search' />
+[8] (617,387)<div aria-label='Search by voice' class='XDyW0e' role='button' />
+[9] (645,387)<div aria-label='Search by image' class='nDcEnd' role='button' />
+[10] (699,387)<button class='plR5qb Y5MKCd' role='link' />
+	[11] (699,387)<div  />
+		[12] (677,387)<span  />
+		[13] (706,387)<span >AI Mode />
+[14] (446,487)<input aria-label='Google Search' class='gNO89b' role='button' />
+[15] (549,487)<input aria-label='I'm Feeling Lucky' class='RNmpXc' />
+[16] (511,591)<a class='m5Qfy' role='link'>Our biggest updates from The Android Show: Gemini Intelligence, Googlebooks, & more />
+Google offered in:
+[17] (537,674)<a href='https://www.google.com/setprefs?sig=0_og-UZWDtEWRqg5kn33spUvtl7x8%3D&hl=ko&source=homepage&sa=X&ved=0ahUKEwiJqrDWwrWUAxXhklYBHXUdCL0Q2ZgBCCk'>한국어 />
+South Korea
+[18] (37,969)<a class='pHiOh' href='https://about.google/?utm_source=google-KR&utm_medium=referral&utm_campaign=hp-footer&fg=1'>About />
+[19] (95,969)<a class='pHiOh' href='https://www.google.com/intl/en_kr/ads/?subid=ww-ww-et-g-awa-a-g_hpafoot1_1!o2&utm_source=google.com&utm_medium=referral&utm_campaign=google_hpafooter&fg=1'>Advertising />
+[20] (159,969)<a class='pHiOh' href='https://www.google.com/services/?subid=ww-ww-et-g-awa-a-g_hpbfoot1_1!o2&utm_source=google.com&utm_medium=referral&utm_campaign=google_hpbfooter&fg=1'>Business />
+[21] (240,969)<a class='pHiOh' href='https://google.com/search/howsearchworks/?fg=1'>How Search works />
+[22] (856,969)<a class='pHiOh' href='https://policies.google.com/privacy?hl=en-KR&fg=1'>Privacy />
+[23] (906,969)<a class='pHiOh' href='https://policies.google.com/terms?hl=en-KR&fg=1'>Terms />
+[24] (958,969)<div class='CcNe6e' role='button' />
+	[25] (958,969)<div >Settings />

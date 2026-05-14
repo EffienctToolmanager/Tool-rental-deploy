@@ -1,0 +1,5 @@
+[0] (500,500)<div  />
+	A
+	Project AssetFlow
+	Please sign in with your corporate account to access the dashboard.
+	[1] (500,622)<button class='f-button f-button-primary'>Sign in with Microsoft />

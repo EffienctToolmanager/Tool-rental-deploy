@@ -1,0 +1,28 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+[0] (500,578)<div  />
+	A
+	Project AssetFlow
+	[1] (142,131)<div >Smart Rental />
+	[2] (232,131)<div >Live Dashboard />
+	[3] (329,131)<div >Master Inventory />
+	Smart Rental Checkout
+	[4] (500,297)<label class='f-label'>Asset Code />
+	[5] (500,339)<select class='f-select' />
+	[6] (399,397)<label class='f-label'>Asset Model />
+	[7] (601,397)<label class='f-label'>Calibration Date />
+	[8] (500,496)<label class='f-label'>Project Name />
+	[9] (500,537)<input class='f-input' placeholder='e.g. Samsung Austin Semiconductor' />
+	[10] (399,594)<label class='f-label'>Project Code />
+	[11] (399,635)<input class='f-input' placeholder='GE-XXXX' />
+	[12] (601,594)<label class='f-label'>PM Email />
+	[13] (601,635)<input class='f-input' placeholder='pm@ge.com' />
+	[14] (500,693)<label class='f-label'>Expected Return Date />
+	[15] (500,735)<input class='f-input' />
+	[16] (500,794)<label class='f-label'>Condition Photo (Current State) />
+	[17] (500,842)<input class='f-input' />
+	[18] (500,938)<button class='f-button f-button-primary'>🚀 Submit Rental Request />
+
+</current_dom>

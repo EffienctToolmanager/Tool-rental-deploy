@@ -1,0 +1,41 @@
+# Walkthrough - Project AssetFlow (Stage 3)
+
+We have successfully integrated the frontend and backend, moving from static mock data to a dynamic, real-time application.
+
+## 🚀 Key Improvements in Stage 3
+
+### 1. E2E API Integration
+- **Real-time Data**: The application now fetches asset and rental data directly from the FastAPI backend on startup.
+- **Form Submissions**: 
+  - **Rental**: Submits `FormData` with asset details and a condition photo to `/api/rent`.
+  - **Return**: A new return modal in the Dashboard allows users to upload a return photo and close the rental.
+- **Auto-Refresh**: The UI automatically re-fetches data after any successful rent or return operation.
+
+### 2. Dashboard Visualization
+- **Status Overview**: Added a modern Donut Chart (using Recharts) to the Live Dashboard.
+- **Visual Insights**: Users can instantly see the ratio of **Available** vs. **Rented** assets.
+
+### 3. Teams Notification Engine
+- **Event Notifications**: 
+  - ✅ **Checkout**: Notifies a Teams channel when an asset is rented.
+  - 🔄 **Return**: Notifies when an asset is returned.
+- **Daily Compliance (Cron)**: 
+  - Runs every day at **08:00 AM**.
+  - **Overdue Alert**: Sends an Urgent/Red Adaptive Card if any items are past their return date.
+  - **Calibration Warning**: Sends a Warning/Yellow Adaptive Card if assets are due for calibration within 30 days.
+
+## 🛠️ Components Updated
+
+### Frontend
+- **[App.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/App.tsx)**: Main API hub and Chart integration.
+- **[RentalForm.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/components/RentalForm.tsx)**: POST to `/api/rent`.
+- **[ActiveRentals.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/components/ActiveRentals.tsx)**: New Return modal and POST to `/api/return`.
+- **[InventoryTable.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/components/InventoryTable.tsx)**: Backend key mapping (PascalCase).
+
+### Backend
+- **[main.py](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/backend/main.py)**: Added `apscheduler` and notification logic.
+- **[config.py](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/backend/config.py)**: Added Teams Webhook configuration.
+
+---
+
+**Project AssetFlow is now a full-stack, proactive enterprise management system!**

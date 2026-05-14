@@ -1,0 +1,12 @@
+# Task: Debug Blank UI at http://localhost:5173/
+
+## Checklist
+- [ ] Navigate to http://localhost:5173/
+- [ ] Capture browser console logs
+- [ ] Look for "main.tsx:" and "App.tsx:" logs
+- [ ] Identify any red error messages
+- [ ] Capture a screenshot of the console
+- [ ] Report findings
+
+## Findings
+- 

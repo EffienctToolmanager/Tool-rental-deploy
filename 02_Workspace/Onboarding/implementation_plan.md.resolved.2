@@ -1,0 +1,49 @@
+# Implementation Plan - Project AssetFlow (Stage 3 -> Stage 4)
+
+Upgrade the system with advanced analytics and prepare for enterprise-level authentication.
+
+## User Review Required
+
+> [!IMPORTANT]
+> - We will install **MSAL** libraries for the authentication scaffold.
+> - A feature flag `VITE_USE_AUTH` will be used to control the authentication requirement.
+> - The backend will now provide CSV streaming for reports.
+
+## Proposed Changes
+
+### [Component] Frontend (React + TS)
+
+#### [NEW] [authConfig.ts](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/authConfig.ts)
+- Define MSAL configuration (client ID, authority, etc.).
+
+#### [NEW] [AnalyticsTab.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/components/AnalyticsTab.tsx)
+- Bar Chart: Rentals per Project.
+- Donut Chart: Calibration Status (Safe/Warning/Expired).
+- CSV Export button.
+
+#### [MODIFY] [App.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/App.tsx)
+- Integrate MSAL hooks (`useMsal`, `useIsAuthenticated`).
+- Implement `VITE_USE_AUTH` check.
+- Add "Analytics & Reports" tab navigation.
+- Implement `handleExportCSV` function.
+
+#### [MODIFY] [main.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/main.tsx)
+- Initialize `PublicClientApplication` and wrap `App` with `MsalProvider`.
+
+---
+
+### [Component] Backend (FastAPI)
+
+#### [MODIFY] [main.py](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/backend/main.py)
+- **New API**: `GET /api/reports/analytics` (Aggregation logic).
+- **New API**: `GET /api/reports/export` (CSV StreamingResponse).
+- **Middleware**: `verify_token` dependency scaffold (placeholder).
+
+## Verification Plan
+
+### Automated/Manual Testing
+1. **Dependency Installation**: `npm install @azure/msal-react @azure/msal-browser`.
+2. **Auth Bypass Test**: Set `VITE_USE_AUTH=false` and verify the app opens directly.
+3. **Analytics Test**: Populate some rental data and verify the charts reflect the project distribution and calibration counts.
+4. **CSV Export Test**: Click the export button and verify a valid CSV file is downloaded with transaction logs.
+5. **Backend Check**: Verify the `/api/reports/analytics` JSON payload structure matches the frontend expectation.

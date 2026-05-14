@@ -1,0 +1,48 @@
+# Implementation Plan - Project AssetFlow
+
+Build a modern, enterprise-grade Single Page Application (SPA) for asset rental management, designed specifically for integration within Microsoft Teams.
+
+## User Review Required
+
+> [!IMPORTANT]
+> The app will be built using **React + TypeScript + Vite** for a professional modular structure.
+> We will follow the **Microsoft Fluent Design System** (Teams Blue #5B5FC7, minimalist gray/white aesthetics).
+
+## Proposed Changes
+
+### [NEW] Project AssetFlow Directory Structure
+We will initialize a new Vite project in `02_Workspace/Project_AssetFlow`.
+
+#### [NEW] [index.css](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/index.css)
+- Implement Fluent Design tokens:
+  - Primary: `#5B5FC7` (Teams Blue)
+  - Backgrounds: `#F5F5F5`, `#FFFFFF`
+  - Typography: `Segoe UI`, system-ui
+- Define layout utilities for Tabs and Grid.
+
+#### [NEW] [App.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/App.tsx)
+- State management for `assets` and `rentals` (using provided Mock Data).
+- Tab navigation logic (Rental Form / Dashboard / Inventory).
+
+#### [NEW] [RentalForm.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/components/RentalForm.tsx)
+- Smart form with auto-fill logic.
+- Validation for required fields.
+- `FormData` packaging for simulated POST request to `http://localhost:8000/api/rent`.
+
+#### [NEW] [ActiveRentals.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/components/ActiveRentals.tsx)
+- Responsive CSS Grid of cards.
+- Progress bar for remaining days calculation.
+- Overdue alerting (Red border).
+
+#### [NEW] [InventoryTable.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/components/InventoryTable.tsx)
+- High-density table with clickable headers for sorting.
+- Row highlighting based on calibration date proximity (< 30 days = Yellow, < 0 = Red).
+
+## Verification Plan
+
+### Automated/Manual Testing
+1. **Initialize & Build**: Run `npm install` and `npm run dev`.
+2. **Tab 1 Test**: Select an asset, verify auto-fill, upload a dummy image, and click Submit. Check console for FormData output and toast notification.
+3. **Tab 2 Test**: Verify "Remaining Days" calculation and progress bar. Trigger an overdue state by modifying mock data if needed.
+4. **Tab 3 Test**: Click headers to sort by "Asset Code" or "Cal Date". Verify color coding for calibration alerts.
+5. **Responsiveness**: Resize browser window to mobile width to verify Card View and Header wrapping.

@@ -1,0 +1,67 @@
+# Implementation Plan: Zero-Touch Onboarding System (Greenfield Build)
+
+기존의 모든 설정을 무시하고, 백지상태에서 가장 안정적이고 확장성 있는 방식으로 'Zero-Touch 온보딩 시스템'을 새로 구축하는 계획입니다. 이번에는 관리와 연동이 더 쉬운 **SharePoint List**를 데이터베이스로 사용하는 방식을 추천드립니다.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **SharePoint 사이트**: 데이터를 저장할 SharePoint 사이트가 준비되어야 합니다. (없을 경우 새로 생성 필요)
+> **MS Forms**: 입사자용(PPE), Tool 신청용(Tool) 2개의 폼을 새로 생성해야 합니다.
+
+## 1. Step-by-Step Infrastructure Setup
+
+### [Step 1] 데이터베이스 (SharePoint List) 생성
+Excel보다 안정적인 SharePoint List를 권장합니다. 'Onboarding Master'라는 이름의 리스트를 만들고 다음 컬럼을 추가합니다.
+- **Title**: (기본값, 성으로 사용)
+- **FirstName**: Single line of text
+- **Email**: Single line of text (신입사원)
+- **ManagerEmail**: Single line of text
+- **Country**: Single line of text
+- **DHL**: Single line of text
+- **PPE_Status**: Choice (Pending, Approved, Declined)
+- **Tool_Brand**: Single line of text
+- **Tool_Model**: Single line of text
+- **Tool_Price**: Number
+- **Tool_Status**: Choice (Pending, Approved, Declined)
+
+### [Step 2] MS Forms 생성
+1. **Form 1 (PPE)**: Last Name, First Name, Email, Manager Email, Country, DHL 정보 포함.
+2. **Form 2 (Tool)**: Email(ID 식별용), Tool 상세 정보 포함.
+
+---
+
+## 2. Power Automate Flow Configuration
+
+### [Flow A] PPE 신청 및 계정 생성 자동화
+1. **Trigger**: `When a new response is submitted` (Form 1)
+2. **Action 1**: `Get response details`
+3. **Action 2 (Notify)**: 신입사원에게 "접수 확인" 메일 발송 (프로그래스 바 1단계 강조)
+4. **Action 3 (Approval)**: `Start and wait for an approval` (관리자 `taegyu.kim@gevernova.com`)
+5. **Condition**: 만약 승인(Approve)이라면:
+   - **DB 기록**: `Create item` (SharePoint 리스트에 신입 정보 저장, PPE_Status="Approved")
+   - **계정 요청**: `MaciejOlesky@skanwear.com`에게 계정 생성 요청 자동 메일 발송
+   - **후속 안내**: 신청자에게 "PPE 완료 및 Tool 신청 링크" 메일 발송 (프로그래스 바 2단계 강조)
+
+### [Flow B] Tool 신청 및 최종 승인 자동화
+1. **Trigger**: `When a new response is submitted` (Form 2)
+2. **Action 1**: `Get response details`
+3. **Action 2 (Find User)**: `Get items` (SharePoint List에서 'Email'이 제출된 이메일과 일치하는 항목 찾기)
+4. **Action 3 (Get Manager)**: 위에서 찾은 항목의 `ManagerEmail` 변수 추출
+5. **Action 4 (Approval)**: 추출된 매니저에게 Tool 구매 승인 요청 발송
+6. **Condition**: 만약 승인(Approve)이라면:
+   - **DB 업데이트**: `Update item` (해당 유저 행에 Tool 정보 추가 및 Tool_Status="Approved")
+   - **Admin 알림**: Teams를 통해 구매 담당자에게 "구매 실행" 알림
+   - **최종 안내**: 신청자에게 "온보딩 완료" 메일 발송 (프로그래스 바 3단계 최종 완료)
+
+---
+
+## 3. Visual & UX Elements
+
+### 프로그래스 바 적용
+각 메일 단계에서 아래 HTML 코드를 활용하여 시각적 직관성을 제공합니다.
+![Onboarding Progress Bar Design](/C:/Users/cfpcl/.gemini/antigravity/brain/d88d02bb-49f9-4c93-be0e-bc25a0dbbd84/onboarding_progress_bar_design_1778738996565.png)
+
+## Verification Plan
+1. **데이터 저장 확인**: Form 1 제출 후 SharePoint List에 정확히 행이 생성되는지 확인.
+2. **매니저 자동 매칭**: Form 2 제출 시 Flow가 DB를 조회하여 올바른 매니저에게 승인을 보내는지 확인.
+3. **최종 승인 연동**: 매니저 승인 버튼 클릭 시 DB의 Tool 관련 컬럼만 정확히 업데이트되는지 확인.

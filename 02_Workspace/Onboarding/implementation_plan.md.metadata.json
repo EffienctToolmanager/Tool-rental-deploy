@@ -1,0 +1,7 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary":  "백지상태에서 시작하는 'Zero-Touch 온보딩 자동화 시스템'의 완전 구축 가이드입니다. SharePoint List 기반의 데이터베이스 설계부터 Power Automate의 단계별 액션 설정까지 포함하고 있습니다.",
+  "updatedAt":  "2026-05-14T06:15:33.226929500Z",
+  "version":  "10",
+  "requestFeedback":  true
+}

@@ -1,0 +1,115 @@
+# Implementation Plan: Zero-Touch Onboarding System (Greenfield Build)
+
+기존의 모든 설정을 무시하고, 백지상태에서 가장 안정적이고 확장성 있는 방식으로 'Zero-Touch 온보딩 시스템'을 새로 구축하는 계획입니다. 이번에는 관리와 연동이 더 쉬운 **SharePoint List**를 데이터베이스로 사용하는 방식을 추천드립니다.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **SharePoint 사이트**: 데이터를 저장할 SharePoint 사이트가 준비되어야 합니다. (없을 경우 새로 생성 필요)
+> **MS Forms**: 입사자용(PPE), Tool 신청용(Tool) 2개의 폼을 새로 생성해야 합니다.
+
+## 1. Step-by-Step Infrastructure Setup
+
+### [Step 1] 데이터베이스 (SharePoint List) 생성
+Excel보다 안정적인 SharePoint List를 권장합니다. 'Onboarding Master'라는 이름의 리스트를 만들고 다음 컬럼을 추가합니다.
+- **Title**: (기본값, 성으로 사용)
+- **FirstName**: Single line of text
+- **Email**: Single line of text (신입사원)
+- **ManagerEmail**: Single line of text
+- **Country**: Single line of text
+- **DHL**: Single line of text
+- **PPE_Status**: Choice (Pending, Approved, Declined)
+- **Tool_Brand**: Single line of text
+- **Tool_Model**: Single line of text
+- **Tool_Price**: Number
+- **Tool_Status**: Choice (Pending, Approved, Declined)
+
+### [Step 2] MS Forms 상세 설계
+각 폼은 데이터베이스와의 연동을 고려하여 질문 유형을 정확히 설정해야 합니다.
+
+#### 1. Form 1: 신입사원 기초 정보 및 PPE 신청용
+- **목적**: 신입사원의 인적사항 기록 및 1단계 승인 프로세스 시작
+- **상세 질문 항목**:
+  1. **Last Name** (텍스트/필수): "성(Surname)을 입력하세요."
+  2. **First Name** (텍스트/필수): "이름(Given Name)을 입력하세요."
+  3. **Your Email** (텍스트/필수): "신입사원 본인의 회사 또는 개인 이메일 주소를 입력하세요. (DB의 고유 Key로 사용됨)"
+  4. **Your Manager Email** (텍스트/필수): "본인 라인 매니저의 공식 이메일 주소를 입력하세요. (2단계 자동 승인에 사용됨)"
+  5. **Base Country** (선택 항목/필수): "근무 국가를 선택하세요." (옵션 예: Korea, USA, UK 등)
+  6. **DHL Account Number** (텍스트/선택): "DHL 계정 번호가 있다면 입력하세요."
+
+#### 2. Form 2: 업무용 Tool 구매 신청용 (대량 입력 최적화 버전)
+- **개선된 방식**: 여러 품목을 하나씩 입력하는 대신, 가이드 엑셀 파일에 내용을 작성하여 **'파일 업로드'** 하는 방식을 채택합니다.
+- **상세 질문 항목**:
+  1. **Your Email** (텍스트/필수): "데이터 매칭용 이메일 주소"
+  2. **Tool List File Upload** (파일 업로드/필수): "제공된 가이드 엑셀 파일(데이터 테이블)을 작성하여 업로드하세요."
+  3. **Total Estimated Amount** (숫자/필수): "업로드한 리스트의 총 합계 금액"
+  4. **Memo** (텍스트/선택): "추가 요청 사항"
+
+---
+
+## 2. Power Automate Flow: Step-by-Step Guide
+
+### [Flow A] 신입 등록 및 PPE 승인 프로세스
+이 플로우는 신입사원의 첫 번째 폼 제출 시 작동하며, DB 등록과 1단계 승인을 처리합니다.
+
+1.  **Trigger**: `When a new response is submitted`
+    - **Form Id**: [Form 1 선택]
+2.  **Action 1**: `Get response details`
+    - **Response Id**: `Response Id` (트리거에서 가져옴)
+3.  **Action 2 (Notify)**: `Send an email (V2)` (신입사원에게)
+    - **Body**: 프리미엄 프로그래스 바 (1단계 강조) + "환영합니다" 메시지
+4.  **Action 3 (Approval)**: `Start and wait for an approval`
+    - **Approval Type**: `Approve/Reject - First to respond`
+    - **Title**: `[PPE Approval] New Engineer: [First Name] [Last Name]`
+    - **Assigned To**: `taegyu.kim@gevernova.com`
+5.  **Action 4 (Condition)**: `Condition` (Outcome이 `Approve`와 같은지 확인)
+    - **If Yes**:
+      - **Action 4.1 (DB)**: `Create item` (SharePoint List)
+        - **Title**: `Last Name` / **FirstName**: `First Name` / **Email**: `Your Email` / **ManagerEmail**: `Your Manager Email` / **PPE_Status**: `Approved`
+      - **Action 4.2 (Skanwear)**: `Send an email (V2)` (To: `MaciejOlesky@skanwear.com`)
+        - **Subject**: `[New joiner] skanwear account creation request _[Last Name]_[First Name]`
+        - **Body**: 입사자 정보 테이블 포함
+      - **Action 4.3 (Next Step)**: `Send an email (V2)` (신입사원에게)
+        - **Body**: 프로그래스 바 (2단계 강조) + **Form 2 링크** + **가이드 엑셀 파일 첨부**
+    - **If No**:
+      - **Action 4.4**: `Send an email (V2)` (신입사원에게 거절 안내)
+
+---
+
+### [Flow B] Tool 신청 및 대량 데이터 처리 프로세스
+이 플로우는 엑셀 파일 업로드를 처리하며, 매니저 자동 매칭 및 데이터 반복 기록을 수행합니다.
+
+1.  **Trigger**: `When a new response is submitted`
+    - **Form Id**: [Form 2 선택]
+2.  **Action 1**: `Get response details`
+3.  **Action 2 (Auth)**: `Get items` (SharePoint List)
+    - **Filter Query**: `Email eq '[Your Email]'` (Form 2의 이메일과 일치하는 항목 검색)
+4.  **Action 3 (Variables)**: `Initialize variable` (매니저 이메일 저장용)
+    - **Value**: `first(outputs('Get_items')?['body/value'])?['ManagerEmail']`
+5.  **Action 4 (File)**: `Get file content` (Forms를 통해 업로드된 파일)
+    - **File Identifier**: `json(outputs('Get_response_details')?['body/아이디_값'])[0]['id']`
+6.  **Action 5 (Excel Data)**: `List rows present in a table`
+    - **File**: (Action 4의 결과값) / **Table**: `Table1`
+7.  **Action 6 (Table UI)**: `Create HTML table`
+    - **From**: (Action 6의 가공된 데이터)
+8.  **Action 7 (Approval)**: `Start and wait for an approval`
+    - **Assigned To**: (Action 4에서 추출한 매니저 이메일 변수)
+    - **Details**: "아래 Tool 구매 리스트를 승인해 주세요." + Action 7의 HTML Table
+9.  **Action 8 (Condition)**: If Outcome is `Approve`
+    - **Action 8.1 (Loop)**: `Apply to each` (Action 6의 행 데이터 반복)
+      - **Sub-Action**: `Update item` (SharePoint List의 해당 사용자 행에 Tool 정보 누적 기록)
+    - **Action 8.2 (Notify Admin)**: `Post message in chat or channel` (Teams)
+    - **Action 8.3 (Final Notify)**: `Send an email (V2)` (신입사원에게 최종 완료 및 프로그래스 바 3단계 전송)
+
+---
+
+## 3. Visual & UX Elements
+
+### 프로그래스 바 적용
+각 메일 단계에서 아래 HTML 코드를 활용하여 시각적 직관성을 제공합니다.
+![Onboarding Progress Bar Design](/C:/Users/cfpcl/.gemini/antigravity/brain/d88d02bb-49f9-4c93-be0e-bc25a0dbbd84/onboarding_progress_bar_design_1778738996565.png)
+
+## Verification Plan
+1. **데이터 저장 확인**: Form 1 제출 후 SharePoint List에 정확히 행이 생성되는지 확인.
+2. **매니저 자동 매칭**: Form 2 제출 시 Flow가 DB를 조회하여 올바른 매니저에게 승인을 보내는지 확인.
+3. **최종 승인 연동**: 매니저 승인 버튼 클릭 시 DB의 Tool 관련 컬럼만 정확히 업데이트되는지 확인.

@@ -1,0 +1,8 @@
+- [ ] Initialize Vite project in `02_Workspace/Project_AssetFlow`
+- [ ] Set up project structure (components folder, assets)
+- [ ] Implement `index.css` with Fluent Design tokens
+- [ ] Implement `App.tsx` with State Management and Tab Navigation
+- [ ] Build `RentalForm` component (Tab 1)
+- [ ] Build `ActiveRentals` component (Tab 2)
+- [ ] Build `InventoryTable` component (Tab 3)
+- [ ] Final verification and cleanup

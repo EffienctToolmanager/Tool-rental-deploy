@@ -1,0 +1,98 @@
+# Implementation Plan: Zero-Touch Onboarding System
+
+신입 엔지니어 입사 시 발생하는 PPE 신청 및 업무용 Tool 구매 프로세스를 자동화하는 'Zero-Touch 온보딩 시스템' 구축 계획입니다.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Excel DB 사전 준비**: `Operation_public` 폴더 내에 `Onboarding_Master.xlsx` 파일이 생성되어 있어야 하며, 본문에 명시된 컬럼으로 구성된 '표(Table)'가 정의되어야 합니다.
+> **MS Forms ID**: Power Automate 연결 시 각 Form의 ID를 선택해야 하므로, Form이 미리 생성되어 있어야 합니다.
+
+## 1. Data Model Setup
+
+### Master Excel Table (`Onboarding_Master.xlsx`)
+- **경로**: `OneDrive/SharePoint > Operation_public`
+- **컬럼 구성**:
+  | 성 (Last Name) | 이름 (First Name) | 신입이메일 (Email) | 매니저이메일 (Manager) | 국가 (Country) | DHL | PPE승인여부 | Tool브랜드 | Tool모델 | Tool가격 | Tool승인여부 |
+  | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+
+## 2. Power Automate Flow 1: PPE Registration
+
+### [Flow 1 Logic]
+1.  **Trigger**: `When a new response is submitted` (Form 1)
+2.  **Action**: `Get response details`
+3.  **Action (Email)**: `Send an email (V2)`
+    - **Visual Progress Bar**: 아래와 같은 HTML 스타일의 카드로 발송하여 시각적 직관성을 높입니다.
+    - **디자인 컨셉**: Microsoft Fluent UI 기반의 'Evergreen' 테마 적용.
+
+| 단계 | 시각적 표현 (Progress Indicator) |
+| :--- | :--- |
+| **1단계 진행** | `[ 🟢 진행중 ] ━━━━━━ [ ⚪ 대기 ] ━━━━━━ [ ⚪ 대기 ]` |
+| **2단계 진행** | `[ ✅ 완료 ] ━━━━━━ [ 🟢 진행중 ] ━━━━━━ [ ⚪ 대기 ]` |
+| **3단계 완료** | `[ ✅ 완료 ] ━━━━━━ [ ✅ 완료 ] ━━━━━━ [ 🟢 최종완료 ]` |
+
+> [!TIP]
+> **고급 디자인 팁**: Power Automate의 `Send an email (V2)` 액션에서 '코드 보기(HTML)' 모드로 전환한 뒤, 아래 제공되는 프리미엄 HTML 템플릿을 붙여넣으면 더욱 고급스러운 카드가 완성됩니다.
+4.  **Action (Approval)**: `Start and wait for an approval`
+    - **Assigned to**: `taegyu.kim@gevernova.com`
+    - **Template**: Adaptive Card 기반 승인 요청
+5.  **Condition**: If Outcome is `Approve`
+    - **Parallel Branch A**: `Send an email (V2)` to `MaciejOlesky@skanwear.com` (계정 생성 요청)
+    - **Parallel Branch B**: `Send an email (V2)` to `Your email` (PPE 승인 완료 + Form 2 링크)
+      - **Progress Bar**: `▶ [✅ 1. PPE 계정 생성 완료] ➔ [🟢 2. Tool 구매 신청 진행 중] ➔ [⚪ 3. 구매 승인 및 DB 저장]`
+    - **Parallel Branch C**: `Add a row into a table` (Excel DB 기록)
+
+## 3. Power Automate Flow 2: Tool Procurement
+
+### [Flow 2 Logic]
+1.  **Trigger**: `When a new response is submitted` (Form 2)
+2.  **Action**: `Get response details`
+3.  **Action (Excel)**: `Get a row` (Key: `Your email`)
+    - `Onboarding_Master.xlsx`에서 매니저 이메일 조회
+4.  **Action (Approval)**: `Start and wait for an approval`
+    - **Assigned to**: `Manager Email` (Excel에서 가져온 값)
+5.  **Condition**: If Outcome is `Approve`
+    - **Parallel Branch A**: `Post message in chat or channel` (Admin 알림)
+    - **Parallel Branch B**: `Send an email (V2)` to `Your email` (최종 온보딩 완료 안내)
+      - **Progress Bar**: `▶ [✅ 1. PPE 계정 생성 완료] ➔ [✅ 2. Tool 구매 신청 완료] ➔ [🟢 3. 구매 완료 및 진행]`
+    - **Parallel Branch C**: `Update a row` (Excel DB에 Tool 정보 업데이트)
+
+## 4. Premium Visual Guide
+
+### 디자인 목업
+![Onboarding Progress Bar Design](/Users/cfpcl/.gemini/antigravity/brain/d88d02bb-49f9-4c93-be0e-bc25a0dbbd84/onboarding_progress_bar_design_1778738996565.png)
+
+### HTML/CSS 템플릿 (이메일 본문용)
+Power Automate 이메일 발송 액션에서 사용할 수 있는 인라인 스타일 코드입니다:
+```html
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; border: 1px solid #e1e1e1; border-radius: 8px; background-color: #ffffff; max-width: 600px;">
+  <h3 style="color: #004d40; margin-top: 0;">Onboarding Progress</h3>
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
+    <!-- Step 1 -->
+    <div style="text-align: center; flex: 1;">
+      <div style="width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background-color: #004d40; color: white; margin: 0 auto; font-weight: bold;">✓</div>
+      <div style="font-size: 12px; margin-top: 8px; color: #004d40; font-weight: bold;">PPE Account</div>
+    </div>
+    <div style="flex: 1; height: 2px; background-color: #004d40; margin-top: -20px;"></div>
+    <!-- Step 2 -->
+    <div style="text-align: center; flex: 1;">
+      <div style="width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background-color: #0078d4; color: white; margin: 0 auto; font-weight: bold;">2</div>
+      <div style="font-size: 12px; margin-top: 8px; color: #0078d4; font-weight: bold;">Tool Request</div>
+    </div>
+    <div style="flex: 1; height: 2px; background-color: #e1e1e1; margin-top: -20px;"></div>
+    <!-- Step 3 -->
+    <div style="text-align: center; flex: 1;">
+      <div style="width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background-color: #f3f2f1; color: #605e5c; margin: 0 auto;">3</div>
+      <div style="font-size: 12px; margin-top: 8px; color: #605e5c;">Final Approval</div>
+    </div>
+  </div>
+</div>
+```
+
+## Verification Plan
+
+### Manual Verification
+- [ ] Form 1 제출 후 `taegyu.kim@gevernova.com`으로 승인 메일이 오는지 확인.
+- [ ] 승인 후 Excel에 행이 추가되고, 신청자에게 Form 2 링크가 오는지 확인.
+- [ ] Form 2 제출 후 Excel에서 매니저를 찾아 승인 요청이 가는지 확인.
+- [ ] 최종 승인 후 Excel 데이터가 업데이트되는지 확인.

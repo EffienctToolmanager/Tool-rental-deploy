@@ -1,0 +1,6 @@
+# Task Checklist
+- [ ] Check http://localhost:8000/docs (Backend API)
+- [ ] Check http://localhost:5173/ (Frontend)
+- [ ] Check http://localhost:5174/ (Alternative Frontend)
+- [ ] Capture screenshots for accessible URLs
+- [ ] Provide summary report

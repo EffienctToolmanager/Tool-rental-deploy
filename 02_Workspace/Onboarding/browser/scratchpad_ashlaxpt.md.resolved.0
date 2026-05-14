@@ -1,0 +1,15 @@
+# Task: Debug blank UI at http://localhost:5173/
+
+## Progress
+- [x] Navigate to http://localhost:5173/
+- [x] Check if UI is visible (Confirmed: Blank)
+- [x] Check Console for errors (Captured: No app errors, only Vite debug)
+- [ ] Investigate cause of blank page
+- [ ] Capture screenshot (if fixed)
+
+## Findings
+- Screenshot confirms page is blank.
+- DOM is empty.
+- Console shows Vite is connected.
+- 404s reported in user terminal log for `/` on port 8000.
+- `index.html: Inline script executing` message appears multiple times in console.

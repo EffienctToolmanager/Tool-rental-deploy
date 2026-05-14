@@ -1,0 +1,56 @@
+# Implementation Plan - Project AssetFlow (Stage 3)
+
+Transition the system from mock data to a fully integrated E2E application with a proactive notification engine for Microsoft Teams.
+
+## User Review Required
+
+> [!IMPORTANT]
+> - We will install **Recharts** for frontend visualization.
+> - We will install **APScheduler** and **HTTPX** for the backend notification engine.
+> - The backend will require a valid `TEAMS_WEBHOOK_URL` in `config.py` for notifications to work (we will use a placeholder for now).
+
+## Proposed Changes
+
+### [Component] Frontend (React + TS)
+
+#### [MODIFY] [App.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/App.tsx)
+- Remove `MOCK_ASSETS` and `MOCK_RENTALS`.
+- Add `fetchData` function with `useEffect` to populate state from `/api/assets` and `/api/rentals`.
+- Add a new "Status Overview" Donut chart using `Recharts` at the top of the Dashboard tab.
+
+#### [MODIFY] [RentalForm.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/components/RentalForm.tsx)
+- Update `handleSubmit` to perform a real `fetch` POST to `/api/rent`.
+- Trigger a parent state refresh callback on success.
+
+#### [MODIFY] [ActiveRentals.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/components/ActiveRentals.tsx)
+- Implement the "Return" modal/logic.
+- Add file input for "Return Photo".
+- POST to `/api/return/{case_id}` on return.
+
+---
+
+### [Component] Backend (FastAPI)
+
+#### [MODIFY] [config.py](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/backend/config.py)
+- Add `TEAMS_WEBHOOK_URL` placeholder.
+
+#### [MODIFY] [main.py](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/backend/main.py)
+- Integrate `apscheduler.schedulers.background.BackgroundScheduler`.
+- Implement `send_teams_notification(payload)` using `httpx`.
+- Add daily cron job (08:00 AM) for Overdue and Calibration checks.
+- Add event-driven webhook calls in `/api/rent` and `/api/return` endpoints.
+
+## Verification Plan
+
+### Automated/Manual Testing
+1. **Dependency Check**: `pip install apscheduler httpx` and `npm install recharts`.
+2. **E2E Rent Flow**: Perform a rental in the UI. Verify:
+   - File saved in `assets/`.
+   - DB record created.
+   - UI automatically refreshes to show the new rental in Dashboard.
+   - Teams Webhook received (check logs/webhook tester).
+3. **E2E Return Flow**: Perform a return in the UI. Verify:
+   - Asset status reverts to 'Available'.
+   - Rental record marked 'CLOSED'.
+4. **Scheduler Test**: Manually trigger the scheduler function to verify Adaptive Card payloads for Overdue/Calibration items.
+5. **Visualization**: Verify the Donut chart accurately reflects the current status counts.

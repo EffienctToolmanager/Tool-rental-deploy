@@ -1,0 +1,34 @@
+# Walkthrough - Project AssetFlow
+
+The Project AssetFlow system is now fully operational. It provides a professional, enterprise-grade interface for asset rental management within Microsoft Teams.
+
+## 🌟 Key Features Implemented
+
+### 1. Smart Rental Checkout (Tab 1)
+- **Asset Dropdown**: Only lists assets with "Available" status.
+- **Intelligent Auto-fill**: Selecting an Asset Code automatically populates the Model and Calibration Date fields.
+- **Secure Submission**: Packages all data, including the condition photo, into a `FormData` object for backend processing.
+
+### 2. Live Dashboard (Tab 2)
+- **Active Rental Cards**: Displays all currently rented items in a responsive grid.
+- **Overdue Tracking**: Automatically calculates remaining days. Items past their expected return date are flagged with a **red border** and **OVERDUE** badge.
+- **Visual Progress**: Shows time remaining as a Fluent-style progress bar.
+
+### 3. Master Inventory (Tab 3)
+- **High-Density Table**: Shows all assets with detailed location and calibration data.
+- **Calibration Alerts**:
+  - <span style="background: #FFF9C4; padding: 2px 4px; border: 1px solid #FBC02D;">Yellow</span>: Calibration due within 30 days.
+  - <span style="background: #FFCDD2; padding: 2px 4px; border: 1px solid #D32F2F;">Red</span>: Calibration expired.
+- **Dynamic Sorting**: Click any column header to sort assets instantly.
+
+## 🎨 Design System
+- **Microsoft Fluent UI**: Using Teams Blue (#5B5FC7), Segoe UI typography, and subtle shadows for a native Teams look and feel.
+- **Responsive Layout**: Fully mobile-friendly, transitioning from a table view to card views on smaller screens.
+
+## 🛠️ Technical Details
+- **Framework**: React + TypeScript + Vite
+- **Styling**: Vanilla CSS with Fluent Design tokens
+- **State**: Mock data injected for immediate testing and validation
+
+---
+**Project AssetFlow is ready for deployment as a Teams Tab!**

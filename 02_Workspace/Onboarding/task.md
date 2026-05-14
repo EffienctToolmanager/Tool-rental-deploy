@@ -1,0 +1,7 @@
+- [x] Stage 5: Production Packaging & MS Graph API Integration
+    - [x] Create `backend/graph_api.py`
+    - [x] Update `backend/main.py` for Static File Serving
+    - [x] Update `src/authConfig.ts` with new scopes
+    - [x] Create `src/utils/graph.ts` for token acquisition
+    - [x] Update `src/components/RentalForm.tsx` to handle tokens
+    - [x] Final verification (Single server mode)

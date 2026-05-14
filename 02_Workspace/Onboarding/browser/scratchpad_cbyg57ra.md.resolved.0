@@ -1,0 +1,8 @@
+# Investigation of Missing Login Button
+
+- [ ] Navigate to http://localhost:8000/
+- [ ] Check for "Sign in with Microsoft" button
+- [ ] Take a screenshot of the current UI
+- [ ] Check console logs for errors or environment variable values
+- [ ] Analyze DOM to see if Dashboard or Login is rendered
+- [ ] Determine why the login button is missing

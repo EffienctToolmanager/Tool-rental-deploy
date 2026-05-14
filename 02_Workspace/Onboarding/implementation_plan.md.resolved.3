@@ -1,0 +1,46 @@
+# Implementation Plan - Project AssetFlow (Stage 4 -> Stage 5)
+
+Transition the application to a production-ready single-server architecture and implement direct Microsoft Graph API cloud integration.
+
+## User Review Required
+
+> [!IMPORTANT]
+> - We will modify `main.py` to serve the React `dist` folder. This means you must run `npm run build` before the backend can serve the frontend.
+> - Direct MS Graph API integration requires specific app permissions (`Files.ReadWrite.All`) in your Entra ID portal.
+> - We are implementing a "Single Server" model to facilitate `.exe` packaging later.
+
+## Proposed Changes
+
+### [Component] Backend (FastAPI)
+
+#### [MODIFY] [main.py](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/backend/main.py)
+- Import `StaticFiles` and `FileResponse`.
+- Mount `dist/assets`.
+- Implement catch-all route for SPA compatibility.
+
+#### [NEW] [graph_api.py](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/backend/graph_api.py)
+- Implement `upload_to_sharepoint` async function.
+- Handle Graph API PUT requests for file uploads.
+
+---
+
+### [Component] Frontend (React + TS)
+
+#### [MODIFY] [authConfig.ts](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/authConfig.ts)
+- Add `Files.ReadWrite.All` to the `loginRequest` scopes.
+
+#### [NEW] [graph.ts](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/utils/graph.ts)
+- Helper to acquire Graph API access tokens silently.
+
+#### [MODIFY] [RentalForm.tsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/Project_AssetFlow/src/components/RentalForm.tsx)
+- Integrate token acquisition before form submission.
+- Include `Authorization` header in the `POST /api/rent` call if authenticated.
+
+## Verification Plan
+
+### Automated/Manual Testing
+1. **Build Test**: Run `npm run build` to generate the `dist` folder.
+2. **Single Server Test**: Start ONLY the backend (`python backend/main.py`) and verify the UI is accessible at `http://localhost:8000`.
+3. **SPA Routing Test**: Navigate to `http://localhost:8000/analytics` directly in the browser and verify the page loads (catch-all route check).
+4. **Token Scope Test**: Enable `VITE_USE_AUTH=true` and verify the login popup requests the new "Files.ReadWrite.All" permission.
+5. **Graph API Mock Test**: Manually test the `upload_to_sharepoint` function if a valid token is available.

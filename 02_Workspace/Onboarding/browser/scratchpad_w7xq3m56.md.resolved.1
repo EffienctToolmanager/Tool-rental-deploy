@@ -1,0 +1,16 @@
+# Task: Debug Blank UI at http://localhost:5173/
+
+## Checklist
+- [x] Navigate to http://localhost:5173/
+- [x] Capture browser console logs
+- [ ] Look for "main.tsx:" and "App.tsx:" logs (None found so far)
+- [ ] Identify any red error messages (None found so far)
+- [x] Capture a screenshot of the console (Screenshot captured, page is white)
+- [ ] Report findings
+
+## Findings
+- The page at http://localhost:5173/ is completely white/blank.
+- Console logs only show Vite connection messages (`[vite] connecting...`, `[vite] connected.`).
+- No logs from `main.tsx` or `App.tsx` are present.
+- `browser_get_dom` returned an empty structure.
+- Initial attempt to list network requests failed with a server error.
