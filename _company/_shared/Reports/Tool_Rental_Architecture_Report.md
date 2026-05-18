@@ -37,12 +37,12 @@ graph LR
         L3["🚧 Remaining"]:::remaining
     end
 
-    %% Nodes (Program Icons)
-    T1["📱 Microsoft Teams\n(App UI)"]:::completed
-    P["🐍 Python Proxy\n(Port 5000)"]:::current
-    O["📧 Microsoft Outlook\n(Email)"]:::remaining
-    S["📋 Microsoft Lists App (in Teams)\n(Data Log for History)"]:::remaining
-    T2["💬 Microsoft Teams\n(Bot Notification)"]:::remaining
+    %% Nodes (Program Icons with Embedded Purpose & Data)
+    T1["📱 Microsoft Teams (App UI)\n───────────────\nPurpose: Receive Request\nData: JSON Payload"]:::completed
+    P["🐍 Python Proxy (Port 5000)\n───────────────\nPurpose: Route & Security\nData: Token & Email Body"]:::current
+    O["📧 Microsoft Outlook (Email)\n───────────────\nPurpose: Finalize Decision\nData: Approve Status"]:::remaining
+    S["📋 Microsoft Lists App (in Teams)\n───────────────\nPurpose: Immutable Audit Log\nData: Transaction History"]:::remaining
+    T2["💬 Microsoft Teams (Bot)\n───────────────\nPurpose: Close Loop\nData: Pickup Instructions"]:::remaining
 
     %% Logical Flow (Trigger & Action)
     T1 -->|1. Submit JSON| P
