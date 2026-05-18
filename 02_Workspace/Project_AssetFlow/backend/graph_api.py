@@ -3,30 +3,28 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-async def upload_to_sharepoint(file_bytes: bytes, filename: str, token: str):
+async def upload_to_sharepoint(file_bytes: bytes, filename: str):
     """
-    Directly uploads a file to Microsoft Graph API (SharePoint/OneDrive).
-    Target: Operation_public/Tool_Rental/Images/{filename}
+    Uploads a file to SharePoint via the Token Isolation Proxy.
+    The proxy server automatically handles the MSAL Token injection.
     """
-    # Microsoft Graph API endpoint for file upload
-    url = f"https://graph.microsoft.com/v1.0/me/drive/root:/Operation_public/Tool_Rental/Images/{filename}:/content"
+    # Local Token Isolation Proxy endpoint
+    proxy_url = f"http://localhost:5000/api/sharepoint/upload?filename={filename}"
     
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/octet-stream"
-    }
+    # Send file to proxy as multipart/form-data
+    files = {'file': (filename, file_bytes, 'application/octet-stream')}
 
     try:
         async with httpx.AsyncClient() as client:
-            response = await client.put(url, content=file_bytes, headers=headers)
+            response = await client.post(proxy_url, files=files)
             
             if response.status_code in [200, 201]:
                 data = response.json()
-                logger.info(f"Successfully uploaded {filename} to Graph API.")
+                logger.info(f"Successfully uploaded {filename} via Proxy.")
                 return data.get("webUrl")
             else:
-                logger.error(f"Graph API Upload failed: {response.status_code} - {response.text}")
+                logger.error(f"Proxy Upload failed: {response.status_code} - {response.text}")
                 return None
     except Exception as e:
-        logger.error(f"Error during Graph API upload: {str(e)}")
+        logger.error(f"Error during Proxy upload: {str(e)}")
         return None
