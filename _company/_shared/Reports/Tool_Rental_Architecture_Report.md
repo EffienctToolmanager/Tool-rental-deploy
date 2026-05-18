@@ -41,7 +41,7 @@ graph LR
     T1["📱 Microsoft Teams\n(App UI)"]:::completed
     P["🐍 Python Proxy\n(Port 5000)"]:::current
     O["📧 Microsoft Outlook\n(Email)"]:::remaining
-    S["💠 Microsoft SharePoint\n(List Database)"]:::remaining
+    S["📋 Microsoft Lists App (in Teams)\n(Data Log for History)"]:::remaining
     T2["💬 Microsoft Teams\n(Bot Notification)"]:::remaining
 
     %% Logical Flow (Trigger & Action)
@@ -71,13 +71,13 @@ The exact specification of the **Purpose** achieved when each node executes, alo
   * **Purpose:** Act as a security checkpoint and approval routing bridge between the Frontend and the Cloud.
   * **Acquired & Recorded:** Acquires MS Graph API calling permissions (Token) by injecting the hidden `Client Secret`, and constructs the email template (including photo attachments).
 
-* **Step 3. Manager Approve (Outlook)**
-  * **Purpose:** Finalize the manager's decision to authorize the equipment dispatch/rental.
-  * **Acquired & Recorded:** Acquires the manager's 'Approve' action status, and forcibly records/overwrites the Status column in the Master DB (SharePoint List) as `Rented`.
+* **Step 3. Manager Approve & Log History (Outlook -> Lists App)**
+  * **Purpose:** Finalize the manager's decision and securely log the immutable audit history.
+  * **Acquired & Recorded:** Acquires the manager's 'Approve' action status. Forcibly records/overwrites the status as `Rented` and archives the entire transaction log into the **Microsoft Lists App inside Teams (Data Log for History)**.
 
-* **Step 4. Trigger Alert (SharePoint -> Teams Bot)**
+* **Step 4. Trigger Alert (Lists App -> Teams Bot)**
   * **Purpose:** Propagate immediate feedback regarding Master DB modifications.
-  * **Acquired & Recorded:** Detects the updated SharePoint List Row ID, acquires the requester's Teams ID, and generates an automated notification trigger record.
+  * **Acquired & Recorded:** Detects the newly appended history log in the Microsoft Lists App, acquires the requester's Teams ID, and generates an automated notification trigger record.
 
 * **Step 5. Return to App (Teams Bot -> User)**
   * **Purpose:** Initiate user action and close the workflow loop.
