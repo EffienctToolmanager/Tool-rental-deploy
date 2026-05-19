@@ -39,6 +39,7 @@ const App: React.FC = () => {
          expectedReturnDate: item.returnDate,
          caseId: item.caseId,
          userEmail: item.userEmail,
+         pmEmail: item.pmEmail,
          model: item.name
       }));
 
