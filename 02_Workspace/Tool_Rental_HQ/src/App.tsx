@@ -26,14 +26,14 @@ const App: React.FC = () => {
       const mappedAssets = items.map((item: any) => ({
         assetCode: item.equipmentCode,
         model: item.name,
-        Current_Status: item.status === '보관중' ? 'Available' : 'Rented',
+        Current_Status: (item.status === '보관중' || item.status === 'Available') ? 'Available' : 'Rented',
         currentLocation: item.projectName || 'Warehouse',
         calDate: '2026-12-31',
         zone: 'HQ',
         rack: 'A1'
       }));
 
-      const activeRentals = items.filter((item: any) => item.status === '대여중').map((item: any) => ({
+      const activeRentals = items.filter((item: any) => item.status === '대여중' || item.status === 'Rented').map((item: any) => ({
          assetCode: item.equipmentCode,
          projectName: item.projectName,
          expectedReturnDate: item.returnDate,

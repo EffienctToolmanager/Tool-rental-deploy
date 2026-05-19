@@ -87,7 +87,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) {
-      alert("장바구니에 선택된 장비가 없습니다. 위 목록에서 대여할 장비를 체크해주세요.");
+      alert("No assets selected in the cart. Please check assets to rent from the inventory list above.");
       return;
     }
 
@@ -95,7 +95,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
     const missingPhotos = cart.filter(item => !item.photo);
     if (missingPhotos.length > 0) {
       const codes = missingPhotos.map(item => item.assetCode).join(', ');
-      alert(`⚠️ 다음 장비의 개별 상태 사진이 누락되었습니다:\n${codes}\n\n모든 장비에 1:1 개별 사진을 첨부해 주세요.`);
+      alert(`⚠️ The following assets are missing individual condition photos:\n${codes}\n\nPlease attach a 1:1 condition photo for all tools.`);
       return;
     }
 
@@ -133,7 +133,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
 
       const result = await response.json();
       
-      alert(`✅ 묶음 대여 신청이 성공적으로 완료되었습니다!\nCase ID: ${result.caseId}`);
+      alert(`✅ Bulk rental request has been successfully submitted!\nCase ID: ${result.caseId}`);
       
       // Clear form & Cart
       setCart([]);
@@ -149,7 +149,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
       onSuccess();
     } catch (error) {
       console.error("Error submitting bulk rental:", error);
-      alert("대여 처리 중 오류가 발생했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.");
+      alert("An error occurred while processing your rental. Please check your network connection and try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -217,7 +217,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
               ) : (
                 <tr>
                   <td colSpan={4} style={{ padding: '16px', textAlign: 'center', color: '#64748b' }}>
-                    일치하는 보관 중인 장비가 없습니다.
+                    No matching available assets found.
                   </td>
                 </tr>
               )}

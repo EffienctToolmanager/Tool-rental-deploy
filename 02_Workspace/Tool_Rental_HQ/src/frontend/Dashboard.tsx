@@ -44,8 +44,8 @@ const Dashboard: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl font-extrabold tracking-tight leading-tight"
           >
-            대여가 필요하신가요? <br />
-            <span className="text-[#3182F6]">간편하게 신청하세요.</span>
+            Need a tool rental? <br />
+            <span className="text-[#3182F6]">Apply quickly and easily.</span>
           </motion.h2>
         </section>
 
@@ -57,16 +57,16 @@ const Dashboard: React.FC = () => {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-6">
-                <InputGroup label="장비 고유 코드" icon={<FiBox />} placeholder="예: DSP01" />
-                <InputGroup label="프로젝트 명" icon={<FiMapPin />} placeholder="신규 투입 현장 입력" />
+                <InputGroup label="Equipment Code" icon={<FiBox />} placeholder="e.g., DSP01" />
+                <InputGroup label="Project Name" icon={<FiMapPin />} placeholder="e.g., Samsung Austin Semiconductor" />
               </div>
               <div className="space-y-6">
-                <InputGroup label="반납 예정일" icon={<FiCalendar />} type="date" />
+                <InputGroup label="Expected Return Date" icon={<FiCalendar />} type="date" />
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-[#4E5968] ml-1">상태 사진 첨부</label>
+                  <label className="text-sm font-semibold text-[#4E5968] ml-1">Attach Condition Photo</label>
                   <button className="w-full h-32 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center text-gray-400 hover:border-[#3182F6] hover:text-[#3182F6] transition-all group">
                     <FiCamera className="w-8 h-8 mb-2 group-hover:scale-110 transition-transform" />
-                    <span className="text-sm">클릭하여 사진 업로드</span>
+                    <span className="text-sm">Click to upload photo</span>
                   </button>
                 </div>
               </div>
@@ -76,7 +76,7 @@ const Dashboard: React.FC = () => {
               whileTap={{ scale: 0.98 }}
               className="w-full mt-10 bg-[#3182F6] text-white py-5 rounded-2xl font-bold text-lg shadow-lg shadow-blue-200 hover:bg-[#1b64da] transition-colors flex items-center justify-center space-x-2"
             >
-              <span>대여 신청하기</span>
+              <span>Apply for Rental</span>
               <FiChevronRight />
             </motion.button>
           </motion.div>
@@ -84,7 +84,7 @@ const Dashboard: React.FC = () => {
 
         {/* Status Tracker: Minimalist List */}
         <section className="space-y-6">
-          <h3 className="text-lg font-bold ml-1 text-[#4E5968]">현재 대여중인 장비</h3>
+          <h3 className="text-lg font-bold ml-1 text-[#4E5968]">Currently Rented Tools</h3>
           <div className="space-y-3">
             {[1, 2].map((i) => (
               <div key={i} className="bg-white p-6 rounded-2xl flex items-center justify-between border border-gray-50 shadow-sm">
@@ -94,10 +94,10 @@ const Dashboard: React.FC = () => {
                   </div>
                   <div>
                     <div className="font-bold">DSP0{i} (Control System)</div>
-                    <div className="text-sm text-[#4E5968]">반납 D-5 | 김태규</div>
+                    <div className="text-sm text-[#4E5968]">Return D-5 | Renter</div>
                   </div>
                 </div>
-                <div className="text-sm font-semibold text-[#3182F6] bg-blue-50 px-3 py-1 rounded-full">대여중</div>
+                <div className="text-sm font-semibold text-[#3182F6] bg-blue-50 px-3 py-1 rounded-full">Rented</div>
               </div>
             ))}
           </div>

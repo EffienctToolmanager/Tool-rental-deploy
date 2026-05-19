@@ -72,7 +72,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '18px' }}>🛒</span>
             <span style={{ fontSize: '14px', fontWeight: '600', color: '#1e3a8a' }}>
-              대여 예정 장비 <strong>{selectedAssetCodes.length}개</strong>가 장바구니에 담겼습니다.
+              <strong>{selectedAssetCodes.length}</strong> planned rental assets have been added to your cart.
             </span>
           </div>
           <button 
@@ -92,7 +92,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
             }}
             onClick={onNavigateToCheckout}
           >
-            Smart 대여 신청하러 가기 ➜
+            Go to Smart Checkout ➜
           </button>
         </div>
       )}
@@ -157,7 +157,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                       disabled={!isAvailable}
                       style={{ width: '16px', height: '16px', cursor: isAvailable ? 'pointer' : 'not-allowed' }}
                       onChange={(e) => handleCheckboxChange(assetCode, e.target.checked)}
-                      title={isAvailable ? '대여 장바구니에 담기' : '대여중인 장비는 선택할 수 없습니다.'}
+                      title={isAvailable ? 'Add to rental cart' : 'Rented assets cannot be selected.'}
                     />
                   </td>
                   <td>

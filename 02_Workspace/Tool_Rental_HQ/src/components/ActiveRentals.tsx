@@ -46,7 +46,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
     const missingPhotos = assetsToReturn.filter(item => !item.photo);
     if (missingPhotos.length > 0) {
       const codes = missingPhotos.map(item => item.assetCode).join(', ');
-      alert(`⚠️ 다음 반납 장비의 개별 상태 사진이 누락되었습니다:\n${codes}\n\n모든 반납 장비에 1:1 사진을 첨부해 주세요.`);
+      alert(`⚠️ The following assets are missing individual return condition photos:\n${codes}\n\nPlease upload a 1:1 photo for all assets being returned.`);
       return;
     }
 
@@ -81,7 +81,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
         throw new Error("Failed to process return on serverless database.");
       }
 
-      alert(`✅ ${assetsToReturn.length}개 장비의 반납 신청 및 개별 상태 사진 업로드가 실시간 완료되었습니다!\n(장비 상태가 '보관중'으로 즉시 원상 복귀되었습니다.)`);
+      alert(`✅ Return request and individual condition photo uploads for ${assetsToReturn.length} assets have been successfully processed in real-time!\n(Asset status has been instantly restored to 'Available'.)`);
       setReturnCaseId(null);
       setAssetsToReturn([]);
       onRefresh(); // Refresh data
@@ -106,16 +106,32 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
 
     if (invalidDates.length > 0) {
       const codes = invalidDates.map(item => item.assetCode).join(', ');
-      alert(`⚠️ 다음 장비의 연장 반납일이 현재 반납일보다 같거나 이전입니다:\n${codes}\n\n새 반납 예정일은 현재 반납일 이후여야 합니다.`);
+      alert(`⚠️ The extension return date for the following assets is equal to or prior to the current return date:\n${codes}\n\nThe new expected return date must be after the current return date.`);
       return;
     }
 
     setIsSubmitting(true);
     try {
-      // Mock backend processing to simulate extension
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // API call to serverless backend to extend the rental period in real-time
+      const extendResponse = await fetch('/api/sharepoint/extend', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          caseId: extendCaseId,
+          items: assetsToExtend.map(item => ({
+            equipmentCode: item.assetCode,
+            newReturnDate: item.newReturnDate
+          }))
+        })
+      });
 
-      alert(`✅ ${assetsToExtend.length}개 장비의 대여 기간이 성공적으로 연장되었습니다!`);
+      if (!extendResponse.ok) {
+        throw new Error("Failed to process extension on serverless database.");
+      }
+
+      alert(`✅ The rental period for ${assetsToExtend.length} assets has been successfully extended!`);
       setExtendCaseId(null);
       setAssetsToExtend([]);
       setBatchExtendDate('');
@@ -172,11 +188,11 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                   <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 6px 0', color: '#1e293b' }}>{caseId}</h3>
                   <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                      <span>👤 대여자: <strong style={{ color: '#334155' }}>{userEmail}</strong></span>
+                      <span>👤 Renter: <strong style={{ color: '#334155' }}>{userEmail}</strong></span>
                       <span>🔑 PM: <strong style={{ color: '#334155' }}>{pmEmail}</strong></span>
                     </div>
                     <div style={{ display: 'flex', gap: '12px', marginTop: '2px' }}>
-                      <span>🏢 현장: <strong style={{ color: '#334155' }}>{projectName}</strong></span>
+                      <span>🏢 Project: <strong style={{ color: '#334155' }}>{projectName}</strong></span>
                     </div>
                   </div>
                 </div>
@@ -385,7 +401,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
               {assetsToExtend.length > 1 && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#f0f9ff', border: '1px solid #bae6fd', padding: '12px', borderRadius: '6px', marginBottom: '16px' }}>
                   <span style={{ fontSize: '13px', fontWeight: '600', color: '#0369a1' }}>
-                    ⚡ 일괄 신규 반납일 지정:
+                    ⚡ Batch New Return Date:
                   </span>
                   <input 
                     type="date"

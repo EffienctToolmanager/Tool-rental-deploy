@@ -29,14 +29,14 @@ def get_msal_token():
     return "real_token"
 
 # --- In-Memory Persistent Database for Premium Staging Demo ---
-# 서버리스 컨테이너 수명 주기 동안 대여 신청 내역이 동적으로 프론트엔드와 실시간 유지되게 설계
+# In-memory mock database to allow seamless serverless state updates
 INITIAL_ITEMS = [
-    {"id": "1", "equipmentCode": "DSP01", "name": "Control System DSP01", "projectName": "A 현장", "returnDate": "2026-05-20", "status": "대여중", "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260515-ABCD"},
-    {"id": "2", "equipmentCode": "LTS02", "name": "Laser Tracker LTS02", "projectName": "A 현장", "returnDate": "2026-05-20", "status": "대여중", "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260515-ABCD"},
-    {"id": "3", "equipmentCode": "CAM11", "name": "4K Action Camera Set", "projectName": "B 현장", "returnDate": "2026-05-25", "status": "대여중", "userEmail": "tech@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260516-WXYZ"}
+    {"id": "1", "equipmentCode": "DSP01", "name": "Control System DSP01", "projectName": "Project Site A", "returnDate": "2026-05-20", "status": "Rented", "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260515-ABCD"},
+    {"id": "2", "equipmentCode": "LTS02", "name": "Laser Tracker LTS02", "projectName": "Project Site A", "returnDate": "2026-05-20", "status": "Rented", "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260515-ABCD"},
+    {"id": "3", "equipmentCode": "CAM11", "name": "4K Action Camera Set", "projectName": "Project Site B", "returnDate": "2026-05-25", "status": "Rented", "userEmail": "tech@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260516-WXYZ"}
 ]
 
-# 20개의 여유 보관중 공구 대량 로드
+# Dynamic loading of 20 available generic tools
 for i in range(4, 25):
     INITIAL_ITEMS.append({
         "id": str(i), 
@@ -44,7 +44,7 @@ for i in range(4, 25):
         "name": f"Generic Test Tool {i}", 
         "projectName": "", 
         "returnDate": "", 
-        "status": "보관중",
+        "status": "Available",
         "userEmail": "",
         "pmEmail": "",
         "caseId": ""
@@ -78,20 +78,19 @@ class BulkRentalRequest(BaseModel):
 async def create_rental_record(rental: BulkRentalRequest):
     logger.info(f"Rental request received for Case {rental.caseId}")
     
-    # 동적 데이터 갱신: 장바구니에 담겨 들어온 장비 코드들을 찾아 대여 상태로 즉시 변경
+    # Dynamic database update: switch requested items to Rented status
     requested_codes = {item.equipmentCode for item in rental.items}
     
     updated_items = []
     for item in db_storage["items"]:
         if item["equipmentCode"] in requested_codes:
-            # 보관중인 장비를 대여중으로 동적 스위칭 (대여자와 PM 정보 분리 저장)
             updated_items.append({
                 "id": item["id"],
                 "equipmentCode": item["equipmentCode"],
                 "name": item["name"],
                 "projectName": rental.projectName,
                 "returnDate": rental.returnDate,
-                "status": "대여중",
+                "status": "Rented",
                 "userEmail": rental.userEmail,
                 "pmEmail": rental.pmEmail,
                 "caseId": rental.caseId
@@ -106,6 +105,35 @@ async def create_rental_record(rental: BulkRentalRequest):
         "status": "success", 
         "message": f"Bulk Rental created dynamically for Case {rental.caseId}", 
         "caseId": rental.caseId
+    }
+
+class ExtendItem(BaseModel):
+    equipmentCode: str
+    newReturnDate: str
+
+class BulkExtendRequest(BaseModel):
+    caseId: str
+    items: List[ExtendItem]
+
+@app.post("/api/sharepoint/extend")
+async def extend_rental_record(request: BulkExtendRequest):
+    logger.info(f"Extension request received for Case {request.caseId}")
+    extend_map = {item.equipmentCode: item.newReturnDate for item in request.items}
+    
+    updated_items = []
+    for item in db_storage["items"]:
+        if item["equipmentCode"] in extend_map:
+            item_copy = item.copy()
+            item_copy["returnDate"] = extend_map[item["equipmentCode"]]
+            updated_items.append(item_copy)
+        else:
+            updated_items.append(item)
+            
+    db_storage["items"] = updated_items
+    logger.info(f"Extension processed successfully in db. Case {request.caseId} extended.")
+    return {
+        "status": "success", 
+        "message": f"Case {request.caseId} extended and items new return dates synchronized."
     }
 
 @app.post("/api/sharepoint/upload")
@@ -132,15 +160,16 @@ async def return_rental_record(request: BulkReturnRequest):
     updated_items = []
     for item in db_storage["items"]:
         if item["equipmentCode"] in returned_codes:
-            # 반납 처리: 보관중 상태로 원상 복귀하고 결재 케이스/현장/사용자 정보 클리어
+            # Restore status to Available, clearing out metadata
             updated_items.append({
                 "id": item["id"],
                 "equipmentCode": item["equipmentCode"],
                 "name": item["name"],
                 "projectName": "",
                 "returnDate": "",
-                "status": "보관중",
+                "status": "Available",
                 "userEmail": "",
+                "pmEmail": "",
                 "caseId": ""
             })
         else:
@@ -150,7 +179,7 @@ async def return_rental_record(request: BulkReturnRequest):
     logger.info(f"Return processed successfully in db. Case {request.caseId} returned.")
     return {
         "status": "success", 
-        "message": f"Case {request.caseId} returned and items status restored to 보관중."
+        "message": f"Case {request.caseId} returned and items status restored to Available."
     }
 
 # --- Analytics & Compliance Dashboard API Mocking [NEW] ---
@@ -158,27 +187,26 @@ async def return_rental_record(request: BulkReturnRequest):
 
 @app.get("/api/reports/analytics")
 async def get_analytics_data():
-    # 현재 데이터베이스 상태를 기준으로 동적 차트 통계치 연산
-    rented_count = sum(1 for x in db_storage["items"] if x["status"] == "대여중")
-    available_count = sum(1 for x in db_storage["items"] if x["status"] == "보관중")
+    # Dynamic calculations based on current status (Rented vs Available)
+    rented_count = sum(1 for x in db_storage["items"] if x["status"] == "Rented")
+    available_count = sum(1 for x in db_storage["items"] if x["status"] == "Available")
     
-    # 프로젝트별 카운트 계산
     project_map = {}
     for item in db_storage["items"]:
-        if item["status"] == "대여중" and item["projectName"]:
+        if item["status"] == "Rented" and item["projectName"]:
             proj = item["projectName"]
             project_map[proj] = project_map.get(proj, 0) + 1
             
     rentals_by_project = [{"name": proj, "count": count} for proj, count in project_map.items()]
     if not rentals_by_project:
-        rentals_by_project = [{"name": "A 현장", "count": 2}, {"name": "B 현장", "count": 1}]
+        rentals_by_project = [{"name": "Project Site A", "count": 2}, {"name": "Project Site B", "count": 1}]
         
     return {
         "rentals_by_project": rentals_by_project,
         "calibration_status": [
-            {"name": "Safe (정상)", "value": available_count + 1, "color": "#4CAF50"},
-            {"name": "Warning (점검 요망)", "value": 2, "color": "#FFC107"},
-            {"name": "Expired (검교정 누락)", "value": 1, "color": "#F44336"}
+            {"name": "Safe", "value": available_count + 1, "color": "#4CAF50"},
+            {"name": "Warning", "value": 2, "color": "#FFC107"},
+            {"name": "Expired", "value": 1, "color": "#F44336"}
         ]
     }
 
