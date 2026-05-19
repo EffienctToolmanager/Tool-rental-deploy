@@ -30,6 +30,8 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
   const [batchExtendDate, setBatchExtendDate] = useState<string>('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [projectSearch, setProjectSearch] = useState('');
+  const [selectedProjectTab, setSelectedProjectTab] = useState('All');
 
   const calculateRemainingDays = (returnDate: string) => {
     const today = new Date();
@@ -144,8 +146,24 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
     }
   };
 
-  // Group rentals by Case ID
-  const groupedRentals = rentals.reduce((acc, current) => {
+  // Get unique projects for quick filter pills
+  const uniqueProjects = Array.from(new Set(rentals.map(r => r.projectName).filter(Boolean)));
+
+  // Filter rentals by search keyword and selected project tab
+  const filteredRentals = rentals.filter(rental => {
+    const projName = rental.projectName || '';
+    const caseId = rental.caseId || '';
+    const userEmail = rental.userEmail || '';
+    const matchesSearch = projName.toLowerCase().includes(projectSearch.toLowerCase()) || 
+                          caseId.toLowerCase().includes(projectSearch.toLowerCase()) ||
+                          userEmail.toLowerCase().includes(projectSearch.toLowerCase());
+    
+    if (selectedProjectTab === 'All') return matchesSearch;
+    return matchesSearch && projName === selectedProjectTab;
+  });
+
+  // Group filtered rentals by Case ID
+  const groupedRentals = filteredRentals.reduce((acc, current) => {
     const caseId = current.caseId || (current as any).Case_ID || current.id || 'UNKNOWN-CASE';
     const key = caseId || 'UNKNOWN-CASE';
     if (!acc[key]) acc[key] = [];
@@ -155,9 +173,68 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <h2 style={{ fontSize: '18px' }}>Active Rentals Monitor</h2>
-        <div className="f-badge f-badge-available">{Object.keys(groupedRentals).length} Active Cases ({rentals.length} Items)</div>
+        <div className="f-badge f-badge-available">{Object.keys(groupedRentals).length} Active Cases ({filteredRentals.length} Items)</div>
+      </div>
+
+      {/* Premium Project View Filter Section */}
+      <div className="f-card" style={{ marginBottom: '24px', padding: '16px', backgroundColor: '#fafafc', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#475569' }}>🔍 View Filter:</span>
+            <input 
+              type="text"
+              placeholder="Search by project, case ID, renter..."
+              className="f-input"
+              style={{ width: '260px', height: '36px', fontSize: '13px', margin: 0 }}
+              value={projectSearch}
+              onChange={(e) => setProjectSearch(e.target.value)}
+            />
+          </div>
+          
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
+            <button 
+              className="f-button"
+              type="button"
+              style={{ 
+                height: '32px', 
+                fontSize: '12px', 
+                padding: '0 14px',
+                borderRadius: '16px',
+                border: '1px solid #5B5FC7',
+                backgroundColor: selectedProjectTab === 'All' ? '#5B5FC7' : 'transparent',
+                color: selectedProjectTab === 'All' ? 'white' : '#5B5FC7',
+                fontWeight: '600',
+                transition: 'all 0.2s'
+              }}
+              onClick={() => setSelectedProjectTab('All')}
+            >
+              All Projects
+            </button>
+            {uniqueProjects.map(proj => (
+              <button 
+                key={proj}
+                className="f-button"
+                type="button"
+                style={{ 
+                  height: '32px', 
+                  fontSize: '12px', 
+                  padding: '0 14px',
+                  borderRadius: '16px',
+                  border: '1px solid #5B5FC7',
+                  backgroundColor: selectedProjectTab === proj ? '#5B5FC7' : 'transparent',
+                  color: selectedProjectTab === proj ? 'white' : '#5B5FC7',
+                  fontWeight: '600',
+                  transition: 'all 0.2s'
+                }}
+                onClick={() => setSelectedProjectTab(proj || '')}
+              >
+                {proj}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 380px), 1fr))', gap: '20px' }}>
