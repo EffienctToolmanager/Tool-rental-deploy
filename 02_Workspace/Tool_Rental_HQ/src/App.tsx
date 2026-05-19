@@ -6,7 +6,7 @@ import InventoryTable from './components/InventoryTable';
 import AnalyticsTab from './components/AnalyticsTab';
 import { type Asset, type Rental } from './types';
 
-const API_BASE = "http://localhost:5000/api/sharepoint";
+const API_BASE = "/api/sharepoint";
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'checkout' | 'dashboard' | 'inventory' | 'analytics'>('dashboard');

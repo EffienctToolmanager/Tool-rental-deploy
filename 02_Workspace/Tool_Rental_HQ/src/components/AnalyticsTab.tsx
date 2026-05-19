@@ -9,7 +9,7 @@ interface AnalyticsData {
   calibration_status: { name: string, value: number, color: string }[];
 }
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "/api";
 
 const AnalyticsTab: React.FC = () => {
   const [data, setData] = useState<AnalyticsData | null>(null);

@@ -121,7 +121,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/sharepoint/rental", {
+      const response = await fetch("/api/sharepoint/rental", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
