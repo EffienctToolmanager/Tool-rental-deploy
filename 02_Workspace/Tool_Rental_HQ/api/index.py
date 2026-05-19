@@ -31,9 +31,9 @@ def get_msal_token():
 # --- In-Memory Persistent Database for Premium Staging Demo ---
 # 서버리스 컨테이너 수명 주기 동안 대여 신청 내역이 동적으로 프론트엔드와 실시간 유지되게 설계
 INITIAL_ITEMS = [
-    {"id": "1", "equipmentCode": "DSP01", "name": "Control System DSP01", "projectName": "A 현장", "returnDate": "2026-05-20", "status": "대여중", "userEmail": "pm@ge.com", "caseId": "TR-20260515-ABCD"},
-    {"id": "2", "equipmentCode": "LTS02", "name": "Laser Tracker LTS02", "projectName": "A 현장", "returnDate": "2026-05-20", "status": "대여중", "userEmail": "pm@ge.com", "caseId": "TR-20260515-ABCD"},
-    {"id": "3", "equipmentCode": "CAM11", "name": "4K Action Camera Set", "projectName": "B 현장", "returnDate": "2026-05-25", "status": "대여중", "userEmail": "tech@ge.com", "caseId": "TR-20260516-WXYZ"}
+    {"id": "1", "equipmentCode": "DSP01", "name": "Control System DSP01", "projectName": "A 현장", "returnDate": "2026-05-20", "status": "대여중", "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260515-ABCD"},
+    {"id": "2", "equipmentCode": "LTS02", "name": "Laser Tracker LTS02", "projectName": "A 현장", "returnDate": "2026-05-20", "status": "대여중", "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260515-ABCD"},
+    {"id": "3", "equipmentCode": "CAM11", "name": "4K Action Camera Set", "projectName": "B 현장", "returnDate": "2026-05-25", "status": "대여중", "userEmail": "tech@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260516-WXYZ"}
 ]
 
 # 20개의 여유 보관중 공구 대량 로드
@@ -46,6 +46,7 @@ for i in range(4, 25):
         "returnDate": "", 
         "status": "보관중",
         "userEmail": "",
+        "pmEmail": "",
         "caseId": ""
     })
 
@@ -71,6 +72,7 @@ class BulkRentalRequest(BaseModel):
     projectName: str
     returnDate: str
     pmEmail: str
+    userEmail: str
 
 @app.post("/api/sharepoint/rental")
 async def create_rental_record(rental: BulkRentalRequest):
@@ -82,7 +84,7 @@ async def create_rental_record(rental: BulkRentalRequest):
     updated_items = []
     for item in db_storage["items"]:
         if item["equipmentCode"] in requested_codes:
-            # 보관중인 장비를 대여중으로 동적 스위칭
+            # 보관중인 장비를 대여중으로 동적 스위칭 (대여자와 PM 정보 분리 저장)
             updated_items.append({
                 "id": item["id"],
                 "equipmentCode": item["equipmentCode"],
@@ -90,7 +92,8 @@ async def create_rental_record(rental: BulkRentalRequest):
                 "projectName": rental.projectName,
                 "returnDate": rental.returnDate,
                 "status": "대여중",
-                "userEmail": rental.pmEmail,
+                "userEmail": rental.userEmail,
+                "pmEmail": rental.pmEmail,
                 "caseId": rental.caseId
             })
         else:
@@ -112,6 +115,42 @@ async def upload_file_to_sharepoint(filename: str, file: UploadFile = File(...))
     return {
         "status": "success", 
         "webUrl": f"https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=300"
+    }
+
+class ReturnItem(BaseModel):
+    equipmentCode: str
+
+class BulkReturnRequest(BaseModel):
+    caseId: str
+    items: List[ReturnItem]
+
+@app.post("/api/sharepoint/return")
+async def return_rental_record(request: BulkReturnRequest):
+    logger.info(f"Return request received for Case {request.caseId}")
+    returned_codes = {item.equipmentCode for item in request.items}
+    
+    updated_items = []
+    for item in db_storage["items"]:
+        if item["equipmentCode"] in returned_codes:
+            # 반납 처리: 보관중 상태로 원상 복귀하고 결재 케이스/현장/사용자 정보 클리어
+            updated_items.append({
+                "id": item["id"],
+                "equipmentCode": item["equipmentCode"],
+                "name": item["name"],
+                "projectName": "",
+                "returnDate": "",
+                "status": "보관중",
+                "userEmail": "",
+                "caseId": ""
+            })
+        else:
+            updated_items.append(item)
+            
+    db_storage["items"] = updated_items
+    logger.info(f"Return processed successfully in db. Case {request.caseId} returned.")
+    return {
+        "status": "success", 
+        "message": f"Case {request.caseId} returned and items status restored to 보관중."
     }
 
 # --- Analytics & Compliance Dashboard API Mocking [NEW] ---

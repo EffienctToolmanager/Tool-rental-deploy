@@ -51,18 +51,37 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
     }
 
     setIsSubmitting(true);
-    const payload = new FormData();
-    assetsToReturn.forEach(item => {
-      if (item.photo) {
-        payload.append('photos', item.photo, item.assetCode);
-      }
-    });
 
     try {
-      // Mock backend processing
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // 1. 개별 장비별 반납 사진 업로드 API 호출
+      for (const item of assetsToReturn) {
+        if (item.photo) {
+          const uploadPayload = new FormData();
+          uploadPayload.append('file', item.photo);
+          await fetch(`/api/sharepoint/upload?filename=${item.assetCode}_return.jpg`, {
+            method: 'POST',
+            body: uploadPayload
+          });
+        }
+      }
 
-      alert(`✅ ${assetsToReturn.length}개 장비의 반납 신청이 성공적으로 완료되었습니다!`);
+      // 2. 백엔드 인메모리 DB 상태 원상 복귀(보관중 롤백) API 호출
+      const returnResponse = await fetch('/api/sharepoint/return', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          caseId: returnCaseId,
+          items: assetsToReturn.map(item => ({ equipmentCode: item.assetCode }))
+        })
+      });
+
+      if (!returnResponse.ok) {
+        throw new Error("Failed to process return on serverless database.");
+      }
+
+      alert(`✅ ${assetsToReturn.length}개 장비의 반납 신청 및 개별 상태 사진 업로드가 실시간 완료되었습니다!\n(장비 상태가 '보관중'으로 즉시 원상 복귀되었습니다.)`);
       setReturnCaseId(null);
       setAssetsToReturn([]);
       onRefresh(); // Refresh data
@@ -130,7 +149,8 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
           // Extract shared meta from the first item
           const firstItem = items[0];
           const expectedDate = (firstItem as any).expectedReturnDate || (firstItem as any).Expected_Return_Date || (firstItem as any).expectedReturn || '2026-05-30';
-          const userEmail = (firstItem as any).userEmail || (firstItem as any).User_Email || firstItem.user || 'Unknown User';
+          const userEmail = (firstItem as any).userEmail || (firstItem as any).User_Email || (firstItem as any).user || 'Unknown Renter';
+          const pmEmail = (firstItem as any).pmEmail || (firstItem as any).pm || 'Unknown PM';
           const projectName = firstItem.projectName || 'Unknown Project';
 
           const daysLeft = calculateRemainingDays(expectedDate);
@@ -148,14 +168,19 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
             >
               {/* Case Header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid var(--f-border)', paddingBottom: '12px' }}>
-                <div>
-                  <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 4px 0', color: '#1e293b' }}>{caseId}</h3>
-                  <div style={{ fontSize: '13px', color: '#64748b', display: 'flex', gap: '12px' }}>
-                    <span>👤 {userEmail}</span>
-                    <span>🏢 {projectName}</span>
+                <div style={{ width: '100%' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 6px 0', color: '#1e293b' }}>{caseId}</h3>
+                  <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+                      <span>👤 대여자: <strong style={{ color: '#334155' }}>{userEmail}</strong></span>
+                      <span>🔑 PM: <strong style={{ color: '#334155' }}>{pmEmail}</strong></span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', marginTop: '2px' }}>
+                      <span>🏢 현장: <strong style={{ color: '#334155' }}>{projectName}</strong></span>
+                    </div>
                   </div>
                 </div>
-                {isOverdue && <span className="f-badge" style={{ background: 'var(--f-error)', color: 'white', alignSelf: 'flex-start' }}>OVERDUE</span>}
+                {isOverdue && <span className="f-badge" style={{ background: 'var(--f-error)', color: 'white', alignSelf: 'flex-start', marginLeft: '8px' }}>OVERDUE</span>}
               </div>
 
               {/* Progress Bar */}
