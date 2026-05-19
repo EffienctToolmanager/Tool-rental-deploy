@@ -160,7 +160,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
         <div className="f-badge f-badge-available">{Object.keys(groupedRentals).length} Active Cases ({rentals.length} Items)</div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 380px), 1fr))', gap: '20px' }}>
         {Object.entries(groupedRentals).map(([caseId, items]) => {
           // Extract shared meta from the first item
           const firstItem = items[0];
