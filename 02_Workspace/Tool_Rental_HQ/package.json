@@ -8,13 +8,13 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --force",
     "preview": "vite preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@azure/msal-browser": "^5.10.1",
     "@azure/msal-react": "^5.4.1",
