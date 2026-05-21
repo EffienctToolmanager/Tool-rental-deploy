@@ -23,6 +23,11 @@ const RentalForm: React.FC<RentalFormProps> = ({
   // Catalog & Search State
   const [searchTerm, setSearchTerm] = useState('');
   
+  // Non-Inventory states
+  const [isNonInventoryMode, setIsNonInventoryMode] = useState(false);
+  const [customItemName, setCustomItemName] = useState('');
+  const [customAssetType, setCustomAssetType] = useState('Durable Tool');
+  
   // Cart & Project Form State
   const [cart, setCart] = useState<CartItemType[]>([]);
   const [formData, setFormData] = useState({
@@ -33,6 +38,31 @@ const RentalForm: React.FC<RentalFormProps> = ({
     expectedReturnDate: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleAddCustomItem = () => {
+    if (!customItemName.trim()) {
+      alert("Please enter a custom item name.");
+      return;
+    }
+    const randSuffix = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const customCode = `NON-INV-${randSuffix}`;
+    const customModel = `[${customAssetType}] ${customItemName}`;
+
+    const newItem: CartItemType = {
+      assetCode: customCode,
+      assetModel: customModel,
+      photo: null
+    };
+
+    setCart(prev => [...prev, newItem]);
+    setSelectedAssetCodes(prev => [...prev, customCode]);
+    setCustomItemName('');
+  };
+
+  const handleRemoveFromCart = (assetCode: string) => {
+    setSelectedAssetCodes(prev => prev.filter(code => code !== assetCode));
+    setCart(prev => prev.filter(item => item.assetCode !== assetCode));
+  };
 
   // Synchronize local cart with global selectedAssetCodes
   useEffect(() => {
@@ -45,7 +75,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
         const asset = assets.find(a => a.assetCode === code);
         return {
           assetCode: code,
-          assetModel: asset ? asset.model : 'Unknown Model',
+          assetModel: asset ? asset.model : (code.startsWith('NON-INV-') ? 'Non-Inventory Item' : 'Unknown Model'),
           photo: null
         };
       });
@@ -163,67 +193,151 @@ const RentalForm: React.FC<RentalFormProps> = ({
       
       {/* SECTION 1: Catalog Selector */}
       <div style={{ marginBottom: '25px', padding: '16px', border: '1px solid #e2e8f0', borderRadius: '8px', backgroundColor: '#f8fafc' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '600', color: '#334155' }}>
-            1. Select Tools from Catalog ({assets.length} Available)
-          </h3>
-          <input 
-            type="text"
-            className="f-input"
-            style={{ width: '220px', height: '32px', fontSize: '13px', margin: 0 }}
-            placeholder="🔍 Search Code or Model..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        
+        {/* Toggle Switch for Non-Inventory Mode */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #cbd5e1' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>
+            <input 
+              type="checkbox" 
+              checked={isNonInventoryMode}
+              onChange={(e) => setIsNonInventoryMode(e.target.checked)}
+              style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+            />
+            <span>🚨 Item not in list (미등록 물품 대여)</span>
+          </label>
+          {isNonInventoryMode && (
+            <span className="f-badge" style={{ backgroundColor: '#ffedd5', color: '#9a3412', fontSize: '11px', border: '1px solid #fed7aa', fontWeight: 'bold' }}>
+              NON-INVENTORY MODE ACTIVE
+            </span>
+          )}
         </div>
 
-        <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #cbd5e1', borderRadius: '6px', backgroundColor: '#ffffff' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-            <thead style={{ position: 'sticky', top: 0, backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', zIndex: 1 }}>
-              <tr>
-                <th style={{ width: '40px', padding: '8px', textAlign: 'center' }}>Select</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Asset Code</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Brand</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Model</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredAssets.length > 0 ? (
-                filteredAssets.map(asset => {
-                  const isChecked = cart.some(item => item.assetCode === asset.assetCode);
-                  return (
-                    <tr 
-                      key={asset.assetCode} 
-                      style={{ 
-                        borderBottom: '1px solid #e2e8f0', 
-                        backgroundColor: isChecked ? '#eff6ff' : 'transparent',
-                        transition: 'background-color 0.15s ease'
-                      }}
-                    >
-                      <td style={{ padding: '8px', textAlign: 'center' }}>
-                        <input 
-                          type="checkbox" 
-                          checked={isChecked}
-                          style={{ width: '16px', height: '16px', cursor: 'pointer' }}
-                          onChange={(e) => handleCheckboxChange(asset, e.target.checked)}
-                        />
+        {isNonInventoryMode ? (
+          <div style={{ padding: '12px', backgroundColor: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '6px' }}>
+            <h4 style={{ fontSize: '13px', fontWeight: 'bold', color: '#475569', marginBottom: '10px' }}>
+              ➕ Add Non-Inventory Custom Asset
+            </h4>
+            
+            {/* Guidelines Card */}
+            <div style={{ 
+              backgroundColor: '#eff6ff', 
+              border: '1px solid #bfdbfe', 
+              borderRadius: '6px', 
+              padding: '12px', 
+              marginBottom: '14px', 
+              fontSize: '12px', 
+              color: '#1e3a8a',
+              lineHeight: '1.6'
+            }}>
+              <strong style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: '#1e3a8a' }}>
+                💡 미등록 물품 대여 신청 가이드라인 (Non-Inventory Guidelines)
+              </strong>
+              <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <li><strong>명확한 이름 규격:</strong> 제조사, 모델명 또는 상세 규격을 포함하여 정확하게 작성해주세요. (예: <code>UHD HDMI Cable 10m</code>)</li>
+                <li><strong>자산 타입 분류:</strong> 회수가 필요한 장비/공구는 <code>Durable Tool</code>, 일회성 소모품은 <code>Consumable / Auxiliary</code>를 선택해주세요.</li>
+                <li><strong>상태 증빙 사진 필수:</strong> 장바구니에 담은 후, 아래 <strong>[Selected Items] 목록에서 1:1 실물 사진을 꼭 첨부</strong>해야 신청이 완료됩니다.</li>
+              </ul>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '12px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', color: '#64748b', marginBottom: '4px', fontWeight: '500' }}>Custom Item Name</label>
+                <input 
+                  type="text"
+                  placeholder="e.g. UHD HDMI Cable 10m"
+                  className="f-input"
+                  style={{ width: '100%', margin: 0, height: '36px', fontSize: '13px' }}
+                  value={customItemName}
+                  onChange={(e) => setCustomItemName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', color: '#64748b', marginBottom: '4px', fontWeight: '500' }}>Asset Type</label>
+                <select
+                  className="f-input"
+                  style={{ width: '100%', margin: 0, height: '36px', fontSize: '13px', padding: '4px 8px', backgroundColor: '#ffffff' }}
+                  value={customAssetType}
+                  onChange={(e) => setCustomAssetType(e.target.value)}
+                >
+                  <option value="Durable Tool">Durable Tool (일반 공구/장비)</option>
+                  <option value="Consumable / Auxiliary">Consumable / Auxiliary (소모품/보조품)</option>
+                </select>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="f-button"
+              style={{ width: '100%', height: '36px', backgroundColor: '#5B5FC7', color: 'white', border: 'none', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer' }}
+              onClick={handleAddCustomItem}
+            >
+              ➕ Add Custom Item to Cart
+            </button>
+          </div>
+        ) : (
+          <>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: '600', color: '#334155' }}>
+                1. Select Tools from Catalog ({assets.length} Available)
+              </h3>
+              <input 
+                type="text"
+                className="f-input"
+                style={{ width: '220px', height: '32px', fontSize: '13px', margin: 0 }}
+                placeholder="🔍 Search Code or Model..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #cbd5e1', borderRadius: '6px', backgroundColor: '#ffffff' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                <thead style={{ position: 'sticky', top: 0, backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', zIndex: 1 }}>
+                  <tr>
+                    <th style={{ width: '40px', padding: '8px', textAlign: 'center' }}>Select</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>Asset Code</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>Brand</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>Model</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredAssets.length > 0 ? (
+                    filteredAssets.map(asset => {
+                      const isChecked = cart.some(item => item.assetCode === asset.assetCode);
+                      return (
+                        <tr 
+                          key={asset.assetCode} 
+                          style={{ 
+                            borderBottom: '1px solid #e2e8f0', 
+                            backgroundColor: isChecked ? '#eff6ff' : 'transparent',
+                            transition: 'background-color 0.15s ease'
+                          }}
+                        >
+                          <td style={{ padding: '8px', textAlign: 'center' }}>
+                            <input 
+                              type="checkbox" 
+                              checked={isChecked}
+                              style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                              onChange={(e) => handleCheckboxChange(asset, e.target.checked)}
+                            />
+                          </td>
+                          <td style={{ padding: '8px', fontWeight: '600' }}>{asset.assetCode}</td>
+                          <td style={{ padding: '8px' }}>{asset.brand || 'N/A'}</td>
+                          <td style={{ padding: '8px', color: '#475569' }}>{asset.model}</td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan={4} style={{ padding: '16px', textAlign: 'center', color: '#64748b' }}>
+                        No matching available assets found.
                       </td>
-                      <td style={{ padding: '8px', fontWeight: '600' }}>{asset.assetCode}</td>
-                      <td style={{ padding: '8px' }}>{asset.brand || 'N/A'}</td>
-                      <td style={{ padding: '8px', color: '#475569' }}>{asset.model}</td>
                     </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={4} style={{ padding: '16px', textAlign: 'center', color: '#64748b' }}>
-                    No matching available assets found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </div>
 
       {/* SECTION 2: Dynamic Cart Table (Photo Upload) */}
@@ -236,15 +350,23 @@ const RentalForm: React.FC<RentalFormProps> = ({
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #cbd5e1' }}>
                 <tr>
-                  <th style={{ padding: '10px', textAlign: 'left', width: '120px' }}>Asset Code</th>
+                  <th style={{ padding: '10px', textAlign: 'left', width: '140px' }}>Asset Code</th>
                   <th style={{ padding: '10px', textAlign: 'left' }}>Model</th>
                   <th style={{ padding: '10px', textAlign: 'left', width: '300px' }}>Condition Photo (1:1 Required)</th>
+                  <th style={{ padding: '10px', textAlign: 'center', width: '80px' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {cart.map(item => (
                   <tr key={item.assetCode} style={{ borderBottom: '1px solid #cbd5e1' }}>
-                    <td style={{ padding: '10px', fontWeight: '600' }}>{item.assetCode}</td>
+                    <td style={{ padding: '10px', fontWeight: '600' }}>
+                      {item.assetCode}
+                      {item.assetCode.startsWith('NON-INV-') && (
+                        <div style={{ fontSize: '10px', color: '#b45309', background: '#fef3c7', padding: '2px 6px', borderRadius: '3px', display: 'inline-block', marginTop: '4px', fontWeight: 'bold' }}>
+                          Non-Inventory
+                        </div>
+                      )}
+                    </td>
                     <td style={{ padding: '10px', color: '#475569' }}>{item.assetModel}</td>
                     <td style={{ padding: '10px' }}>
                       <input 
@@ -258,6 +380,15 @@ const RentalForm: React.FC<RentalFormProps> = ({
                           ✓ Attached: {item.photo.name}
                         </div>
                       )}
+                    </td>
+                    <td style={{ padding: '10px', textAlign: 'center' }}>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFromCart(item.assetCode)}
+                        style={{ background: 'transparent', border: 'none', color: '#ef4444', fontSize: '12px', cursor: 'pointer', fontWeight: '600' }}
+                      >
+                        Remove
+                      </button>
                     </td>
                   </tr>
                 ))}

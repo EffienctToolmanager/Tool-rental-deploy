@@ -301,8 +301,22 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                 <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
                   {items.map(item => (
                     <li key={item.assetCode} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px dashed #cbd5e1' }}>
-                      <span style={{ fontSize: '13px', fontWeight: '500' }}>
-                        {item.assetCode} <span style={{ color: '#64748b', fontWeight: 'normal' }}>- {(item as any).model || 'Unknown Model'}</span>
+                      <span style={{ fontSize: '13px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        {item.assetCode}
+                        {item.assetCode.startsWith('NON-INV-') && (
+                          <span style={{ 
+                            fontSize: '10px', 
+                            backgroundColor: '#ffedd5', 
+                            color: '#9a3412', 
+                            border: '1px solid #fed7aa', 
+                            padding: '2px 6px', 
+                            borderRadius: '3px',
+                            fontWeight: 'bold'
+                          }}>
+                            NON-INVENTORY
+                          </span>
+                        )}
+                        <span style={{ color: '#64748b', fontWeight: 'normal' }}>- {(item as any).model || 'Unknown Model'}</span>
                       </span>
                       <div style={{ display: 'flex', gap: '4px' }}>
                         <button 
@@ -405,7 +419,14 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                   <tbody>
                     {assetsToReturn.map(item => (
                       <tr key={item.assetCode} style={{ borderBottom: '1px solid #cbd5e1' }}>
-                        <td style={{ padding: '10px', fontWeight: '600' }}>{item.assetCode}</td>
+                        <td style={{ padding: '10px', fontWeight: '600' }}>
+                          {item.assetCode}
+                          {item.assetCode.startsWith('NON-INV-') && (
+                            <div style={{ fontSize: '10px', color: '#b45309', background: '#fef3c7', padding: '2px 6px', borderRadius: '3px', display: 'inline-block', marginTop: '4px', fontWeight: 'bold' }}>
+                              Non-Inventory
+                            </div>
+                          )}
+                        </td>
                         <td style={{ padding: '10px', color: '#475569' }}>{item.model}</td>
                         <td style={{ padding: '10px' }}>
                           <input 
