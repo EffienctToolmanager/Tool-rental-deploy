@@ -20,18 +20,35 @@ def main():
         wb = excel.Workbooks.Open(master_path)
         print_progress("[+] Quote Master opened successfully.")
         
-        # 1. Update paths in existing queries dynamically to preserve encoding
-        print_progress("[+] Adjusting connection and query source paths dynamically...")
-        old_workspace_path = r"C:\Users\cfpcl\OneDrive\Desktop\AI_OS_HQ\02_Workspace"
-        old_workspace_path_lower = r"c:\Users\cfpcl\OneDrive\Desktop\AI_OS_HQ\02_Workspace"
+        # 1. Re-write Power Queries with robust filters and composite join keys to avoid duplicates
+        print_progress("[+] Overwriting Power Queries with robust JPY/KRW and Qty > 0 filters...")
         
-        for i in range(1, wb.Queries.Count + 1):
-            q = wb.Queries.Item(i)
-            formula = q.Formula
-            new_formula = formula.replace(old_workspace_path, FILES_DIR).replace(old_workspace_path_lower, FILES_DIR)
-            if new_formula != formula:
-                q.Formula = new_formula
-                print_progress(f"[+] Updated Query: '{q.Name}' source path.")
+        q_cost = wb.Queries.Item("HQ_Cost_DB")
+        q_cost.Formula = (
+            'let\n'
+            f'    Source = Excel.Workbook(File.Contents("{os.path.join(FILES_DIR, "GEV_HQ_Cost_Book.xlsx")}"), null, true),\n'
+            '    HQ_Cost_DB_Sheet = Source{[Item="HQ_Cost_DB",Kind="Sheet"]}[Data],\n'
+            '    #"Promoted Headers" = Table.PromoteHeaders(HQ_Cost_DB_Sheet, [PromoteAllScalars=true])\n'
+            'in\n'
+            '    #"Promoted Headers"'
+        )
+        print_progress("[+] Updated HQ_Cost_DB query formula.")
+        
+        q_order = wb.Queries.Item("Order_Sheet (2)")
+        q_order.Formula = (
+            'let\n'
+            f'    Source = Excel.Workbook(File.Contents("{os.path.join(FILES_DIR, "GEV_Order_Template.xlsx")}"), null, true),\n'
+            '    Order_Sheet_Sheet = Source{[Item="Order_Sheet",Kind="Sheet"]}[Data],\n'
+            '    #"Removed Top Rows" = Table.Skip(Order_Sheet_Sheet, 5),\n'
+            '    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Top Rows", [PromoteAllScalars=true]),\n'
+            '    #"Filtered Empty Rows" = Table.SelectRows(#"Promoted Headers", each ([#"파트번호 (Part Number)"] <> null) and ([#"수량 (Qty)"] <> null) and ([#"수량 (Qty)"] <> 0) and ([#"수량 (Qty)"] <> "")),\n'
+            '    #"Merged Queries" = Table.NestedJoin(#"Filtered Empty Rows", {"파트번호 (Part Number)", "파트명 (Part Name)"}, HQ_Cost_DB, {"파트번호 (Part Number)", "파트명 (Part Name)"}, "HQ_Cost_DB", JoinKind.LeftOuter),\n'
+            '    #"Expanded HQ_Cost_DB" = Table.ExpandTableColumn(#"Merged Queries", "HQ_Cost_DB", {"본사원가 (HQ Cost JPY)"}, {"본사원가 (HQ Cost JPY)"}),\n'
+            '    #"Renamed Columns" = Table.RenameColumns(#"Expanded HQ_Cost_DB", {{"모델명 (Model)", "모델명"}, {"파트번호 (Part Number)", "파트번호"}, {"파트명 (Part Name)", "파트명"}, {"수량 (Qty)", "수량"}, {"표준단가 (List Price)", "대리점매입가"}, {"본사원가 (HQ Cost JPY)", "본사엔화원가"}})\n'
+            'in\n'
+            '    #"Renamed Columns"'
+        )
+        print_progress("[+] Updated Order_Sheet (2) query formula with composite keys and Qty > 0 filter.")
                 
         # 2. Re-create the ListObject table in Summary_Front at A7
         ws_front = wb.Sheets.Item("Summary_Front")
