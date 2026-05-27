@@ -1,47 +1,48 @@
-# GEV Auto-Admin Document Portal Configuration Blueprint
+# GEV 자동 행정 문서 발급 포탈 구축 가이드 (Blueprint)
 
-This document contains the exact technical configurations, step-by-step actions, and the premium responsive HTML template required to build the **Zero-Maintenance Interactive Document Portal** in Microsoft Power Automate.
+본 가이드는 Microsoft Power Automate를 사용하여 **관리 공수가 전혀 발생하지 않는 대화식 행정 서류 자동 발급 시스템(Zero-Maintenance Interactive Document Portal)**을 구축하기 위한 구체적인 구성 명세서, 단계별 액션 설정 및 이메일 본문용 프리미엄 반응형 HTML 코드 원본입니다.
 
 ---
 
-## 🏗️ End-to-End Power Automate Architecture
+## 🏗️ End-to-End Power Automate 전체 설계도
 
 ```
-[Flow A: Discovery Loop (목록 제공)]
-Trigger: Outlook - 새 이메일이 도착할 때 (V3)
-  └─ Subject filter: "#자료요청" or "#행정서류"
-Action 1: OneDrive for Business - 폴더 내 파일 나열 (List files in folder)
-  └─ Folder path: "/admin_shared_docs"
-Action 2: Data Operations - Select (데이터 가공)
-  └─ From: Outputs of Action 1
-  └─ Map: 
+[흐름 A: 목록 제공 루프 (Discovery Loop)]
+트리거: Outlook - 새 이메일이 도착할 때 (V3)
+  └─ 제목 필터: "#자료요청" 또는 "#행정서류"
+액션 1: OneDrive for Business - 폴더 내 파일 나열 (List files in folder)
+  └─ 폴더 경로: "/admin_shared_docs"
+액션 2: 데이터 작업 - Select (데이터 매핑 및 HTML 링크화)
+  └─ From: 액션 1의 출력값 (body/value)
+  └─ Map (키-값 매핑):
        - Name: item()?['Name']
        - MailToLink: concat('mailto:taegyu.kim@gevernova.com?subject=[자료요청] ', item()?['Name'], '&body=아래 전송 버튼을 누르시면 자료가 즉시 메일 첨부로 자동 발송됩니다.')
-Action 3: Data Operations - Compose (HTML 빌드)
-  └─ Inputs: [Premium HTML Template (below)]
-Action 4: Outlook - 회신 메일 보내기 (V2)
-  └─ Body: Output of Action 3 (IsHTML = True)
+액션 3: 데이터 작업 - 작성 (Compose - HTML 빌드)
+  └─ 입력값: [아래 제공된 프리미엄 HTML 템플릿 코드 붙여넣기]
+액션 4: Outlook - 회신 메일 보내기 (V2)
+  └─ 본문: 액션 3의 결과물 (Compose HTML)
+  └─ HTML 여부: 예 (IsHTML = True)
 
 ---------------------------------------------------------
 
-[Flow B: Delivery Loop (서류 발급)]
-Trigger: Outlook - 새 이메일이 도착할 때 (V3)
-  └─ Subject filter: "[자료요청]"
-Action 1: Data Operations - Compose (파일명 추출)
-  └─ Inputs (Expression): trim(replace(triggerBody()?['subject'], '[자료요청]', ''))
-Action 2: OneDrive for Business - 파일 콘텐츠 가져오기 (Get file content using path)
-  └─ File Path: concat('/admin_shared_docs/', outputs('Compose_파일명_추출'))
-Action 3: Outlook - 회신 메일 보내기 (V2)
-  └─ Body: "요청하신 서류를 첨부파일로 발송해 드립니다."
-  └─ Attachments Name: outputs('Compose_파일명_추출')
-  └─ Attachments Content: outputs('Get_file_content')
+[흐름 B: 서류 전달 루프 (Delivery Loop)]
+트리거: Outlook - 새 이메일이 도착할 때 (V3)
+  └─ 제목 필터: "[자료요청]"
+액션 1: 데이터 작업 - 작성 (파일명 안전 추출)
+  └─ 입력값 (식/Expression): trim(replace(triggerBody()?['subject'], '[자료요청]', ''))
+액션 2: OneDrive for Business - 경로를 사용하여 파일 콘텐츠 가져오기 (Get file content)
+  └─ 파일 경로: concat('/admin_shared_docs/', outputs('작성_파일명_안전_추출'))
+액션 3: Outlook - 회신 메일 보내기 (V2)
+  └─ 본문: "요청하신 서류를 첨부파일로 발송해 드립니다."
+  └─ 첨부파일 이름: outputs('작성_파일명_안전_추출')
+  └─ 첨부파일 콘텐츠: outputs('파일_콘텐츠_가져오기')
 ```
 
 ---
 
-## 🎨 Premium HTML Interactive Email Template
+## 🎨 프리미엄 HTML 대화식 이메일 템플릿
 
-Copy and paste the following HTML block directly into the **Compose HTML** action in Power Automate:
+Power Automate의 **HTML 빌드 (Compose)** 액션에 아래의 한글화된 고품격 HTML 코드를 그대로 붙여넣어 사용하시면 됩니다.
 
 ```html
 <!DOCTYPE html>
@@ -204,26 +205,22 @@ Copy and paste the following HTML block directly into the **Compose HTML** actio
 
 ---
 
-## 🔒 Security & Defense Enforcements
+## 🔒 이중 보안 필터 적용 구성 (Security)
 
-### Directory Traversal Prevention
-To guarantee that users cannot request files outside the directory, place a **Condition** check before retrieving the file:
-```text
-If Expression: contains(outputs('Compose_파일명_추출'), '/') 
-            or contains(outputs('Compose_파일명_추출'), '\') 
-            or contains(outputs('Compose_파일명_추출'), '..')
-Then: Terminate Flow (Abused request detected)
-```
+### 1. 상위 경로 이탈 방지 (Directory Traversal 방어)
+사용자가 제목을 해킹하여 비공유 폴더의 중요 문서를 취득하려는 행위를 감지 및 차단합니다.
+* **차단 조건식(Condition)**:
+  `outputs('작성_파일명_안전_추출')` 값에 `/`, `\`, 또는 `..` 문자가 포함되어 있을 경우 ➜ **흐름 즉시 종료(Terminate Flow)**.
 
-### Supported Extensions Whitelisting
-Enforce file extensions validation:
-```text
-If Expression: or(
-    endsWith(outputs('Compose_파일명_추출'), '.pdf'),
-    endsWith(outputs('Compose_파일명_추출'), '.jpg'),
-    endsWith(outputs('Compose_파일명_추출'), '.png'),
-    endsWith(outputs('Compose_파일명_추출'), '.xlsx')
-)
-Then: Continue processing
-Else: Terminate Flow (Unsupported file type)
-```
+### 2. 허용 확장자 필터 (Whitelisting)
+의도하지 않은 실행 파일(`.exe`, `.bat` 등)이나 엉뚱한 임시 파일 전송을 방어합니다.
+* **통과 조건식(Condition)**:
+  ```text
+  Or(
+      endsWith(outputs('작성_파일명_안전_추출'), '.pdf'),
+      endsWith(outputs('작성_파일명_안전_추출'), '.jpg'),
+      endsWith(outputs('작성_파일명_안전_추출'), '.png'),
+      endsWith(outputs('작성_파일명_안전_추출'), '.xlsx')
+  )
+  ```
+  위 조건식에 참(True)일 때만 발송 단계를 진행하고, 그렇지 않으면 이메일 반려 처리합니다.
