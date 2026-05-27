@@ -30,9 +30,10 @@
    * 대시보드 3번 탭 내부에 실시간 타임라인 UI 및 **3호기 AI (DeepSeek-R1) 관부가세 감사 모듈** 결합 완료.
    * 예시 송장(`DHL-`, `UNIPASS-`) 입력 시 실시간 세부 현황과 관세 면제 검토 및 세관 보류 소명 사유서 자동 매핑 등의 AI 해법 팝업 지원.
 
-6. **GEV Purchasing System 엑셀 환율 재설계 ([generate_excel_prototypes.py](file:///C:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/05_Scripts/generate_excel_prototypes.py))**
-   * **원가 DB ([GEV_HQ_Cost_Book.xlsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/GEV_HQ_Cost_Book.xlsx))**: `I1:K2` 영역에 골드 환율 설정 칸 구축 및 1,000행 전체의 원화 가격을 dynamic `=E5*$K$1` 수식으로 전면 재설계.
-   * **구매 분석기 ([GEV_Quote_Master_Mockup.xlsx](file:///c:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/02_Workspace/GEV_Quote_Master_Mockup.xlsx))**: `L1:N2` 골드 환율 설정 칸 배치 및 매출액, 마진, 이익률 및 하단 합계 행 전체를 Excel 수식으로 연계하여 환율 셀 한 곳만 바꾸면 전체 장부가 100% 자동 재계산 처리.
+6. **GEV Purchasing System 엑셀 환율 재설계 및 GEV_Quote_Master.xlsm 완벽 복구 ([complete_restoration_and_automation.py](file:///C:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/05_Scripts/complete_restoration_and_automation.py))**
+   * **원가 DB ([GEV_HQ_Cost_Book.xlsx](file:///C:/Users/cfpcl/OneDrive/Desktop/GEV_Purchasing_System/GEV_HQ_Cost_Book.xlsx))**: `I1:K2` 영역에 골드 환율 설정 칸 구축 및 1,000행 전체의 원화 가격을 dynamic `=E5*$K$1` 수식으로 전면 재설계.
+   * **마스터 분석기 ([GEV_Quote_Master.xlsm](file:///C:/Users/cfpcl/OneDrive/Desktop/GEV_Purchasing_System/GEV_Quote_Master.xlsm))**: 쿼리/테이블/슬라이서가 소실되었던 마스터 파일을 최신 AutoRecover 임시 파일로부터 구조적/기능적으로 100% 완벽 복구하였습니다.
+   * **파워 쿼리 및 환율 연동**: `win32com` COM 자동화를 사용해 로컬 OLEDB 파워 쿼리 소스 경로를 dynamic path-replacement 기법으로 갱신하여 인코딩 크래시 없이 `Order_Sheet (2)` 및 `HQ_Cost_DB`를 연결하였으며, `L1:N2` 골드 환율 설정 칸과 동적으로 매핑된 4개 계산 열(`본사원화원가`, `매출액`, `매출이익액`, `이익률 (%)`), 합계 이중선 스타일링, 그리고 실시간 필터링용 **모델명 슬라이서**까지 무결하게 재건 완료했습니다.
 
 ---
 
