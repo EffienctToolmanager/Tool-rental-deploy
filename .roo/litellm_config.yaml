@@ -1,0 +1,46 @@
+model_list:
+  # 1. AI Secretary 3 (Gemma 4 e2b - Local Scanner)
+  - model_name: sec3-model
+    litellm_params:
+      model: ollama/gemma4:e2b
+      api_base: http://192.168.35.203:11434
+      tpm: 100000
+      rpm: 1000
+      temperature: 0.0
+
+  # 2. AI Secretary 2 (Gemma 4 e4b - Local Planner/QA)
+  - model_name: sec2-model
+    litellm_params:
+      model: ollama/gemma4:e4b
+      api_base: http://127.0.0.1:11434
+      tpm: 100000
+      rpm: 1000
+      temperature: 0.0
+
+  # 3. AI Secretary 1 (Nous Hermes 3 Latest - Local Operator)
+  - model_name: sec1-model
+    litellm_params:
+      model: ollama/hermes3:latest
+      api_base: http://127.0.0.1:11434
+      tpm: 100000
+      rpm: 1000
+      temperature: 0.0
+
+  # 4. AI Lead Expert (Google Gemini 2.5 Pro - Cloud Paid)
+  - model_name: lead-model
+    litellm_params:
+      model: gemini/gemini-2.5-pro
+      api_key: "os.environ/GEMINI_API_KEY"
+      temperature: 0.0
+
+  # 5. Hybrid Router (Roo Code Main Entry Point - Bypassing Gemini Spend Cap by Routing to Local Hermes 3)
+  - model_name: hybrid-router
+    litellm_params:
+      model: ollama/hermes3:latest
+      api_base: http://127.0.0.1:11434
+      temperature: 0.0
+
+router_settings:
+  routing_strategy: usage-based-routing-v2
+  enable_fallbacks: true
+
