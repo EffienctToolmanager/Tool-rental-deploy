@@ -1,226 +1,200 @@
-# GEV 자동 행정 문서 발급 포탈 구축 가이드 (Blueprint)
+# GEV 아웃룩 대화형 메일(Adaptive Cards) 미세 단위 실행 가이드
 
-본 가이드는 Microsoft Power Automate를 사용하여 **관리 공수가 전혀 발생하지 않는 대화식 행정 서류 자동 발급 시스템(Zero-Maintenance Interactive Document Portal)**을 구축하기 위한 구체적인 구성 명세서, 단계별 액션 설정 및 이메일 본문용 프리미엄 반응형 HTML 코드 원본입니다.
+본 문서는 외부 브라우저 창이나 링크 클릭 없이, **아웃룩 메일창 내부에서 체크박스로 파일을 선택하고 즉시 제출하여 첨부파일로 돌려받는 순정 엔터프라이즈 시스템**의 미세 단위(Micro-Level) 구축 매뉴얼입니다.
 
----
-
-## 🏗️ End-to-End Power Automate 전체 설계도
-
-```
-[흐름 A: 목록 제공 루프 (Discovery Loop)]
-트리거: Outlook - 새 이메일이 도착할 때 (V3)
-  └─ 제목 필터: "#자료요청" 또는 "#행정서류"
-액션 1: OneDrive for Business - 폴더 내 파일 나열 (List files in folder)
-  └─ 폴더 경로: "/admin_shared_docs"
-액션 2: 데이터 작업 - Select (데이터 매핑 및 HTML 링크화)
-  └─ From: 액션 1의 출력값 (body/value)
-  └─ Map (키-값 매핑):
-       - Name: item()?['Name']
-       - MailToLink: concat('mailto:taegyu.kim@gevernova.com?subject=[자료요청] ', item()?['Name'], '&body=아래 전송 버튼을 누르시면 자료가 즉시 메일 첨부로 자동 발송됩니다.')
-액션 3: 데이터 작업 - 작성 (Compose - HTML 빌드)
-  └─ 입력값: [아래 제공된 프리미엄 HTML 템플릿 코드 붙여넣기]
-액션 4: Outlook - 회신 메일 보내기 (V2)
-  └─ 본문: 액션 3의 결과물 (Compose HTML)
-  └─ HTML 여부: 예 (IsHTML = True)
-
----------------------------------------------------------
-
-[흐름 B: 서류 전달 루프 (Delivery Loop)]
-트리거: Outlook - 새 이메일이 도착할 때 (V3)
-  └─ 제목 필터: "[자료요청]"
-액션 1: 데이터 작업 - 작성 (파일명 안전 추출)
-  └─ 입력값 (식/Expression): trim(replace(triggerBody()?['subject'], '[자료요청]', ''))
-액션 2: OneDrive for Business - 경로를 사용하여 파일 콘텐츠 가져오기 (Get file content)
-  └─ 파일 경로: concat('/admin_shared_docs/', outputs('작성_파일명_안전_추출'))
-액션 3: Outlook - 회신 메일 보내기 (V2)
-  └─ 본문: "요청하신 서류를 첨부파일로 발송해 드립니다."
-  └─ 첨부파일 이름: outputs('작성_파일명_안전_추출')
-  └─ 첨부파일 콘텐츠: outputs('파일_콘텐츠_가져오기')
-```
+M365 Power Automate에서 아래 단계를 1에서 10까지 그대로 따라 하시면 세팅이 완료됩니다.
 
 ---
 
-## 🎨 프리미엄 HTML 대화식 이메일 템플릿
-
-Power Automate의 **HTML 빌드 (Compose)** 액션에 아래의 한글화된 고품격 HTML 코드를 그대로 붙여넣어 사용하시면 됩니다.
-
-```html
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GEV Corporate Document Portal</title>
-    <style>
-        body {
-            font-family: '맑은 고딕', 'Malgun Gothic', Arial, sans-serif;
-            background-color: #F4F6F9;
-            margin: 0;
-            padding: 0;
-            color: #333333;
-        }
-        .container {
-            max-width: 600px;
-            margin: 30px auto;
-            background: #FFFFFF;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            border-top: 6px solid #1F497D;
-            overflow: hidden;
-        }
-        .header {
-            background-color: #1F497D;
-            padding: 25px;
-            text-align: center;
-        }
-        .header h1 {
-            color: #FFFFFF;
-            font-size: 20px;
-            margin: 0;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-        }
-        .header p {
-            color: #D6B656;
-            margin: 5px 0 0 0;
-            font-size: 13px;
-            font-weight: bold;
-        }
-        .content {
-            padding: 30px 25px;
-        }
-        .instruction {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #555555;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-        .file-list {
-            margin: 20px 0;
-        }
-        .file-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 20px;
-            background-color: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            transition: all 0.2s ease;
-        }
-        .file-info {
-            display: flex;
-            align-items: center;
-        }
-        .file-icon {
-            font-size: 24px;
-            margin-right: 12px;
-            color: #1F497D;
-        }
-        .file-name {
-            font-size: 14px;
-            font-weight: bold;
-            color: #2D3748;
-        }
-        .btn-request {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: #1F497D;
-            color: #FFFFFF !important;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: bold;
-            transition: background-color 0.2s ease;
-            text-align: center;
-        }
-        .btn-request:hover {
-            background-color: #D6B656;
-        }
-        .footer {
-            background-color: #F8FAFC;
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid #E2E8F0;
-            font-size: 11px;
-            color: #718096;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>GEV 행정 문서 자동 발급 포탈</h1>
-            <p>GEV_Admin_Auto_Portal v1.0</p>
-        </div>
-        
-        <!-- Content -->
-        <div class="content">
-            <p class="instruction">
-                안녕하세요.<br>
-                현재 공유 가능한 법인 서류 목록입니다.<br>
-                <strong>필요한 서류 옆의 [이메일 발급] 버튼을 눌러 즉시 전송받으세요.</strong>
-            </p>
-            
-            <div class="file-list">
-                <!--이 구간은 Power Automate의 'Apply to each' 루프 또는 HTML Table 생성 액션에 의해 동적 렌더링됩니다-->
-                <div class="file-card">
-                    <div class="file-info">
-                        <span class="file-icon">📄</span>
-                        <span class="file-name">사업자등록증.pdf</span>
-                    </div>
-                    <a href="mailto:taegyu.kim@gevernova.com?subject=[자료요청] 사업자등록증.pdf&body=아래 전송 버튼을 누르시면 자료가 즉시 메일 첨부로 자동 발송됩니다." class="btn-request">이메일 발급</a>
-                </div>
-                
-                <div class="file-card">
-                    <div class="file-info">
-                        <span class="file-icon">📄</span>
-                        <span class="file-name">통장사본.pdf</span>
-                    </div>
-                    <a href="mailto:taegyu.kim@gevernova.com?subject=[자료요청] 통장사본.pdf&body=아래 전송 버튼을 누르시면 자료가 즉시 메일 첨부로 자동 발송됩니다." class="btn-request">이메일 발급</a>
-                </div>
-                
-                <div class="file-card">
-                    <div class="file-info">
-                        <span class="file-icon">📄</span>
-                        <span class="file-name">법인등기부등본.pdf</span>
-                    </div>
-                    <a href="mailto:taegyu.kim@gevernova.com?subject=[자료요청] 법인등기부등본.pdf&body=아래 전송 버튼을 누르시면 자료가 즉시 메일 첨부로 자동 발송됩니다." class="btn-request">이메일 발급</a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Footer -->
-        <div class="footer">
-            본 메일은 GEV AI Auto-Admin 시스템에 의해 실시간 자동 처리되고 있습니다.<br>
-            © 2026 GEV Corp. All rights reserved.
-        </div>
-    </div>
-</body>
-</html>
-```
+## 🏗️ 전체 흐름 요약
+이 시스템은 2개의 독립적인 클라우드 흐름(Flow)이 유기적으로 통신하며 작동합니다.
+1. **[흐름 1: 백엔드 처리기]**: 요청자가 이메일에서 [제출] 버튼을 눌렀을 때 백그라운드에서 실행되어 파일을 꺼내 메일로 쏴주는 API 흐름 (HTTP Request 기반).
+2. **[흐름 2: 포탈 발송기]**: 상대방이 `#자료요청` 메일을 보냈을 때 실시간 OneDrive 파일을 검색하여 이메일 내부 적응형 카드를 렌더링해 1차 발송하는 흐름.
 
 ---
 
-## 🔒 이중 보안 필터 적용 구성 (Security)
+## 🛠️ [PART 1] 흐름 1: 백엔드 처리기 구축 (미세 단계)
 
-### 1. 상위 경로 이탈 방지 (Directory Traversal 방어)
-사용자가 제목을 해킹하여 비공유 폴더의 중요 문서를 취득하려는 행위를 감지 및 차단합니다.
-* **차단 조건식(Condition)**:
-  `outputs('작성_파일명_안전_추출')` 값에 `/`, `\`, 또는 `..` 문자가 포함되어 있을 경우 ➜ **흐름 즉시 종료(Terminate Flow)**.
+요청자가 이메일 내부에서 체크박스를 누르고 [제출]을 클릭했을 때 작동할 API 백엔드를 먼저 만듭니다. (이 흐름의 Endpoint URL이 흐름 2의 카드에 삽입되어야 하기 때문입니다.)
 
-### 2. 허용 확장자 필터 (Whitelisting)
-의도하지 않은 실행 파일(`.exe`, `.bat` 등)이나 엉뚱한 임시 파일 전송을 방어합니다.
-* **통과 조건식(Condition)**:
-  ```text
-  Or(
-      endsWith(outputs('작성_파일명_안전_추출'), '.pdf'),
-      endsWith(outputs('작성_파일명_안전_추출'), '.jpg'),
-      endsWith(outputs('작성_파일명_안전_추출'), '.png'),
-      endsWith(outputs('작성_파일명_안전_추출'), '.xlsx')
-  )
-  ```
-  위 조건식에 참(True)일 때만 발송 단계를 진행하고, 그렇지 않으면 이메일 반려 처리합니다.
+### 1단계: 트리거 생성
+1. **Power Automate 포탈**(`make.powerautomate.com`)에 접속합니다.
+2. `만들기(Create)` ➜ **`인스턴트 클라우드 흐름(Instant cloud flow)`**을 선택합니다.
+3. 흐름 이름을 `GEV_AutoAdmin_Backend`로 입력하고, 트리거 목록에서 **`HTTP 요청이 수신되는 경우(When an HTTP request is received)`**를 선택한 뒤 `만들기`를 클릭합니다.
+4. **요청 본문 JSON 스키마(Request Body JSON Schema)** 항목에 아래 JSON을 그대로 붙여넣습니다:
+   ```json
+   {
+     "type": "object",
+     "properties": {
+       "requested_files": { "type": "string" },
+       "sender": { "type": "string" }
+     },
+     "required": ["requested_files", "sender"]
+   }
+   ```
+5. **[중요]** 흐름을 임시 저장하면 `HTTP POST URL`이 자동 생성됩니다. 이 URL을 메모장 등에 복사해 둡니다.
+
+### 2단계: 파일 처리 조건문(Condition) 작성
+1. `새 단계(New step)`를 눌러 **`제어(Control) - 적용 대상 각각(Apply to each)`** 액션을 추가합니다.
+2. **이전 단계에서 출력값 선택** 란에 식(Expression)을 삽입합니다:
+   * 식: `split(triggerBody()?['requested_files'], ',')`
+   * *(설명: 요청자가 다중 선택한 파일명 문자열 "사업자등록증.pdf,통장사본.pdf"을 쉼표 기준으로 쪼개어 루프를 돕니다.)*
+
+### 3단계: 루프 내부의 파일 콘텐츠 획득 및 배열 변수 추가
+1. 흐름의 맨 처음(HTTP 트리거 바로 아래)에 **`변수 초기화(Initialize variable)`** 액션을 추가합니다.
+   * 이름: `AttachmentList`
+   * 형식: `배열(Array)`
+2. `Apply to each` 루프 내부에 **`OneDrive for Business - 경로를 사용하여 파일 콘텐츠 가져오기(Get file content using path)`** 액션을 추가합니다.
+   * 파일 경로: `/admin_shared_docs/@{items('Apply_to_each')}`
+3. 루프 내부 파일 콘텐츠 가져오기 아래에 **`배열 변수에 추가(Append to array variable)`** 액션을 추가합니다.
+   * 이름: `AttachmentList`
+   * 값:
+     ```json
+     {
+       "Name": "@{items('Apply_to_each')}",
+       "ContentBytes": @{body('경로를_사용하여_파일_콘텐츠_가져오기')}
+     }
+     ```
+
+### 4단계: 2차 메일 직접 첨부 발송 및 HTTP 응답 처리
+1. 루프(`Apply to each`)가 완전히 끝난 바깥 아래에 **`Office 365 Outlook - 이메일 보내기(V2)`** 액션을 추가합니다.
+   * 받는 사람: 트리거의 `sender` 동적 값 (`@{triggerBody()?['sender']}`)
+   * 제목: `[발급완료] GEV 요청하신 행정 서류가 첨부되었습니다.`
+   * 본문: `"요청하신 서류를 첨부파일로 안전하게 발송해 드립니다. 메일 창을 이탈하지 않고 즉시 받아보실 수 있습니다."`
+   * 우측 하단 **`고급 옵션 표시(Show advanced options)`** 클릭 ➜ **`첨부파일(Attachments)`** 입력 칸 우측의 `배열 전체 전환` 아이콘(T자 모양 옆 아이콘)을 클릭한 뒤 변수 `AttachmentList`를 통째로 매핑합니다.
+2. 메일 발송 액션 바로 아래에 **`응답(Response)`** 액션을 추가하여 아웃룩에 성공 메시지를 반환합니다.
+   * 상태 코드: `200`
+   * 헤더:
+     * `CARD-UPDATE-IN-BODY`: `true`
+   * 본문 (제출 완료 후 메일 창의 디자인이 바뀔 최종 화면을 의미함):
+     ```json
+     {
+       "type": "AdaptiveCard",
+       "version": "1.4",
+       "body": [
+         {
+           "type": "TextBlock",
+           "text": "서류 발급 성공!",
+           "weight": "Bolder",
+           "color": "Good",
+           "size": "Medium"
+         },
+         {
+           "type": "TextBlock",
+           "text": "요청하신 서류가 회원님의 메일함으로 즉시 첨부되어 안전하게 발송되었습니다.",
+           "wrap": true
+         }
+       ]
+     }
+     ```
+3. 흐름을 **저장**합니다.
+
+---
+
+## 🛠️ [PART 2] 흐름 2: 포탈 발송기 구축 (미세 단계)
+
+상대방의 트리거 메일을 수신하여 실시간 폴더 리스트가 반영된 대화형 메일을 작성해 보내는 흐름입니다.
+
+### 5단계: 이메일 감지 트리거 설정
+1. `만들기(Create)` ➜ **`자동화된 클라우드 흐름(Automated cloud flow)`**을 선택합니다.
+2. 흐름 이름을 `GEV_AutoAdmin_Portal_Dispatcher`로 지정합니다.
+3. 트리거로 **`Office 365 Outlook - 새 이메일이 도착할 때(V3)`**를 선택하고 `만들기`를 누릅니다.
+4. 트리거 설정에서:
+   * 폴더: `Inbox`
+   * 제목 필터: `#자료요청`
+   * 중요도: `임의`
+
+### 6단계: OneDrive 실시간 파일 검색
+1. 트리거 바로 아래에 **`OneDrive for Business - 폴더 내 파일 나열(List files in folder)`** 액션을 추가합니다.
+   * 폴더: `/admin_shared_docs`
+
+### 7단계: 적응형 카드용 선택지 JSON 동적 조립
+1. 아래에 **`데이터 작업 - Select`** 액션을 추가합니다.
+   * From: `폴더 내 파일 나열`의 출력값 (`value`)
+   * Map (텍스트 모드로 전환 후 작성):
+     ```json
+     {
+       "title": "@{item()?['Name']}",
+       "value": "@{item()?['Name']}"
+     }
+     ```
+2. 바로 아래에 **`데이터 작업 - 작성(Compose)`** 액션을 추가하여 전체 적응형 카드(Adaptive Card)의 HTML 껍데기를 정의합니다.
+   * **[매우 중요]** 아웃룩 대화형 메일을 발송할 때는 메일 본문의 `<script type="application/adaptivecard+json">` 태그 안에 적응형 카드가 삽입되어야 작동합니다.
+   * **입력값(Input)**에 다음 코드를 입력하되, `{HTTP_POST_URL}` 부분은 **1단계에서 메모장에 적어둔 흐름 1의 HTTP POST URL**로 교체합니다:
+     ```html
+     <html>
+     <head>
+       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+     </head>
+     <body>
+       <script type="application/adaptivecard+json">
+       {
+         "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+         "type": "AdaptiveCard",
+         "version": "1.4",
+         "body": [
+           {
+             "type": "TextBlock",
+             "text": "GEV 행정 서류 발급 포탈",
+             "weight": "Bolder",
+             "size": "Large",
+             "color": "Accent"
+           },
+           {
+             "type": "TextBlock",
+             "text": "아웃룩 메일 내에서 필요한 서류를 체크하신 후 하단의 제출 버튼을 누르시면, 본 메일로 즉시 서류 파일들이 첨부되어 회신됩니다. (외부 브라우저나 웹페이지가 열리지 않습니다.)",
+             "wrap": true,
+             "isSubtle": true
+           },
+           {
+             "type": "Input.ChoiceSet",
+             "id": "SelectedDocs",
+             "isMultiSelect": true,
+             "value": "",
+             "choices": @{body('Select')},
+             "style": "expanded"
+           }
+         ],
+         "actions": [
+           {
+             "type": "Action.Http",
+             "title": "선택 서류 안전 발급",
+             "url": "{HTTP_POST_URL}",
+             "method": "POST",
+             "body": "{\"requested_files\": \"{{SelectedDocs.value}}\", \"sender\": \"@{triggerBody()?['from']}\"}",
+             "headers": [
+               {
+                 "name": "Authorization",
+                 "value": ""
+               }
+             ]
+           }
+         ]
+       }
+       </script>
+     </body>
+     </html>
+     ```
+
+### 8단계: 아웃룩 1차 회신 발송
+1. **`Office 365 Outlook - 회신 메일 보내기(V2)`** 액션을 추가합니다.
+   * 메시지 ID: 트리거의 `메시지 ID(Message Id)` 동적 값 매핑
+   * 본문: **7단계의 `작성(Compose)` 출력값**을 통째로 삽입합니다.
+   * 고급 옵션 표시 ➜ **`HTML 여부`**를 **`예(Yes)`**로 강제 지정합니다.
+2. 흐름을 **저장**하고 활성화합니다.
+
+---
+
+## 🔒 [PART 3] 사내 테넌트 사용 승인 처리 (최종 등록)
+
+보안 정책상, Outlook 내부에서 백그라운드 HTTP API를 직접 제어하는 Actionable Message를 수신하기 위해 조직 내부의 승인을 거쳐야 합니다. (외부 테스트를 하기 위한 전제조건)
+
+### 9단계: 아웃룩 개발자 포탈 등록
+1. [Actionable Email Developer Dashboard](https://outlook.office.com/connectors/publish) 에 접속합니다.
+2. **`New Provider`**를 생성합니다.
+   * Friendly Name: `GEV Auto Admin Portal`
+   * Provider ID: 자동 생성됨
+   * Sender Email addresses from which actionable emails will originate: `taegyu.kim@gevernova.com` (보내는 이 메일 주소)
+   * Target URL: **1단계에서 획득한 백엔드 흐름 1의 HTTP POST URL** 입력
+   * Scope of submission: **`Organization`** (사내 전체 조직 배포용) 또는 **`Test Users`** (우선 김대표님 단독 테스트용)를 선택합니다.
+3. 등록 완료 후 **Save**를 하면 즉시 보안 토큰 및 연동 허가가 떨어지며 즉시 전체 기능이 가동됩니다.
