@@ -1,0 +1,27 @@
+{
+  "lastUpdated": "1780300980.911422",
+  "reservations": [
+    {
+      "id": "RES-001",
+      "roomId": "1",
+      "title": "Design Guideline Review",
+      "organizer": "KimPro",
+      "dept": "Design",
+      "date": "2026-06-01",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "isBlocked": false
+    },
+    {
+      "id": "RES-SIM-A_MANAGER",
+      "roomId": "1",
+      "title": "Concurrent Meeting: A_Manager",
+      "organizer": "A_Manager",
+      "dept": "Development",
+      "date": "2026-06-01",
+      "startTime": "14:00",
+      "endTime": "15:00",
+      "isBlocked": false
+    }
+  ]
+}

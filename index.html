@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GEV Workspace | Shared Calendar</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* --- GEV SYSTEM STANDARD: SLIM & LIGHTWEIGHT --- */
+    :root {
+      --primary: #054141; /* GEV Evergreen */
+      --primary-hover: #0a5c5c;
+      --primary-light: #e6f2f2;
+      --bg-white: #ffffff;
+      --bg-light: #f8fafc;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --emerald: #059669;
+      --rose: #e11d48;
+      
+      --font-main: 'Outfit', sans-serif;
+      --font-mono: 'Roboto Mono', monospace;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 3rem;
+    }
+    
+    /* --- MINIMALIST HEADER --- */
+    header {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .brand-logo {
+      background: var(--primary);
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: var(--bg-white);
+      font-size: 1.1rem;
+    }
+    
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+    
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    
+    .sync-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--emerald);
+      background: #ecfdf5;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      border: 1px solid #d1fae5;
+    }
+    
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--emerald);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(5, 150, 105, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+    }
+    
+    /* --- MAIN CONTENT LAYOUT --- */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 2rem;
+    }
+    
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* --- CARD STYLE --- */
+    .card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* --- CALENDAR COMPONENT --- */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    
+    .calendar-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    
+    .calendar-btn-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .btn-icon {
+      background: var(--bg-light);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    
+    .btn-icon:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    
+    .weekday-header {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 0.5rem 0;
+      letter-spacing: 0.05em;
+    }
+    
+    .calendar-day {
+      background: var(--bg-white);
+      border: 1px solid var(--border-color);
+      min-height: 80px;
+      border-radius: 6px;
+      padding: 0.35rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s;
+    }
+    
+    .calendar-day:hover {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+    
+    .calendar-day.empty {
+      background: var(--bg-light);
+      cursor: default;
+      border-color: transparent;
+    }
+    
+    .calendar-day.selected {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+      box-shadow: inset 0 0 0 1px var(--primary);
+    }
+    
+    .day-num {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    
+    .calendar-day.today .day-num {
+      background: var(--primary);
+      color: var(--bg-white);
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .day-indicator-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-top: 0.35rem;
+    }
+    
+    .day-pill {
+      font-size: 0.65rem;
+      padding: 1px 3px;
+      border-radius: 3px;
+      background: #e2e8f0;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+      border-left: 3px solid var(--primary);
+    }
+    
+    /* --- DETAIL LIST COMPONENT --- */
+    .detail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+    
+    .empty-state {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 3rem 1.5rem;
+      font-size: 0.95rem;
+    }
+    
+    .res-card {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .res-card:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      transform: translateY(-1px);
+    }
+    
+    .res-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+    
+    .res-time {
+      font-family: var(--font-mono);
+      color: var(--primary);
+      font-weight: 700;
+    }
+    
+    .res-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.25rem;
+    }
+    
+    .res-user {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    
+    /* --- BUTTONS --- */
+    .btn {
+      background: var(--primary);
+      color: var(--bg-white);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+    
+    .btn-secondary {
+      background: var(--bg-light);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+    
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+    
+    .btn-danger {
+      background: var(--rose);
+      color: var(--bg-white);
+    }
+    
+    .btn-danger:hover {
+      background: #be123c;
+    }
+    
+    /* --- MODAL DIALOG --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .modal {
+      background: var(--bg-white);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 450px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+      transform: translateY(20px);
+      transition: transform 0.25s;
+    }
+    
+    .modal-overlay.active .modal {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .form-input:focus {
+      border-color: var(--primary);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MINIMALIST HEADER -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo"><i class="fa-solid fa-calendar-check"></i></div>
+      <div>
+        <h1 class="brand-title">GEV Shared Calendar</h1>
+        <span class="brand-subtitle">Corporate Assets Hub</span>
+      </div>
+    </div>
+    
+    <div class="sync-badge">
+      <div class="sync-dot"></div>
+      <span>Sync Status: Live</span>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="container">
+    
+    <!-- LEFT COLUMN: CALENDAR CARD -->
+    <section class="card">
+      <div class="calendar-header">
+        <h2 id="calendar-month-year" class="calendar-title">June 2026</h2>
+        <div class="calendar-btn-group">
+          <button class="btn-icon" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="btn-icon" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+      
+      <div class="calendar-grid">
+        <div class="weekday-header">Sun</div>
+        <div class="weekday-header">Mon</div>
+        <div class="weekday-header">Tue</div>
+        <div class="weekday-header">Wed</div>
+        <div class="weekday-header">Thu</div>
+        <div class="weekday-header">Fri</div>
+        <div class="weekday-header">Sat</div>
+      </div>
+      <div id="calendar-days-container" class="calendar-grid">
+        <!-- Calendar days dynamically rendered here -->
+      </div>
+    </section>
+    
+    <!-- RIGHT COLUMN: SELECTED DATE LIST CARD -->
+    <section class="card">
+      <div class="card-title">
+        <span id="selected-date-label">June 1, 2026</span>
+        <button class="btn" onclick="openBookingModal()"><i class="fa-solid fa-plus"></i> Add Event</button>
+      </div>
+      
+      <div id="selected-date-list" class="detail-list">
+        <!-- Day events rendered here -->
+      </div>
+    </section>
+    
+  </main>
+
+  <!-- BOOKING MODAL (Universal Add/Edit Dialog) -->
+  <div id="booking-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-heading" class="modal-title">New Booking</h3>
+        <button class="btn-icon" onclick="closeBookingModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      
+      <form id="booking-form" onsubmit="handleFormSubmit(event)">
+        <input type="hidden" id="edit-id">
+        
+        <div class="form-group">
+          <label class="form-label" for="booking-title">Title / Subject</label>
+          <input type="text" id="booking-title" class="form-input" required placeholder="e.g. Design Review">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="booking-room">Resource / Room</label>
+          <select id="booking-room" class="form-input" required>
+            <option value="Room 1 (Bigger)">Room 1 (Bigger - 12p)</option>
+            <option value="Room 2 (Smaller)">Room 2 (Smaller - 6p)</option>
+            <option value="General Asset">General Corporate Asset</option>
+          </select>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="booking-organizer">Organizer</label>
+            <input type="text" id="booking-organizer" class="form-input" required placeholder="Your Name">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="booking-dept">Department</label>
+            <select id="booking-dept" class="form-input" required>
+              <option value="Development">Development</option>
+              <option value="Design">Design</option>
+              <option value="Management">Management</option>
+              <option value="Marketing">Marketing</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="booking-start">Start Time</label>
+            <input type="time" id="booking-start" class="form-input" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="booking-end">End Time</label>
+            <input type="time" id="booking-end" class="form-input" required>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <div>
+            <button type="button" id="delete-btn" class="btn btn-danger" style="display: none;" onclick="handleDelete()"><i class="fa-solid fa-trash"></i> Remove</button>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeBookingModal()">Cancel</button>
+            <button type="submit" class="btn"><i class="fa-solid fa-check"></i> Confirm</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CORE LOGIC: LIGHTWEIGHT OCC SYNC ENGINE -->
+  <script>
+    // --- STATE MANAGEMENT ---
+    const state = {
+      currentViewDate: new Date(),
+      selectedDate: new Date(),
+      reservations: [],
+      lastUpdated: ""
+    };
+    
+    // Check if running inside SharePoint
+    const isSharePoint = window.location.href.includes('/sites/') || window.location.href.includes('.sharepoint.com');
+    
+    // --- INITIALIZATION ---
+    window.addEventListener('DOMContentLoaded', async () => {
+      // Set default start/end times to standard ranges
+      document.getElementById('booking-start').value = "10:00";
+      document.getElementById('booking-end').value = "11:00";
+      
+      await loadFromCache();
+      startAutoSyncPoll();
+    });
+    
+    // --- SERVER SYNC OPERATIONS ---
+    const KVDB_ENDPOINT = "https://kvdb.io/MNmS98Jp6yU9x8r5XGf3nB/reservations";
+
+    async function loadFromCache() {
+      try {
+        let reservations = [];
+        let incomingVer = "";
+        
+        if (isSharePoint) {
+          const res = await fetch('reservations.json?nocache=' + Date.now());
+          if (res.ok) {
+            const data = await res.json();
+            reservations = data ? data.reservations || [] : [];
+            incomingVer = data ? data.lastUpdated || "" : "";
+          }
+        } else {
+          // Use 24/7 public KVDB database directly when running outside SharePoint
+          const res = await fetch(KVDB_ENDPOINT + '?nocache=' + Date.now());
+          if (res.ok) {
+            const data = await res.json();
+            if (data && typeof data === 'object' && 'reservations' in data) {
+              reservations = data.reservations;
+              incomingVer = data.lastUpdated || "";
+            } else {
+              reservations = data;
+            }
+          }
+        }
+        
+        if (reservations && Array.isArray(reservations)) {
+          state.reservations = reservations;
+          state.lastUpdated = incomingVer;
+          localStorage.setItem('gev_room_reservations', JSON.stringify(state.reservations));
+          renderCalendar();
+          renderDetailList();
+        }
+      } catch (err) {
+        console.warn("Offline/Local fallback triggered", err);
+        const cached = localStorage.getItem('gev_room_reservations');
+        if (cached) {
+          state.reservations = JSON.parse(cached);
+          renderCalendar();
+          renderDetailList();
+        }
+      }
+    }
+    
+    async function saveToCache() {
+      localStorage.setItem('gev_room_reservations', JSON.stringify(state.reservations));
+      
+      const payload = {
+        lastUpdated: new Date().toISOString(),
+        reservations: state.reservations
+      };
+      
+      try {
+        if (isSharePoint) {
+          await saveToSharePoint(state.reservations);
+        } else {
+          // Save to 24/7 cloud KVDB database
+          const response = await fetch(KVDB_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (response.ok) {
+            state.lastUpdated = payload.lastUpdated;
+            console.log("🟢 Saved successfully to 24/7 cloud database!");
+          }
+        }
+      } catch (err) {
+        console.error("Broadcasting update error:", err);
+      }
+    }
+
+    async function saveToSharePoint(reservations) {
+      const digestRes = await fetch('/sites/NSEAResourceTeam/_api/contextinfo', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json;odata=verbose' }
+      });
+      if (!digestRes.ok) throw new Error("SharePoint digest failed");
+      const digestData = await digestRes.json();
+      const requestDigest = digestData.d.GetContextWebInformation.FormDigestValue;
+
+      const payload = {
+        lastUpdated: new Date().toISOString(),
+        reservations: reservations
+      };
+
+      const folderPath = "/sites/NSEAResourceTeam/Shared Documents/Meeting Room Reservation";
+      const uploadUrl = `/sites/NSEAResourceTeam/_api/web/GetFolderByServerRelativeUrl('${folderPath}')/Files/Add(url='reservations.json', overwrite=true)`;
+      
+      await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          'X-RequestDigest': requestDigest,
+          'Accept': 'application/json;odata=verbose',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      state.lastUpdated = payload.lastUpdated;
+    }
+    
+    // --- BACKGROUND BROADCASTING (5s Polling) ---
+    function startAutoSyncPoll() {
+      setInterval(async () => {
+        try {
+          let incomingRes = [];
+          let incomingVer = "";
+          
+          if (isSharePoint) {
+            const res = await fetch('reservations.json?nocache=' + Date.now());
+            if (res.ok) {
+              const data = await res.json();
+              incomingRes = data ? data.reservations || [] : [];
+              incomingVer = data ? data.lastUpdated || "" : "";
+            }
+          } else {
+            const res = await fetch(KVDB_ENDPOINT + '?nocache=' + Date.now());
+            if (res.ok) {
+              const data = await res.json();
+              if (data && typeof data === 'object' && 'reservations' in data) {
+                incomingRes = data.reservations;
+                incomingVer = data.lastUpdated || "";
+              } else {
+                incomingRes = data;
+              }
+            }
+          }
+          
+          if (incomingRes && Array.isArray(incomingRes)) {
+            const currentStr = JSON.stringify(state.reservations);
+            const incomingStr = JSON.stringify(incomingRes);
+            if (currentStr !== incomingStr) {
+              state.reservations = incomingRes;
+              state.lastUpdated = incomingVer;
+              localStorage.setItem('gev_room_reservations', JSON.stringify(state.reservations));
+              renderCalendar();
+              renderDetailList();
+              console.log("🔄 Real-time cloud sync: Synced latest events!");
+            }
+          }
+        } catch (err) {
+          console.warn("Polling synchronization status check failed.");
+        }
+      }, 5000);
+    }
+    
+    // --- CALENDAR RENDERING ---
+    function renderCalendar() {
+      const year = state.currentViewDate.getFullYear();
+      const month = state.currentViewDate.getMonth();
+      
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
+      
+      const firstDayIdx = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+      
+      const container = document.getElementById('calendar-days-container');
+      container.innerHTML = "";
+      
+      // Empty days before the 1st
+      for (let i = 0; i < firstDayIdx; i++) {
+        const cell = document.createElement('div');
+        cell.className = "calendar-day empty";
+        container.appendChild(cell);
+      }
+      
+      // Render standard month days
+      for (let day = 1; day <= totalDays; day++) {
+        const cell = document.createElement('div');
+        cell.className = "calendar-day";
+        
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        
+        // Highlight active date selection
+        const isSelected = dateStr === state.selectedDate.toISOString().split('T')[0];
+        if (isSelected) cell.classList.add('selected');
+        
+        // Highlight current today
+        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+        if (isToday) cell.classList.add('today');
+        
+        cell.onclick = () => selectDate(year, month, day);
+        
+        // Day number
+        const numSpan = document.createElement('span');
+        numSpan.className = "day-num";
+        numSpan.innerText = day;
+        cell.appendChild(numSpan);
+        
+        // Render tiny preview indicators
+        const dayRes = state.reservations.filter(r => r.date === dateStr);
+        if (dayRes.length > 0) {
+          const list = document.createElement('div');
+          list.className = "day-indicator-list";
+          
+          dayRes.slice(0, 3).forEach(r => {
+            const dot = document.createElement('div');
+            dot.className = "day-pill";
+            dot.innerText = `${r.startTime} ${r.title}`;
+            list.appendChild(dot);
+          });
+          
+          if (dayRes.length > 3) {
+            const more = document.createElement('div');
+            more.className = "day-pill";
+            more.style.borderLeft = "none";
+            more.style.textAlign = "center";
+            more.innerText = `+${dayRes.length - 3} more`;
+            list.appendChild(more);
+          }
+          cell.appendChild(list);
+        }
+        
+        container.appendChild(cell);
+      }
+    }
+    
+    function changeMonth(direction) {
+      state.currentViewDate.setMonth(state.currentViewDate.getMonth() + direction);
+      renderCalendar();
+    }
+    
+    function selectDate(year, month, day) {
+      state.selectedDate = new Date(year, month, day);
+      renderCalendar();
+      renderDetailList();
+    }
+    
+    // --- DETAILS PANEL RENDERING ---
+    function renderDetailList() {
+      const dateStr = state.selectedDate.toISOString().split('T')[0];
+      
+      const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+      document.getElementById('selected-date-label').innerText = state.selectedDate.toLocaleDateString('ko-KR', options);
+      
+      const container = document.getElementById('selected-date-list');
+      container.innerHTML = "";
+      
+      const dayRes = state.reservations
+        .filter(r => r.date === dateStr)
+        .sort((a, b) => a.startTime.localeCompare(b.startTime));
+        
+      if (dayRes.length === 0) {
+        container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-calendar-minus" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>예약된 일정이 없습니다.</div>`;
+        return;
+      }
+      
+      dayRes.forEach(r => {
+        const card = document.createElement('div');
+        card.className = "res-card";
+        card.onclick = () => openBookingModal(r);
+        
+        card.innerHTML = `
+          <div class="res-meta">
+            <span class="res-time"><i class="fa-regular fa-clock"></i> ${r.startTime} - ${r.endTime}</span>
+            <span><i class="fa-solid fa-location-dot"></i> ${r.roomId || "Shared Room"}</span>
+          </div>
+          <h4 class="res-title">${r.title}</h4>
+          <div class="res-user"><i class="fa-regular fa-user"></i> ${r.organizer} (${r.dept})</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+    
+    // --- DIALOG MODAL CONTROLS ---
+    function openBookingModal(existingRes = null) {
+      const modal = document.getElementById('booking-modal');
+      const form = document.getElementById('booking-form');
+      form.reset();
+      
+      if (existingRes) {
+        // Mode: EDIT / DELETE
+        document.getElementById('modal-heading').innerText = "Edit Reservation";
+        document.getElementById('edit-id').value = existingRes.id;
+        document.getElementById('booking-title').value = existingRes.title;
+        document.getElementById('booking-room').value = existingRes.roomId || "Room 1 (Bigger)";
+        document.getElementById('booking-organizer').value = existingRes.organizer;
+        document.getElementById('booking-dept').value = existingRes.dept;
+        document.getElementById('booking-start').value = existingRes.startTime;
+        document.getElementById('booking-end').value = existingRes.endTime;
+        
+        document.getElementById('delete-btn').style.display = "inline-flex";
+      } else {
+        // Mode: NEW
+        document.getElementById('modal-heading').innerText = "Add Reservation";
+        document.getElementById('edit-id').value = "";
+        document.getElementById('delete-btn').style.display = "none";
+        
+        // Auto default hour
+        document.getElementById('booking-start').value = "10:00";
+        document.getElementById('booking-end').value = "11:00";
+      }
+      
+      modal.classList.add('active');
+    }
+    
+    function closeBookingModal() {
+      document.getElementById('booking-modal').classList.remove('active');
+    }
+    
+    // --- CREATE, EDIT, DELETE PROCESSORS ---
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      const id = document.getElementById('edit-id').value;
+      const title = document.getElementById('booking-title').value;
+      const roomId = document.getElementById('booking-room').value;
+      const organizer = document.getElementById('booking-organizer').value;
+      const dept = document.getElementById('booking-dept').value;
+      const startTime = document.getElementById('booking-start').value;
+      const endTime = document.getElementById('booking-end').value;
+      const dateStr = state.selectedDate.toISOString().split('T')[0];
+      
+      // Simple validation: check if start time is before end time
+      if (startTime >= endTime) {
+        alert("🚨 시작 시간은 종료 시간보다 빨라야 합니다.");
+        return;
+      }
+      
+      // Detect time conflict within the same room resource
+      const conflicting = state.reservations.some(r => {
+        if (r.id === id) return false; // ignore self
+        if (r.date !== dateStr) return false;
+        if (r.roomId !== roomId) return false;
+        
+        // Time overlap checker
+        return (startTime < r.endTime && endTime > r.startTime);
+      });
+      
+      if (conflicting) {
+        alert("🚨 시간대 충돌!\n\n동일한 자원(방)에 겹치는 시간에 이미 등록된 예약이 존재합니다.");
+        return;
+      }
+      
+      if (id) {
+        // Process EDIT
+        const idx = state.reservations.findIndex(r => r.id === id);
+        if (idx !== -1) {
+          state.reservations[idx] = { id, roomId, title, organizer, dept, date: dateStr, startTime, endTime };
+        }
+      } else {
+        // Process CREATE
+        const newRes = {
+          id: 'RES-' + Date.now(),
+          roomId,
+          title,
+          organizer,
+          dept,
+          date: dateStr,
+          startTime,
+          endTime
+        };
+        state.reservations.push(newRes);
+      }
+      
+      closeBookingModal();
+      renderCalendar();
+      renderDetailList();
+      
+      // Broadcast to other peers immediately
+      await saveToCache();
+    }
+    
+    async function handleDelete() {
+      const id = document.getElementById('edit-id').value;
+      if (!id) return;
+      
+      if (confirm("정말로 이 일정을 삭제하시겠습니까?")) {
+        state.reservations = state.reservations.filter(r => r.id !== id);
+        closeBookingModal();
+        renderCalendar();
+        renderDetailList();
+        
+        // Broadcast to other peers immediately
+        await saveToCache();
+      }
+    }
+  </script>
+</body>
+</html>
