@@ -27,8 +27,8 @@
     {
       "entityId": "reservation_dashboard",
       "name": "Room Reservation",
-      "contentUrl": "https://spoteamsite.ge.com/sites/NSEAResourceTeam/Shared%20Documents/Meeting%20Room%20Reservation/index.html?csf=1&web=1&e=hdJURU",
-      "websiteUrl": "https://spoteamsite.ge.com/sites/NSEAResourceTeam/Shared%20Documents/Meeting%20Room%20Reservation/index.html?csf=1&web=1&e=hdJURU",
+      "contentUrl": "https://spoteamsite.ge.com/sites/NSEAResourceTeam/Shared%20Documents/Meeting%20Room%20Reservation/index.html?csf=1&web=1",
+      "websiteUrl": "https://spoteamsite.ge.com/sites/NSEAResourceTeam/Shared%20Documents/Meeting%20Room%20Reservation/index.html?csf=1&web=1",
       "scopes": [
         "personal"
       ]
