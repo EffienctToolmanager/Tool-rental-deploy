@@ -42,13 +42,13 @@ manifest_data = {
     {
       "entityId": "reservation_dashboard",
       "name": "Room Reservation",
-      "contentUrl": "http://localhost:8000/index.html",
-      "websiteUrl": "http://localhost:8000/index.html",
+      "contentUrl": "https://effiencttoolmanager.github.io/Tool-rental-deploy/30_Projects_Apps/Meeting_Room_Reservation/index.html",
+      "websiteUrl": "https://effiencttoolmanager.github.io/Tool-rental-deploy/30_Projects_Apps/Meeting_Room_Reservation/index.html",
       "scopes": ["personal"]
     }
   ],
   "permissions": ["identity"],
-  "validDomains": ["localhost"]
+  "validDomains": ["localhost", "effiencttoolmanager.github.io"]
 }
 
 def make_package():
