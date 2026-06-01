@@ -1,0 +1,43 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.15/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.15",
+  "version": "1.0.0",
+  "id": "b7549be1-0d2a-43c9-8d7e-97cddabcb222",
+  "packageName": "com.gev.roomreservation",
+  "developer": {
+    "name": "GEV Innovation Team",
+    "websiteUrl": "https://localhost:8000",
+    "privacyUrl": "https://localhost:8000/privacy",
+    "termsOfUseUrl": "https://localhost:8000/terms"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "GEV Room Booking",
+    "full": "GEV Meeting Room Reservation System"
+  },
+  "description": {
+    "short": "Real-time meeting room timeline tracker and reservation booking engine.",
+    "full": "A premium enterprise-grade system for booking meeting rooms A & B featuring real-time collision detection, admin lockers, and M365 serialization sync."
+  },
+  "accentColor": "#054141",
+  "staticTabs": [
+    {
+      "entityId": "reservation_dashboard",
+      "name": "Room Reservation",
+      "contentUrl": "http://localhost:8000/index.html",
+      "websiteUrl": "http://localhost:8000/index.html",
+      "scopes": [
+        "personal"
+      ]
+    }
+  ],
+  "permissions": [
+    "identity"
+  ],
+  "validDomains": [
+    "localhost"
+  ]
+}
