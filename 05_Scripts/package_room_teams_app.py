@@ -51,9 +51,23 @@ manifest_data = {
   "validDomains": ["localhost", "effiencttoolmanager.github.io"]
 }
 
-def make_package():
+from urllib.parse import urlparse
+
+def make_package(custom_url=None):
     print("🔄 Building GEV Meeting Room Reservation Teams App Package...", flush=True)
     
+    if custom_url:
+        print(f"🔗 Using custom hosting URL: {custom_url}", flush=True)
+        manifest_data["staticTabs"][0]["contentUrl"] = custom_url
+        manifest_data["staticTabs"][0]["websiteUrl"] = custom_url
+        
+        # Parse domain to add to validDomains
+        parsed = urlparse(custom_url)
+        domain = parsed.netloc
+        if domain and domain not in manifest_data["validDomains"]:
+            manifest_data["validDomains"].append(domain)
+            print(f"🛡️ Added '{domain}' to validDomains", flush=True)
+            
     # Ensure Package Directory exists
     os.makedirs(PACKAGE_DIR, exist_ok=True)
     
@@ -91,4 +105,6 @@ def make_package():
     print(f"👉 You can upload this ZIP file directly into MS Teams ('Upload a custom app' flow)!", flush=True)
 
 if __name__ == "__main__":
-    make_package()
+    # If custom URL is provided as argument, use it
+    target_url = sys.argv[1] if len(sys.argv) > 1 else None
+    make_package(target_url)
