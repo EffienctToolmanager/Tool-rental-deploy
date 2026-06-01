@@ -627,45 +627,61 @@
 
     async function loadFromCache() {
       try {
-        let reservations = [];
+        let reservations = null;
         let incomingVer = "";
+        let success = false;
         
-        if (isSharePoint) {
+        // 1. Try to read from local server or SharePoint directory first
+        try {
           const res = await fetch('reservations.json?nocache=' + Date.now());
           if (res.ok) {
             const data = await res.json();
             reservations = data ? data.reservations || [] : [];
             incomingVer = data ? data.lastUpdated || "" : "";
+            success = true;
+            console.log("🟢 Loaded database from local/SharePoint server.");
           }
-        } else {
-          // Use 24/7 public KVDB database directly when running outside SharePoint
-          const res = await fetch(KVDB_ENDPOINT + '?nocache=' + Date.now());
-          if (res.ok) {
-            const data = await res.json();
-            if (data && typeof data === 'object' && 'reservations' in data) {
-              reservations = data.reservations;
-              incomingVer = data.lastUpdated || "";
-            } else {
-              reservations = data;
+        } catch (e) {
+          // Local/SharePoint server is offline, proceed to Cloud KVDB fallback
+        }
+        
+        // 2. Try to read from public Cloud Database (KVDB) if local failed
+        if (!success) {
+          try {
+            const res = await fetch(KVDB_ENDPOINT + '?nocache=' + Date.now());
+            if (res.ok) {
+              const data = await res.json();
+              if (data && typeof data === 'object' && 'reservations' in data) {
+                reservations = data.reservations;
+                incomingVer = data.lastUpdated || "";
+              } else {
+                reservations = data;
+              }
+              success = true;
+              console.log("🟢 Loaded database from 24/7 cloud fallback.");
             }
+          } catch (e) {
+            // Cloud KVDB also failed
           }
         }
         
-        if (reservations && Array.isArray(reservations)) {
+        // 3. Apply changes if fetch was successful, otherwise load from localStorage
+        if (success && reservations && Array.isArray(reservations)) {
           state.reservations = reservations;
           state.lastUpdated = incomingVer;
           localStorage.setItem('gev_room_reservations', JSON.stringify(state.reservations));
-          renderCalendar();
-          renderDetailList();
+        } else {
+          console.warn("⚠️ All network channels offline/failing. Loading offline local storage cached data.");
+          const cached = localStorage.getItem('gev_room_reservations');
+          if (cached) {
+            state.reservations = JSON.parse(cached);
+          }
         }
+        
+        renderCalendar();
+        renderDetailList();
       } catch (err) {
-        console.warn("Offline/Local fallback triggered", err);
-        const cached = localStorage.getItem('gev_room_reservations');
-        if (cached) {
-          state.reservations = JSON.parse(cached);
-          renderCalendar();
-          renderDetailList();
-        }
+        console.error("Critical error inside loadFromCache:", err);
       }
     }
     
@@ -677,11 +693,33 @@
         reservations: state.reservations
       };
       
+      let saved = false;
+      
+      // 1. Try to save to SharePoint or local Python server first
       try {
         if (isSharePoint) {
           await saveToSharePoint(state.reservations);
+          saved = true;
         } else {
-          // Save to 24/7 cloud KVDB database
+          const response = await fetch('reservations.json', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (response.ok) {
+            const resData = await response.json();
+            state.lastUpdated = resData && resData.lastUpdated ? resData.lastUpdated : payload.lastUpdated;
+            console.log("🟢 Saved successfully to local Python server!");
+            saved = true;
+          }
+        }
+      } catch (err) {
+        // Local server/SharePoint save failed, proceed to Cloud KVDB fallback
+      }
+      
+      // 2. Try to save to 24/7 cloud KVDB database if local save failed
+      if (!saved) {
+        try {
           const response = await fetch(KVDB_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -689,11 +727,12 @@
           });
           if (response.ok) {
             state.lastUpdated = payload.lastUpdated;
-            console.log("🟢 Saved successfully to 24/7 cloud database!");
+            console.log("🟢 Saved successfully to 24/7 cloud database fallback!");
+            saved = true;
           }
+        } catch (err) {
+          console.error("Cloud database save failed:", err);
         }
-      } catch (err) {
-        console.error("Broadcasting update error:", err);
       }
     }
 
@@ -730,30 +769,44 @@
     function startAutoSyncPoll() {
       setInterval(async () => {
         try {
-          let incomingRes = [];
+          let incomingRes = null;
           let incomingVer = "";
+          let success = false;
           
-          if (isSharePoint) {
+          // 1. Poll from local/SharePoint server first
+          try {
             const res = await fetch('reservations.json?nocache=' + Date.now());
             if (res.ok) {
               const data = await res.json();
               incomingRes = data ? data.reservations || [] : [];
               incomingVer = data ? data.lastUpdated || "" : "";
+              success = true;
             }
-          } else {
-            const res = await fetch(KVDB_ENDPOINT + '?nocache=' + Date.now());
-            if (res.ok) {
-              const data = await res.json();
-              if (data && typeof data === 'object' && 'reservations' in data) {
-                incomingRes = data.reservations;
-                incomingVer = data.lastUpdated || "";
-              } else {
-                incomingRes = data;
+          } catch (e) {
+            // Local/SharePoint offline
+          }
+          
+          // 2. Poll from Cloud KVDB fallback if local fails
+          if (!success) {
+            try {
+              const res = await fetch(KVDB_ENDPOINT + '?nocache=' + Date.now());
+              if (res.ok) {
+                const data = await res.json();
+                if (data && typeof data === 'object' && 'reservations' in data) {
+                  incomingRes = data.reservations;
+                  incomingVer = data.lastUpdated || "";
+                } else {
+                  incomingRes = data;
+                }
+                success = true;
               }
+            } catch (e) {
+              // Cloud offline
             }
           }
           
-          if (incomingRes && Array.isArray(incomingRes)) {
+          // 3. Compare and apply only if a network check successfully returned data
+          if (success && incomingRes && Array.isArray(incomingRes)) {
             const currentStr = JSON.stringify(state.reservations);
             const incomingStr = JSON.stringify(incomingRes);
             if (currentStr !== incomingStr) {
