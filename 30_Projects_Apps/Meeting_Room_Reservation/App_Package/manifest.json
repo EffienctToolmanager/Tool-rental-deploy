@@ -40,6 +40,9 @@
   "validDomains": [
     "localhost",
     "effiencttoolmanager.github.io",
-    "spoteamsite.ge.com"
+    "spoteamsite.ge.com",
+    "login.microsoftonline.com",
+    "*.sharepoint.com",
+    "*.ge.com"
   ]
 }

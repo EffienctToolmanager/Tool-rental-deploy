@@ -48,7 +48,14 @@ manifest_data = {
     }
   ],
   "permissions": ["identity"],
-  "validDomains": ["localhost", "effiencttoolmanager.github.io"]
+  "validDomains": [
+    "localhost",
+    "effiencttoolmanager.github.io",
+    "spoteamsite.ge.com",
+    "login.microsoftonline.com",
+    "*.sharepoint.com",
+    "*.ge.com"
+  ]
 }
 
 from urllib.parse import urlparse
