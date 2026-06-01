@@ -610,7 +610,37 @@
     };
     
     // Check if running inside SharePoint
-    const isSharePoint = window.location.href.includes('/sites/') || window.location.href.includes('.sharepoint.com');
+    const isSharePoint = window.location.href.includes('/sites/') || window.location.href.includes('.sharepoint.com') || window.location.href.includes('/personal/');
+    
+    // Dynamic SharePoint Site & Folder Detection
+    let spSiteUrl = "/sites/NSEAResourceTeam"; // fallback default
+    let spFolderPath = "/sites/NSEAResourceTeam/Shared Documents/Meeting Room Reservation"; // fallback default
+
+    if (isSharePoint) {
+      try {
+        const urlObj = new URL(window.location.href);
+        const pathParts = urlObj.pathname.split('/');
+        
+        // Find /sites/ or /personal/ in the path to get the site root
+        const siteTypeIdx = pathParts.findIndex(p => {
+          const lp = p.toLowerCase();
+          return lp === 'sites' || lp === 'personal';
+        });
+        
+        if (siteTypeIdx !== -1 && pathParts.length > siteTypeIdx + 1) {
+          spSiteUrl = '/' + pathParts[siteTypeIdx] + '/' + pathParts[siteTypeIdx + 1];
+          
+          // Decode URL path and locate the folder containing this index.html file
+          const decodedPath = decodeURIComponent(urlObj.pathname);
+          const lastSlashIdx = decodedPath.lastIndexOf('/');
+          if (lastSlashIdx !== -1) {
+            spFolderPath = decodedPath.substring(0, lastSlashIdx);
+          }
+        }
+      } catch (err) {
+        console.error("Error parsing dynamic SharePoint path:", err);
+      }
+    }
     
     // --- INITIALIZATION ---
     window.addEventListener('DOMContentLoaded', async () => {
@@ -737,7 +767,7 @@
     }
 
     async function saveToSharePoint(reservations) {
-      const digestRes = await fetch('/sites/NSEAResourceTeam/_api/contextinfo', {
+      const digestRes = await fetch(spSiteUrl + '/_api/contextinfo', {
         method: 'POST',
         headers: { 'Accept': 'application/json;odata=verbose' }
       });
@@ -750,8 +780,7 @@
         reservations: reservations
       };
 
-      const folderPath = "/sites/NSEAResourceTeam/Shared Documents/Meeting Room Reservation";
-      const uploadUrl = `/sites/NSEAResourceTeam/_api/web/GetFolderByServerRelativeUrl('${folderPath}')/Files/Add(url='reservations.json', overwrite=true)`;
+      const uploadUrl = spSiteUrl + `/_api/web/GetFolderByServerRelativeUrl('${spFolderPath}')/Files/Add(url='reservations.json', overwrite=true)`;
       
       await fetch(uploadUrl, {
         method: 'POST',
