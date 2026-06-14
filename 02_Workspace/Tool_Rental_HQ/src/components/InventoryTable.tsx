@@ -161,10 +161,22 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
             </span>
           </div>
           <div style={{ display: 'flex', gap: '8px' }}>
-            <button type="button" className="f-button spec-export-button" onClick={downloadSelectedCsv}>
+            <button 
+              type="button" 
+              className="f-button spec-export-button" 
+              onClick={downloadSelectedCsv}
+              data-agent-id="export-csv-btn"
+              data-agent-action="export-csv"
+            >
               ⬇ Export Spec CSV
             </button>
-            <button type="button" className="f-button f-button-primary" onClick={onNavigateToCheckout}>
+            <button 
+              type="button" 
+              className="f-button f-button-primary" 
+              onClick={onNavigateToCheckout}
+              data-agent-id="navigate-checkout-btn"
+              data-agent-action="navigate-checkout"
+            >
               Go to Smart Checkout ➜
             </button>
           </div>
@@ -230,6 +242,8 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                       style={{ width: '16px', height: '16px', cursor: isAvailable ? 'pointer' : 'not-allowed' }}
                       onChange={(e) => handleCheckboxChange(assetCode, e.target.checked)}
                       title={isAvailable ? 'Add to rental cart' : 'Rented assets cannot be selected.'}
+                      data-agent-id={`select-${assetCode}`}
+                      data-agent-action="select-asset"
                     />
                   </td>
                   <td><span className={`f-badge ${status === 'Available' ? 'f-badge-available' : 'f-badge-rented'}`}>{status?.toUpperCase()}</span></td>
@@ -246,7 +260,16 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                   <td>{asset.Calibration_Date || asset.calDate}</td>
                   <td style={{ fontWeight: 'bold' }}>{daysLeft < 0 ? <span style={{ color: 'var(--f-error)' }}>EXPIRED ({Math.abs(daysLeft)}d)</span> : `${daysLeft}d`}</td>
                   <td style={{ textAlign: 'center' }}>
-                    <button className="row-more-button" type="button" onClick={() => setDetailsAsset(asset)} aria-label={`Open details for ${assetCode}`}>⋯</button>
+                    <button 
+                      className="row-more-button" 
+                      type="button" 
+                      onClick={() => setDetailsAsset(asset)} 
+                      aria-label={`Open details for ${assetCode}`}
+                      data-agent-id={`more-details-${assetCode}`}
+                      data-agent-action="open-details"
+                    >
+                      ⋯
+                    </button>
                   </td>
                 </tr>
               );
@@ -263,7 +286,15 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                 <h3>{getBrand(detailsAsset)} {getModel(detailsAsset)}</h3>
                 <p>{getAssetCode(detailsAsset)} · standardized mock datasheet template</p>
               </div>
-              <button type="button" className="details-close-button" onClick={() => setDetailsAsset(null)}>×</button>
+              <button 
+                type="button" 
+                className="details-close-button" 
+                onClick={() => setDetailsAsset(null)}
+                data-agent-id="close-details-btn"
+                data-agent-action="close-details"
+              >
+                ×
+              </button>
             </div>
             <SpecSummaryCard asset={detailsAsset} />
           </div>

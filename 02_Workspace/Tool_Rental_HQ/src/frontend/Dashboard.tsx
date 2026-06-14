@@ -30,6 +30,8 @@ const Dashboard: React.FC = () => {
           <button 
             onClick={syncWithSharePoint}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors active:scale-95"
+            data-agent-id="sync-sharepoint-btn"
+            data-agent-action="sync-sharepoint"
           >
             <FiRefreshCw className="w-5 h-5 text-gray-500" />
           </button>
@@ -57,14 +59,36 @@ const Dashboard: React.FC = () => {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-6">
-                <InputGroup label="Equipment Code" icon={<FiBox />} placeholder="e.g., DSP01" />
-                <InputGroup label="Project Name" icon={<FiMapPin />} placeholder="e.g., Samsung Austin Semiconductor" />
+                <InputGroup 
+                  label="Equipment Code" 
+                  icon={<FiBox />} 
+                  placeholder="e.g., DSP01" 
+                  data-agent-id="input-equipment-code"
+                  data-agent-action="input-text"
+                />
+                <InputGroup 
+                  label="Project Name" 
+                  icon={<FiMapPin />} 
+                  placeholder="e.g., Samsung Austin Semiconductor" 
+                  data-agent-id="input-project-name"
+                  data-agent-action="input-text"
+                />
               </div>
               <div className="space-y-6">
-                <InputGroup label="Expected Return Date" icon={<FiCalendar />} type="date" />
+                <InputGroup 
+                  label="Expected Return Date" 
+                  icon={<FiCalendar />} 
+                  type="date" 
+                  data-agent-id="input-expected-return"
+                  data-agent-action="input-date"
+                />
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-[#4E5968] ml-1">Attach Condition Photo</label>
-                  <button className="w-full h-32 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center text-gray-400 hover:border-[#3182F6] hover:text-[#3182F6] transition-all group">
+                  <button 
+                    className="w-full h-32 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center text-gray-400 hover:border-[#3182F6] hover:text-[#3182F6] transition-all group"
+                    data-agent-id="upload-condition-photo-btn"
+                    data-agent-action="upload-photo"
+                  >
                     <FiCamera className="w-8 h-8 mb-2 group-hover:scale-110 transition-transform" />
                     <span className="text-sm">Click to upload photo</span>
                   </button>
@@ -75,6 +99,8 @@ const Dashboard: React.FC = () => {
             <motion.button
               whileTap={{ scale: 0.98 }}
               className="w-full mt-10 bg-[#3182F6] text-white py-5 rounded-2xl font-bold text-lg shadow-lg shadow-blue-200 hover:bg-[#1b64da] transition-colors flex items-center justify-center space-x-2"
+              data-agent-id="apply-rental-btn"
+              data-agent-action="submit-rental-form"
             >
               <span>Apply for Rental</span>
               <FiChevronRight />
