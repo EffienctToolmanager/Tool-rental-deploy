@@ -31,24 +31,160 @@ def get_msal_token():
 # --- In-Memory Persistent Database for Premium Staging Demo ---
 # In-memory mock database to allow seamless serverless state updates
 INITIAL_ITEMS = [
-    {"id": "1", "equipmentCode": "DSP01", "name": "Control System DSP01", "projectName": "Project Site A", "returnDate": "2026-05-20", "status": "Rented", "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260515-ABCD"},
-    {"id": "2", "equipmentCode": "LTS02", "name": "Laser Tracker LTS02", "projectName": "Project Site A", "returnDate": "2026-05-20", "status": "Rented", "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260515-ABCD"},
-    {"id": "3", "equipmentCode": "CAM11", "name": "4K Action Camera Set", "projectName": "Project Site B", "returnDate": "2026-05-25", "status": "Rented", "userEmail": "tech@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260516-WXYZ"}
+    {
+        "id": "1", "equipmentCode": "FLK-87V-01", "brand": "Fluke", "model": "87V",
+        "name": "Fluke 87V Industrial Multimeter", "equipmentType": "Industrial Digital Multimeter",
+        "projectName": "Project Site A", "returnDate": "2026-06-30", "status": "Rented",
+        "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0001",
+        "datasheetUrl": "https://example.com/mock-datasheets/fluke-87v.pdf",
+        "specSummary": {"equipmentType": "Industrial Digital Multimeter", "measurementRange": "Mock range: AC/DC voltage, resistance, frequency, temperature", "accuracy": "Mock accuracy: high precision class for field diagnostics", "voltageRating": "Mock rating: low-voltage industrial systems", "currentRating": "Mock current input with fused protection", "safetyCategory": "Mock CAT III / CAT IV safety category", "connectivity": "No wireless connectivity in this mock profile", "powerSource": "Battery powered", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["True-RMS style reading", "Rugged field body", "Backlit display"], "typicalUse": "General electrical troubleshooting and maintenance checks"},
+    },
+    {
+        "id": "2", "equipmentCode": "FLK-1738-01", "brand": "Fluke", "model": "1738",
+        "name": "Fluke 1738 Power Logger", "equipmentType": "Power Quality Logger",
+        "projectName": "Project Site A", "returnDate": "2026-06-30", "status": "Rented",
+        "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0001",
+        "datasheetUrl": "https://example.com/mock-datasheets/fluke-1738.pdf",
+        "specSummary": {"equipmentType": "Power Quality Logger", "measurementRange": "Mock range: 3-phase voltage/current/power trend logging", "accuracy": "Mock accuracy: site energy audit grade", "voltageRating": "Mock rating: distribution panel measurement", "currentRating": "Mock flexible current probe support", "safetyCategory": "Mock CAT III / CAT IV safety category", "connectivity": "USB / Wi-Fi style mock connectivity", "powerSource": "Rechargeable battery / line power", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["Power trend capture", "Event logging", "Energy study workflow"], "typicalUse": "Temporary power quality survey and load profiling"},
+    },
+    {
+        "id": "3", "equipmentCode": "KEY-U1282A-01", "brand": "Keysight", "model": "U1282A",
+        "name": "Keysight U1282A Handheld Digital Multimeter", "equipmentType": "Handheld Digital Multimeter",
+        "projectName": "Project Site B", "returnDate": "2026-07-05", "status": "Rented",
+        "userEmail": "tech@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0002",
+        "datasheetUrl": "https://example.com/mock-datasheets/keysight-u1282a.pdf",
+        "specSummary": {"equipmentType": "Handheld Digital Multimeter", "measurementRange": "Mock range: voltage, current, resistance, frequency, temperature", "accuracy": "Mock accuracy: high-count handheld measurement", "voltageRating": "Mock rating: industrial electrical panels", "currentRating": "Mock milliamp/amp measurement ranges", "safetyCategory": "Mock CAT III / CAT IV safety category", "connectivity": "Optional optical/USB style mock link", "powerSource": "Battery powered", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["High resolution display", "Data logging style memory", "Rugged case"], "typicalUse": "Bench and field electrical verification"},
+    },
+    {
+        "id": "4", "equipmentCode": "KEY-U1461A-01", "brand": "Keysight", "model": "U1461A",
+        "name": "Keysight U1461A Insulation Resistance Tester", "equipmentType": "Insulation Resistance Tester",
+        "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
+        "datasheetUrl": "https://example.com/mock-datasheets/keysight-u1461a.pdf",
+        "specSummary": {"equipmentType": "Insulation Resistance Tester", "measurementRange": "Mock range: selectable insulation test voltage and resistance", "accuracy": "Mock accuracy: maintenance screening grade", "voltageRating": "Mock test voltage profiles for motor/cable checks", "currentRating": "Mock leakage current indication", "safetyCategory": "Mock CAT III safety category", "connectivity": "USB style mock export", "powerSource": "Battery powered", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["PI/DAR style test", "Timed insulation test", "Continuity check"], "typicalUse": "Motor, cable, and panel insulation condition check"},
+    },
+    {
+        "id": "5", "equipmentCode": "HIO-IR4056-01", "brand": "Hioki", "model": "IR4056",
+        "name": "Hioki IR4056 Insulation Tester", "equipmentType": "Insulation Tester",
+        "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
+        "datasheetUrl": "https://example.com/mock-datasheets/hioki-ir4056.pdf",
+        "specSummary": {"equipmentType": "Insulation Tester", "measurementRange": "Mock range: low to high insulation resistance checks", "accuracy": "Mock accuracy: field maintenance grade", "voltageRating": "Mock selectable test voltage", "currentRating": "Mock continuity current function", "safetyCategory": "Mock CAT III safety category", "connectivity": "No connectivity in mock profile", "powerSource": "Battery powered", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["Fast comparator style judgement", "Bright indication", "Continuity test"], "typicalUse": "Routine electrical insulation screening"},
+    },
+    {
+        "id": "6", "equipmentCode": "HIO-CM4375-01", "brand": "Hioki", "model": "CM4375",
+        "name": "Hioki CM4375 AC/DC Clamp Meter", "equipmentType": "AC/DC Clamp Meter",
+        "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
+        "datasheetUrl": "https://example.com/mock-datasheets/hioki-cm4375.pdf",
+        "specSummary": {"equipmentType": "AC/DC Clamp Meter", "measurementRange": "Mock range: AC/DC current clamp and voltage checks", "accuracy": "Mock accuracy: industrial current survey grade", "voltageRating": "Mock rating: panel and feeder checks", "currentRating": "Mock high-current clamp measurement", "safetyCategory": "Mock CAT III / CAT IV safety category", "connectivity": "Bluetooth-style mock connectivity", "powerSource": "Battery powered", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["Clamp current measurement", "Inrush style capture", "Rugged jaw design"], "typicalUse": "Current measurement without circuit interruption"},
+    },
+    {
+        "id": "7", "equipmentCode": "MEG-MIT525-01", "brand": "Megger", "model": "MIT525",
+        "name": "Megger MIT525 Insulation Resistance Tester", "equipmentType": "High Voltage Insulation Tester",
+        "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
+        "datasheetUrl": "https://example.com/mock-datasheets/megger-mit525.pdf",
+        "specSummary": {"equipmentType": "High Voltage Insulation Tester", "measurementRange": "Mock range: high-voltage insulation resistance testing", "accuracy": "Mock accuracy: asset commissioning grade", "voltageRating": "Mock 5 kV class profile", "currentRating": "Mock leakage current display", "safetyCategory": "Mock high energy safety profile", "connectivity": "USB style mock result transfer", "powerSource": "Rechargeable battery / mains", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["PI/DAR/DD style tests", "Guard terminal", "Large asset diagnostics"], "typicalUse": "Generator, transformer, cable insulation verification"},
+    },
+    {
+        "id": "8", "equipmentCode": "MEG-DLRO10HD-01", "brand": "Megger", "model": "DLRO10HD",
+        "name": "Megger DLRO10HD Low Resistance Ohmmeter", "equipmentType": "Low Resistance Ohmmeter",
+        "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
+        "datasheetUrl": "https://example.com/mock-datasheets/megger-dlro10hd.pdf",
+        "specSummary": {"equipmentType": "Low Resistance Ohmmeter", "measurementRange": "Mock range: micro-ohm to low-ohm resistance checks", "accuracy": "Mock accuracy: bonding/contact resistance grade", "voltageRating": "Mock low-voltage resistance test output", "currentRating": "Mock 10 A class test current", "safetyCategory": "Mock industrial safety profile", "connectivity": "No connectivity in mock profile", "powerSource": "Rechargeable battery / mains", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["High current continuity test", "Bidirectional measurement", "Rugged field case"], "typicalUse": "Grounding, bonding, breaker contact, and busbar resistance checks"},
+    },
 ]
 
-# Dynamic loading of 20 available generic tools
-for i in range(4, 25):
+ADDITIONAL_MOCK_MODELS = [
+    ("FLK", "Fluke", "179", "True-RMS Digital Multimeter", "Industrial Digital Multimeter"),
+    ("FLK", "Fluke", "289", "Logging Multimeter", "Advanced Logging Multimeter"),
+    ("FLK", "Fluke", "376 FC", "AC/DC Clamp Meter", "AC/DC Clamp Meter"),
+    ("FLK", "Fluke", "1507", "Insulation Resistance Tester", "Insulation Tester"),
+    ("FLK", "Fluke", "1587 FC", "Insulation Multimeter", "Insulation Multimeter"),
+    ("FLK", "Fluke", "435-II", "Power Quality Analyzer", "Power Quality Analyzer"),
+    ("FLK", "Fluke", "1625-2", "Earth Ground Tester", "Earth Ground Tester"),
+    ("FLK", "Fluke", "TiS75+", "Thermal Camera", "Thermal Imaging Camera"),
+    ("FLK", "Fluke", "BT521", "Battery Analyzer", "Battery Analyzer"),
+    ("FLK", "Fluke", "754", "Documenting Process Calibrator", "Process Calibrator"),
+    ("KEY", "Keysight", "U1273A", "Handheld Digital Multimeter", "Handheld Digital Multimeter"),
+    ("KEY", "Keysight", "U1242C", "Handheld Digital Multimeter", "Handheld Digital Multimeter"),
+    ("KEY", "Keysight", "U1213A", "Clamp Meter", "Clamp Meter"),
+    ("KEY", "Keysight", "U1453A", "Insulation Resistance Tester", "Insulation Tester"),
+    ("KEY", "Keysight", "34465A", "Bench Digital Multimeter", "Bench Digital Multimeter"),
+    ("KEY", "Keysight", "E4980AL", "Precision LCR Meter", "LCR Meter"),
+    ("KEY", "Keysight", "N6705C", "DC Power Analyzer", "DC Power Analyzer"),
+    ("KEY", "Keysight", "U5855A", "TrueIR Thermal Imager", "Thermal Imaging Camera"),
+    ("KEY", "Keysight", "U8903B", "Audio Analyzer", "Signal Analyzer"),
+    ("KEY", "Keysight", "DAQ970A", "Data Acquisition System", "Data Acquisition Unit"),
+    ("HIO", "Hioki", "DT4282", "Digital Multimeter", "Industrial Digital Multimeter"),
+    ("HIO", "Hioki", "DT4256", "Digital Multimeter", "Field Digital Multimeter"),
+    ("HIO", "Hioki", "CM3289", "AC Clamp Meter", "AC Clamp Meter"),
+    ("HIO", "Hioki", "CM7290", "Display Unit", "Clamp Sensor Display Unit"),
+    ("HIO", "Hioki", "IR4057", "Insulation Tester", "Insulation Tester"),
+    ("HIO", "Hioki", "BT3554", "Battery Tester", "Battery Tester"),
+    ("HIO", "Hioki", "PQ3198", "Power Quality Analyzer", "Power Quality Analyzer"),
+    ("HIO", "Hioki", "PW3360", "Clamp Power Logger", "Power Logger"),
+    ("HIO", "Hioki", "LR8450", "Memory HiLogger", "Data Logger"),
+    ("HIO", "Hioki", "IM3536", "LCR Meter", "LCR Meter"),
+    ("MEG", "Megger", "MIT1025", "Insulation Resistance Tester", "High Voltage Insulation Tester"),
+    ("MEG", "Megger", "MIT1525", "Insulation Resistance Tester", "High Voltage Insulation Tester"),
+    ("MEG", "Megger", "MFT1845+", "Multifunction Tester", "Multifunction Installation Tester"),
+    ("MEG", "Megger", "DET4TC2", "Earth Tester", "Earth Ground Tester"),
+    ("MEG", "Megger", "TDR2050", "Cable Fault Locator", "Cable Fault Locator"),
+    ("MEG", "Megger", "BITE5", "Battery Tester", "Battery Impedance Tester"),
+    ("MEG", "Megger", "MPQ1000", "Power Quality Analyzer", "Power Quality Analyzer"),
+    ("MEG", "Megger", "MOM2", "Micro-ohmmeter", "Low Resistance Ohmmeter"),
+    ("MEG", "Megger", "S1-568", "Insulation Resistance Tester", "Insulation Tester"),
+    ("MEG", "Megger", "PAT450", "Portable Appliance Tester", "Appliance Safety Tester"),
+    ("YOK", "Yokogawa", "WT3000E", "Precision Power Analyzer", "Power Analyzer"),
+    ("YOK", "Yokogawa", "WT5000", "Precision Power Analyzer", "Power Analyzer"),
+    ("YOK", "Yokogawa", "CW500", "Power Quality Analyzer", "Power Quality Analyzer"),
+    ("YOK", "Yokogawa", "CA500", "Multifunction Process Calibrator", "Process Calibrator"),
+    ("YOK", "Yokogawa", "MY600", "Digital Insulation Tester", "Insulation Tester"),
+    ("YOK", "Yokogawa", "TY720", "Digital Multimeter", "Digital Multimeter"),
+    ("GOS", "GW Instek", "GDM-9061", "Bench Digital Multimeter", "Bench Digital Multimeter"),
+    ("GOS", "GW Instek", "GPT-15012", "Electrical Safety Analyzer", "Electrical Safety Tester"),
+    ("BK", "B&K Precision", "5493C", "Bench Digital Multimeter", "Bench Digital Multimeter"),
+    ("AM", "Amprobe", "AMP-330", "Clamp Meter", "Clamp Meter"),
+]
+
+
+def build_mock_spec(brand: str, model: str, product_name: str, equipment_type: str):
+    return {
+        "equipmentType": equipment_type,
+        "measurementRange": f"Mock range for {brand} {model}: representative field measurement ranges only.",
+        "accuracy": "Mock accuracy: placeholder text for visual template testing only.",
+        "voltageRating": "Mock voltage rating: suitable-looking internal demo text.",
+        "currentRating": "Mock current rating: illustrative current/input capability text.",
+        "safetyCategory": "Mock safety category: CAT-style placeholder, not verified.",
+        "connectivity": "Mock connectivity: USB/Bluetooth/none depending on product class.",
+        "powerSource": "Mock power source: battery or mains powered depending on tool type.",
+        "calibrationCycle": "12 months mock cycle",
+        "keyFeatures": [
+            f"{equipment_type} workflow",
+            "Standardized datasheet card layout",
+            "Placeholder specification text",
+        ],
+        "typicalUse": f"Mock use case for {product_name}; for UI validation only, not technical reference.",
+    }
+
+
+for idx, (prefix, brand, model, product_name, equipment_type) in enumerate(ADDITIONAL_MOCK_MODELS, start=len(INITIAL_ITEMS) + 1):
+    code_model = model.upper().replace(" ", "").replace("+", "P").replace("-", "")
     INITIAL_ITEMS.append({
-        "id": str(i), 
-        "equipmentCode": f"TOOL{i:02d}", 
-        "name": f"Generic Test Tool {i}", 
-        "projectName": "", 
-        "returnDate": "", 
+        "id": str(idx),
+        "equipmentCode": f"{prefix}-{code_model}-01",
+        "brand": brand,
+        "model": model,
+        "name": f"{brand} {model} {product_name}",
+        "equipmentType": equipment_type,
+        "projectName": "",
+        "returnDate": "",
         "status": "Available",
         "userEmail": "",
         "pmEmail": "",
-        "caseId": ""
+        "caseId": "",
+        "datasheetUrl": f"https://example.com/mock-datasheets/{brand.lower().replace(' ', '-')}-{model.lower().replace(' ', '-').replace('+', 'p')}.pdf",
+        "specSummary": build_mock_spec(brand, model, product_name, equipment_type),
     })
+
 
 db_storage = {"items": INITIAL_ITEMS}
 
@@ -84,10 +220,8 @@ async def create_rental_record(rental: BulkRentalRequest):
     updated_items = []
     for item in db_storage["items"]:
         if item["equipmentCode"] in requested_codes:
-            updated_items.append({
-                "id": item["id"],
-                "equipmentCode": item["equipmentCode"],
-                "name": item["name"],
+            item_copy = item.copy()
+            item_copy.update({
                 "projectName": rental.projectName,
                 "returnDate": rental.returnDate,
                 "status": "Rented",
@@ -95,6 +229,7 @@ async def create_rental_record(rental: BulkRentalRequest):
                 "pmEmail": rental.pmEmail,
                 "caseId": rental.caseId
             })
+            updated_items.append(item_copy)
         else:
             updated_items.append(item)
             
@@ -160,11 +295,9 @@ async def return_rental_record(request: BulkReturnRequest):
     updated_items = []
     for item in db_storage["items"]:
         if item["equipmentCode"] in returned_codes:
-            # Restore status to Available, clearing out metadata
-            updated_items.append({
-                "id": item["id"],
-                "equipmentCode": item["equipmentCode"],
-                "name": item["name"],
+            # Restore status to Available, clearing out rental metadata while keeping catalog/spec fields
+            item_copy = item.copy()
+            item_copy.update({
                 "projectName": "",
                 "returnDate": "",
                 "status": "Available",
@@ -172,6 +305,7 @@ async def return_rental_record(request: BulkReturnRequest):
                 "pmEmail": "",
                 "caseId": ""
             })
+            updated_items.append(item_copy)
         else:
             updated_items.append(item)
             

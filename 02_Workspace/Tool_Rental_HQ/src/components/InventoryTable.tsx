@@ -8,6 +8,72 @@ interface InventoryTableProps {
   onNavigateToCheckout: () => void;
 }
 
+const csvEscape = (value: unknown) => {
+  const raw = value == null ? '' : String(value);
+  return `"${raw.replace(/"/g, '""')}"`;
+};
+
+const getAssetCode = (asset: any) => asset.Asset_Code || asset.assetCode;
+const getBrand = (asset: any) => asset.Brand || asset.brand || '—';
+const getModel = (asset: any) => asset.Asset_Model || asset.model || '—';
+
+const SpecSummaryCard: React.FC<{ asset: Asset; compact?: boolean }> = ({ asset, compact = false }) => {
+  const spec = asset.specSummary;
+
+  if (!spec) {
+    return (
+      <div className="datasheet-summary-card">
+        <strong>Spec Summary</strong>
+        <p>No mock datasheet summary saved yet.</p>
+      </div>
+    );
+  }
+
+  const rows = [
+    ['Type', spec.equipmentType],
+    ['Range', spec.measurementRange],
+    ['Accuracy', spec.accuracy],
+    ['Voltage', spec.voltageRating],
+    ['Current', spec.currentRating],
+    ['Safety', spec.safetyCategory],
+    ['Connectivity', spec.connectivity],
+    ['Power', spec.powerSource],
+    ['Calibration', spec.calibrationCycle],
+  ];
+
+  return (
+    <div className="datasheet-summary-card">
+      <div className="summary-card-header">
+        <div>
+          <strong>Spec Summary</strong>
+          <div className="summary-card-subtitle">{getBrand(asset)} {getModel(asset)}</div>
+        </div>
+        <span className="summary-card-chip">MOCK</span>
+      </div>
+      <div className={compact ? 'summary-card-grid compact' : 'summary-card-grid'}>
+        {rows.map(([label, value]) => (
+          <React.Fragment key={label}>
+            <span className="summary-card-label">{label}</span>
+            <span>{value}</span>
+          </React.Fragment>
+        ))}
+      </div>
+      <div className="summary-card-features">
+        <strong>Key features</strong>
+        <ul>
+          {spec.keyFeatures.map((feature) => <li key={feature}>{feature}</li>)}
+        </ul>
+      </div>
+      <p className="summary-card-use"><strong>Typical use:</strong> {spec.typicalUse}</p>
+      {asset.datasheetUrl && (
+        <a className="summary-card-link" href={asset.datasheetUrl} target="_blank" rel="noreferrer">
+          Open mock datasheet PDF
+        </a>
+      )}
+    </div>
+  );
+};
+
 const InventoryTable: React.FC<InventoryTableProps> = ({ 
   assets: initialAssets, 
   selectedAssetCodes, 
@@ -16,8 +82,8 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
 }) => {
   const [assets, setAssets] = useState<Asset[]>(initialAssets);
   const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
+  const [detailsAsset, setDetailsAsset] = useState<Asset | null>(null);
 
-  // Sync state when props change
   useEffect(() => {
     setAssets(initialAssets);
   }, [initialAssets]);
@@ -37,13 +103,15 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
     }
 
     const sorted = [...assets].sort((a: any, b: any) => {
-      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
-      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+      const av = a[key] || a[key.replace(/^[A-Z]/, (c) => c.toLowerCase())] || '';
+      const bv = b[key] || b[key.replace(/^[A-Z]/, (c) => c.toLowerCase())] || '';
+      if (av < bv) return direction === 'asc' ? -1 : 1;
+      if (av > bv) return direction === 'asc' ? 1 : -1;
       return 0;
     });
 
     setAssets(sorted);
-    sortConfig && setSortConfig({ key, direction });
+    setSortConfig({ key, direction });
   };
 
   const handleCheckboxChange = (assetCode: string, checked: boolean) => {
@@ -54,51 +122,62 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
     }
   };
 
+  const selectedAssets = assets.filter(asset => selectedAssetCodes.includes(getAssetCode(asset)));
+
+  const downloadSelectedCsv = () => {
+    const headers = [
+      'Asset Code', 'Brand', 'Model', 'Equipment Type', 'Measurement Range', 'Accuracy',
+      'Voltage Rating', 'Current Rating', 'Safety Category', 'Connectivity', 'Power Source',
+      'Calibration Cycle', 'Key Features', 'Typical Use', 'Datasheet PDF URL'
+    ];
+
+    const rows = selectedAssets.map(asset => {
+      const spec = asset.specSummary;
+      return [
+        getAssetCode(asset), getBrand(asset), getModel(asset), spec?.equipmentType, spec?.measurementRange,
+        spec?.accuracy, spec?.voltageRating, spec?.currentRating, spec?.safetyCategory, spec?.connectivity,
+        spec?.powerSource, spec?.calibrationCycle, spec?.keyFeatures.join('; '), spec?.typicalUse, asset.datasheetUrl
+      ].map(csvEscape).join(',');
+    });
+
+    const csv = [headers.map(csvEscape).join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'ToolRental_Selected_Spec_Summary.csv';
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
-      {/* Sleek Floating Top Bar for Cart Selection */}
       {selectedAssetCodes.length > 0 && (
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: '#eff6ff',
-          border: '1px solid #3b82f6',
-          borderRadius: '8px',
-          padding: '12px 20px',
-          marginBottom: '20px',
-          boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.1), 0 2px 4px -1px rgba(59, 130, 246, 0.06)'
-        }}>
+        <div className="inventory-selection-bar">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '18px' }}>🛒</span>
             <span style={{ fontSize: '14px', fontWeight: '600', color: '#1e3a8a' }}>
-              <strong>{selectedAssetCodes.length}</strong> planned rental assets have been added to your cart.
+              <strong>{selectedAssetCodes.length}</strong> planned rental assets selected.
             </span>
           </div>
-          <button 
-            type="button"
-            className="f-button"
-            style={{
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              border: 'none',
-              padding: '8px 16px',
-              fontSize: '13px',
-              fontWeight: 'bold',
-              margin: 0,
-              cursor: 'pointer',
-              borderRadius: '4px',
-              transition: 'background-color 0.2s'
-            }}
-            onClick={onNavigateToCheckout}
-          >
-            Go to Smart Checkout ➜
-          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button type="button" className="f-button spec-export-button" onClick={downloadSelectedCsv}>
+              ⬇ Export Spec CSV
+            </button>
+            <button type="button" className="f-button f-button-primary" onClick={onNavigateToCheckout}>
+              Go to Smart Checkout ➜
+            </button>
+          </div>
         </div>
       )}
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h2 style={{ fontSize: '18px' }}>Master Asset Inventory</h2>
+        <div>
+          <h2 style={{ fontSize: '18px' }}>Master Asset Inventory</h2>
+          <p style={{ fontSize: '12px', color: 'var(--f-text-secondary)' }}>
+            Hover model text or use ⋯ Details to preview the standardized mock datasheet summary.
+          </p>
+        </div>
         <div style={{ display: 'flex', gap: '12px', fontSize: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             <div style={{ width: '12px', height: '12px', background: 'var(--f-warning)', border: '1px solid var(--f-warning-border)' }}></div>
@@ -124,6 +203,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
               <th onClick={() => handleSort('Asset_Model')}>Model</th>
               <th onClick={() => handleSort('Calibration_Date')}>Calibration Date</th>
               <th>Days Until Cal</th>
+              <th style={{ width: '72px', textAlign: 'center' }}>More</th>
             </tr>
           </thead>
           <tbody>
@@ -132,24 +212,16 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
               const status = asset.Current_Status || asset.status;
               const location = `${asset.Location_Zone || asset.zone} / ${asset.Location_Rack || asset.rack}`;
               const currentLocation = asset.Current_Location || asset.currentLocation;
-              const assetCode = asset.Asset_Code || asset.assetCode;
-              
+              const assetCode = getAssetCode(asset);
               const isSelected = selectedAssetCodes.includes(assetCode);
               const isAvailable = status === 'Available';
-              
               let rowStyle = {};
-              if (daysLeft < 0) {
-                rowStyle = { backgroundColor: 'var(--f-danger-bg)' };
-              } else if (daysLeft < 30) {
-                rowStyle = { backgroundColor: 'var(--f-warning)' };
-              }
-
-              if (isSelected) {
-                rowStyle = { ...rowStyle, backgroundColor: '#eff6ff' };
-              }
+              if (daysLeft < 0) rowStyle = { backgroundColor: 'var(--f-danger-bg)' };
+              else if (daysLeft < 30) rowStyle = { backgroundColor: 'var(--f-warning)' };
+              if (isSelected) rowStyle = { ...rowStyle, backgroundColor: '#eff6ff' };
 
               return (
-                <tr key={index} style={rowStyle}>
+                <tr key={assetCode || index} style={rowStyle}>
                   <td style={{ textAlign: 'center' }}>
                     <input 
                       type="checkbox"
@@ -160,25 +232,21 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                       title={isAvailable ? 'Add to rental cart' : 'Rented assets cannot be selected.'}
                     />
                   </td>
+                  <td><span className={`f-badge ${status === 'Available' ? 'f-badge-available' : 'f-badge-rented'}`}>{status?.toUpperCase()}</span></td>
+                  <td>{location}</td>
+                  <td style={{ color: currentLocation === 'Warehouse' ? 'var(--f-text-secondary)' : 'var(--f-primary)', fontWeight: 600 }}>{currentLocation}</td>
+                  <td style={{ fontWeight: 600 }}>{assetCode}</td>
+                  <td>{getBrand(asset)}</td>
                   <td>
-                    <span className={`f-badge ${status === 'Available' ? 'f-badge-available' : 'f-badge-rented'}`}>
-                      {status?.toUpperCase()}
+                    <span className="model-hover-target">
+                      {getModel(asset)}
+                      <div className="model-hover-card"><SpecSummaryCard asset={asset} compact /></div>
                     </span>
                   </td>
-                  <td>{location}</td>
-                  <td style={{ color: currentLocation === 'Warehouse' ? 'var(--f-text-secondary)' : 'var(--f-primary)', fontWeight: 600 }}>
-                    {currentLocation}
-                  </td>
-                  <td style={{ fontWeight: 600 }}>{assetCode}</td>
-                  <td>{asset.Brand || asset.brand}</td>
-                  <td>{asset.Asset_Model || asset.model}</td>
                   <td>{asset.Calibration_Date || asset.calDate}</td>
-                  <td style={{ fontWeight: 'bold' }}>
-                    {daysLeft < 0 ? (
-                      <span style={{ color: 'var(--f-error)' }}>EXPIRED ({Math.abs(daysLeft)}d)</span>
-                    ) : (
-                      `${daysLeft}d`
-                    )}
+                  <td style={{ fontWeight: 'bold' }}>{daysLeft < 0 ? <span style={{ color: 'var(--f-error)' }}>EXPIRED ({Math.abs(daysLeft)}d)</span> : `${daysLeft}d`}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    <button className="row-more-button" type="button" onClick={() => setDetailsAsset(asset)} aria-label={`Open details for ${assetCode}`}>⋯</button>
                   </td>
                 </tr>
               );
@@ -186,6 +254,21 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
           </tbody>
         </table>
       </div>
+
+      {detailsAsset && (
+        <div className="details-modal-backdrop" onClick={() => setDetailsAsset(null)}>
+          <div className="details-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="details-modal-header">
+              <div>
+                <h3>{getBrand(detailsAsset)} {getModel(detailsAsset)}</h3>
+                <p>{getAssetCode(detailsAsset)} · standardized mock datasheet template</p>
+              </div>
+              <button type="button" className="details-close-button" onClick={() => setDetailsAsset(null)}>×</button>
+            </div>
+            <SpecSummaryCard asset={detailsAsset} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

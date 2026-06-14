@@ -1,3 +1,17 @@
+export type SpecSummary = {
+  equipmentType: string;
+  measurementRange: string;
+  accuracy: string;
+  voltageRating: string;
+  currentRating: string;
+  safetyCategory: string;
+  connectivity: string;
+  powerSource: string;
+  calibrationCycle: string;
+  keyFeatures: string[];
+  typicalUse: string;
+}
+
 export type Asset = {
   assetCode: string;
   brand: string;
@@ -7,6 +21,16 @@ export type Asset = {
   currentLocation: string;
   calDate: string;
   status: 'Available' | 'Rented';
+  Current_Status?: 'Available' | 'Rented';
+  Brand?: string;
+  Asset_Model?: string;
+  Asset_Code?: string;
+  Location_Zone?: string;
+  Location_Rack?: string;
+  Current_Location?: string;
+  Calibration_Date?: string;
+  datasheetUrl?: string;
+  specSummary?: SpecSummary;
 }
 
 export type Rental = {
