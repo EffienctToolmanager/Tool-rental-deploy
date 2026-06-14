@@ -64,7 +64,7 @@ const App: React.FC = () => {
     const rented = assets.filter(a => (a as any).Current_Status === 'Rented').length;
     return [
       { name: 'Available', value: available, color: '#4CAF50' },
-      { name: 'Rented', value: rented, color: '#5B5FC7' },
+      { name: 'Rented', value: rented, color: '#005E60' },
       { name: 'Maintenance', value: 0, color: '#FF9800' }
     ];
   };
@@ -74,8 +74,8 @@ const App: React.FC = () => {
       <header style={{ marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '32px', height: '32px', background: 'var(--f-primary)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyItems: 'center', color: 'white', fontWeight: 'bold', justifyContent: 'center' }}>T</div>
-            <h1 style={{ fontSize: '20px' }}>Tool Rental HQ</h1>
+            <div style={{ width: '32px', height: '32px', background: 'var(--f-primary)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyItems: 'center', color: 'white', fontWeight: 'bold', justifyContent: 'center' }}>G</div>
+            <h1 style={{ fontSize: '20px' }}>GE VERNOVA_Tool Rental System</h1>
           </div>
         </div>
 

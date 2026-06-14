@@ -26,7 +26,7 @@ const Dashboard: React.FC = () => {
       {/* Header: Apple-style Sticky Glassmorphism */}
       <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-          <h1 className="text-xl font-bold tracking-tight">Tool Rental HQ</h1>
+          <h1 className="text-xl font-bold tracking-tight">GE VERNOVA_Tool Rental System</h1>
           <button 
             onClick={syncWithSharePoint}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors active:scale-95"

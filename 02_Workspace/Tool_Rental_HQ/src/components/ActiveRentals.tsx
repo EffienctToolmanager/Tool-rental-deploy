@@ -202,9 +202,9 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                 fontSize: '12px', 
                 padding: '0 14px',
                 borderRadius: '16px',
-                border: '1px solid #5B5FC7',
-                backgroundColor: selectedProjectTab === 'All' ? '#5B5FC7' : 'transparent',
-                color: selectedProjectTab === 'All' ? 'white' : '#5B5FC7',
+                border: '1px solid #005E60',
+                backgroundColor: selectedProjectTab === 'All' ? '#005E60' : 'transparent',
+                color: selectedProjectTab === 'All' ? 'white' : '#005E60',
                 fontWeight: '600',
                 transition: 'all 0.2s'
               }}
@@ -222,9 +222,9 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                   fontSize: '12px', 
                   padding: '0 14px',
                   borderRadius: '16px',
-                  border: '1px solid #5B5FC7',
-                  backgroundColor: selectedProjectTab === proj ? '#5B5FC7' : 'transparent',
-                  color: selectedProjectTab === proj ? 'white' : '#5B5FC7',
+                  border: '1px solid #005E60',
+                  backgroundColor: selectedProjectTab === proj ? '#005E60' : 'transparent',
+                  color: selectedProjectTab === proj ? 'white' : '#005E60',
                   fontWeight: '600',
                   transition: 'all 0.2s'
                 }}

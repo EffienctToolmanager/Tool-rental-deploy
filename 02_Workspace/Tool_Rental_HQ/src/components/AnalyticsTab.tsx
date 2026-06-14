@@ -75,7 +75,7 @@ const AnalyticsTab: React.FC = () => {
               <YAxis allowDecimals={false} />
               <ReTooltip />
               <ReLegend />
-              <Bar dataKey="count" fill="#5B5FC7" radius={[4, 4, 0, 0]} name="Rental Count" />
+              <Bar dataKey="count" fill="#005E60" radius={[4, 4, 0, 0]} name="Rental Count" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -107,7 +107,7 @@ const AnalyticsTab: React.FC = () => {
 
       {/* Summary KPI Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginTop: '24px' }}>
-        <div className="f-card" style={{ textAlign: 'center', borderTop: '4px solid #5B5FC7' }}>
+        <div className="f-card" style={{ textAlign: 'center', borderTop: '4px solid #005E60' }}>
           <div style={{ fontSize: '12px', color: 'var(--f-text-secondary)' }}>Total Projects</div>
           <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{data.rentals_by_project.length}</div>
         </div>
