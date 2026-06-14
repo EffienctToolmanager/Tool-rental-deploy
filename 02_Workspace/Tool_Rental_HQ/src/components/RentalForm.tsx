@@ -157,14 +157,14 @@ const RentalForm: React.FC<RentalFormProps> = ({
 
   return (
     <div className="f-card" style={{ maxWidth: '850px', margin: '0 auto', padding: '24px' }}>
-      <h2 style={{ marginBottom: '20px', fontSize: '20px', fontWeight: 'bold', color: '#1e293b' }}>
+      <h2 style={{ marginBottom: '20px', fontSize: '20px', fontWeight: 'bold', color: 'var(--f-text-strong)' }}>
         🛒 Smart Bulk Rental Checkout
       </h2>
       
       {/* SECTION 1: Catalog Selector */}
-      <div style={{ marginBottom: '25px', padding: '16px', border: '1px solid #e2e8f0', borderRadius: '8px', backgroundColor: '#f8fafc' }}>
+      <div style={{ marginBottom: '25px', padding: '16px', border: '1px solid var(--f-card-accent-border)', borderRadius: '8px', backgroundColor: 'var(--f-card-accent-bg)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '600', color: '#334155' }}>
+          <h3 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--f-text-normal)' }}>
             1. Select Tools from Catalog ({assets.length} Available)
           </h3>
           <input 
@@ -177,9 +177,9 @@ const RentalForm: React.FC<RentalFormProps> = ({
           />
         </div>
 
-        <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #cbd5e1', borderRadius: '6px', backgroundColor: '#ffffff' }}>
+        <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid var(--f-border)', borderRadius: '6px', backgroundColor: 'var(--f-bg-white)' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-            <thead style={{ position: 'sticky', top: 0, backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', zIndex: 1 }}>
+            <thead style={{ position: 'sticky', top: 0, backgroundColor: 'var(--f-bg-th)', borderBottom: '1px solid var(--f-border)', zIndex: 1 }}>
               <tr>
                 <th style={{ width: '40px', padding: '8px', textAlign: 'center' }}>Select</th>
                 <th style={{ padding: '8px', textAlign: 'left' }}>Asset Code</th>
@@ -195,8 +195,8 @@ const RentalForm: React.FC<RentalFormProps> = ({
                     <tr 
                       key={asset.assetCode} 
                       style={{ 
-                        borderBottom: '1px solid #e2e8f0', 
-                        backgroundColor: isChecked ? '#eff6ff' : 'transparent',
+                        borderBottom: '1px solid var(--f-border)', 
+                        backgroundColor: isChecked ? 'var(--f-selected-bg)' : 'transparent',
                         transition: 'background-color 0.15s ease'
                       }}
                     >
@@ -210,13 +210,13 @@ const RentalForm: React.FC<RentalFormProps> = ({
                       </td>
                       <td style={{ padding: '8px', fontWeight: '600' }}>{asset.assetCode}</td>
                       <td style={{ padding: '8px' }}>{asset.brand || 'N/A'}</td>
-                      <td style={{ padding: '8px', color: '#475569' }}>{asset.model}</td>
+                      <td style={{ padding: '8px', color: 'var(--f-text-muted)' }}>{asset.model}</td>
                     </tr>
                   );
                 })
               ) : (
                 <tr>
-                  <td colSpan={4} style={{ padding: '16px', textAlign: 'center', color: '#64748b' }}>
+                  <td colSpan={4} style={{ padding: '16px', textAlign: 'center', color: 'var(--f-text-muted)' }}>
                     No matching available assets found.
                   </td>
                 </tr>
@@ -229,12 +229,12 @@ const RentalForm: React.FC<RentalFormProps> = ({
       {/* SECTION 2: Dynamic Cart Table (Photo Upload) */}
       {cart.length > 0 && (
         <div style={{ marginBottom: '25px' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '600', color: '#334155', marginBottom: '10px' }}>
+          <h3 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--f-text-normal)', marginBottom: '10px' }}>
             📦 Selected Items & Condition Photos ({cart.length})
           </h3>
-          <div style={{ border: '1px solid #cbd5e1', borderRadius: '6px', overflow: 'hidden' }}>
+          <div style={{ border: '1px solid var(--f-border)', borderRadius: '6px', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #cbd5e1' }}>
+              <thead style={{ backgroundColor: 'var(--f-bg-th)', borderBottom: '1px solid var(--f-border)' }}>
                 <tr>
                   <th style={{ padding: '10px', textAlign: 'left', width: '120px' }}>Asset Code</th>
                   <th style={{ padding: '10px', textAlign: 'left' }}>Model</th>
@@ -243,9 +243,9 @@ const RentalForm: React.FC<RentalFormProps> = ({
               </thead>
               <tbody>
                 {cart.map(item => (
-                  <tr key={item.assetCode} style={{ borderBottom: '1px solid #cbd5e1' }}>
+                  <tr key={item.assetCode} style={{ borderBottom: '1px solid var(--f-border)' }}>
                     <td style={{ padding: '10px', fontWeight: '600' }}>{item.assetCode}</td>
-                    <td style={{ padding: '10px', color: '#475569' }}>{item.assetModel}</td>
+                    <td style={{ padding: '10px', color: 'var(--f-text-muted)' }}>{item.assetModel}</td>
                     <td style={{ padding: '10px' }}>
                       <input 
                         type="file" 
@@ -269,7 +269,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
 
       {/* SECTION 3: Project Form */}
       <form onSubmit={handleSubmit}>
-        <h3 style={{ fontSize: '15px', fontWeight: '600', color: '#334155', marginBottom: '12px', borderTop: '1px solid #e2e8f0', paddingTop: '20px' }}>
+        <h3 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--f-text-normal)', marginBottom: '12px', borderTop: '1px solid var(--f-border)', paddingTop: '20px' }}>
           2. Project & Requester Details
         </h3>
         
@@ -340,7 +340,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
         <button 
           type="submit" 
           className="f-button f-button-primary" 
-          style={{ width: '100%', marginTop: '20px', height: '48px', fontSize: '15px', fontWeight: 'bold', backgroundColor: '#3b82f6' }}
+          style={{ width: '100%', marginTop: '20px', height: '48px', fontSize: '15px', fontWeight: 'bold', backgroundColor: 'var(--f-primary)' }}
           disabled={isSubmitting || cart.length === 0}
         >
           {isSubmitting ? 'Processing Bulk Request...' : '🚀 Submit Bulk Rental Request'}

@@ -179,10 +179,10 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
       </div>
 
       {/* Premium Project View Filter Section */}
-      <div className="f-card" style={{ marginBottom: '24px', padding: '16px', backgroundColor: '#fafafc', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
+      <div className="f-card" style={{ marginBottom: '24px', padding: '16px', backgroundColor: 'var(--f-card-accent-bg)', border: '1px solid var(--f-card-accent-border)', borderRadius: '8px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#475569' }}>🔍 View Filter:</span>
+            <span style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--f-text-muted)' }}>🔍 View Filter:</span>
             <input 
               type="text"
               placeholder="Search by project, case ID, renter..."
@@ -202,9 +202,9 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                 fontSize: '12px', 
                 padding: '0 14px',
                 borderRadius: '16px',
-                border: '1px solid #005E60',
-                backgroundColor: selectedProjectTab === 'All' ? '#005E60' : 'transparent',
-                color: selectedProjectTab === 'All' ? 'white' : '#005E60',
+                border: '1px solid var(--f-primary)',
+                backgroundColor: selectedProjectTab === 'All' ? 'var(--f-primary)' : 'transparent',
+                color: selectedProjectTab === 'All' ? 'var(--f-bg-white)' : 'var(--f-primary)',
                 fontWeight: '600',
                 transition: 'all 0.2s'
               }}
@@ -222,9 +222,9 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                   fontSize: '12px', 
                   padding: '0 14px',
                   borderRadius: '16px',
-                  border: '1px solid #005E60',
-                  backgroundColor: selectedProjectTab === proj ? '#005E60' : 'transparent',
-                  color: selectedProjectTab === proj ? 'white' : '#005E60',
+                  border: '1px solid var(--f-primary)',
+                  backgroundColor: selectedProjectTab === proj ? 'var(--f-primary)' : 'transparent',
+                  color: selectedProjectTab === proj ? 'var(--f-bg-white)' : 'var(--f-primary)',
                   fontWeight: '600',
                   transition: 'all 0.2s'
                 }}
@@ -262,14 +262,14 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
               {/* Case Header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid var(--f-border)', paddingBottom: '12px' }}>
                 <div style={{ width: '100%' }}>
-                  <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 6px 0', color: '#1e293b' }}>{caseId}</h3>
-                  <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 6px 0', color: 'var(--f-text-strong)' }}>{caseId}</h3>
+                  <div style={{ fontSize: '12px', color: 'var(--f-text-muted)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                      <span>👤 Renter: <strong style={{ color: '#334155' }}>{userEmail}</strong></span>
-                      <span>🔑 PM: <strong style={{ color: '#334155' }}>{pmEmail}</strong></span>
+                      <span>👤 Renter: <strong style={{ color: 'var(--f-text-normal)' }}>{userEmail}</strong></span>
+                      <span>🔑 PM: <strong style={{ color: 'var(--f-text-normal)' }}>{pmEmail}</strong></span>
                     </div>
                     <div style={{ display: 'flex', gap: '12px', marginTop: '2px' }}>
-                      <span>🏢 Project: <strong style={{ color: '#334155' }}>{projectName}</strong></span>
+                      <span>🏢 Project: <strong style={{ color: 'var(--f-text-normal)' }}>{projectName}</strong></span>
                     </div>
                   </div>
                 </div>
@@ -280,29 +280,29 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
               <div style={{ marginBottom: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px' }}>
                   <span>Return Date: {expectedDate}</span>
-                  <span style={{ fontWeight: 'bold', color: isOverdue ? 'var(--f-error)' : '#3b82f6' }}>
+                  <span style={{ fontWeight: 'bold', color: isOverdue ? 'var(--f-error)' : 'var(--f-primary)' }}>
                     {isOverdue ? `${Math.abs(daysLeft)} Days Past Due` : `${daysLeft} Days Left`}
                   </span>
                 </div>
-                <div style={{ width: '100%', height: '6px', background: '#E0E0E0', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '6px', background: 'var(--f-border)', borderRadius: '3px', overflow: 'hidden' }}>
                   <div 
                     style={{ 
                       width: `${isOverdue ? 100 : progress}%`, 
                       height: '100%', 
-                      background: isOverdue ? 'var(--f-error)' : '#3b82f6',
+                      background: isOverdue ? 'var(--f-error)' : 'var(--f-primary)',
                     }} 
                   />
                 </div>
               </div>
 
               {/* Items List */}
-              <div style={{ marginBottom: '20px', background: '#f8fafc', padding: '12px', borderRadius: '8px' }}>
-                <h4 style={{ fontSize: '12px', color: '#64748b', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Rented Assets ({items.length})</h4>
+              <div style={{ marginBottom: '20px', background: 'var(--f-bg-item-list)', padding: '12px', borderRadius: '8px' }}>
+                <h4 style={{ fontSize: '12px', color: 'var(--f-text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Rented Assets ({items.length})</h4>
                 <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
                   {items.map(item => (
-                    <li key={item.assetCode} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px dashed #cbd5e1' }}>
+                    <li key={item.assetCode} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px dashed var(--f-border-dashed)' }}>
                       <span style={{ fontSize: '13px', fontWeight: '500' }}>
-                        {item.assetCode} <span style={{ color: '#64748b', fontWeight: 'normal' }}>- {(item as any).model || 'Unknown Model'}</span>
+                        {item.assetCode} <span style={{ color: 'var(--f-text-muted)', fontWeight: 'normal' }}>- {(item as any).model || 'Unknown Model'}</span>
                       </span>
                       <div style={{ display: 'flex', gap: '4px' }}>
                         <button 
@@ -344,7 +344,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button 
                   className="f-button" 
-                  style={{ flex: 1, border: '1px solid #3b82f6', background: 'white', color: '#3b82f6', fontSize: '13px', fontWeight: '500' }}
+                  style={{ flex: 1, border: '1px solid var(--f-primary)', background: 'var(--f-bg-white)', color: 'var(--f-primary)', fontSize: '13px', fontWeight: '500' }}
                   onClick={() => {
                     setExtendCaseId(caseId);
                     setAssetsToExtend(items.map(item => ({
@@ -388,14 +388,14 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
             <h3 style={{ marginBottom: '8px', fontSize: '18px', fontWeight: 'bold' }}>
               ↩️ {assetsToReturn.length > 1 ? 'Bulk Return' : 'Partial Return'}
             </h3>
-            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '20px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--f-text-muted)', marginBottom: '20px' }}>
               Case ID: {returnCaseId}
             </p>
             
             <form onSubmit={handleReturn}>
-              <div style={{ border: '1px solid #cbd5e1', borderRadius: '6px', overflow: 'hidden', marginBottom: '20px' }}>
+              <div style={{ border: '1px solid var(--f-border)', borderRadius: '6px', overflow: 'hidden', marginBottom: '20px' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                  <thead style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #cbd5e1' }}>
+                  <thead style={{ backgroundColor: 'var(--f-bg-th)', borderBottom: '1px solid var(--f-border)' }}>
                     <tr>
                       <th style={{ padding: '10px', textAlign: 'left' }}>Asset Code</th>
                       <th style={{ padding: '10px', textAlign: 'left' }}>Model</th>
@@ -404,9 +404,9 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                   </thead>
                   <tbody>
                     {assetsToReturn.map(item => (
-                      <tr key={item.assetCode} style={{ borderBottom: '1px solid #cbd5e1' }}>
+                      <tr key={item.assetCode} style={{ borderBottom: '1px solid var(--f-border)' }}>
                         <td style={{ padding: '10px', fontWeight: '600' }}>{item.assetCode}</td>
-                        <td style={{ padding: '10px', color: '#475569' }}>{item.model}</td>
+                        <td style={{ padding: '10px', color: 'var(--f-text-normal)' }}>{item.model}</td>
                         <td style={{ padding: '10px' }}>
                           <input 
                             type="file" 
@@ -436,7 +436,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                 <button 
                   type="button" 
                   className="f-button" 
-                  style={{ flex: 1, background: 'white', border: '1px solid var(--f-border)' }}
+                  style={{ flex: 1, background: 'var(--f-bg-white)', color: 'var(--f-text)', border: '1px solid var(--f-border)' }}
                   onClick={() => {
                     setReturnCaseId(null);
                     setAssetsToReturn([]);
@@ -469,15 +469,15 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
             <h3 style={{ marginBottom: '8px', fontSize: '18px', fontWeight: 'bold' }}>
               🗓️ {assetsToExtend.length > 1 ? 'Bulk Extend Rental' : 'Partial Extend Rental'}
             </h3>
-            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '20px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--f-text-muted)', marginBottom: '20px' }}>
               Case ID: {extendCaseId}
             </p>
 
             <form onSubmit={handleExtend}>
               {/* Batch Date Setter for multiple items */}
               {assetsToExtend.length > 1 && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#f0f9ff', border: '1px solid #bae6fd', padding: '12px', borderRadius: '6px', marginBottom: '16px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: '600', color: '#0369a1' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--f-bg-item-list)', border: '1px solid var(--f-border)', padding: '12px', borderRadius: '6px', marginBottom: '16px' }}>
+                  <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--f-primary)' }}>
                     ⚡ Batch New Return Date:
                   </span>
                   <input 
@@ -499,9 +499,9 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                 </div>
               )}
 
-              <div style={{ border: '1px solid #cbd5e1', borderRadius: '6px', overflow: 'hidden', marginBottom: '20px' }}>
+              <div style={{ border: '1px solid var(--f-border)', borderRadius: '6px', overflow: 'hidden', marginBottom: '20px' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                  <thead style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #cbd5e1' }}>
+                  <thead style={{ backgroundColor: 'var(--f-bg-th)', borderBottom: '1px solid var(--f-border)' }}>
                     <tr>
                       <th style={{ padding: '10px', textAlign: 'left' }}>Asset Code</th>
                       <th style={{ padding: '10px', textAlign: 'left' }}>Current Return</th>
@@ -510,12 +510,12 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                   </thead>
                   <tbody>
                     {assetsToExtend.map(item => (
-                      <tr key={item.assetCode} style={{ borderBottom: '1px solid #cbd5e1' }}>
+                      <tr key={item.assetCode} style={{ borderBottom: '1px solid var(--f-border)' }}>
                         <td style={{ padding: '10px', fontWeight: '600' }}>
                           {item.assetCode}
-                          <div style={{ fontSize: '11px', fontWeight: 'normal', color: '#64748b' }}>{item.model}</div>
+                          <div style={{ fontSize: '11px', fontWeight: 'normal', color: 'var(--f-text-muted)' }}>{item.model}</div>
                         </td>
-                        <td style={{ padding: '10px', color: '#ef4444', fontWeight: '500' }}>{item.currentReturnDate}</td>
+                        <td style={{ padding: '10px', color: 'var(--f-error)', fontWeight: '500' }}>{item.currentReturnDate}</td>
                         <td style={{ padding: '10px' }}>
                           <input 
                             type="date" 
@@ -542,7 +542,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                 <button 
                   type="button" 
                   className="f-button" 
-                  style={{ flex: 1, background: 'white', border: '1px solid var(--f-border)' }}
+                  style={{ flex: 1, background: 'var(--f-bg-white)', color: 'var(--f-text)', border: '1px solid var(--f-border)' }}
                   onClick={() => {
                     setExtendCaseId(null);
                     setAssetsToExtend([]);
@@ -554,7 +554,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                 <button 
                   type="submit" 
                   className="f-button f-button-primary" 
-                  style={{ flex: 1, backgroundColor: '#3b82f6', color: 'white', border: 'none', height: '38px', fontSize: '14px', fontWeight: 'bold' }}
+                  style={{ flex: 1, backgroundColor: 'var(--f-primary)', color: 'white', border: 'none', height: '38px', fontSize: '14px', fontWeight: 'bold' }}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Processing...' : `Confirm Extension (${assetsToExtend.length})`}

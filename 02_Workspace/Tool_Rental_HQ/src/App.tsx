@@ -14,6 +14,23 @@ const App: React.FC = () => {
   const [rentals, setRentals] = useState<Rental[]>([]);
   const [selectedAssetCodes, setSelectedAssetCodes] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || saved === 'light') return saved;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return 'light';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
 
   const fetchData = async () => {
     try {
@@ -64,7 +81,7 @@ const App: React.FC = () => {
     const rented = assets.filter(a => (a as any).Current_Status === 'Rented').length;
     return [
       { name: 'Available', value: available, color: '#4CAF50' },
-      { name: 'Rented', value: rented, color: '#005E60' },
+      { name: 'Rented', value: rented, color: 'var(--f-primary)' },
       { name: 'Maintenance', value: 0, color: '#FF9800' }
     ];
   };
@@ -77,6 +94,31 @@ const App: React.FC = () => {
             <div style={{ width: '32px', height: '32px', background: 'var(--f-primary)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyItems: 'center', color: 'white', fontWeight: 'bold', justifyContent: 'center' }}>G</div>
             <h1 style={{ fontSize: '20px' }}>GE VERNOVA_Tool Rental System</h1>
           </div>
+          <button
+            type="button"
+            className="theme-toggle-btn"
+            onClick={toggleTheme}
+            data-agent-id="toggle-darkmode-btn"
+            data-agent-action="toggle-theme"
+            aria-label="Toggle Dark Mode"
+            style={{
+              background: 'var(--f-bg-white)',
+              border: '1px solid var(--f-border)',
+              borderRadius: '6px',
+              padding: '6px 12px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              color: 'var(--f-text)',
+              transition: 'all 0.2s',
+              boxShadow: 'var(--f-shadow)'
+            }}
+          >
+            {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
+          </button>
         </div>
 
         <nav className="f-tabs">
