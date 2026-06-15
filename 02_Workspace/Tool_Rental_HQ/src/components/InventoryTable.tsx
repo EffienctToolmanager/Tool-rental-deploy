@@ -279,12 +279,12 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
             <tr>
               <th className="table-th-select">Select</th>
               <th onClick={() => handleSort('Current_Status')}>Status</th>
-              <th onClick={() => handleSort('serialNumber')}>Serial Number</th>
               <th onClick={() => handleSort('Location_Zone')}>Toolcode/Rack</th>
               <th onClick={() => handleSort('Current_Location')}>Current location</th>
               <th onClick={() => handleSort('Asset_Code')}>Asset Code</th>
               <th onClick={() => handleSort('Brand')}>Brand</th>
               <th onClick={() => handleSort('Asset_Model')}>Model</th>
+              <th onClick={() => handleSort('serialNumber')}>Serial Number</th>
               <th onClick={() => handleSort('Calibration_Date')}>Calibration Date</th>
               <th>Days Until Cal</th>
               <th className="table-th-more">More</th>
@@ -321,7 +321,6 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                     />
                   </td>
                   <td><span className={`f-badge ${status === 'Available' ? 'f-badge-available' : 'f-badge-rented'}`}>{status?.toUpperCase()}</span></td>
-                  <td>{serialNumber}</td>
                   <td>{location}</td>
                   <td className={`table-td-location ${currentLocation === 'Warehouse' ? 'warehouse' : 'field'}`}>{currentLocation}</td>
                   <td className="table-td-code">{assetCode}</td>
@@ -332,6 +331,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                       <div className="model-hover-card"><SpecSummaryCard asset={asset} compact /></div>
                     </span>
                   </td>
+                  <td>{serialNumber}</td>
                   <td>{asset.Calibration_Date || asset.calDate}</td>
                   <td className="table-td-cal-days">{daysLeft < 0 ? <span className="cal-expired-text">EXPIRED ({Math.abs(daysLeft)}d)</span> : `${daysLeft}d`}</td>
                   <td className="table-td-more">
