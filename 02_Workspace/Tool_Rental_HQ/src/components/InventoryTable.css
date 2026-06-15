@@ -125,3 +125,45 @@
 .row-selected {
   background-color: var(--f-selected-bg);
 }
+
+.inventory-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  font-size: 14px;
+  border: 1px solid var(--f-border);
+  border-radius: 6px;
+  background-color: var(--f-bg-white);
+  color: var(--f-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--f-primary);
+  box-shadow: 0 0 0 2px var(--f-selected-bg);
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--f-text-secondary);
+  pointer-events: none;
+  font-size: 14px;
+}
+

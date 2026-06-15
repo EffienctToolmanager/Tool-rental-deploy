@@ -270,10 +270,11 @@ const RentalForm: React.FC<RentalFormProps> = ({
         </h3>
         
         <div className="f-form-group">
-          <label className="f-label">Project Name</label>
+          <label className="f-label" htmlFor="project-name">Project Name</label>
           <input 
             type="text" 
             name="projectName"
+            id="project-name"
             className="f-input" 
             value={formData.projectName}
             onChange={handleInputChange}
@@ -284,10 +285,11 @@ const RentalForm: React.FC<RentalFormProps> = ({
 
         <div className="form-row">
           <div className="f-form-group">
-            <label className="f-label">Project Code</label>
+            <label className="f-label" htmlFor="project-code">Project Code</label>
             <input 
               type="text" 
               name="projectCode"
+              id="project-code"
               className="f-input" 
               value={formData.projectCode}
               onChange={handleInputChange}
@@ -296,10 +298,11 @@ const RentalForm: React.FC<RentalFormProps> = ({
             />
           </div>
           <div className="f-form-group">
-            <label className="f-label">Requester Email</label>
+            <label className="f-label" htmlFor="user-email">Requester Email</label>
             <input 
               type="email" 
               name="userEmail"
+              id="user-email"
               className="f-input" 
               value={formData.userEmail}
               onChange={handleInputChange}
@@ -308,10 +311,11 @@ const RentalForm: React.FC<RentalFormProps> = ({
             />
           </div>
           <div className="f-form-group">
-            <label className="f-label">PM Email</label>
+            <label className="f-label" htmlFor="pm-email">PM Email</label>
             <input 
               type="email" 
               name="pmEmail"
+              id="pm-email"
               className="f-input" 
               value={formData.pmEmail}
               onChange={handleInputChange}
@@ -322,10 +326,11 @@ const RentalForm: React.FC<RentalFormProps> = ({
         </div>
 
         <div className="f-form-group">
-          <label className="f-label">Expected Return Date</label>
+          <label className="f-label" htmlFor="expected-return-date">Expected Return Date</label>
           <input 
             type="date" 
             name="expectedReturnDate"
+            id="expected-return-date"
             className="f-input" 
             value={formData.expectedReturnDate}
             onChange={handleInputChange}

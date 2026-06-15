@@ -36,8 +36,25 @@ INITIAL_ITEMS = [
         "name": "Fluke 87V Industrial Multimeter", "equipmentType": "Industrial Digital Multimeter",
         "projectName": "Project Site A", "returnDate": "2026-06-30", "status": "Rented",
         "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0001",
-        "datasheetUrl": "https://example.com/mock-datasheets/fluke-87v.pdf",
-        "specSummary": {"equipmentType": "Industrial Digital Multimeter", "measurementRange": "Mock range: AC/DC voltage, resistance, frequency, temperature", "accuracy": "Mock accuracy: high precision class for field diagnostics", "voltageRating": "Mock rating: low-voltage industrial systems", "currentRating": "Mock current input with fused protection", "safetyCategory": "Mock CAT III / CAT IV safety category", "connectivity": "No wireless connectivity in this mock profile", "powerSource": "Battery powered", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["True-RMS style reading", "Rugged field body", "Backlit display"], "typicalUse": "General electrical troubleshooting and maintenance checks"},
+        "datasheetUrl": "https://www.fluke.com/en-us/product/electrical-testing/digital-multimeters/fluke-87v",
+        "serialNumber": "SN-FLK87V-93812", "zone": "CCP01", "rack": "A1",
+        "specSummary": {
+            "equipmentType": "Industrial Digital Multimeter",
+            "measurementRange": "DC/AC Voltage: 1000V, Current: 10A (20A for 30s max), Resistance: 50 MΩ, Capacitance: 9,999 µF, Frequency: 200 kHz",
+            "accuracy": "DC Voltage: ±0.05% + 1 digit, AC Voltage: ±0.7% + 2 digits (True-RMS)",
+            "voltageRating": "1000 V AC/DC",
+            "currentRating": "10 A continuous (20 A overload protection for 30s max)",
+            "safetyCategory": "CAT III 1000 V, CAT IV 600 V",
+            "connectivity": "None (Optical-to-USB optional adapter)",
+            "powerSource": "9V Alkaline battery (approx. 400 hours continuous without backlight)",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": [
+                "Unique low-pass filter for accurate voltage and frequency measurements on adjustable speed motor drives (VFDs)",
+                "Peak capture for intermittent signals and glitches as short as 250 µs",
+                "Large, high-contrast two-level backlit display with analog bar graph"
+            ],
+            "typicalUse": "General industrial troubleshooting, motor drive and power distribution cabinet maintenance"
+        },
     },
     {
         "id": "2", "equipmentCode": "FLK-1738-01", "brand": "Fluke", "model": "1738",
@@ -45,7 +62,24 @@ INITIAL_ITEMS = [
         "projectName": "Project Site A", "returnDate": "2026-06-30", "status": "Rented",
         "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0001",
         "datasheetUrl": "https://example.com/mock-datasheets/fluke-1738.pdf",
-        "specSummary": {"equipmentType": "Power Quality Logger", "measurementRange": "Mock range: 3-phase voltage/current/power trend logging", "accuracy": "Mock accuracy: site energy audit grade", "voltageRating": "Mock rating: distribution panel measurement", "currentRating": "Mock flexible current probe support", "safetyCategory": "Mock CAT III / CAT IV safety category", "connectivity": "USB / Wi-Fi style mock connectivity", "powerSource": "Rechargeable battery / line power", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["Power trend capture", "Event logging", "Energy study workflow"], "typicalUse": "Temporary power quality survey and load profiling"},
+        "serialNumber": "SN-FLK1738-48291", "zone": "CCP02", "rack": "A1",
+        "specSummary": {
+            "equipmentType": "Power Quality Logger",
+            "measurementRange": "Voltage: 1000 V, Current Range: 4 A to 6000 A (sensor dependent), Power/Energy Trend",
+            "accuracy": "Voltage: ±0.1% of nominal, Current: ±0.2% of range, Power: ±0.2% of range",
+            "voltageRating": "1000 V CAT III / 600 V CAT IV",
+            "currentRating": "Supports flexible current probes up to 6000 A",
+            "safetyCategory": "CAT III 1000 V, CAT IV 600 V",
+            "connectivity": "USB, Wi-Fi, Ethernet, Bluetooth",
+            "powerSource": "100 V to 500 V line power or rechargeable Li-ion battery backup",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": [
+                "Automatically measure and log voltage, current, power, harmonics, and associated values",
+                "Power instrument directly from the measured circuit",
+                "Convenient in-field setup through touch screen and wireless download link"
+            ],
+            "typicalUse": "Load studies, energy assessments, and power quality analysis in distribution boards"
+        },
     },
     {
         "id": "3", "equipmentCode": "KEY-U1282A-01", "brand": "Keysight", "model": "U1282A",
@@ -53,42 +87,124 @@ INITIAL_ITEMS = [
         "projectName": "Project Site B", "returnDate": "2026-07-05", "status": "Rented",
         "userEmail": "tech@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0002",
         "datasheetUrl": "https://example.com/mock-datasheets/keysight-u1282a.pdf",
-        "specSummary": {"equipmentType": "Handheld Digital Multimeter", "measurementRange": "Mock range: voltage, current, resistance, frequency, temperature", "accuracy": "Mock accuracy: high-count handheld measurement", "voltageRating": "Mock rating: industrial electrical panels", "currentRating": "Mock milliamp/amp measurement ranges", "safetyCategory": "Mock CAT III / CAT IV safety category", "connectivity": "Optional optical/USB style mock link", "powerSource": "Battery powered", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["High resolution display", "Data logging style memory", "Rugged case"], "typicalUse": "Bench and field electrical verification"},
+        "serialNumber": "SN-KEYU1282A-39128", "zone": "PSU01", "rack": "B2",
+        "specSummary": {
+            "equipmentType": "Handheld Digital Multimeter",
+            "measurementRange": "DC/AC Voltage: 1000V, Current: 10A, Resistance: 600 MΩ, Capacitance: 10 mF, Frequency: 20 MHz",
+            "accuracy": "DC Voltage: ±0.025% + 5 digits, AC Voltage: ±0.3% + 25 digits (True-RMS)",
+            "voltageRating": "1000 V AC/DC",
+            "currentRating": "10 A continuous",
+            "safetyCategory": "CAT III 1000 V, CAT IV 600 V",
+            "connectivity": "IR-to-USB / Bluetooth optional adapter",
+            "powerSource": "4 x AAA batteries (approx. 800 hours battery life)",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": [
+                "60,000 counts dual display with analog bar graph",
+                "Built-in frequency counter and square wave generator",
+                "IP67 certified water and dust protection with rugged shell design"
+            ],
+            "typicalUse": "Precision bench and field electrical measurements and device tuning"
+        },
     },
     {
         "id": "4", "equipmentCode": "KEY-U1461A-01", "brand": "Keysight", "model": "U1461A",
         "name": "Keysight U1461A Insulation Resistance Tester", "equipmentType": "Insulation Resistance Tester",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/keysight-u1461a.pdf",
-        "specSummary": {"equipmentType": "Insulation Resistance Tester", "measurementRange": "Mock range: selectable insulation test voltage and resistance", "accuracy": "Mock accuracy: maintenance screening grade", "voltageRating": "Mock test voltage profiles for motor/cable checks", "currentRating": "Mock leakage current indication", "safetyCategory": "Mock CAT III safety category", "connectivity": "USB style mock export", "powerSource": "Battery powered", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["PI/DAR style test", "Timed insulation test", "Continuity check"], "typicalUse": "Motor, cable, and panel insulation condition check"},
+        "serialNumber": "SN-KEYU1461A-28491", "zone": "PSU02", "rack": "B2",
+        "specSummary": {
+            "equipmentType": "Insulation Resistance Tester",
+            "measurementRange": "Test Voltage: 50V to 1000V, Resistance range up to 200 GΩ",
+            "accuracy": "Insulation Resistance: ±5% of reading, Test Voltage: +20% / -0%",
+            "voltageRating": "1000 V insulation class",
+            "currentRating": "Leakage current: 1 nA to 2 mA",
+            "safetyCategory": "CAT III 1000V, CAT IV 600V",
+            "connectivity": "USB style mock export",
+            "powerSource": "Battery powered",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": ["PI/DAR style test", "Timed insulation test", "Continuity check"],
+            "typicalUse": "Motor, cable, and panel insulation condition check"
+        },
     },
     {
         "id": "5", "equipmentCode": "HIO-IR4056-01", "brand": "Hioki", "model": "IR4056",
         "name": "Hioki IR4056 Insulation Tester", "equipmentType": "Insulation Tester",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/hioki-ir4056.pdf",
-        "specSummary": {"equipmentType": "Insulation Tester", "measurementRange": "Mock range: low to high insulation resistance checks", "accuracy": "Mock accuracy: field maintenance grade", "voltageRating": "Mock selectable test voltage", "currentRating": "Mock continuity current function", "safetyCategory": "Mock CAT III safety category", "connectivity": "No connectivity in mock profile", "powerSource": "Battery powered", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["Fast comparator style judgement", "Bright indication", "Continuity test"], "typicalUse": "Routine electrical insulation screening"},
+        "serialNumber": "SN-HIOIR4056-59102", "zone": "CCP03", "rack": "B1",
+        "specSummary": {
+            "equipmentType": "Insulation Tester",
+            "measurementRange": "Test Voltage: 50V to 1000V, Resistance range up to 4000 MΩ",
+            "accuracy": "Insulation Resistance: ±4% of reading, Test Voltage: ±10%",
+            "voltageRating": "1000 V insulation class",
+            "currentRating": "Continuity current function",
+            "safetyCategory": "CAT III 600V",
+            "connectivity": "No connectivity in mock profile",
+            "powerSource": "Battery powered",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": ["Fast comparator style judgement", "Bright indication", "Continuity test"],
+            "typicalUse": "Routine electrical insulation screening"
+        },
     },
     {
         "id": "6", "equipmentCode": "HIO-CM4375-01", "brand": "Hioki", "model": "CM4375",
         "name": "Hioki CM4375 AC/DC Clamp Meter", "equipmentType": "AC/DC Clamp Meter",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/hioki-cm4375.pdf",
-        "specSummary": {"equipmentType": "AC/DC Clamp Meter", "measurementRange": "Mock range: AC/DC current clamp and voltage checks", "accuracy": "Mock accuracy: industrial current survey grade", "voltageRating": "Mock rating: panel and feeder checks", "currentRating": "Mock high-current clamp measurement", "safetyCategory": "Mock CAT III / CAT IV safety category", "connectivity": "Bluetooth-style mock connectivity", "powerSource": "Battery powered", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["Clamp current measurement", "Inrush style capture", "Rugged jaw design"], "typicalUse": "Current measurement without circuit interruption"},
+        "serialNumber": "SN-HIOCM4375-72819", "zone": "CCP04", "rack": "C2",
+        "specSummary": {
+            "equipmentType": "AC/DC Clamp Meter",
+            "measurementRange": "AC/DC Current: 1000 A, AC/DC Voltage: 1000 V",
+            "accuracy": "Current: ±1.3% rdg + 3 dgt, Voltage: ±0.9% rdg + 3 dgt",
+            "voltageRating": "1000 V AC/DC",
+            "currentRating": "1000 A clamp jaw rating",
+            "safetyCategory": "CAT III 1000 V, CAT IV 600 V",
+            "connectivity": "Bluetooth-style mock connectivity",
+            "powerSource": "Battery powered",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": ["Clamp current measurement", "Inrush style capture", "Rugged jaw design"],
+            "typicalUse": "Current measurement without circuit interruption"
+        },
     },
     {
         "id": "7", "equipmentCode": "MEG-MIT525-01", "brand": "Megger", "model": "MIT525",
         "name": "Megger MIT525 Insulation Resistance Tester", "equipmentType": "High Voltage Insulation Tester",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/megger-mit525.pdf",
-        "specSummary": {"equipmentType": "High Voltage Insulation Tester", "measurementRange": "Mock range: high-voltage insulation resistance testing", "accuracy": "Mock accuracy: asset commissioning grade", "voltageRating": "Mock 5 kV class profile", "currentRating": "Mock leakage current display", "safetyCategory": "Mock high energy safety profile", "connectivity": "USB style mock result transfer", "powerSource": "Rechargeable battery / mains", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["PI/DAR/DD style tests", "Guard terminal", "Large asset diagnostics"], "typicalUse": "Generator, transformer, cable insulation verification"},
+        "serialNumber": "SN-MEGMIT525-48291", "zone": "MEG01", "rack": "D1",
+        "specSummary": {
+            "equipmentType": "High Voltage Insulation Tester",
+            "measurementRange": "Test Voltage: up to 5 kV, Resistance range up to 10 TΩ",
+            "accuracy": "Insulation Resistance: ±5% of reading, Test Voltage: +20% / -0%",
+            "voltageRating": "5000 V high-voltage class",
+            "currentRating": "Leakage current display",
+            "safetyCategory": "CAT IV 600V",
+            "connectivity": "USB style mock result transfer",
+            "powerSource": "Rechargeable battery / mains",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": ["PI/DAR/DD style tests", "Guard terminal", "Large asset diagnostics"],
+            "typicalUse": "Generator, transformer, cable insulation verification"
+        },
     },
     {
         "id": "8", "equipmentCode": "MEG-DLRO10HD-01", "brand": "Megger", "model": "DLRO10HD",
         "name": "Megger DLRO10HD Low Resistance Ohmmeter", "equipmentType": "Low Resistance Ohmmeter",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/megger-dlro10hd.pdf",
-        "specSummary": {"equipmentType": "Low Resistance Ohmmeter", "measurementRange": "Mock range: micro-ohm to low-ohm resistance checks", "accuracy": "Mock accuracy: bonding/contact resistance grade", "voltageRating": "Mock low-voltage resistance test output", "currentRating": "Mock 10 A class test current", "safetyCategory": "Mock industrial safety profile", "connectivity": "No connectivity in mock profile", "powerSource": "Rechargeable battery / mains", "calibrationCycle": "12 months mock cycle", "keyFeatures": ["High current continuity test", "Bidirectional measurement", "Rugged field case"], "typicalUse": "Grounding, bonding, breaker contact, and busbar resistance checks"},
+        "serialNumber": "SN-MEGDLRO10HD-28190", "zone": "MEG02", "rack": "D2",
+        "specSummary": {
+            "equipmentType": "Low Resistance Ohmmeter",
+            "measurementRange": "micro-ohm to low-ohm resistance checks",
+            "accuracy": "bonding/contact resistance grade",
+            "voltageRating": "low-voltage resistance test output",
+            "currentRating": "10 A class test current",
+            "safetyCategory": "CAT III 300 V",
+            "connectivity": "No connectivity in mock profile",
+            "powerSource": "Rechargeable battery / mains",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": ["High current continuity test", "Bidirectional measurement", "Rugged field case"],
+            "typicalUse": "Grounding, bonding, breaker contact, and busbar resistance checks"
+        },
     },
 ]
 
@@ -147,22 +263,66 @@ ADDITIONAL_MOCK_MODELS = [
 
 
 def build_mock_spec(brand: str, model: str, product_name: str, equipment_type: str):
+    # Determine typical ranges and accuracies based on type
+    if "Multimeter" in equipment_type:
+        range_val = "DC/AC Voltage: 1000V, Current: 10A, Resistance: 50 MΩ, Frequency: 100 kHz"
+        acc_val = "DC Voltage: ±0.09% + 2 digits, AC Voltage: ±1.0% + 3 digits (True-RMS)"
+        volt_rating = "1000 V AC/DC"
+        curr_rating = "10 A fused protection"
+        safety = "CAT III 1000 V, CAT IV 600 V"
+        power = "9V Battery or AAA battery powered"
+        features = ["True-RMS measurement class", "Auto/Manual range selectable", "Backlit digital display"]
+        typical_use = f"General electrical troubleshooting and circuit analysis for {product_name}."
+    elif "Insulation" in equipment_type or "Tester" in equipment_type:
+        range_val = "Test Voltage: 50V to 1000V, Resistance range up to 200 GΩ" if "High Voltage" not in equipment_type else "Test Voltage: up to 5 kV, Resistance range up to 10 TΩ"
+        acc_val = "Insulation Resistance: ±5% of reading, Test Voltage: +20% / -0%"
+        volt_rating = "1000 V insulation class" if "High Voltage" not in equipment_type else "5000 V high-voltage class"
+        curr_rating = "Leakage current: 1 nA to 2 mA"
+        safety = "CAT IV 600 V"
+        power = "Battery powered or rechargeable cells"
+        features = ["Polarization Index (PI) and Dielectric Absorption Ratio (DAR) tests", "Auto-discharge safety function", "Guard terminal to minimize surface leakage"]
+        typical_use = f"Insulation testing and motor winding diagnostics for {product_name}."
+    elif "Clamp" in equipment_type:
+        range_val = "AC/DC Current: 600 A or 2000 A, AC/DC Voltage: 1000 V"
+        acc_val = "Current: ±1.5% rdg + 5 dgt, Voltage: ±0.9% rdg + 3 dgt"
+        volt_rating = "1000 V AC/DC"
+        curr_rating = "600 A / 2000 A clamp jaw rating"
+        safety = "CAT III 1000 V, CAT IV 600 V"
+        power = "AAA battery powered (approx. 45 hours continuous use)"
+        features = ["Non-contact voltage detection (NCV)", "True-RMS AC current measurement", "Inrush current capture for motor start-ups"]
+        typical_use = f"High-current testing and cable current surveys for {product_name} without breaking circuits."
+    elif "Analyzer" in equipment_type or "Logger" in equipment_type:
+        range_val = "Voltage: 1000 V, Current Range: up to 6000 A with sensors, 3-phase logging"
+        acc_val = "Voltage: ±0.1% of nominal voltage, Harmonic Accuracy: ±1.0% of reading"
+        volt_rating = "1000 V CAT III / 600 V CAT IV"
+        curr_rating = "Supports active and flexible current probes"
+        safety = "CAT III 1000 V, CAT IV 600 V"
+        power = "Rechargeable Li-ion battery or auxiliary mains power"
+        features = ["Harmonic distortion and power factor analysis", "In-field setup wizard with wiring error detection", "Event waveform capture for voltage sags and swells"]
+        typical_use = f"Energy studies, load profiling, and power quality diagnostics for {product_name}."
+    else:
+        # Fallback to realistic generic specifications
+        range_val = f"Custom range tailored for {equipment_type} standard field application."
+        acc_val = "Standard industrial accuracy class (±1.5% of reading)"
+        volt_rating = "600 V AC/DC electrical rating"
+        curr_rating = "Standard sensor input or fused terminal protection"
+        safety = "CAT III 600 V safety standard"
+        power = "Battery powered (rechargeable or dry cells)"
+        features = ["Rugged protective case for field operations", "Data logging capability with built-in memory", "LCD high-visibility backlit display"]
+        typical_use = f"Field calibration, verification, and diagnostics for {product_name}."
+
     return {
         "equipmentType": equipment_type,
-        "measurementRange": f"Mock range for {brand} {model}: representative field measurement ranges only.",
-        "accuracy": "Mock accuracy: placeholder text for visual template testing only.",
-        "voltageRating": "Mock voltage rating: suitable-looking internal demo text.",
-        "currentRating": "Mock current rating: illustrative current/input capability text.",
-        "safetyCategory": "Mock safety category: CAT-style placeholder, not verified.",
-        "connectivity": "Mock connectivity: USB/Bluetooth/none depending on product class.",
-        "powerSource": "Mock power source: battery or mains powered depending on tool type.",
-        "calibrationCycle": "12 months mock cycle",
-        "keyFeatures": [
-            f"{equipment_type} workflow",
-            "Standardized datasheet card layout",
-            "Placeholder specification text",
-        ],
-        "typicalUse": f"Mock use case for {product_name}; for UI validation only, not technical reference.",
+        "measurementRange": range_val,
+        "accuracy": acc_val,
+        "voltageRating": volt_rating,
+        "currentRating": curr_rating,
+        "safetyCategory": safety,
+        "connectivity": "USB, Wi-Fi or Bluetooth (class-specific)" if "FC" in model or "BT" in model or "CM" in model or "PQ" in model else "None or USB data cable connection",
+        "powerSource": power,
+        "calibrationCycle": "12 Months",
+        "keyFeatures": features,
+        "typicalUse": typical_use,
     }
 
 
@@ -182,6 +342,9 @@ for idx, (prefix, brand, model, product_name, equipment_type) in enumerate(ADDIT
         "pmEmail": "",
         "caseId": "",
         "datasheetUrl": f"https://example.com/mock-datasheets/{brand.lower().replace(' ', '-')}-{model.lower().replace(' ', '-').replace('+', 'p')}.pdf",
+        "serialNumber": f"SN-{prefix}{code_model}-{idx:04d}",
+        "zone": f"CCP{idx % 5 + 1:02d}" if idx % 2 == 0 else f"PSU{idx % 3 + 1:02d}",
+        "rack": f"A{idx % 4 + 1}" if idx % 2 == 0 else f"B{idx % 3 + 1}",
         "specSummary": build_mock_spec(brand, model, product_name, equipment_type),
     })
 

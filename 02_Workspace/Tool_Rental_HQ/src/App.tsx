@@ -47,8 +47,9 @@ const App: React.FC = () => {
         Current_Status: (item.status === '보관중' || item.status === 'Available') ? 'Available' : 'Rented',
         currentLocation: item.projectName || 'Warehouse',
         calDate: '2026-12-31',
-        zone: 'HQ',
-        rack: 'A1',
+        zone: item.zone || 'HQ',
+        rack: item.rack || 'A1',
+        serialNumber: item.serialNumber || item.Serial_Number || 'N/A',
         datasheetUrl: item.datasheetUrl,
         specSummary: item.specSummary
       }));

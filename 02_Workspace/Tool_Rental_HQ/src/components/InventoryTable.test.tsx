@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import InventoryTable from './InventoryTable';
 import { type Asset } from '../types';
@@ -9,8 +9,9 @@ const mockAssets: Asset[] = [
     assetCode: 'EQ-001',
     brand: 'GE',
     model: 'Multimeter 90',
-    zone: 'A',
-    rack: '3',
+    zone: 'CCP01',
+    rack: 'A1',
+    serialNumber: 'SN-001',
     currentLocation: 'Warehouse',
     calDate: '2026-08-01',
     status: 'Available',
@@ -47,6 +48,8 @@ describe('InventoryTable Component', () => {
     expect(screen.getByText('Master Asset Inventory')).toBeInTheDocument();
     expect(screen.getByText('EQ-001')).toBeInTheDocument();
     expect(screen.getByText('GE')).toBeInTheDocument();
+    expect(screen.getByText('SN-001')).toBeInTheDocument();
+    expect(screen.getByText('CCP01/A1')).toBeInTheDocument();
   });
 
   it('shows selection bar when assets are selected', () => {
@@ -65,4 +68,46 @@ describe('InventoryTable Component', () => {
     expect(screen.getByText(/planned rental assets selected/i)).toBeInTheDocument();
     expect(screen.getByText('Go to Smart Checkout ➜')).toBeInTheDocument();
   });
+
+  it('filters assets by search keyword', async () => {
+    const setSelectedAssetCodes = vi.fn();
+    const onNavigateToCheckout = vi.fn();
+    
+    const doubleAssets: Asset[] = [
+      ...mockAssets,
+      {
+        assetCode: 'EQ-002',
+        brand: 'Fluke',
+        model: '87V',
+        zone: 'CCP02',
+        rack: 'B1',
+        serialNumber: 'SN-FLK87V-999',
+        currentLocation: 'Field Site',
+        calDate: '2026-09-01',
+        status: 'Available'
+      }
+    ];
+
+    render(
+      <InventoryTable 
+        assets={doubleAssets}
+        selectedAssetCodes={[]}
+        setSelectedAssetCodes={setSelectedAssetCodes}
+        onNavigateToCheckout={onNavigateToCheckout}
+      />
+    );
+
+    // Initial render shows both
+    expect(screen.getByText('EQ-001')).toBeInTheDocument();
+    expect(screen.getByText('EQ-002')).toBeInTheDocument();
+
+    // Type Fluke in search input
+    const searchInput = screen.getByPlaceholderText(/search by model/i);
+    fireEvent.change(searchInput, { target: { value: 'Fluke' } });
+
+    // Should only show EQ-002
+    expect(screen.queryByText('EQ-001')).not.toBeInTheDocument();
+    expect(screen.getByText('EQ-002')).toBeInTheDocument();
+  });
 });
+

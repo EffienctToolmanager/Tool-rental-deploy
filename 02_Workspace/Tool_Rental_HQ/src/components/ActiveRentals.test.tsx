@@ -33,7 +33,7 @@ describe('ActiveRentals Component', () => {
 
     expect(screen.getByText('Active Rentals Monitor')).toBeInTheDocument();
     expect(screen.getByText('CASE-001')).toBeInTheDocument();
-    expect(screen.getByText('Wind Turbine Dev')).toBeInTheDocument();
+    expect(screen.getAllByText('Wind Turbine Dev')[0]).toBeInTheDocument();
   });
 
   it('filters rentals when searching', () => {

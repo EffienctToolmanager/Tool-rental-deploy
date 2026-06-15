@@ -44,11 +44,11 @@ describe('RentalForm Component', () => {
       />
     );
 
-    expect(screen.getByPlaceholderText(/search catalog/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/search code or model/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/project name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/project code/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/renter email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/approver pm email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/requester email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/pm email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/expected return date/i)).toBeInTheDocument();
   });
 

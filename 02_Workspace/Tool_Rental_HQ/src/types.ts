@@ -29,6 +29,8 @@ export type Asset = {
   Location_Rack?: string;
   Current_Location?: string;
   Calibration_Date?: string;
+  serialNumber?: string;
+  Serial_Number?: string;
   datasheetUrl?: string;
   specSummary?: SpecSummary;
 }

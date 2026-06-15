@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { type Asset } from '../types';
 import './InventoryTable.css';
 
@@ -81,13 +81,9 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
   setSelectedAssetCodes, 
   onNavigateToCheckout 
 }) => {
-  const [assets, setAssets] = useState<Asset[]>(initialAssets);
+  const [searchQuery, setSearchQuery] = useState('');
   const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
   const [detailsAsset, setDetailsAsset] = useState<Asset | null>(null);
-
-  useEffect(() => {
-    setAssets(initialAssets);
-  }, [initialAssets]);
 
   const calculateDaysUntilCal = (calDate: string) => {
     if (!calDate) return 999;
@@ -102,16 +98,6 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
     }
-
-    const sorted = [...assets].sort((a: any, b: any) => {
-      const av = a[key] || a[key.replace(/^[A-Z]/, (c) => c.toLowerCase())] || '';
-      const bv = b[key] || b[key.replace(/^[A-Z]/, (c) => c.toLowerCase())] || '';
-      if (av < bv) return direction === 'asc' ? -1 : 1;
-      if (av > bv) return direction === 'asc' ? 1 : -1;
-      return 0;
-    });
-
-    setAssets(sorted);
     setSortConfig({ key, direction });
   };
 
@@ -123,19 +109,88 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
     }
   };
 
-  const selectedAssets = assets.filter(asset => selectedAssetCodes.includes(getAssetCode(asset)));
+  // Dynamically filter and sort assets on the fly
+  const getSortedAndFilteredAssets = () => {
+    let result = [...initialAssets];
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(asset => {
+        const code = (asset.Asset_Code || asset.assetCode || '').toLowerCase();
+        const brand = (asset.Brand || asset.brand || '').toLowerCase();
+        const model = (asset.Asset_Model || asset.model || '').toLowerCase();
+        const type = (asset.specSummary?.equipmentType || '').toLowerCase();
+        const serial = (asset.serialNumber || asset.Serial_Number || '').toLowerCase();
+        const location = `${asset.Location_Zone || asset.zone || ''}/${asset.Location_Rack || asset.rack || ''}`.toLowerCase();
+        const currentLocation = (asset.Current_Location || asset.currentLocation || '').toLowerCase();
+
+        return code.includes(query) ||
+               brand.includes(query) ||
+               model.includes(query) ||
+               type.includes(query) ||
+               serial.includes(query) ||
+               location.includes(query) ||
+               currentLocation.includes(query);
+      });
+    }
+
+    if (sortConfig) {
+      const { key, direction } = sortConfig;
+      result.sort((a: any, b: any) => {
+        let av = a[key] || a[key.replace(/^[A-Z]/, (c) => c.toLowerCase())] || '';
+        let bv = b[key] || b[key.replace(/^[A-Z]/, (c) => c.toLowerCase())] || '';
+
+        if (key === 'Location_Zone' || key === 'Location' || key === 'location') {
+          av = `${a.Location_Zone || a.zone || ''}/${a.Location_Rack || a.rack || ''}`;
+          bv = `${b.Location_Zone || b.zone || ''}/${b.Location_Rack || b.rack || ''}`;
+        } else if (key === 'serialNumber' || key === 'Serial_Number') {
+          av = a.serialNumber || a.Serial_Number || '';
+          bv = b.serialNumber || b.Serial_Number || '';
+        } else if (key === 'Current_Status' || key === 'status') {
+          av = a.Current_Status || a.status || '';
+          bv = b.Current_Status || b.status || '';
+        } else if (key === 'Current_Location' || key === 'currentLocation') {
+          av = a.Current_Location || a.currentLocation || '';
+          bv = b.Current_Location || b.currentLocation || '';
+        } else if (key === 'Asset_Code' || key === 'assetCode') {
+          av = a.Asset_Code || a.assetCode || '';
+          bv = b.Asset_Code || b.assetCode || '';
+        } else if (key === 'Brand' || key === 'brand') {
+          av = a.Brand || a.brand || '';
+          bv = b.Brand || b.brand || '';
+        } else if (key === 'Asset_Model' || key === 'model') {
+          av = a.Asset_Model || a.model || '';
+          bv = b.Asset_Model || b.model || '';
+        } else if (key === 'Calibration_Date' || key === 'calDate') {
+          av = a.Calibration_Date || a.calDate || '';
+          bv = b.Calibration_Date || b.calDate || '';
+        }
+
+        if (av < bv) return direction === 'asc' ? -1 : 1;
+        if (av > bv) return direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return result;
+  };
+
+  const displayAssets = getSortedAndFilteredAssets();
+  const selectedAssets = initialAssets.filter(asset => selectedAssetCodes.includes(getAssetCode(asset)));
 
   const downloadSelectedCsv = () => {
     const headers = [
-      'Asset Code', 'Brand', 'Model', 'Equipment Type', 'Measurement Range', 'Accuracy',
+      'Asset Code', 'Brand', 'Model', 'Serial Number', 'Location', 'Equipment Type', 'Measurement Range', 'Accuracy',
       'Voltage Rating', 'Current Rating', 'Safety Category', 'Connectivity', 'Power Source',
       'Calibration Cycle', 'Key Features', 'Typical Use', 'Datasheet PDF URL'
     ];
 
     const rows = selectedAssets.map(asset => {
       const spec = asset.specSummary;
+      const serial = asset.serialNumber || asset.Serial_Number || '';
+      const loc = `${asset.Location_Zone || asset.zone || ''}/${asset.Location_Rack || asset.rack || ''}`;
       return [
-        getAssetCode(asset), getBrand(asset), getModel(asset), spec?.equipmentType, spec?.measurementRange,
+        getAssetCode(asset), getBrand(asset), getModel(asset), serial, loc, spec?.equipmentType, spec?.measurementRange,
         spec?.accuracy, spec?.voltageRating, spec?.currentRating, spec?.safetyCategory, spec?.connectivity,
         spec?.powerSource, spec?.calibrationCycle, spec?.keyFeatures.join('; '), spec?.typicalUse, asset.datasheetUrl
       ].map(csvEscape).join(',');
@@ -203,13 +258,29 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
         </div>
       </div>
 
+      <div className="inventory-controls">
+        <div className="search-input-wrapper">
+          <span className="search-icon">🔍</span>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search by model, brand, code, serial, or location..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            data-agent-id="inventory-search-input"
+            data-agent-action="search"
+          />
+        </div>
+      </div>
+
       <div className="f-table-container">
         <table className="f-table">
           <thead>
             <tr>
               <th className="table-th-select">Select</th>
               <th onClick={() => handleSort('Current_Status')}>Status</th>
-              <th onClick={() => handleSort('Location_Zone')}>Location (Zone/Rack)</th>
+              <th onClick={() => handleSort('serialNumber')}>Serial Number</th>
+              <th onClick={() => handleSort('Location_Zone')}>Toolcode/Rack</th>
               <th onClick={() => handleSort('Current_Location')}>Current location</th>
               <th onClick={() => handleSort('Asset_Code')}>Asset Code</th>
               <th onClick={() => handleSort('Brand')}>Brand</th>
@@ -220,14 +291,15 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
             </tr>
           </thead>
           <tbody>
-            {assets.map((asset: any, index) => {
+            {displayAssets.map((asset: any, index) => {
               const daysLeft = calculateDaysUntilCal(asset.Calibration_Date || asset.calDate);
               const status = asset.Current_Status || asset.status;
-              const location = `${asset.Location_Zone || asset.zone} / ${asset.Location_Rack || asset.rack}`;
+              const location = `${asset.Location_Zone || asset.zone}/${asset.Location_Rack || asset.rack}`;
               const currentLocation = asset.Current_Location || asset.currentLocation;
               const assetCode = getAssetCode(asset);
               const isSelected = selectedAssetCodes.includes(assetCode);
               const isAvailable = status === 'Available';
+              const serialNumber = asset.serialNumber || asset.Serial_Number || '—';
               
               let rowClass = '';
               if (daysLeft < 0) rowClass = 'row-calibration-expired';
@@ -249,6 +321,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                     />
                   </td>
                   <td><span className={`f-badge ${status === 'Available' ? 'f-badge-available' : 'f-badge-rented'}`}>{status?.toUpperCase()}</span></td>
+                  <td>{serialNumber}</td>
                   <td>{location}</td>
                   <td className={`table-td-location ${currentLocation === 'Warehouse' ? 'warehouse' : 'field'}`}>{currentLocation}</td>
                   <td className="table-td-code">{assetCode}</td>
