@@ -25,6 +25,7 @@
   --f-bg-item-list: #F8FAFC;
   --f-border-dashed: #CBD5E1;
   --f-selected-bg: rgba(0, 94, 96, 0.08);
+  --f-success: #10B981;
 }
 
 :root[data-theme="dark"] {
@@ -53,6 +54,7 @@
   --f-bg-item-list: #262626;
   --f-border-dashed: #3D3D3D;
   --f-selected-bg: rgba(0, 141, 144, 0.2);
+  --f-success: #81C784;
 }
 
 * {

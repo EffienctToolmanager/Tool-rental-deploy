@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { type Asset } from '../types';
+import './RentalForm.css';
 
 interface RentalFormProps {
   assets: Asset[];
@@ -156,35 +157,34 @@ const RentalForm: React.FC<RentalFormProps> = ({
   };
 
   return (
-    <div className="f-card" style={{ maxWidth: '850px', margin: '0 auto', padding: '24px' }}>
-      <h2 style={{ marginBottom: '20px', fontSize: '20px', fontWeight: 'bold', color: 'var(--f-text-strong)' }}>
+    <div className="f-card rental-form-container">
+      <h2 className="rental-form-title">
         🛒 Smart Bulk Rental Checkout
       </h2>
       
       {/* SECTION 1: Catalog Selector */}
-      <div style={{ marginBottom: '25px', padding: '16px', border: '1px solid var(--f-card-accent-border)', borderRadius: '8px', backgroundColor: 'var(--f-card-accent-bg)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--f-text-normal)' }}>
+      <div className="catalog-selector-card">
+        <div className="catalog-header">
+          <h3 className="cart-title">
             1. Select Tools from Catalog ({assets.length} Available)
           </h3>
           <input 
             type="text"
-            className="f-input"
-            style={{ width: '220px', height: '32px', fontSize: '13px', margin: 0 }}
+            className="f-input catalog-search-input"
             placeholder="🔍 Search Code or Model..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid var(--f-border)', borderRadius: '6px', backgroundColor: 'var(--f-bg-white)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-            <thead style={{ position: 'sticky', top: 0, backgroundColor: 'var(--f-bg-th)', borderBottom: '1px solid var(--f-border)', zIndex: 1 }}>
+        <div className="catalog-table-wrapper">
+          <table className="catalog-table">
+            <thead className="catalog-table-thead">
               <tr>
-                <th style={{ width: '40px', padding: '8px', textAlign: 'center' }}>Select</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Asset Code</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Brand</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Model</th>
+                <th className="catalog-th-select">Select</th>
+                <th className="catalog-th-left">Asset Code</th>
+                <th className="catalog-th-left">Brand</th>
+                <th className="catalog-th-left">Model</th>
               </tr>
             </thead>
             <tbody>
@@ -194,29 +194,25 @@ const RentalForm: React.FC<RentalFormProps> = ({
                   return (
                     <tr 
                       key={asset.assetCode} 
-                      style={{ 
-                        borderBottom: '1px solid var(--f-border)', 
-                        backgroundColor: isChecked ? 'var(--f-selected-bg)' : 'transparent',
-                        transition: 'background-color 0.15s ease'
-                      }}
+                      className={`catalog-tr ${isChecked ? 'selected' : ''}`}
                     >
-                      <td style={{ padding: '8px', textAlign: 'center' }}>
+                      <td className="catalog-td-center">
                         <input 
                           type="checkbox" 
                           checked={isChecked}
-                          style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                          className="catalog-checkbox"
                           onChange={(e) => handleCheckboxChange(asset, e.target.checked)}
                         />
                       </td>
-                      <td style={{ padding: '8px', fontWeight: '600' }}>{asset.assetCode}</td>
-                      <td style={{ padding: '8px' }}>{asset.brand || 'N/A'}</td>
-                      <td style={{ padding: '8px', color: 'var(--f-text-muted)' }}>{asset.model}</td>
+                      <td className="catalog-td-code">{asset.assetCode}</td>
+                      <td className="catalog-td-brand">{asset.brand || 'N/A'}</td>
+                      <td className="catalog-td-model">{asset.model}</td>
                     </tr>
                   );
                 })
               ) : (
                 <tr>
-                  <td colSpan={4} style={{ padding: '16px', textAlign: 'center', color: 'var(--f-text-muted)' }}>
+                  <td colSpan={4} className="catalog-td-model" style={{ textAlign: 'center', padding: '16px' }}>
                     No matching available assets found.
                   </td>
                 </tr>
@@ -228,33 +224,33 @@ const RentalForm: React.FC<RentalFormProps> = ({
 
       {/* SECTION 2: Dynamic Cart Table (Photo Upload) */}
       {cart.length > 0 && (
-        <div style={{ marginBottom: '25px' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--f-text-normal)', marginBottom: '10px' }}>
+        <div className="cart-section">
+          <h3 className="cart-title">
             📦 Selected Items & Condition Photos ({cart.length})
           </h3>
-          <div style={{ border: '1px solid var(--f-border)', borderRadius: '6px', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead style={{ backgroundColor: 'var(--f-bg-th)', borderBottom: '1px solid var(--f-border)' }}>
+          <div className="cart-table-wrapper">
+            <table className="cart-table">
+              <thead className="cart-table-thead">
                 <tr>
-                  <th style={{ padding: '10px', textAlign: 'left', width: '120px' }}>Asset Code</th>
-                  <th style={{ padding: '10px', textAlign: 'left' }}>Model</th>
-                  <th style={{ padding: '10px', textAlign: 'left', width: '300px' }}>Condition Photo (1:1 Required)</th>
+                  <th className="cart-th-code">Asset Code</th>
+                  <th className="cart-th-model">Model</th>
+                  <th className="cart-th-photo">Condition Photo (1:1 Required)</th>
                 </tr>
               </thead>
               <tbody>
                 {cart.map(item => (
-                  <tr key={item.assetCode} style={{ borderBottom: '1px solid var(--f-border)' }}>
-                    <td style={{ padding: '10px', fontWeight: '600' }}>{item.assetCode}</td>
-                    <td style={{ padding: '10px', color: 'var(--f-text-muted)' }}>{item.assetModel}</td>
-                    <td style={{ padding: '10px' }}>
+                  <tr key={item.assetCode} className="cart-tr">
+                    <td className="cart-td-code">{item.assetCode}</td>
+                    <td className="cart-td-model">{item.assetModel}</td>
+                    <td className="cart-td-photo">
                       <input 
                         type="file" 
                         accept="image/jpeg, image/png"
-                        style={{ fontSize: '12px' }}
+                        className="cart-file-input"
                         onChange={(e) => handleFileChangeForAsset(item.assetCode, e.target.files ? e.target.files[0] : null)}
                       />
                       {item.photo && (
-                        <div style={{ fontSize: '11px', color: '#10b981', marginTop: '4px' }}>
+                        <div className="cart-attached-indicator">
                           ✓ Attached: {item.photo.name}
                         </div>
                       )}
@@ -269,7 +265,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
 
       {/* SECTION 3: Project Form */}
       <form onSubmit={handleSubmit}>
-        <h3 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--f-text-normal)', marginBottom: '12px', borderTop: '1px solid var(--f-border)', paddingTop: '20px' }}>
+        <h3 className="form-section-title">
           2. Project & Requester Details
         </h3>
         
@@ -286,7 +282,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
           />
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+        <div className="form-row">
           <div className="f-form-group">
             <label className="f-label">Project Code</label>
             <input 
@@ -339,8 +335,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
 
         <button 
           type="submit" 
-          className="f-button f-button-primary" 
-          style={{ width: '100%', marginTop: '20px', height: '48px', fontSize: '15px', fontWeight: 'bold', backgroundColor: 'var(--f-primary)' }}
+          className="f-button f-button-primary rental-submit-btn" 
           disabled={isSubmitting || cart.length === 0}
         >
           {isSubmitting ? 'Processing Bulk Request...' : '🚀 Submit Bulk Rental Request'}
@@ -351,3 +346,4 @@ const RentalForm: React.FC<RentalFormProps> = ({
 };
 
 export default RentalForm;
+

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { 
-  FiBox, FiUser, FiCalendar, FiMapPin, FiCamera, 
-  FiCheckCircle, FiChevronRight, FiRefreshCw 
+  FiBox, FiCalendar, FiMapPin, FiCamera, 
+  FiChevronRight, FiRefreshCw 
 } from 'react-icons/fi';
 
 /**
@@ -11,9 +11,7 @@ import {
  */
 
 const Dashboard: React.FC = () => {
-  const [tools, setTools] = useState<any[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+
 
   // MS Graph API를 통한 SharePoint 데이터 동기화 (인터페이스 skeleton)
   const syncWithSharePoint = async () => {

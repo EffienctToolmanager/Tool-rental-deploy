@@ -1,0 +1,127 @@
+.selection-bar-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selection-bar-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--f-primary);
+}
+
+.selection-bar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.inventory-title {
+  font-size: 18px;
+}
+
+.inventory-subtitle {
+  font-size: 12px;
+  color: var(--f-text-secondary);
+}
+
+.legend-container {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-color-box {
+  width: 12px;
+  height: 12px;
+}
+
+.legend-color-box.warning {
+  background: var(--f-warning);
+  border: 1px solid var(--f-warning-border);
+}
+
+.legend-color-box.expired {
+  background: var(--f-danger-bg);
+  border: 1px solid var(--f-error);
+}
+
+.table-th-select {
+  width: 60px;
+  text-align: center;
+}
+
+.table-th-more {
+  width: 72px;
+  text-align: center;
+}
+
+.table-td-select {
+  text-align: center;
+}
+
+.select-checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+.select-checkbox.available {
+  cursor: pointer;
+}
+
+.select-checkbox.rented {
+  cursor: not-allowed;
+}
+
+.table-td-location {
+  fontWeight: 600;
+}
+
+.table-td-location.warehouse {
+  color: var(--f-text-secondary);
+}
+
+.table-td-location.field {
+  color: var(--f-primary);
+}
+
+.table-td-code {
+  font-weight: 600;
+}
+
+.table-td-cal-days {
+  font-weight: bold;
+}
+
+.cal-expired-text {
+  color: var(--f-error);
+}
+
+.table-td-more {
+  text-align: center;
+}
+
+/* Row states based on tokens */
+.row-calibration-expired {
+  background-color: var(--f-danger-bg);
+}
+
+.row-calibration-warning {
+  background-color: var(--f-warning);
+}
+
+.row-selected {
+  background-color: var(--f-selected-bg);
+}

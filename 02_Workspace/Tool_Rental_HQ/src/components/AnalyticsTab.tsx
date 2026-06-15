@@ -3,6 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as ReTooltip, Legend as ReLegend, ResponsiveContainer,
   PieChart, Pie, Cell 
 } from 'recharts';
+import './AnalyticsTab.css';
 
 interface AnalyticsData {
   rentals_by_project: { name: string, count: number }[];
@@ -53,8 +54,8 @@ const AnalyticsTab: React.FC = () => {
 
   return (
     <div className="f-fade-in">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h2 style={{ fontSize: '20px' }}>Analytics & Compliance Reports</h2>
+      <div className="analytics-header">
+        <h2 className="analytics-title">Analytics & Compliance Reports</h2>
         <button 
           className="f-button f-button-primary" 
           onClick={triggerDownload}
@@ -64,10 +65,10 @@ const AnalyticsTab: React.FC = () => {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+      <div className="analytics-charts-grid">
         {/* Project Utilization Bar Chart */}
-        <div className="f-card" style={{ height: '400px' }}>
-          <h3 style={{ marginBottom: '20px' }}>Rentals by Project</h3>
+        <div className="f-card analytics-card">
+          <h3 className="analytics-card-title">Rentals by Project</h3>
           <ResponsiveContainer width="100%" height="90%">
             <BarChart data={data.rentals_by_project}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -75,14 +76,14 @@ const AnalyticsTab: React.FC = () => {
               <YAxis allowDecimals={false} />
               <ReTooltip />
               <ReLegend />
-              <Bar dataKey="count" fill="#005E60" radius={[4, 4, 0, 0]} name="Rental Count" />
+              <Bar dataKey="count" fill="var(--f-primary)" radius={[4, 4, 0, 0]} name="Rental Count" />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Compliance Donut Chart */}
-        <div className="f-card" style={{ height: '400px' }}>
-          <h3 style={{ marginBottom: '20px' }}>Calibration Compliance Status</h3>
+        <div className="f-card analytics-card">
+          <h3 className="analytics-card-title">Calibration Compliance Status</h3>
           <ResponsiveContainer width="100%" height="90%">
             <PieChart>
               <Pie
@@ -94,9 +95,13 @@ const AnalyticsTab: React.FC = () => {
                 paddingAngle={5}
                 dataKey="value"
               >
-                {data.calibration_status.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
+                {data.calibration_status.map((entry, index) => {
+                  // Map compliance colors to design tokens if matched
+                  let cellColor = entry.color;
+                  if (entry.name === 'Safe') cellColor = 'var(--f-success)';
+                  if (entry.name === 'Expired') cellColor = 'var(--f-error)';
+                  return <Cell key={`cell-${index}`} fill={cellColor} />;
+                })}
               </Pie>
               <ReTooltip />
               <ReLegend verticalAlign="bottom" />
@@ -106,14 +111,14 @@ const AnalyticsTab: React.FC = () => {
       </div>
 
       {/* Summary KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginTop: '24px' }}>
-        <div className="f-card" style={{ textAlign: 'center', borderTop: '4px solid #005E60' }}>
-          <div style={{ fontSize: '12px', color: 'var(--f-text-secondary)' }}>Total Projects</div>
-          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{data.rentals_by_project.length}</div>
+      <div className="kpi-cards-grid">
+        <div className="f-card kpi-card-primary">
+          <div className="kpi-card-label">Total Projects</div>
+          <div className="kpi-card-value">{data.rentals_by_project.length}</div>
         </div>
-        <div className="f-card" style={{ textAlign: 'center', borderTop: '4px solid #4CAF50' }}>
-          <div style={{ fontSize: '12px', color: 'var(--f-text-secondary)' }}>Compliance Rate</div>
-          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
+        <div className="f-card kpi-card-success">
+          <div className="kpi-card-label">Compliance Rate</div>
+          <div className="kpi-card-value">
             {Math.round((data.calibration_status.find(s => s.name === 'Safe')?.value || 0) / 
             data.calibration_status.reduce((a, b) => a + b.value, 0) * 100)}%
           </div>

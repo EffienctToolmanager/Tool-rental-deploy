@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { type Asset } from '../types';
+import './InventoryTable.css';
 
 interface InventoryTableProps {
   assets: Asset[];
@@ -154,13 +155,13 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
     <div>
       {selectedAssetCodes.length > 0 && (
         <div className="inventory-selection-bar">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className="selection-bar-info">
             <span style={{ fontSize: '18px' }}>🛒</span>
-            <span style={{ fontSize: '14px', fontWeight: '600', color: '#1e3a8a' }}>
+            <span className="selection-bar-text">
               <strong>{selectedAssetCodes.length}</strong> planned rental assets selected.
             </span>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="selection-bar-actions">
             <button 
               type="button" 
               className="f-button spec-export-button" 
@@ -183,20 +184,20 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
         </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div className="inventory-header">
         <div>
-          <h2 style={{ fontSize: '18px' }}>Master Asset Inventory</h2>
-          <p style={{ fontSize: '12px', color: 'var(--f-text-secondary)' }}>
+          <h2 className="inventory-title">Master Asset Inventory</h2>
+          <p className="inventory-subtitle">
             Hover model text or use ⋯ Details to preview the standardized mock datasheet summary.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '12px', fontSize: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <div style={{ width: '12px', height: '12px', background: 'var(--f-warning)', border: '1px solid var(--f-warning-border)' }}></div>
+        <div className="legend-container">
+          <div className="legend-item">
+            <div className="legend-color-box warning"></div>
             <span>Cal &lt; 30 Days</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <div style={{ width: '12px', height: '12px', background: 'var(--f-danger-bg)', border: '1px solid #D32F2F' }}></div>
+          <div className="legend-item">
+            <div className="legend-color-box expired"></div>
             <span>Cal Expired</span>
           </div>
         </div>
@@ -206,7 +207,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
         <table className="f-table">
           <thead>
             <tr>
-              <th style={{ width: '60px', textAlign: 'center' }}>Select</th>
+              <th className="table-th-select">Select</th>
               <th onClick={() => handleSort('Current_Status')}>Status</th>
               <th onClick={() => handleSort('Location_Zone')}>Location (Zone/Rack)</th>
               <th onClick={() => handleSort('Current_Location')}>Current location</th>
@@ -215,7 +216,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
               <th onClick={() => handleSort('Asset_Model')}>Model</th>
               <th onClick={() => handleSort('Calibration_Date')}>Calibration Date</th>
               <th>Days Until Cal</th>
-              <th style={{ width: '72px', textAlign: 'center' }}>More</th>
+              <th className="table-th-more">More</th>
             </tr>
           </thead>
           <tbody>
@@ -227,19 +228,20 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
               const assetCode = getAssetCode(asset);
               const isSelected = selectedAssetCodes.includes(assetCode);
               const isAvailable = status === 'Available';
-              let rowStyle = {};
-              if (daysLeft < 0) rowStyle = { backgroundColor: 'var(--f-danger-bg)' };
-              else if (daysLeft < 30) rowStyle = { backgroundColor: 'var(--f-warning)' };
-              if (isSelected) rowStyle = { ...rowStyle, backgroundColor: '#eff6ff' };
+              
+              let rowClass = '';
+              if (daysLeft < 0) rowClass = 'row-calibration-expired';
+              else if (daysLeft < 30) rowClass = 'row-calibration-warning';
+              if (isSelected) rowClass += (rowClass ? ' ' : '') + 'row-selected';
 
               return (
-                <tr key={assetCode || index} style={rowStyle}>
-                  <td style={{ textAlign: 'center' }}>
+                <tr key={assetCode || index} className={rowClass}>
+                  <td className="table-td-select">
                     <input 
                       type="checkbox"
                       checked={isSelected}
                       disabled={!isAvailable}
-                      style={{ width: '16px', height: '16px', cursor: isAvailable ? 'pointer' : 'not-allowed' }}
+                      className={`select-checkbox ${isAvailable ? 'available' : 'rented'}`}
                       onChange={(e) => handleCheckboxChange(assetCode, e.target.checked)}
                       title={isAvailable ? 'Add to rental cart' : 'Rented assets cannot be selected.'}
                       data-agent-id={`select-${assetCode}`}
@@ -248,8 +250,8 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                   </td>
                   <td><span className={`f-badge ${status === 'Available' ? 'f-badge-available' : 'f-badge-rented'}`}>{status?.toUpperCase()}</span></td>
                   <td>{location}</td>
-                  <td style={{ color: currentLocation === 'Warehouse' ? 'var(--f-text-secondary)' : 'var(--f-primary)', fontWeight: 600 }}>{currentLocation}</td>
-                  <td style={{ fontWeight: 600 }}>{assetCode}</td>
+                  <td className={`table-td-location ${currentLocation === 'Warehouse' ? 'warehouse' : 'field'}`}>{currentLocation}</td>
+                  <td className="table-td-code">{assetCode}</td>
                   <td>{getBrand(asset)}</td>
                   <td>
                     <span className="model-hover-target">
@@ -258,8 +260,8 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                     </span>
                   </td>
                   <td>{asset.Calibration_Date || asset.calDate}</td>
-                  <td style={{ fontWeight: 'bold' }}>{daysLeft < 0 ? <span style={{ color: 'var(--f-error)' }}>EXPIRED ({Math.abs(daysLeft)}d)</span> : `${daysLeft}d`}</td>
-                  <td style={{ textAlign: 'center' }}>
+                  <td className="table-td-cal-days">{daysLeft < 0 ? <span className="cal-expired-text">EXPIRED ({Math.abs(daysLeft)}d)</span> : `${daysLeft}d`}</td>
+                  <td className="table-td-more">
                     <button 
                       className="row-more-button" 
                       type="button" 

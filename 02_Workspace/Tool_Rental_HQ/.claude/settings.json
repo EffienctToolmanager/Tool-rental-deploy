@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "onSave": [
+      {
+        "description": "Scan file contents to prevent hardcoding of styling colors",
+        "files": ["src/**/*.tsx", "src/**/*.ts", "src/**/*.css"],
+        "run": "node .claude/hooks/check-design-tokens.mjs ${filePath}"
+      },
+      {
+        "description": "Ensure saved React component has matching Storybook stories",
+        "files": ["src/components/**/*.tsx"],
+        "run": "node .claude/hooks/check-story-exists.mjs ${filePath}"
+      },
+      {
+        "description": "Block saving or writing to private environment variables files",
+        "files": ["**/*"],
+        "run": "node .claude/hooks/protect-files.mjs ${filePath}"
+      }
+    ]
+  },
+  "security": {
+    "blockReadAccess": [
+      ".env",
+      ".env.local",
+      ".env.development",
+      ".env.production",
+      ".claude/settings.json"
+    ]
+  }
+}

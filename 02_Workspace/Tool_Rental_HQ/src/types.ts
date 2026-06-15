@@ -40,4 +40,11 @@ export type Rental = {
   user: string;
   projectCode: string;
   expectedReturn: string;
+  projectName?: string;
+  expectedReturnDate?: string;
+  userEmail?: string;
+  pmEmail?: string;
+  id?: string;
 }
+
+
