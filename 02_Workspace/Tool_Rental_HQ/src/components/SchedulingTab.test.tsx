@@ -107,4 +107,38 @@ describe('SchedulingTab Component', () => {
     fireEvent.click(addBtn);
     expect(screen.getByText(/Register New Scheduling Case/i)).toBeInTheDocument();
   });
+
+  it('renders conditional handover fields and checklist verified options in modal', async () => {
+    const onRefresh = vi.fn();
+    render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
+    });
+
+    const editBtn = screen.getByTitle('Edit');
+    fireEvent.click(editBtn);
+
+    // active_rental is selected, so should show "Handover Record Required Fields"
+    expect(screen.getByText(/Handover Record Required Fields/i)).toBeInTheDocument();
+    expect(screen.getByText(/Handover PIC Name/i)).toBeInTheDocument();
+    expect(screen.getByText(/Handover Photo File\/Path/i)).toBeInTheDocument();
+  });
+
+  it('prompts the edit modal with target stage when a stage change is requested on card', async () => {
+    const onRefresh = vi.fn();
+    render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
+    });
+
+    const moveSelect = screen.getByRole('combobox');
+    fireEvent.change(moveSelect, { target: { value: 'calibration' } });
+
+    // Should prompt edit modal
+    expect(screen.getByText(/Edit Scheduling Case/i)).toBeInTheDocument();
+    // And stage should be preselected to calibration, thus showing Calibration Record fields
+    expect(screen.getByText(/Calibration Record Required Fields/i)).toBeInTheDocument();
+  });
 });

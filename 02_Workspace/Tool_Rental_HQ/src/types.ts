@@ -62,6 +62,9 @@ export type ScheduledCase = {
   userEmail: string;
   pmEmail: string;
   notes?: string;
+  handoverPic?: string;
+  handoverPhoto?: string;
+  checklistVerified?: boolean;
 }
 
 

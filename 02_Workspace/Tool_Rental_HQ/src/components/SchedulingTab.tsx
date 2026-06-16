@@ -27,6 +27,9 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   const [formPmEmail, setFormPmEmail] = useState('');
   const [formNotes, setFormNotes] = useState('');
   const [formStatus, setFormStatus] = useState<'Scheduled' | 'In_Progress' | 'Completed' | 'Delayed'>('Scheduled');
+  const [formHandoverPic, setFormHandoverPic] = useState('');
+  const [formHandoverPhoto, setFormHandoverPhoto] = useState('');
+  const [formChecklistVerified, setFormChecklistVerified] = useState(false);
 
   const fetchSchedules = async () => {
     try {
@@ -58,6 +61,9 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     setFormPmEmail('');
     setFormNotes('');
     setFormStatus('Scheduled');
+    setFormHandoverPic('');
+    setFormHandoverPhoto('');
+    setFormChecklistVerified(false);
     setIsModalOpen(true);
   };
 
@@ -73,6 +79,9 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     setFormPmEmail(sc.pmEmail);
     setFormNotes(sc.notes || '');
     setFormStatus(sc.status);
+    setFormHandoverPic(sc.handoverPic || '');
+    setFormHandoverPhoto(sc.handoverPhoto || '');
+    setFormChecklistVerified(sc.checklistVerified || false);
     setIsModalOpen(true);
   };
 
@@ -100,7 +109,10 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
       status: formStatus,
       userEmail: formUserEmail,
       pmEmail: formPmEmail,
-      notes: formNotes
+      notes: formNotes,
+      handoverPic: (formStage === 'active_rental' || formStage === 'dispatched' || formStage === 'calibration') ? formHandoverPic : undefined,
+      handoverPhoto: (formStage === 'active_rental' || formStage === 'dispatched' || formStage === 'calibration') ? formHandoverPhoto : undefined,
+      checklistVerified: (formStage === 'active_rental' || formStage === 'dispatched' || formStage === 'calibration') ? formChecklistVerified : undefined
     };
 
     try {
@@ -137,21 +149,24 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     }
   };
 
-  const handleMoveStage = async (sc: ScheduledCase, nextStage: 'active_rental' | 'calibration' | 'staged' | 'dispatched') => {
+  const handleMoveStage = (sc: ScheduledCase, nextStage: 'active_rental' | 'calibration' | 'staged' | 'dispatched') => {
     if (!isAdmin) return;
-    const updated = { ...sc, stage: nextStage };
-    try {
-      const res = await fetch(`${API_BASE}/update`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updated)
-      });
-      if (!res.ok) throw new Error("Failed to move stage");
-      await fetchSchedules();
-      onRefreshAssets();
-    } catch (err) {
-      console.error(err);
-    }
+    
+    // Open edit modal with target stage to enforce entering checkout photo/checklist details
+    setEditingCase(sc);
+    setFormEquipmentCode(sc.equipmentCode);
+    setFormStage(nextStage);
+    setFormDestination(sc.destination);
+    setFormStartDate(sc.startDate);
+    setFormEndDate(sc.endDate);
+    setFormUserEmail(sc.userEmail);
+    setFormPmEmail(sc.pmEmail);
+    setFormNotes(sc.notes || '');
+    setFormStatus(sc.status);
+    setFormHandoverPic(sc.handoverPic || '');
+    setFormHandoverPhoto(sc.handoverPhoto || '');
+    setFormChecklistVerified(sc.checklistVerified || false);
+    setIsModalOpen(true);
   };
 
   // Conflict detection check (two schedules for same asset overlap)
@@ -172,7 +187,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
       case 'active_rental': return '📢 Active Rental';
       case 'calibration': return '🔬 Calibration Yard';
       case 'staged': return '📦 Staged for Next';
-      case 'dispatched': return '🚚 Dispatched / Live';
+      case 'dispatched': return '🚚 Handover Complete';
       default: return stage;
     }
   };
@@ -217,6 +232,14 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                           <div>👤 {sc.userEmail}</div>
                         </div>
                         {sc.notes && <div className="card-notes">{sc.notes}</div>}
+
+                        {(sc.handoverPic || sc.handoverPhoto || sc.checklistVerified) && (
+                          <div className="card-handover-info" style={{ marginTop: '8px', padding: '6px', backgroundColor: 'var(--f-bg-secondary)', borderRadius: '4px', border: '1px solid var(--f-border)', fontSize: '11px' }}>
+                            {sc.handoverPic && <div style={{ color: 'var(--f-text-primary)' }}>👤 <strong>PIC:</strong> {sc.handoverPic}</div>}
+                            {sc.handoverPhoto && <div style={{ color: 'var(--f-text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>📷 <strong>Photo:</strong> <span style={{ textDecoration: 'underline', color: 'var(--f-link)', cursor: 'pointer' }}>{sc.handoverPhoto}</span></div>}
+                            {sc.checklistVerified && <div style={{ color: 'var(--f-success)', fontWeight: '600', marginTop: '2px' }}>✅ Checklist Verified</div>}
+                          </div>
+                        )}
                         
                         {isAdmin && (
                           <div className="card-stage-selectors">
@@ -229,7 +252,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                               <option value="active_rental">Active Rental</option>
                               <option value="calibration">Calibration</option>
                               <option value="staged">Staging</option>
-                              <option value="dispatched">Dispatched</option>
+                              <option value="dispatched">Handover Complete</option>
                             </select>
                           </div>
                         )}
@@ -417,7 +440,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                     <option value="active_rental">Active Rental</option>
                     <option value="calibration">Calibration Lab</option>
                     <option value="staged">Staging for Next</option>
-                    <option value="dispatched">Dispatched</option>
+                    <option value="dispatched">Handover Complete</option>
                   </select>
                 </div>
                 
@@ -497,6 +520,54 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                   />
                 </div>
               </div>
+
+              {/* Handover / Calibration Data Enforcement Section */}
+              {(formStage === 'active_rental' || formStage === 'dispatched' || formStage === 'calibration') && (
+                <div className="handover-enforcement-section f-card" style={{ padding: '12px', marginBottom: '15px', backgroundColor: 'var(--f-bg-secondary)', border: '1px solid var(--f-border)', borderRadius: '4px' }}>
+                  <h4 style={{ margin: '0 0 10px 0', fontSize: '13px', color: 'var(--f-text-primary)', fontWeight: 600 }}>
+                    📋 {formStage === 'calibration' ? 'Calibration Record' : 'Handover Record'} Required Fields
+                  </h4>
+                  <div className="form-row" style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                    <div className="f-form-group" style={{ flex: 1 }}>
+                      <label className="f-label" style={{ fontSize: '11px', color: 'var(--f-text-secondary)' }}>{formStage === 'calibration' ? 'Calibration Specialist' : 'Handover PIC Name'}</label>
+                      <input 
+                        type="text" 
+                        className="f-input"
+                        value={formHandoverPic}
+                        onChange={(e) => setFormHandoverPic(e.target.value)}
+                        required
+                        placeholder="e.g. John Doe"
+                      />
+                    </div>
+                    <div className="f-form-group" style={{ flex: 1 }}>
+                      <label className="f-label" style={{ fontSize: '11px', color: 'var(--f-text-secondary)' }}>{formStage === 'calibration' ? 'Certificate Photo / ID' : 'Handover Photo File/Path'}</label>
+                      <input 
+                        type="text" 
+                        className="f-input"
+                        value={formHandoverPhoto}
+                        onChange={(e) => setFormHandoverPhoto(e.target.value)}
+                        required
+                        placeholder="e.g. inspection-photo-01.png"
+                      />
+                    </div>
+                  </div>
+                  <div className="f-form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '5px' }}>
+                    <input 
+                      type="checkbox"
+                      id="checklistVerified"
+                      checked={formChecklistVerified}
+                      onChange={(e) => setFormChecklistVerified(e.target.checked)}
+                      required
+                      style={{ cursor: 'pointer' }}
+                    />
+                    <label htmlFor="checklistVerified" className="f-label" style={{ margin: 0, cursor: 'pointer', fontSize: '11px', color: 'var(--f-text-primary)' }}>
+                      {formStage === 'calibration' 
+                        ? 'Confirm calibration standard verified & sticker attached' 
+                        : 'Confirm physical inspection complete & safety checklist verified'}
+                    </label>
+                  </div>
+                </div>
+              )}
 
               <div className="f-form-group">
                 <label className="f-label">Notes & Routing Instructions</label>

@@ -362,7 +362,10 @@ INITIAL_SCHEDULED_CASES = [
         "status": "In_Progress",
         "userEmail": "pm@ge.com",
         "pmEmail": "pm@ge.com",
-        "notes": "Current active checkout on Project Site A"
+        "notes": "Current active checkout on Project Site A",
+        "handoverPic": "John Doe",
+        "handoverPhoto": "inspection-flk87-siteA.png",
+        "checklistVerified": True
     },
     {
         "id": "SCH-202606-0002",
@@ -376,7 +379,10 @@ INITIAL_SCHEDULED_CASES = [
         "status": "Scheduled",
         "userEmail": "cal-specialist@ge.com",
         "pmEmail": "pm@ge.com",
-        "notes": "Annual calibration checkup scheduled immediately after Site A return"
+        "notes": "Annual calibration checkup scheduled immediately after Site A return",
+        "handoverPic": "Cal Specialist Lead",
+        "handoverPhoto": "cal-cert-pending.png",
+        "checklistVerified": True
     },
     {
         "id": "SCH-202606-0003",
@@ -404,7 +410,10 @@ INITIAL_SCHEDULED_CASES = [
         "status": "In_Progress",
         "userEmail": "pm@ge.com",
         "pmEmail": "pm@ge.com",
-        "notes": "Running load studies"
+        "notes": "Running load studies",
+        "handoverPic": "Jane Smith",
+        "handoverPhoto": "pre-checkout-calibration-1738.png",
+        "checklistVerified": True
     }
 ]
 
@@ -603,6 +612,9 @@ class ScheduledCase(BaseModel):
     userEmail: str
     pmEmail: str
     notes: Optional[str] = None
+    handoverPic: Optional[str] = None
+    handoverPhoto: Optional[str] = None
+    checklistVerified: Optional[bool] = None
 
 @app.get("/api/sharepoint/schedule/list")
 async def get_schedule_list():
