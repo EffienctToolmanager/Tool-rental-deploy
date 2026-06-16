@@ -14,7 +14,8 @@ const components = [
   'ActiveRentals',
   'AnalyticsTab',
   'InventoryTable',
-  'RentalForm'
+  'RentalForm',
+  'SchedulingTab'
 ];
 
 const report = {
