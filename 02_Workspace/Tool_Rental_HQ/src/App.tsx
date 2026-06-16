@@ -4,12 +4,14 @@ import RentalForm from './components/RentalForm';
 import ActiveRentals from './components/ActiveRentals';
 import InventoryTable from './components/InventoryTable';
 import AnalyticsTab from './components/AnalyticsTab';
+import { SchedulingTab } from './components/SchedulingTab';
 import { type Asset, type Rental } from './types';
 
 const API_BASE = "/api/sharepoint";
 
 const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'checkout' | 'dashboard' | 'inventory' | 'analytics'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'checkout' | 'dashboard' | 'inventory' | 'analytics' | 'scheduling'>('dashboard');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [rentals, setRentals] = useState<Rental[]>([]);
   const [selectedAssetCodes, setSelectedAssetCodes] = useState<string[]>([]);
@@ -107,41 +109,71 @@ const App: React.FC = () => {
               Tool Rental System
             </span>
           </div>
-          <button
-            type="button"
-            className="theme-toggle-btn"
-            onClick={toggleTheme}
-            data-agent-id="toggle-darkmode-btn"
-            data-agent-action="toggle-theme"
-            aria-label="Toggle Dark Mode"
-            style={{
-              background: 'var(--f-bg-white)',
-              border: '1px solid var(--f-border)',
-              borderRadius: '6px',
-              padding: '6px 12px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              color: 'var(--f-text)',
-              transition: 'all 0.2s',
-              boxShadow: 'var(--f-shadow)'
-            }}
-          >
-            {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button
+              type="button"
+              className={`f-button ${isAdmin ? 'admin-active' : ''}`}
+              onClick={() => setIsAdmin(prev => !prev)}
+              data-agent-id="toggle-admin-btn"
+              data-agent-action="toggle-admin"
+              style={{
+                background: isAdmin ? 'var(--f-primary)' : 'var(--f-bg-white)',
+                color: isAdmin ? '#ffffff' : 'var(--f-text)',
+                border: '1px solid var(--f-border)',
+                borderRadius: '6px',
+                padding: '6px 12px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                transition: 'all 0.2s',
+                boxShadow: 'var(--f-shadow)'
+              }}
+            >
+              🔐 {isAdmin ? 'Admin Mode (On)' : 'Admin Mode (Off)'}
+            </button>
+            <button
+              type="button"
+              className="theme-toggle-btn"
+              onClick={toggleTheme}
+              data-agent-id="toggle-darkmode-btn"
+              data-agent-action="toggle-theme"
+              aria-label="Toggle Dark Mode"
+              style={{
+                background: 'var(--f-bg-white)',
+                border: '1px solid var(--f-border)',
+                borderRadius: '6px',
+                padding: '6px 12px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                color: 'var(--f-text)',
+                transition: 'all 0.2s',
+                boxShadow: 'var(--f-shadow)'
+              }}
+            >
+              {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+            </button>
+          </div>
         </div>
 
         <nav className="f-tabs">
-          {['checkout', 'dashboard', 'inventory', 'analytics'].map((tab) => (
+          {['checkout', 'dashboard', 'inventory', 'analytics', 'scheduling'].map((tab) => (
             <div 
               key={tab}
               className={`f-tab ${activeTab === tab ? 'active' : ''}`} 
               onClick={() => setActiveTab(tab as any)}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1).replace('checkout', 'Smart Rental').replace('dashboard', 'Live Dashboard').replace('inventory', 'Master Inventory').replace('analytics', 'Analytics & Reports')}
+              {tab === 'checkout' && '🛒 Smart Rental'}
+              {tab === 'dashboard' && '📊 Live Dashboard'}
+              {tab === 'inventory' && '📦 Master Inventory'}
+              {tab === 'analytics' && '📈 Reports & Analytics'}
+              {tab === 'scheduling' && '🗓️ Tool Scheduler'}
             </div>
           ))}
         </nav>
@@ -202,6 +234,14 @@ const App: React.FC = () => {
             )}
             
             {activeTab === 'analytics' && <AnalyticsTab />}
+
+            {activeTab === 'scheduling' && (
+              <SchedulingTab 
+                assets={assets} 
+                isAdmin={isAdmin} 
+                onRefreshAssets={fetchData} 
+              />
+            )}
           </>
         )}
       </main>

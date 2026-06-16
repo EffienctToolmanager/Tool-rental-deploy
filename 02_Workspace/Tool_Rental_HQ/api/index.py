@@ -349,7 +349,69 @@ for idx, (prefix, brand, model, product_name, equipment_type) in enumerate(ADDIT
     })
 
 
-db_storage = {"items": INITIAL_ITEMS}
+INITIAL_SCHEDULED_CASES = [
+    {
+        "id": "SCH-202606-0001",
+        "equipmentCode": "FLK-87V-01",
+        "model": "87V",
+        "sequenceOrder": 0,
+        "stage": "active_rental",
+        "destination": "Project Site A",
+        "startDate": "2026-06-10",
+        "endDate": "2026-06-30",
+        "status": "In_Progress",
+        "userEmail": "pm@ge.com",
+        "pmEmail": "pm@ge.com",
+        "notes": "Current active checkout on Project Site A"
+    },
+    {
+        "id": "SCH-202606-0002",
+        "equipmentCode": "FLK-87V-01",
+        "model": "87V",
+        "sequenceOrder": 1,
+        "stage": "calibration",
+        "destination": "Fluke Cal Lab",
+        "startDate": "2026-07-01",
+        "endDate": "2026-07-03",
+        "status": "Scheduled",
+        "userEmail": "cal-specialist@ge.com",
+        "pmEmail": "pm@ge.com",
+        "notes": "Annual calibration checkup scheduled immediately after Site A return"
+    },
+    {
+        "id": "SCH-202606-0003",
+        "equipmentCode": "FLK-87V-01",
+        "model": "87V",
+        "sequenceOrder": 2,
+        "stage": "staged",
+        "destination": "Samsung Austin Site",
+        "startDate": "2026-07-04",
+        "endDate": "2026-07-25",
+        "status": "Scheduled",
+        "userEmail": "samsung-lead@ge.com",
+        "pmEmail": "pm@ge.com",
+        "notes": "Next project deployment scheduled to ship post-calibration"
+    },
+    {
+        "id": "SCH-202606-0004",
+        "equipmentCode": "FLK-1738-01",
+        "model": "1738",
+        "sequenceOrder": 0,
+        "stage": "active_rental",
+        "destination": "Project Site A",
+        "startDate": "2026-06-10",
+        "endDate": "2026-06-30",
+        "status": "In_Progress",
+        "userEmail": "pm@ge.com",
+        "pmEmail": "pm@ge.com",
+        "notes": "Running load studies"
+    }
+]
+
+db_storage = {
+    "items": INITIAL_ITEMS,
+    "schedules": INITIAL_SCHEDULED_CASES
+}
 
 # --- API Routes ---
 
@@ -524,3 +586,124 @@ async def export_monthly_report():
     )
     response.headers["Content-Disposition"] = "attachment; filename=AssetFlow_Report_Staging.csv"
     return response
+
+
+# --- Successive Scheduling Case API Endpoints [NEW] ---
+
+class ScheduledCase(BaseModel):
+    id: str
+    equipmentCode: str
+    model: str
+    sequenceOrder: int
+    stage: str
+    destination: str
+    startDate: str
+    endDate: str
+    status: str
+    userEmail: str
+    pmEmail: str
+    notes: Optional[str] = None
+
+@app.get("/api/sharepoint/schedule/list")
+async def get_schedule_list():
+    logger.info("Fetching scheduling cases list.")
+    return {
+        "status": "success",
+        "data": db_storage.get("schedules", [])
+    }
+
+@app.post("/api/sharepoint/schedule/create")
+async def create_schedule_case(case: ScheduledCase):
+    logger.info(f"Creating scheduled case: {case.id}")
+    schedules = db_storage.get("schedules", [])
+    schedules.append(case.dict())
+    db_storage["schedules"] = schedules
+    
+    # Sync with asset if stage is active_rental/dispatched
+    if case.stage in ["active_rental", "dispatched"]:
+        for item in db_storage["items"]:
+            if item["equipmentCode"] == case.equipmentCode:
+                item["status"] = "Rented"
+                item["projectName"] = case.destination
+                item["returnDate"] = case.endDate
+                item["userEmail"] = case.userEmail
+                item["pmEmail"] = case.pmEmail
+                item["caseId"] = case.id
+                
+    return {
+        "status": "success",
+        "message": f"Scheduled case {case.id} created.",
+        "data": case
+    }
+
+@app.put("/api/sharepoint/schedule/update")
+async def update_schedule_case(case: ScheduledCase):
+    logger.info(f"Updating scheduled case: {case.id}")
+    schedules = db_storage.get("schedules", [])
+    updated = False
+    
+    for idx, s in enumerate(schedules):
+        if s["id"] == case.id:
+            schedules[idx] = case.dict()
+            updated = True
+            break
+            
+    if not updated:
+        raise HTTPException(status_code=404, detail="Scheduled case not found")
+        
+    db_storage["schedules"] = schedules
+    
+    # Sync with main assets
+    if case.stage == "active_rental":
+        for item in db_storage["items"]:
+            if item["equipmentCode"] == case.equipmentCode:
+                item["status"] = "Rented"
+                item["projectName"] = case.destination
+                item["returnDate"] = case.endDate
+                item["userEmail"] = case.userEmail
+                item["pmEmail"] = case.pmEmail
+                item["caseId"] = case.id
+    elif case.stage == "calibration":
+        for item in db_storage["items"]:
+            if item["equipmentCode"] == case.equipmentCode:
+                item["status"] = "Available"
+                item["projectName"] = "Calibration Lab"
+                item["returnDate"] = case.endDate
+                item["userEmail"] = case.userEmail
+                item["caseId"] = case.id
+    elif case.stage == "staged":
+        for item in db_storage["items"]:
+            if item["equipmentCode"] == case.equipmentCode:
+                item["status"] = "Available"
+                item["projectName"] = f"Staged: {case.destination}"
+                item["returnDate"] = ""
+                item["caseId"] = case.id
+    elif case.stage == "dispatched":
+        for item in db_storage["items"]:
+            if item["equipmentCode"] == case.equipmentCode:
+                item["status"] = "Rented"
+                item["projectName"] = case.destination
+                item["returnDate"] = case.endDate
+                item["userEmail"] = case.userEmail
+                item["pmEmail"] = case.pmEmail
+                item["caseId"] = case.id
+                
+    return {
+        "status": "success",
+        "message": f"Scheduled case {case.id} updated and assets synced.",
+        "data": case
+    }
+
+@app.delete("/api/sharepoint/schedule/delete/{case_id}")
+async def delete_schedule_case(case_id: str):
+    logger.info(f"Deleting scheduled case: {case_id}")
+    schedules = db_storage.get("schedules", [])
+    filtered = [s for s in schedules if s["id"] != case_id]
+    if len(filtered) == len(schedules):
+        raise HTTPException(status_code=404, detail="Scheduled case not found")
+        
+    db_storage["schedules"] = filtered
+    return {
+        "status": "success",
+        "message": f"Scheduled case {case_id} deleted."
+    }

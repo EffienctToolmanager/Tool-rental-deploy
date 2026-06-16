@@ -49,4 +49,19 @@ export type Rental = {
   id?: string;
 }
 
+export type ScheduledCase = {
+  id: string;
+  equipmentCode: string;
+  model: string;
+  sequenceOrder: number;
+  stage: 'active_rental' | 'calibration' | 'staged' | 'dispatched';
+  destination: string;
+  startDate: string;
+  endDate: string;
+  status: 'Scheduled' | 'In_Progress' | 'Completed' | 'Delayed';
+  userEmail: string;
+  pmEmail: string;
+  notes?: string;
+}
+
 
