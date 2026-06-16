@@ -3,14 +3,13 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import RentalForm from './components/RentalForm';
 import ActiveRentals from './components/ActiveRentals';
 import InventoryTable from './components/InventoryTable';
-import AnalyticsTab from './components/AnalyticsTab';
 import { SchedulingTab } from './components/SchedulingTab';
 import { type Asset, type Rental, type ScheduledCase } from './types';
 
 const API_BASE = "/api/sharepoint";
 
 const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'checkout' | 'dashboard' | 'inventory' | 'analytics' | 'scheduling'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'checkout' | 'dashboard' | 'inventory' | 'scheduling'>('dashboard');
   const [isAdmin, setIsAdmin] = useState(false);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [rentals, setRentals] = useState<Rental[]>([]);
@@ -176,7 +175,7 @@ const App: React.FC = () => {
         </div>
 
         <nav className="f-tabs">
-          {['checkout', 'dashboard', 'inventory', 'analytics', 'scheduling'].map((tab) => (
+          {['checkout', 'dashboard', 'inventory', 'scheduling'].map((tab) => (
             <div 
               key={tab}
               className={`f-tab ${activeTab === tab ? 'active' : ''}`} 
@@ -185,7 +184,6 @@ const App: React.FC = () => {
               {tab === 'checkout' && '🛒 Smart Rental'}
               {tab === 'dashboard' && '📊 Live Dashboard'}
               {tab === 'inventory' && '📦 Master Inventory'}
-              {tab === 'analytics' && '📈 Reports & Analytics'}
               {tab === 'scheduling' && '🗓️ Tool Scheduler'}
             </div>
           ))}
@@ -246,9 +244,6 @@ const App: React.FC = () => {
                 onNavigateToCheckout={() => setActiveTab('checkout')}
               />
             )}
-            
-            {activeTab === 'analytics' && <AnalyticsTab />}
-
             {activeTab === 'scheduling' && (
               <SchedulingTab 
                 assets={assets} 

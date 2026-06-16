@@ -308,7 +308,10 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                 if (a.sequenceOrder !== b.sequenceOrder) {
                   return a.sequenceOrder - b.sequenceOrder;
                 }
-                return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+                const dateA = a.startDate ? new Date(a.startDate).getTime() : 0;
+                const dateB = b.startDate ? new Date(b.startDate).getTime() : 0;
+                if (dateA !== dateB) return dateA - dateB;
+                return a.id.localeCompare(b.id);
               });
               const currentCaseId = asset.caseId;
               const nextSchedules = sortedSchedules.filter((s: any) => s.id !== currentCaseId);
@@ -383,7 +386,11 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                                       </span>
                                       <span className="timeline-destination">{s.destination || 'Calibration Lab'}</span>
                                     </div>
-                                    <div className="timeline-dates">{s.startDate} ~ {s.endDate}</div>
+                                    {s.startDate && s.endDate ? (
+                                      <div className="timeline-dates">{s.startDate} ~ {s.endDate}</div>
+                                    ) : (
+                                      <div className="timeline-dates" style={{ fontStyle: 'italic', color: 'var(--f-text-muted)' }}>No dates (Sequence Queue)</div>
+                                    )}
                                     <div className="timeline-meta">
                                       {s.projectCode && <span>Code: {s.projectCode} · </span>}
                                       <span>PM: {s.pmEmail}</span>

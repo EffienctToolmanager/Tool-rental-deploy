@@ -440,6 +440,7 @@ class BulkRentalRequest(BaseModel):
     caseId: str
     items: List[CartItem]
     projectName: str
+    projectCode: Optional[str] = None
     returnDate: str
     pmEmail: str
     userEmail: str
@@ -448,33 +449,65 @@ class BulkRentalRequest(BaseModel):
 async def create_rental_record(rental: BulkRentalRequest):
     logger.info(f"Rental request received for Case {rental.caseId}")
     
-    # Dynamic database update: switch requested items to Rented status
-    requested_codes = {item.equipmentCode for item in rental.items}
+    import random
+    from datetime import datetime
+    date_str = datetime.now().strftime("%y%m%d")
+    schedules = db_storage.get("schedules", [])
     
-    updated_items = []
-    for item in db_storage["items"]:
-        if item["equipmentCode"] in requested_codes:
-            item_copy = item.copy()
-            item_copy.update({
-                "projectName": rental.projectName,
-                "returnDate": rental.returnDate,
-                "status": "Rented",
-                "userEmail": rental.userEmail,
-                "pmEmail": rental.pmEmail,
-                "caseId": rental.caseId
-            })
-            updated_items.append(item_copy)
-        else:
-            updated_items.append(item)
-            
-    db_storage["items"] = updated_items
-    logger.info(f"Database updated. Case {rental.caseId} live loaded.")
+    for idx, item in enumerate(rental.items):
+        # find model
+        model = "Unknown Model"
+        for i in db_storage.get("items", []):
+            if i["equipmentCode"] == item.equipmentCode:
+                model = i.get("model", "Unknown Model")
+                break
+                
+        # find max sequence
+        item_schedules = [s for s in schedules if s["equipmentCode"] == item.equipmentCode]
+        max_seq = -1
+        for s in item_schedules:
+            if s.get("sequenceOrder", 0) > max_seq:
+                max_seq = s["sequenceOrder"]
+        new_seq = max_seq + 1
+        
+        # generate id
+        rand_num = random.randint(1000, 9999)
+        new_id = f"SCH-{date_str}-{rand_num}-{idx}"
+        
+        new_case = {
+            "id": new_id,
+            "equipmentCode": item.equipmentCode,
+            "model": model,
+            "sequenceOrder": new_seq,
+            "stage": "active_rental",
+            "destination": rental.projectName,
+            "startDate": datetime.now().strftime("%Y-%m-%d"),
+            "endDate": rental.returnDate,
+            "status": "Pending_Approval",
+            "userEmail": rental.userEmail,
+            "pmEmail": rental.pmEmail,
+            "notes": f"Checkout Case ID: {rental.caseId}",
+            "projectCode": rental.projectCode,
+            "handoverPic": "Renter Checkout",
+            "handoverPhoto": item.photoUrl,
+            "checklistVerified": True
+        }
+        schedules.append(new_case)
+        
+    db_storage["schedules"] = schedules
+    
+    # Sync states for all items
+    for item in rental.items:
+        sync_asset_state(item.equipmentCode)
+        
+    logger.info(f"Database updated. Case {rental.caseId} schedules loaded as Pending_Approval.")
     
     return {
         "status": "success", 
-        "message": f"Bulk Rental created dynamically for Case {rental.caseId}", 
+        "message": f"Bulk Rental schedules created dynamically for Case {rental.caseId}", 
         "caseId": rental.caseId
     }
+
 
 class ExtendItem(BaseModel):
     equipmentCode: str
@@ -606,8 +639,8 @@ class ScheduledCase(BaseModel):
     sequenceOrder: int
     stage: str
     destination: str
-    startDate: str
-    endDate: str
+    startDate: Optional[str] = None
+    endDate: Optional[str] = None
     status: str
     userEmail: str
     pmEmail: str
@@ -616,6 +649,122 @@ class ScheduledCase(BaseModel):
     handoverPic: Optional[str] = None
     handoverPhoto: Optional[str] = None
     checklistVerified: Optional[bool] = None
+
+from fastapi import Form
+
+@app.post("/api/sharepoint/calibration/clear")
+async def clear_calibration_case(
+    schedule_id: str = Form(...),
+    calibration_date: str = Form(...),
+    pdf_file: UploadFile = File(...),
+    image_file: UploadFile = File(...)
+):
+    import shutil
+    import re
+    logger.info(f"Clearing calibration for schedule: {schedule_id} with date {calibration_date}")
+    schedules = db_storage.get("schedules", [])
+    
+    # Find the target schedule
+    target_schedule = None
+    for s in schedules:
+        if s["id"] == schedule_id:
+            target_schedule = s
+            break
+            
+    if not target_schedule:
+        raise HTTPException(status_code=404, detail="Scheduled case not found")
+        
+    equipment_code = target_schedule["equipmentCode"]
+    model = target_schedule["model"]
+    
+    # Find serial number of the asset and update calibration date in database
+    serial_number = "UNKNOWN"
+    for item in db_storage.get("items", []):
+        if item.get("equipmentCode") == equipment_code:
+            serial_number = item.get("serialNumber") or item.get("Serial_Number") or "UNKNOWN"
+            item["calDate"] = calibration_date
+            if "Calibration_Date" in item:
+                item["Calibration_Date"] = calibration_date
+            break
+
+    # Determine OneDrive save directory
+    onedrive_base = "C:\\Users\\cfpcl\\OneDrive"
+    target_dir = os.path.join(onedrive_base, "Calibration_Reports")
+    
+    if not os.path.exists(onedrive_base):
+        # Fallback to local workspace folder
+        target_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "OneDrive_Calibration_Reports"))
+        
+    os.makedirs(target_dir, exist_ok=True)
+    
+    # Naming template: (검교정날짜_툴코드_툴모델명_시리얼넘버.pdf)
+    def sanitize(val):
+        return re.sub(r'[^a-zA-Z0-9_\-]', '_', val)
+        
+    sanitized_model = sanitize(model)
+    sanitized_serial = sanitize(serial_number)
+    sanitized_code = sanitize(equipment_code)
+    
+    pdf_filename = f"{calibration_date}_{sanitized_code}_{sanitized_model}_{sanitized_serial}.pdf"
+    
+    _, ext = os.path.splitext(image_file.filename or "")
+    if not ext:
+        ext = ".jpg"
+    image_filename = f"{calibration_date}_{sanitized_code}_{sanitized_model}_{sanitized_serial}_photo{ext}"
+    
+    pdf_path = os.path.join(target_dir, pdf_filename)
+    image_path = os.path.join(target_dir, image_filename)
+    
+    try:
+        with open(pdf_path, "wb") as buffer:
+            shutil.copyfileobj(pdf_file.file, buffer)
+        with open(image_path, "wb") as buffer:
+            shutil.copyfileobj(image_file.file, buffer)
+    except Exception as e:
+        logger.error(f"Failed to save files: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to save certificate files: {str(e)}")
+        
+    # Mark this calibration schedule as Completed
+    for s in schedules:
+        if s["id"] == schedule_id:
+            s["status"] = "Completed"
+            s["handoverPic"] = "System Calibration"
+            s["handoverPhoto"] = f"{pdf_filename}; {image_filename}"
+            s["checklistVerified"] = True
+            break
+            
+    db_storage["schedules"] = schedules
+    sync_asset_state(equipment_code)
+    
+    return {
+        "status": "success",
+        "message": "Calibration successfully cleared and certificate files saved.",
+        "pdf_filename": pdf_filename,
+        "image_filename": image_filename,
+        "saved_path": target_dir
+    }
+
+@app.post("/api/sharepoint/schedule/approve/{schedule_id}")
+async def approve_schedule_case(schedule_id: str):
+    logger.info(f"Approving scheduled case: {schedule_id}")
+    schedules = db_storage.get("schedules", [])
+    target = None
+    for s in schedules:
+        if s["id"] == schedule_id:
+            s["status"] = "In_Progress"
+            target = s
+            break
+            
+    if not target:
+        raise HTTPException(status_code=404, detail="Scheduled case not found")
+        
+    db_storage["schedules"] = schedules
+    sync_asset_state(target["equipmentCode"])
+    return {
+        "status": "success",
+        "message": f"Scheduled case {schedule_id} approved.",
+        "data": target
+    }
 
 def sync_asset_state(equipment_code: str):
     schedules = [s for s in db_storage.get("schedules", []) if s["equipmentCode"] == equipment_code]
@@ -635,52 +784,50 @@ def sync_asset_state(equipment_code: str):
                 })
         return
 
-    active_rentals = [s for s in schedules if s["stage"] == "active_rental"]
-    calibrations = [s for s in schedules if s["stage"] == "calibration"]
-    ongoings = [s for s in schedules if s["stage"] == "ongoing"]
+    # Filter out completed cases to find active scheduling
+    active_schedules = [s for s in schedules if s.get("status") != "Completed"]
+    if not active_schedules:
+        for item in db_storage["items"]:
+            if item["equipmentCode"] == equipment_code:
+                item.update({
+                    "projectName": "Warehouse",
+                    "returnDate": "",
+                    "status": "Available",
+                    "userEmail": "",
+                    "pmEmail": "",
+                    "caseId": ""
+                })
+        return
+
+    # Sort active schedules by sequenceOrder to find the first upcoming step
+    selected_case = sorted(active_schedules, key=lambda x: x.get("sequenceOrder", 0))[0]
     
-    status = "Available"
-    project_name = "Warehouse"
-    return_date = ""
-    user_email = ""
-    pm_email = ""
-    case_id = ""
-    
-    if active_rentals:
-        selected_case = sorted(active_rentals, key=lambda x: (x.get("sequenceOrder", 0), x.get("startDate", "")))[0]
-        status = "Rented"
+    stage = selected_case["stage"]
+    if stage == "active_rental":
+        # If it's a rental request but not approved/active yet, mark as Reserved
+        if selected_case.get("status") == "In_Progress":
+            status = "Rented"
+        else:
+            status = "Reserved"
         project_name = selected_case["destination"]
-        return_date = selected_case["endDate"]
-        user_email = selected_case["userEmail"]
-        pm_email = selected_case["pmEmail"]
-        case_id = selected_case["id"]
-    elif calibrations:
-        selected_case = sorted(calibrations, key=lambda x: (x.get("sequenceOrder", 0), x.get("startDate", "")))[0]
+    elif stage == "calibration":
         status = "Calibration"
-        project_name = "Calibration Lab"
-        return_date = selected_case["endDate"]
-        user_email = selected_case["userEmail"]
-        pm_email = selected_case["pmEmail"]
-        case_id = selected_case["id"]
-    elif ongoings:
-        selected_case = sorted(ongoings, key=lambda x: (x.get("sequenceOrder", 0), x.get("startDate", "")))[0]
+        project_name = selected_case.get("destination") or "Calibration Lab"
+    else:  # ongoing
         status = "Reserved"
-        project_name = "Warehouse"
-        return_date = selected_case["endDate"]
-        user_email = selected_case["userEmail"]
-        pm_email = selected_case["pmEmail"]
-        case_id = selected_case["id"]
-        
+        project_name = selected_case.get("destination") or "Warehouse"
+
     for item in db_storage["items"]:
         if item["equipmentCode"] == equipment_code:
             item.update({
                 "status": status,
                 "projectName": project_name,
-                "returnDate": return_date,
-                "userEmail": user_email,
-                "pmEmail": pm_email,
-                "caseId": case_id
+                "returnDate": selected_case.get("endDate") or "",
+                "userEmail": selected_case.get("userEmail") or "",
+                "pmEmail": selected_case.get("pmEmail") or "",
+                "caseId": selected_case["id"]
             })
+            break
 
 @app.get("/api/sharepoint/schedule/list")
 async def get_schedule_list():

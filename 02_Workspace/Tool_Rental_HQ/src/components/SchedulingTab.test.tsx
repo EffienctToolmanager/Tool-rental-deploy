@@ -60,8 +60,8 @@ describe('SchedulingTab Component', () => {
     
     await waitFor(() => {
       expect(screen.getByText(/SCH-202606-0001/)).toBeInTheDocument();
-      expect(screen.getByText(/Project Site A/)).toBeInTheDocument();
     });
+    expect(screen.getAllByText(/Project Site A/)[0]).toBeInTheDocument();
   });
 
   it('toggles view mode between Kanban and Gantt', async () => {

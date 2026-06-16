@@ -116,6 +116,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
       caseId,
       items: mappedItems,
       projectName: formData.projectName,
+      projectCode: formData.projectCode,
       returnDate: formData.expectedReturnDate,
       pmEmail: formData.pmEmail,
       userEmail: formData.userEmail

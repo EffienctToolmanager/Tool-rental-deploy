@@ -56,8 +56,8 @@ export type ScheduledCase = {
   sequenceOrder: number;
   stage: 'active_rental' | 'calibration' | 'ongoing';
   destination: string;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   status: 'Scheduled' | 'In_Progress' | 'Completed' | 'Delayed';
   userEmail: string;
   pmEmail: string;

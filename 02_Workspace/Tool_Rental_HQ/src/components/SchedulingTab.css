@@ -63,9 +63,16 @@
 /* Kanban Board Styling */
 .kanban-board {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
   margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+  .kanban-board {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }
 
 .kanban-column {
@@ -76,6 +83,49 @@
   flex-direction: column;
   min-height: 450px;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .kanban-column {
+    min-height: auto;
+  }
+}
+
+.kanban-column.active_rental {
+  border: 2px solid rgba(30, 136, 229, 0.4);
+  border-top: 6px solid #1E88E5;
+  background-color: rgba(30, 136, 229, 0.02);
+}
+.kanban-column.active_rental .kanban-column-header {
+  background-color: rgba(30, 136, 229, 0.08);
+  border-bottom: 1px solid rgba(30, 136, 229, 0.2);
+}
+.kanban-column.active_rental .kanban-column-header h3 {
+  color: #1565C0;
+}
+.kanban-column.calibration {
+  border: 2px solid rgba(216, 27, 96, 0.4);
+  border-top: 6px solid #D81B60;
+  background-color: rgba(216, 27, 96, 0.02);
+}
+.kanban-column.calibration .kanban-column-header {
+  background-color: rgba(216, 27, 96, 0.08);
+  border-bottom: 1px solid rgba(216, 27, 96, 0.2);
+}
+.kanban-column.calibration .kanban-column-header h3 {
+  color: #C2185B;
+}
+.kanban-column.ongoing {
+  border: 2px solid rgba(67, 160, 71, 0.4);
+  border-top: 6px solid #43A047;
+  background-color: rgba(67, 160, 71, 0.02);
+}
+.kanban-column.ongoing .kanban-column-header {
+  background-color: rgba(67, 160, 71, 0.08);
+  border-bottom: 1px solid rgba(67, 160, 71, 0.2);
+}
+.kanban-column.ongoing .kanban-column-header h3 {
+  color: #2E7D32;
 }
 
 .kanban-column-header {
@@ -93,7 +143,7 @@
 
 .kanban-column-header h3 {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .kanban-count-badge {
@@ -272,8 +322,8 @@
 
 .gantt-days-header-grid {
   display: grid;
-  grid-template-columns: repeat(31, 40px);
-  min-width: 1240px; /* 31 days * 40px */
+  grid-template-columns: repeat(10, 140px);
+  min-width: 1400px;
 }
 
 .gantt-day-header-cell {
@@ -328,9 +378,9 @@
 
 .gantt-days-row-grid {
   display: grid;
-  grid-template-columns: repeat(31, 40px);
+  grid-template-columns: repeat(10, 140px);
   grid-template-rows: 40px;
-  min-width: 1240px;
+  min-width: 1400px;
   position: relative;
 }
 
