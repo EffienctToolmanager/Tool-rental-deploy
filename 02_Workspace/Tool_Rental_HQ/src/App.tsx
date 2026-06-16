@@ -5,7 +5,7 @@ import ActiveRentals from './components/ActiveRentals';
 import InventoryTable from './components/InventoryTable';
 import AnalyticsTab from './components/AnalyticsTab';
 import { SchedulingTab } from './components/SchedulingTab';
-import { type Asset, type Rental } from './types';
+import { type Asset, type Rental, type ScheduledCase } from './types';
 
 const API_BASE = "/api/sharepoint";
 
@@ -14,6 +14,7 @@ const App: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [rentals, setRentals] = useState<Rental[]>([]);
+  const [schedules, setSchedules] = useState<ScheduledCase[]>([]);
   const [selectedAssetCodes, setSelectedAssetCodes] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -46,7 +47,9 @@ const App: React.FC = () => {
         assetCode: item.equipmentCode,
         brand: item.brand || item.Brand || 'Mock Brand',
         model: item.model || item.name,
-        Current_Status: (item.status === '보관중' || item.status === 'Available') ? 'Available' : 'Rented',
+        Current_Status: item.status === '보관중' ? 'Available' : 
+                        item.status === '대여중' ? 'Rented' : 
+                        (item.status || 'Available'),
         currentLocation: item.projectName || 'Warehouse',
         calDate: '2026-12-31',
         zone: item.zone || 'HQ',
@@ -68,6 +71,13 @@ const App: React.FC = () => {
 
       setAssets(mappedAssets);
       setRentals(activeRentals);
+
+      // Fetch schedules to display next use information
+      const schedRes = await fetch(`/api/sharepoint/schedule/list`);
+      if (schedRes.ok) {
+        const schedData = await schedRes.json();
+        setSchedules(schedData.data || []);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -82,10 +92,13 @@ const App: React.FC = () => {
   const getChartData = () => {
     const available = assets.filter(a => (a as any).Current_Status === 'Available').length;
     const rented = assets.filter(a => (a as any).Current_Status === 'Rented').length;
+    const calibration = assets.filter(a => (a as any).Current_Status === 'Calibration').length;
+    const reserved = assets.filter(a => (a as any).Current_Status === 'Reserved').length;
     return [
       { name: 'Available', value: available, color: '#4CAF50' },
       { name: 'Rented', value: rented, color: 'var(--f-primary)' },
-      { name: 'Maintenance', value: 0, color: '#FF9800' }
+      { name: 'Calibration', value: calibration, color: '#FF9800' },
+      { name: 'Reserved', value: reserved, color: '#2196F3' }
     ];
   };
 
@@ -227,6 +240,7 @@ const App: React.FC = () => {
             {activeTab === 'inventory' && (
               <InventoryTable 
                 assets={assets} 
+                schedules={schedules}
                 selectedAssetCodes={selectedAssetCodes}
                 setSelectedAssetCodes={setSelectedAssetCodes}
                 onNavigateToCheckout={() => setActiveTab('checkout')}

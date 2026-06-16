@@ -389,7 +389,7 @@ INITIAL_SCHEDULED_CASES = [
         "equipmentCode": "FLK-87V-01",
         "model": "87V",
         "sequenceOrder": 2,
-        "stage": "staged",
+        "stage": "ongoing",
         "destination": "Samsung Austin Site",
         "startDate": "2026-07-04",
         "endDate": "2026-07-25",
@@ -612,9 +612,75 @@ class ScheduledCase(BaseModel):
     userEmail: str
     pmEmail: str
     notes: Optional[str] = None
+    projectCode: Optional[str] = None
     handoverPic: Optional[str] = None
     handoverPhoto: Optional[str] = None
     checklistVerified: Optional[bool] = None
+
+def sync_asset_state(equipment_code: str):
+    schedules = [s for s in db_storage.get("schedules", []) if s["equipmentCode"] == equipment_code]
+    if not schedules:
+        for item in db_storage["items"]:
+            if item["equipmentCode"] == equipment_code:
+                case_id = item.get("caseId", "")
+                if item.get("status") == "Rented" and case_id and not case_id.startswith("SCH-"):
+                    return
+                item.update({
+                    "projectName": "Warehouse",
+                    "returnDate": "",
+                    "status": "Available",
+                    "userEmail": "",
+                    "pmEmail": "",
+                    "caseId": ""
+                })
+        return
+
+    active_rentals = [s for s in schedules if s["stage"] == "active_rental"]
+    calibrations = [s for s in schedules if s["stage"] == "calibration"]
+    ongoings = [s for s in schedules if s["stage"] == "ongoing"]
+    
+    status = "Available"
+    project_name = "Warehouse"
+    return_date = ""
+    user_email = ""
+    pm_email = ""
+    case_id = ""
+    
+    if active_rentals:
+        selected_case = sorted(active_rentals, key=lambda x: (x.get("sequenceOrder", 0), x.get("startDate", "")))[0]
+        status = "Rented"
+        project_name = selected_case["destination"]
+        return_date = selected_case["endDate"]
+        user_email = selected_case["userEmail"]
+        pm_email = selected_case["pmEmail"]
+        case_id = selected_case["id"]
+    elif calibrations:
+        selected_case = sorted(calibrations, key=lambda x: (x.get("sequenceOrder", 0), x.get("startDate", "")))[0]
+        status = "Calibration"
+        project_name = "Calibration Lab"
+        return_date = selected_case["endDate"]
+        user_email = selected_case["userEmail"]
+        pm_email = selected_case["pmEmail"]
+        case_id = selected_case["id"]
+    elif ongoings:
+        selected_case = sorted(ongoings, key=lambda x: (x.get("sequenceOrder", 0), x.get("startDate", "")))[0]
+        status = "Reserved"
+        project_name = "Warehouse"
+        return_date = selected_case["endDate"]
+        user_email = selected_case["userEmail"]
+        pm_email = selected_case["pmEmail"]
+        case_id = selected_case["id"]
+        
+    for item in db_storage["items"]:
+        if item["equipmentCode"] == equipment_code:
+            item.update({
+                "status": status,
+                "projectName": project_name,
+                "returnDate": return_date,
+                "userEmail": user_email,
+                "pmEmail": pm_email,
+                "caseId": case_id
+            })
 
 @app.get("/api/sharepoint/schedule/list")
 async def get_schedule_list():
@@ -624,24 +690,30 @@ async def get_schedule_list():
         "data": db_storage.get("schedules", [])
     }
 
+@app.post("/api/sharepoint/schedule/create-bulk")
+async def create_schedule_cases_bulk(cases: List[ScheduledCase]):
+    logger.info(f"Bulk creating {len(cases)} scheduled cases.")
+    schedules = db_storage.get("schedules", [])
+    eq_codes_to_sync = set()
+    for case in cases:
+        schedules.append(case.dict())
+        eq_codes_to_sync.add(case.equipmentCode)
+    db_storage["schedules"] = schedules
+    for code in eq_codes_to_sync:
+        sync_asset_state(code)
+    return {
+        "status": "success",
+        "message": f"Successfully created {len(cases)} scheduled cases.",
+        "count": len(cases)
+    }
+
 @app.post("/api/sharepoint/schedule/create")
 async def create_schedule_case(case: ScheduledCase):
     logger.info(f"Creating scheduled case: {case.id}")
     schedules = db_storage.get("schedules", [])
     schedules.append(case.dict())
     db_storage["schedules"] = schedules
-    
-    # Sync with asset if stage is active_rental/dispatched
-    if case.stage in ["active_rental", "dispatched"]:
-        for item in db_storage["items"]:
-            if item["equipmentCode"] == case.equipmentCode:
-                item["status"] = "Rented"
-                item["projectName"] = case.destination
-                item["returnDate"] = case.endDate
-                item["userEmail"] = case.userEmail
-                item["pmEmail"] = case.pmEmail
-                item["caseId"] = case.id
-                
+    sync_asset_state(case.equipmentCode)
     return {
         "status": "success",
         "message": f"Scheduled case {case.id} created.",
@@ -664,42 +736,7 @@ async def update_schedule_case(case: ScheduledCase):
         raise HTTPException(status_code=404, detail="Scheduled case not found")
         
     db_storage["schedules"] = schedules
-    
-    # Sync with main assets
-    if case.stage == "active_rental":
-        for item in db_storage["items"]:
-            if item["equipmentCode"] == case.equipmentCode:
-                item["status"] = "Rented"
-                item["projectName"] = case.destination
-                item["returnDate"] = case.endDate
-                item["userEmail"] = case.userEmail
-                item["pmEmail"] = case.pmEmail
-                item["caseId"] = case.id
-    elif case.stage == "calibration":
-        for item in db_storage["items"]:
-            if item["equipmentCode"] == case.equipmentCode:
-                item["status"] = "Available"
-                item["projectName"] = "Calibration Lab"
-                item["returnDate"] = case.endDate
-                item["userEmail"] = case.userEmail
-                item["caseId"] = case.id
-    elif case.stage == "staged":
-        for item in db_storage["items"]:
-            if item["equipmentCode"] == case.equipmentCode:
-                item["status"] = "Available"
-                item["projectName"] = f"Staged: {case.destination}"
-                item["returnDate"] = ""
-                item["caseId"] = case.id
-    elif case.stage == "dispatched":
-        for item in db_storage["items"]:
-            if item["equipmentCode"] == case.equipmentCode:
-                item["status"] = "Rented"
-                item["projectName"] = case.destination
-                item["returnDate"] = case.endDate
-                item["userEmail"] = case.userEmail
-                item["pmEmail"] = case.pmEmail
-                item["caseId"] = case.id
-                
+    sync_asset_state(case.equipmentCode)
     return {
         "status": "success",
         "message": f"Scheduled case {case.id} updated and assets synced.",
@@ -710,11 +747,21 @@ async def update_schedule_case(case: ScheduledCase):
 async def delete_schedule_case(case_id: str):
     logger.info(f"Deleting scheduled case: {case_id}")
     schedules = db_storage.get("schedules", [])
+    
+    deleted_case = None
+    for s in schedules:
+        if s["id"] == case_id:
+            deleted_case = s
+            break
+            
     filtered = [s for s in schedules if s["id"] != case_id]
     if len(filtered) == len(schedules):
         raise HTTPException(status_code=404, detail="Scheduled case not found")
         
     db_storage["schedules"] = filtered
+    if deleted_case:
+        sync_asset_state(deleted_case["equipmentCode"])
+        
     return {
         "status": "success",
         "message": f"Scheduled case {case_id} deleted."

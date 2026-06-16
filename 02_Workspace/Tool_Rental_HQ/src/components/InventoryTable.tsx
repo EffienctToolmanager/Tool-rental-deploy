@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { type Asset } from '../types';
+import { type Asset, type ScheduledCase } from '../types';
 import './InventoryTable.css';
 
 interface InventoryTableProps {
   assets: Asset[];
+  schedules?: ScheduledCase[];
   selectedAssetCodes: string[];
   setSelectedAssetCodes: React.Dispatch<React.SetStateAction<string[]>>;
   onNavigateToCheckout: () => void;
@@ -77,6 +78,7 @@ const SpecSummaryCard: React.FC<{ asset: Asset; compact?: boolean }> = ({ asset,
 
 const InventoryTable: React.FC<InventoryTableProps> = ({ 
   assets: initialAssets, 
+  schedules = [],
   selectedAssetCodes, 
   setSelectedAssetCodes, 
   onNavigateToCheckout 
@@ -301,6 +303,16 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
               const isAvailable = status === 'Available';
               const serialNumber = asset.serialNumber || asset.Serial_Number || '—';
               
+              const assetSchedules = schedules.filter((s: any) => s.equipmentCode === assetCode);
+              const sortedSchedules = [...assetSchedules].sort((a: any, b: any) => {
+                if (a.sequenceOrder !== b.sequenceOrder) {
+                  return a.sequenceOrder - b.sequenceOrder;
+                }
+                return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+              });
+              const currentCaseId = asset.caseId;
+              const nextSchedules = sortedSchedules.filter((s: any) => s.id !== currentCaseId);
+
               let rowClass = '';
               if (daysLeft < 0) rowClass = 'row-calibration-expired';
               else if (daysLeft < 30) rowClass = 'row-calibration-warning';
@@ -313,16 +325,79 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                       type="checkbox"
                       checked={isSelected}
                       disabled={!isAvailable}
-                      className={`select-checkbox ${isAvailable ? 'available' : 'rented'}`}
+                      className={`select-checkbox ${
+                        isAvailable ? 'available' : 
+                        status === 'Calibration' ? 'calibration' : 
+                        status === 'Reserved' ? 'reserved' : 
+                        'rented'
+                      }`}
                       onChange={(e) => handleCheckboxChange(assetCode, e.target.checked)}
-                      title={isAvailable ? 'Add to rental cart' : 'Rented assets cannot be selected.'}
+                      title={
+                        isAvailable ? 'Add to rental cart' : 
+                        status === 'Calibration' ? 'Equipment in Calibration cannot be rented.' :
+                        status === 'Reserved' ? 'Reserved equipment cannot be rented.' :
+                        'Rented assets cannot be selected.'
+                      }
                       data-agent-id={`select-${assetCode}`}
                       data-agent-action="select-asset"
                     />
                   </td>
-                  <td><span className={`f-badge ${status === 'Available' ? 'f-badge-available' : 'f-badge-rented'}`}>{status?.toUpperCase()}</span></td>
+                  <td>
+                    <span className={`f-badge ${
+                      status === 'Available' ? 'f-badge-available' : 
+                      status === 'Calibration' ? 'f-badge-calibration' : 
+                      status === 'Reserved' ? 'f-badge-reserved' : 
+                      'f-badge-rented'
+                    }`}>
+                      {status?.toUpperCase()}
+                    </span>
+                  </td>
                   <td>{location}</td>
-                  <td className={`table-td-location ${currentLocation === 'Warehouse' ? 'warehouse' : 'field'}`}>{currentLocation}</td>
+                  <td className={`table-td-location ${currentLocation === 'Warehouse' ? 'warehouse' : 'field'}`}>
+                    <div className="location-cell-content">
+                      <span className="location-name">{currentLocation}</span>
+                      {nextSchedules.length > 0 && (
+                        <div className="next-use-badge-container">
+                          <span className="next-use-badge-trigger">
+                            <span className="next-use-label">Next: </span>
+                            <span className={`next-use-badge next-use-badge-${nextSchedules[0].stage}`}>
+                              {nextSchedules[0].stage === 'calibration' ? 'Calibration' : nextSchedules[0].destination}
+                              {nextSchedules.length > 1 && ` (+${nextSchedules.length - 1})`}
+                            </span>
+                          </span>
+                          
+                          {/* Rich Tooltip Card */}
+                          <div className="next-use-tooltip">
+                            <div className="tooltip-header">Upcoming Schedules for {assetCode}</div>
+                            <div className="tooltip-timeline">
+                              {nextSchedules.map((s: any, idx: number) => (
+                                <div key={s.id || idx} className="tooltip-timeline-item">
+                                  <div className="timeline-dot-connector">
+                                    <div className={`timeline-dot dot-${s.stage}`} />
+                                    {idx < nextSchedules.length - 1 && <div className="timeline-connector" />}
+                                  </div>
+                                  <div className="timeline-details">
+                                    <div className="timeline-header-row">
+                                      <span className={`timeline-badge badge-${s.stage}`}>
+                                        {s.stage === 'active_rental' ? 'Rental' : s.stage === 'calibration' ? 'Calibration' : 'Ongoing'}
+                                      </span>
+                                      <span className="timeline-destination">{s.destination || 'Calibration Lab'}</span>
+                                    </div>
+                                    <div className="timeline-dates">{s.startDate} ~ {s.endDate}</div>
+                                    <div className="timeline-meta">
+                                      {s.projectCode && <span>Code: {s.projectCode} · </span>}
+                                      <span>PM: {s.pmEmail}</span>
+                                    </div>
+                                    {s.notes && <div className="timeline-notes">Note: {s.notes}</div>}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </td>
                   <td className="table-td-code">{assetCode}</td>
                   <td>{getBrand(asset)}</td>
                   <td>

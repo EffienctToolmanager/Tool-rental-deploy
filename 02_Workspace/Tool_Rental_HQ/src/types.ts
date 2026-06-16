@@ -20,8 +20,8 @@ export type Asset = {
   rack: string;
   currentLocation: string;
   calDate: string;
-  status: 'Available' | 'Rented';
-  Current_Status?: 'Available' | 'Rented';
+  status: 'Available' | 'Rented' | 'Calibration' | 'Reserved';
+  Current_Status?: 'Available' | 'Rented' | 'Calibration' | 'Reserved';
   Brand?: string;
   Asset_Model?: string;
   Asset_Code?: string;
@@ -54,7 +54,7 @@ export type ScheduledCase = {
   equipmentCode: string;
   model: string;
   sequenceOrder: number;
-  stage: 'active_rental' | 'calibration' | 'staged' | 'dispatched';
+  stage: 'active_rental' | 'calibration' | 'ongoing';
   destination: string;
   startDate: string;
   endDate: string;
@@ -62,6 +62,7 @@ export type ScheduledCase = {
   userEmail: string;
   pmEmail: string;
   notes?: string;
+  projectCode?: string;
   handoverPic?: string;
   handoverPhoto?: string;
   checklistVerified?: boolean;

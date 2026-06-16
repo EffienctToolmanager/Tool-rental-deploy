@@ -370,17 +370,26 @@
   background: linear-gradient(135deg, #E65100 0%, #FF8F00 100%);
 }
 
-.gantt-schedule-bar.staged {
+.gantt-schedule-bar.ongoing {
   background: linear-gradient(135deg, #0D47A1 0%, #1976D2 100%);
-}
-
-.gantt-schedule-bar.dispatched {
-  background: linear-gradient(135deg, #4A148C 0%, #7B1FA2 100%);
 }
 
 .bar-conflict {
   border: 2px solid var(--f-error) !important;
   animation: pulse-border 1.5s infinite alternate;
+}
+
+/* Drag and Drop interactive states */
+.kanban-card.dragging {
+  opacity: 0.4;
+  border: 2px dashed var(--f-primary) !important;
+  transform: scale(0.98);
+}
+
+.kanban-column-body.drag-over {
+  background: rgba(0, 94, 96, 0.08) !important;
+  border: 2px dashed var(--f-primary);
+  transition: background-color 0.2s ease;
 }
 
 .bar-label {
@@ -403,14 +412,31 @@
 }
 
 .modal-content {
-  width: 500px;
-  max-width: 90%;
+  width: 560px;
+  max-width: 95%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   padding: 24px;
   background: var(--f-bg-white);
   border: 1px solid var(--f-border);
   box-shadow: var(--f-shadow);
   border-radius: 8px;
   animation: modal-slide-in 0.2s ease-out;
+  overflow: hidden;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.modal-scrollable-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
 @keyframes modal-slide-in {

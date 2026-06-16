@@ -141,4 +141,49 @@ describe('SchedulingTab Component', () => {
     // And stage should be preselected to calibration, thus showing Calibration Record fields
     expect(screen.getByText(/Calibration Record Required Fields/i)).toBeInTheDocument();
   });
+
+  it('instantly transitions to ongoing stage when requested (no validation modal)', async () => {
+    const onRefresh = vi.fn();
+    render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
+    });
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const moveSelect = screen.getByRole('combobox');
+    fireEvent.change(moveSelect, { target: { value: 'ongoing' } });
+
+    // For ongoing stage, it should update directly and not show modal
+    await waitFor(() => {
+      expect(fetchSpy).toHaveBeenCalledWith(expect.stringContaining('/update'), expect.objectContaining({
+        method: 'PUT'
+      }));
+    });
+    expect(screen.queryByText(/Edit Scheduling Case/i)).not.toBeInTheDocument();
+  });
+
+  it('supports bulk select, project code, and relay scheduling in create modal', async () => {
+    const onRefresh = vi.fn();
+    render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
+    });
+
+    const addBtn = screen.getByText(/Add Schedule Case/i);
+    fireEvent.click(addBtn);
+
+    expect(screen.getByText(/Register New Scheduling Case/i)).toBeInTheDocument();
+    
+    // Check elements for bulk selection and project code
+    expect(screen.getByText(/Select Equipment \(Select Multiple\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Project Code/i)).toBeInTheDocument();
+    expect(screen.getByText(/🔄 Relay Scheduling Flow/i)).toBeInTheDocument();
+    
+    // Verify first schedule step card is rendered
+    expect(screen.getByText(/Schedule 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/Case Name \/ Stage Name/i)).toBeInTheDocument();
+    expect(screen.getByText(/Stage Target/i)).toBeInTheDocument();
+  });
 });
