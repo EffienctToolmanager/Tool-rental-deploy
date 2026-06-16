@@ -67,3 +67,20 @@ Vercel 실시간 프로덕션 웹사이트 배포를 완료하고 검증했습�
 
 ![Vercel 배포 헤더 로고 검증 스냅샷 (라이트 모드)](C:/Users/cfpcl/.gemini/antigravity/brain/a0418336-73ed-4442-b99a-f50ebbda344a/final_verc_deployment_1781505159929.png)
 ![Vercel 배포 헤더 로고 검증 스냅샷 (다크 모드)](C:/Users/cfpcl/.gemini/antigravity/brain/a0418336-73ed-4442-b99a-f50ebbda344a/dark_mode_logo_1781505508372.png)
+
+---
+
+## 🗓️ Tool Scheduler Batch & Search 기능 추가 (신규)
+
+Tool Scheduler 화면에 아래의 핵심 기능을 성공적으로 개발, 통합하고 배포 완료했습니다:
+
+1. **글로벌 키워드 검색 필터링**: Kanban 보드 및 Gantt Timeline 모두에 실시간 검색 창을 추가하여, 장비 코드, 모델명, 목적지, Project Code, 담당자 이메일, 노트 등을 기준으로 원하는 카드를 즉시 필터링할 수 있습니다.
+2. **다중 선택 (Checkbox) 및 벌크 상태 전환**: Admin 권한이 활성화된 상태에서 상태 카드 좌측의 체크박스로 여러 장비를 한꺼번에 선택하고, 하단의 벌크 액션 툴바를 통해 Active, Calibration, On Going 상태로 일괄 이동할 수 있습니다.
+3. **벌크 반출/반입 검증 모달**: 벌크 이동 시 필수 수집 정보(검교정 담당자, 반출 담당 PIC, 인수 사진, 체크리스트 확인 등)를 한 번에 검증하여 입력할 수 있는 일괄 검증 절차를 도입했습니다.
+4. **벌크 릴리즈 (삭제) 및 자원 상태 복원**: 스케줄 보드 내에 있는 다수의 장비를 한 번에 릴리즈(삭제)하여 Inventory Available 상태로 즉시 초기화/반환할 수 있습니다.
+5. **실시간 Conflict (중복) 감지 자동 계산**: 스케줄 카드가 추가/삭제되거나 상태가 완료(Completed)로 바뀌는 등 데이터의 변동이 있을 때마다 즉각적으로 캘린더 날짜 겹침(Overlap) 경고를 실시간으로 재계산하여 오작동을 방지합니다.
+
+* **Vite 및 TypeScript 정적 검사**: 100% 검사 통과 (`npm run build` 성공).
+* **단위 테스트 검증**: `vitest` 테스트 스위트에 검색 및 다중 선택 시나리오를 추가하여 총 18개 테스트가 모두 정상 작동 (`npx vitest run` 완료).
+* **Vercel 실시간 동기화 완료**: GitHub 저장소 `origin main` 브랜치로 커밋 및 푸시가 완료되어 Vercel로 자동 배포가 완료되었습니다.
+
