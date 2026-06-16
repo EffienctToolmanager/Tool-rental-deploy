@@ -17,6 +17,17 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCase, setEditingCase] = useState<ScheduledCase | null>(null);
 
+  // Search and multi-select states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCardIds, setSelectedCardIds] = useState<string[]>([]);
+  
+  // Bulk update verification modal state
+  const [isBulkTransitionModalOpen, setIsBulkTransitionModalOpen] = useState(false);
+  const [bulkTargetStage, setBulkTargetStage] = useState<'active_rental' | 'calibration' | 'ongoing'>('active_rental');
+  const [bulkHandoverPic, setBulkHandoverPic] = useState('');
+  const [bulkHandoverPhoto, setBulkHandoverPhoto] = useState('');
+  const [bulkChecklistVerified, setBulkChecklistVerified] = useState(false);
+
   // Form states
   const [formSelectedAssets, setFormSelectedAssets] = useState<string[]>([]);
   const [formProjectCode, setFormProjectCode] = useState('');
@@ -48,7 +59,10 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
       const res = await fetch(`${API_BASE}/list`);
       if (!res.ok) throw new Error("Failed to fetch schedules");
       const dataObj = await res.json();
-      setSchedules(dataObj.data || []);
+      const updatedSchedules = dataObj.data || [];
+      setSchedules(updatedSchedules);
+      // Clean up selected card IDs that may no longer exist
+      setSelectedCardIds(prev => prev.filter(id => updatedSchedules.some((s: ScheduledCase) => s.id === id)));
     } catch (err) {
       console.error("Error fetching schedules:", err);
     } finally {
@@ -221,6 +235,80 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     }
   };
 
+  const handleBulkMoveTrigger = (targetStage: 'active_rental' | 'calibration' | 'ongoing') => {
+    if (targetStage === 'ongoing') {
+      executeBulkMove(targetStage);
+    } else {
+      setBulkTargetStage(targetStage);
+      setBulkHandoverPic('');
+      setBulkHandoverPhoto('');
+      setBulkChecklistVerified(false);
+      setIsBulkTransitionModalOpen(true);
+    }
+  };
+
+  const executeBulkMove = async (
+    targetStage: 'active_rental' | 'calibration' | 'ongoing',
+    handoverPic?: string,
+    handoverPhoto?: string,
+    checklistVerified?: boolean
+  ) => {
+    const selectedSchedules = schedules.filter(s => selectedCardIds.includes(s.id));
+    const payloads = selectedSchedules.map(s => ({
+      ...s,
+      stage: targetStage,
+      status: targetStage === 'ongoing' ? 'Scheduled' : 'In_Progress',
+      handoverPic: targetStage !== 'ongoing' ? handoverPic : undefined,
+      handoverPhoto: targetStage !== 'ongoing' ? handoverPhoto : undefined,
+      checklistVerified: targetStage !== 'ongoing' ? checklistVerified : undefined
+    }));
+
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${API_BASE}/update-bulk`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payloads)
+      });
+      if (!res.ok) throw new Error("Bulk update failed");
+      
+      setSelectedCardIds([]);
+      setIsBulkTransitionModalOpen(false);
+      await fetchSchedules();
+      onRefreshAssets();
+    } catch (err) {
+      console.error(err);
+      alert("Error performing bulk stage move.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleBulkRelease = async () => {
+    if (!confirm(`Are you sure you want to release ${selectedCardIds.length} tools? This will delete their active schedule workflows and return them to Available status.`)) {
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${API_BASE}/delete-bulk`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(selectedCardIds)
+      });
+      if (!res.ok) throw new Error("Bulk release failed");
+      
+      setSelectedCardIds([]);
+      await fetchSchedules();
+      onRefreshAssets();
+    } catch (err) {
+      console.error(err);
+      alert("Error releasing scheduled tools.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
   const handleMoveStage = async (sc: ScheduledCase, nextStage: 'active_rental' | 'calibration' | 'ongoing') => {
     if (!isAdmin) return;
     
@@ -268,8 +356,10 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
 
   // Conflict detection check (two schedules for same asset overlap)
   const isConflict = (sc: ScheduledCase) => {
+    if (sc.status === 'Completed') return false;
     return schedules.some(other => {
       if (other.id === sc.id || other.equipmentCode !== sc.equipmentCode) return false;
+      if (other.status === 'Completed') return false;
       const startA = new Date(sc.startDate).getTime();
       const endA = new Date(sc.endDate).getTime();
       const startB = new Date(other.startDate).getTime();
@@ -295,7 +385,23 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     return (
       <div className="kanban-board">
         {columns.map(col => {
-          const colSchedules = schedules.filter(s => s.stage === col);
+          // Filter by stage and keyword search
+          const colSchedules = schedules.filter(s => {
+            if (s.stage !== col) return false;
+            if (!searchTerm) return true;
+            const term = searchTerm.toLowerCase();
+            return (
+              s.equipmentCode.toLowerCase().includes(term) ||
+              s.model.toLowerCase().includes(term) ||
+              s.destination.toLowerCase().includes(term) ||
+              (s.projectCode || '').toLowerCase().includes(term) ||
+              (s.userEmail || '').toLowerCase().includes(term) ||
+              (s.pmEmail || '').toLowerCase().includes(term) ||
+              (s.notes || '').toLowerCase().includes(term) ||
+              s.id.toLowerCase().includes(term)
+            );
+          });
+
           return (
             <div key={col} className="kanban-column">
               <div className="kanban-column-header">
@@ -328,6 +434,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                 {colSchedules.length > 0 ? (
                   colSchedules.map(sc => {
                     const hasConflict = isConflict(sc);
+                    const isSelected = selectedCardIds.includes(sc.id);
                     return (
                       <div 
                         key={sc.id} 
@@ -344,8 +451,22 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                         className={`kanban-card ${sc.status.toLowerCase()} ${hasConflict ? 'conflict-warning' : ''}`}
                       >
                         <div className="card-top">
-                          <span className="card-id">{sc.id}</span>
-                          {hasConflict && <span className="warning-pill">⚠️ Overlap</span>}
+                          {isAdmin && (
+                            <input 
+                              type="checkbox"
+                              checked={isSelected}
+                              style={{ marginRight: '8px', cursor: 'pointer', transform: 'scale(1.15)', accentColor: 'var(--f-primary)' }}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedCardIds([...selectedCardIds, sc.id]);
+                                } else {
+                                  setSelectedCardIds(selectedCardIds.filter(id => id !== sc.id));
+                                }
+                              }}
+                            />
+                          )}
+                          <span className="card-id" style={{ flex: 1 }}>{sc.id}</span>
+                          {hasConflict && <span className="warning-pill" style={{ marginRight: '8px' }}>⚠️ Overlap</span>}
                           {isAdmin && (
                             <div className="card-edit-actions">
                               <button onClick={() => openEditModal(sc)} title="Edit">✏️</button>
@@ -353,7 +474,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                             </div>
                           )}
                         </div>
-                        <h4 className="card-title">{sc.model} ({sc.equipmentCode})</h4>
+                        <h4 className="card-title" style={{ marginTop: '4px' }}>{sc.model} ({sc.equipmentCode})</h4>
                         <div className="card-meta">
                           {sc.projectCode && <div>🏷️ <strong>Project Code:</strong> {sc.projectCode}</div>}
                           <div>📍 <strong>Destination:</strong> {sc.destination}</div>
@@ -405,8 +526,24 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     const daysInMonth = 31;
     const datesArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
+    // Apply search filter to Gantt data
+    const filteredSchedules = schedules.filter(s => {
+      if (!searchTerm) return true;
+      const term = searchTerm.toLowerCase();
+      return (
+        s.equipmentCode.toLowerCase().includes(term) ||
+        s.model.toLowerCase().includes(term) ||
+        s.destination.toLowerCase().includes(term) ||
+        (s.projectCode || '').toLowerCase().includes(term) ||
+        (s.userEmail || '').toLowerCase().includes(term) ||
+        (s.pmEmail || '').toLowerCase().includes(term) ||
+        (s.notes || '').toLowerCase().includes(term) ||
+        s.id.toLowerCase().includes(term)
+      );
+    });
+
     // Group schedules by equipment code
-    const uniqueAssets = Array.from(new Set(schedules.map(s => s.equipmentCode)));
+    const uniqueAssets = Array.from(new Set(filteredSchedules.map(s => s.equipmentCode)));
 
     return (
       <div className="gantt-container f-card">
@@ -427,7 +564,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
         <div className="gantt-timeline-rows">
           {uniqueAssets.length > 0 ? (
             uniqueAssets.map(code => {
-              const assetSchedules = schedules.filter(s => s.equipmentCode === code);
+              const assetSchedules = filteredSchedules.filter(s => s.equipmentCode === code);
               const assetModel = assetSchedules[0]?.model || 'Unknown';
               return (
                 <div key={code} className="gantt-row">
@@ -499,7 +636,37 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
           </p>
         </div>
 
-        <div className="tab-actions">
+        <div className="tab-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          {/* Keyword Search Input */}
+          <div className="search-box-container" style={{ position: 'relative' }}>
+            <input 
+              type="text" 
+              className="f-input search-input" 
+              style={{ minWidth: '240px', paddingLeft: '32px', height: '38px', fontSize: '13px' }}
+              placeholder="🔍 Search schedules..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button 
+                onClick={() => setSearchTerm('')}
+                style={{
+                  position: 'absolute',
+                  right: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--f-text-secondary)',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}
+              >
+                &times;
+              </button>
+            )}
+          </div>
+
           <div className="view-mode-toggles">
             <button 
               className={`f-button ${viewMode === 'kanban' ? 'active' : ''}`}
@@ -525,11 +692,136 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
         </div>
       </div>
 
+      {/* Bulk Actions Panel */}
+      {isAdmin && selectedCardIds.length > 0 && (
+        <div className="bulk-actions-bar f-fade-in" style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: 'rgba(0, 94, 96, 0.06)',
+          border: '1px dashed var(--f-primary)',
+          borderRadius: '8px',
+          padding: '12px 16px',
+          marginBottom: '16px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontWeight: 600, color: 'var(--f-text-primary)', fontSize: '14px' }}>
+              Selected {selectedCardIds.length} tool cards
+            </span>
+            <button 
+              className="f-button" 
+              style={{ padding: '4px 8px', fontSize: '12px', minHeight: 'auto', height: '26px' }}
+              onClick={() => setSelectedCardIds([])}
+            >
+              Deselect All
+            </button>
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button 
+              className="f-button"
+              style={{ backgroundColor: '#2E7D32', color: 'white', minHeight: 'auto', padding: '6px 12px', fontSize: '12px', height: '32px' }}
+              onClick={() => handleBulkMoveTrigger('active_rental')}
+            >
+              📢 Move to Active
+            </button>
+            <button 
+              className="f-button"
+              style={{ backgroundColor: '#EF6C00', color: 'white', minHeight: 'auto', padding: '6px 12px', fontSize: '12px', height: '32px' }}
+              onClick={() => handleBulkMoveTrigger('calibration')}
+            >
+              🔬 Move to Calibration
+            </button>
+            <button 
+              className="f-button"
+              style={{ backgroundColor: '#1565C0', color: 'white', minHeight: 'auto', padding: '6px 12px', fontSize: '12px', height: '32px' }}
+              onClick={() => handleBulkMoveTrigger('ongoing')}
+            >
+              🚚 Move to On Going
+            </button>
+            <button 
+              className="f-button"
+              style={{ backgroundColor: '#D32F2F', color: 'white', minHeight: 'auto', padding: '6px 12px', fontSize: '12px', height: '32px' }}
+              onClick={handleBulkRelease}
+            >
+              🔓 Release Tools (Delete)
+            </button>
+          </div>
+        </div>
+      )}
+
       {isLoading ? (
         <div style={{ textAlign: 'center', padding: '50px' }}>Loading tool schedules...</div>
       ) : (
         viewMode === 'kanban' ? renderKanban() : renderGantt()
       )}
+
+      {/* BULK TRANSITION VERIFICATION MODAL */}
+      {isBulkTransitionModalOpen && (
+        <div className="modal-overlay">
+          <div className="f-card modal-content" style={{ maxWidth: '480px' }}>
+            <div className="modal-header">
+              <h3>📋 Bulk {bulkTargetStage === 'calibration' ? 'Calibration' : 'Handover'} Verification</h3>
+              <button className="modal-close" onClick={() => setIsBulkTransitionModalOpen(false)}>&times;</button>
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              executeBulkMove(bulkTargetStage, bulkHandoverPic, bulkHandoverPhoto, bulkChecklistVerified);
+            }}>
+              <div className="modal-scrollable-body" style={{ padding: '16px' }}>
+                <p style={{ fontSize: '13px', color: 'var(--f-text-secondary)', marginBottom: '16px' }}>
+                  You are transitioning <strong>{selectedCardIds.length}</strong> items to <strong>{bulkTargetStage === 'calibration' ? 'Calibration' : 'Active Rental'}</strong> in bulk.
+                </p>
+                
+                <div className="f-form-group">
+                  <label className="f-label">{bulkTargetStage === 'calibration' ? 'Calibration Specialist' : 'Handover PIC Name'}</label>
+                  <input 
+                    type="text" 
+                    className="f-input"
+                    value={bulkHandoverPic}
+                    onChange={(e) => setBulkHandoverPic(e.target.value)}
+                    required
+                    placeholder="e.g. John Doe"
+                  />
+                </div>
+                
+                <div className="f-form-group">
+                  <label className="f-label">{bulkTargetStage === 'calibration' ? 'Certificate Photo / ID' : 'Handover Photo File/Path'}</label>
+                  <input 
+                    type="text" 
+                    className="f-input"
+                    value={bulkHandoverPhoto}
+                    onChange={(e) => setBulkHandoverPhoto(e.target.value)}
+                    required
+                    placeholder="e.g. inspection-photo.png"
+                  />
+                </div>
+                
+                <div className="f-form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
+                  <input 
+                    type="checkbox"
+                    id="bulkChecklistVerified"
+                    checked={bulkChecklistVerified}
+                    onChange={(e) => setBulkChecklistVerified(e.target.checked)}
+                    required
+                    style={{ cursor: 'pointer' }}
+                  />
+                  <label htmlFor="bulkChecklistVerified" className="f-label" style={{ margin: 0, cursor: 'pointer', fontSize: '12px', color: 'var(--f-text-primary)' }}>
+                    {bulkTargetStage === 'calibration' 
+                      ? 'Confirm calibration standard verified & sticker attached' 
+                      : 'Confirm physical inspection complete & safety checklist verified'}
+                  </label>
+                </div>
+              </div>
+              
+              <div className="modal-footer">
+                <button type="button" className="f-button" onClick={() => setIsBulkTransitionModalOpen(false)}>Cancel</button>
+                <button type="submit" className="f-button f-button-primary">Confirm & Transition</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
 
       {/* CREATE/EDIT MODAL */}
       {isModalOpen && (

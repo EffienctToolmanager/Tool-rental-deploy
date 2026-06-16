@@ -186,4 +186,49 @@ describe('SchedulingTab Component', () => {
     expect(screen.getByText(/Case Name \/ Stage Name/i)).toBeInTheDocument();
     expect(screen.getByText(/Stage Target/i)).toBeInTheDocument();
   });
+
+  it('filters schedules based on search term', async () => {
+    const onRefresh = vi.fn();
+    render(<SchedulingTab assets={mockAssets} isAdmin={false} onRefreshAssets={onRefresh} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByPlaceholderText(/Search schedules.../i);
+    fireEvent.change(searchInput, { target: { value: 'Non-existent-term' } });
+
+    // The schedule card should be filtered out
+    expect(screen.queryByText('SCH-202606-0001')).not.toBeInTheDocument();
+
+    // Clear search term
+    fireEvent.change(searchInput, { target: { value: 'Project Site A' } });
+    expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
+  });
+
+  it('supports selecting cards and showing bulk actions panel', async () => {
+    const onRefresh = vi.fn();
+    render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
+    });
+
+    // Bulk actions panel should not be visible when no cards are selected
+    expect(screen.queryByText(/Selected 1 tool cards/i)).not.toBeInTheDocument();
+
+    // Find and click the checkbox on the card
+    const checkbox = screen.getByRole('checkbox');
+    fireEvent.click(checkbox);
+
+    // Bulk actions panel should now be visible
+    expect(screen.getByText(/Selected 1 tool cards/i)).toBeInTheDocument();
+
+    // Click "Deselect All"
+    const deselectBtn = screen.getByText(/Deselect All/i);
+    fireEvent.click(deselectBtn);
+    expect(checkbox).not.toBeChecked();
+    expect(screen.queryByText(/Selected 1 tool cards/i)).not.toBeInTheDocument();
+  });
 });
+

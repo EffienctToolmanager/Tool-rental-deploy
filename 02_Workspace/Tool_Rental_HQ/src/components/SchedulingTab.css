@@ -517,3 +517,31 @@
 textarea.f-input {
   resize: vertical;
 }
+
+.search-box-container::before {
+  content: "🔍";
+  position: absolute;
+  left: 10px;
+  top: 52%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.bulk-actions-bar {
+  animation: slide-down 0.2s ease-out;
+  box-shadow: 0 4px 12px rgba(0, 94, 96, 0.12);
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+

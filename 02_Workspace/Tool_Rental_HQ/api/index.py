@@ -720,6 +720,49 @@ async def create_schedule_case(case: ScheduledCase):
         "data": case
     }
 
+@app.put("/api/sharepoint/schedule/update-bulk")
+async def update_schedule_cases_bulk(cases: List[ScheduledCase]):
+    logger.info(f"Bulk updating {len(cases)} scheduled cases.")
+    schedules = db_storage.get("schedules", [])
+    updated_ids = {c.id: c for c in cases}
+    
+    eq_codes_to_sync = set()
+    for idx, s in enumerate(schedules):
+        if s["id"] in updated_ids:
+            case_data = updated_ids[s["id"]].dict()
+            schedules[idx] = case_data
+            eq_codes_to_sync.add(case_data["equipmentCode"])
+            
+    db_storage["schedules"] = schedules
+    for code in eq_codes_to_sync:
+        sync_asset_state(code)
+        
+    return {
+        "status": "success",
+        "message": f"Successfully updated {len(cases)} scheduled cases."
+    }
+
+@app.post("/api/sharepoint/schedule/delete-bulk")
+async def delete_schedule_cases_bulk(case_ids: List[str]):
+    logger.info(f"Bulk deleting {len(case_ids)} scheduled cases.")
+    schedules = db_storage.get("schedules", [])
+    
+    eq_codes_to_sync = set()
+    for s in schedules:
+        if s["id"] in case_ids:
+            eq_codes_to_sync.add(s["equipmentCode"])
+            
+    filtered = [s for s in schedules if s["id"] not in case_ids]
+    db_storage["schedules"] = filtered
+    
+    for code in eq_codes_to_sync:
+        sync_asset_state(code)
+        
+    return {
+        "status": "success",
+        "message": f"Successfully deleted {len(case_ids)} scheduled cases."
+    }
+
 @app.put("/api/sharepoint/schedule/update")
 async def update_schedule_case(case: ScheduledCase):
     logger.info(f"Updating scheduled case: {case.id}")
@@ -742,6 +785,7 @@ async def update_schedule_case(case: ScheduledCase):
         "message": f"Scheduled case {case.id} updated and assets synced.",
         "data": case
     }
+
 
 @app.delete("/api/sharepoint/schedule/delete/{case_id}")
 async def delete_schedule_case(case_id: str):
