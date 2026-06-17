@@ -107,5 +107,24 @@ describe('InventoryTable Component', () => {
     expect(screen.queryByText('EQ-001')).not.toBeInTheDocument();
     expect(screen.getByText('EQ-002')).toBeInTheDocument();
   });
+
+  it('opens specification details when model text is tapped or clicked', () => {
+    const setSelectedToolCodes = vi.fn();
+    const onNavigateToCheckout = vi.fn();
+
+    render(
+      <InventoryTable
+        assets={mockAssets}
+        selectedToolCodes={[]}
+        setSelectedToolCodes={setSelectedToolCodes}
+        onNavigateToCheckout={onNavigateToCheckout}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /open specification summary/i }));
+
+    expect(screen.getByText('EQ-001 · standardized mock datasheet template')).toBeInTheDocument();
+    expect(screen.getAllByText(/Electrical testing/i).length).toBeGreaterThanOrEqual(1);
+  });
 });
 

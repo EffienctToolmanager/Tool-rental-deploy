@@ -248,7 +248,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
         <div>
           <h2 className="inventory-title">Master Asset Inventory</h2>
           <p className="inventory-subtitle">
-            Hover model text or use ⋯ Details to preview the standardized mock datasheet summary.
+            Hover or tap model text, or use ⋯ Details to preview the standardized mock datasheet summary.
           </p>
         </div>
         <div className="legend-container">
@@ -411,7 +411,19 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                   </td>
                   <td>{getBrand(asset)}</td>
                   <td>
-                    <span className="model-hover-target">
+                    <span
+                      className="model-hover-target"
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Open specification summary for ${getBrand(asset)} ${getModel(asset)}`}
+                      onClick={() => setDetailsAsset(asset)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setDetailsAsset(asset);
+                        }
+                      }}
+                    >
                       {getModel(asset)}
                       <div className="model-hover-card"><SpecSummaryCard asset={asset} compact /></div>
                     </span>
