@@ -1104,19 +1104,16 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     <div className="scheduling-tab-container f-fade-in">
       <div className="tab-control-header">
         <div className="tab-title-section">
-          <h2>🗓️ Successive Tool scheduling & Routing</h2>
-          <p className="tab-description">
-            Schedule successive handovers, routing to calibration, and staging for future project sites.
-          </p>
+          <h2>🗓️ Tool Scheduling</h2>
         </div>
 
-        <div className="tab-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <div className="tab-actions scheduler-toolbar">
           {/* Keyword Search Input */}
-          <div className="search-box-container" style={{ position: 'relative' }}>
+          <div className="search-box-container scheduler-search-box" style={{ position: 'relative' }}>
             <input 
               type="text" 
               className="f-input search-input" 
-              style={{ minWidth: '240px', paddingLeft: '32px', height: '38px', fontSize: '13px' }}
+              style={{ paddingLeft: '32px' }}
               placeholder="🔍 Search schedules..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -1141,33 +1138,25 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
             )}
           </div>
 
-          <div className="scheduler-filter-controls" style={{ display: 'flex', gap: '8px' }}>
+          <div className="scheduler-filter-controls">
             {isAdmin && (
               <>
                 <button 
                   type="button"
-                  className="f-button"
-                  style={{ border: '1px solid var(--f-border)', height: '38px' }}
+                  className="f-button scheduler-action-btn scheduler-action-secondary"
                   onClick={() => handleSelectAll()}
                 >
                   {getVisibleActiveSchedules().length > 0 && getVisibleActiveSchedules().every(s => selectedCardIds.includes(s.id))
-                    ? "⬜ Deselect All" 
-                    : "☑️ Select All"}
+                    ? "Deselect All" 
+                    : "Select All"}
                 </button>
                 <button 
                   type="button"
-                  className="f-button"
-                  style={{
-                    backgroundColor: '#2E7D32',
-                    color: 'white',
-                    border: 'none',
-                    fontWeight: '600',
-                    height: '38px'
-                  }}
+                  className="f-button scheduler-action-btn scheduler-approve-btn"
                   onClick={handleBulkApproveRentals}
                   disabled={selectedCardIds.filter(id => schedules.find(s => s.id === id)?.status === 'Pending_Approval').length === 0}
                 >
-                  ✔️ Approve Selected
+                  Approve Selected
                 </button>
               </>
             )}
@@ -1175,9 +1164,9 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
           {isAdmin && (
             <button 
               onClick={openCreateModal}
-              className="f-button f-button-primary btn-add-schedule"
+              className="f-button f-button-primary btn-add-schedule scheduler-action-btn"
             >
-              ➕ Add Schedule Case
+              Add Schedule Case
             </button>
           )}
         </div>
