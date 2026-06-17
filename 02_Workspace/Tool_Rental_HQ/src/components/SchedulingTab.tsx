@@ -676,8 +676,8 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     return visibleList;
   };
 
-  const handleSelectAll = () => {
-    const visibleSchedules = getVisibleActiveSchedules();
+  const handleSelectAll = (stage?: 'active_rental' | 'calibration' | 'ongoing') => {
+    const visibleSchedules = getVisibleActiveSchedules().filter(s => !stage || s.stage === stage);
     const visibleIds = visibleSchedules.map(s => s.id);
     if (visibleIds.length === 0) return;
     
@@ -800,7 +800,22 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
             <div key={col} className={`kanban-column ${col}`}>
               <div className="kanban-column-header">
                 <h3>{getStageTitle(col)}</h3>
-                <span className="kanban-count-badge">{colAssets.length}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto' }}>
+                  {isAdmin && colAssets.length > 0 && (
+                    <button
+                      type="button"
+                      className="f-button"
+                      onClick={() => handleSelectAll(col)}
+                      style={{ padding: '3px 7px', fontSize: '11px', minHeight: 'auto', height: '24px' }}
+                    >
+                      {colAssets
+                        .map(code => schedulesByAsset[code].find(s => s.status !== 'Completed')?.id)
+                        .filter(Boolean)
+                        .every(id => selectedCardIds.includes(id as string)) ? 'Clear All' : 'Select All'}
+                    </button>
+                  )}
+                  <span className="kanban-count-badge">{colAssets.length}</span>
+                </div>
               </div>
               <div 
                 className="kanban-column-body"
@@ -819,6 +834,10 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                     e.currentTarget.classList.remove("drag-over");
                     const activeSchedId = e.dataTransfer.getData("text/plain");
                     const card = schedules.find(s => s.id === activeSchedId);
+                    if (card && card.status === 'Pending_Approval') {
+                      alert('Approval Pending cards are locked. Approve first, then move.');
+                      return;
+                    }
                     if (card && card.stage !== col) {
                       handleMoveStage(card, col);
                     }
@@ -837,7 +856,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                     return (
                       <div 
                         key={code} 
-                        draggable={isAdmin}
+                        draggable={isAdmin && activeSched.status !== 'Pending_Approval'}
                         onDragStart={(e) => {
                           if (isAdmin) {
                             e.dataTransfer.setData("text/plain", activeSched.id);
@@ -917,7 +936,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                         )}
 
                         {/* Stage Selector Dropdown */}
-                        {isAdmin && (
+                        {isAdmin && activeSched.status !== 'Pending_Approval' && (
                           <div className="card-stage-selectors" style={{ marginTop: '8px', borderTop: '1px solid var(--f-border)', paddingTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11.5px' }}>
                             <label style={{ fontWeight: 500, color: 'var(--f-text-secondary)' }}>Move to:</label>
                             <select 
@@ -1113,7 +1132,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                   type="button"
                   className="f-button"
                   style={{ border: '1px solid var(--f-border)', height: '38px' }}
-                  onClick={handleSelectAll}
+                  onClick={() => handleSelectAll()}
                 >
                   {getVisibleActiveSchedules().length > 0 && getVisibleActiveSchedules().every(s => selectedCardIds.includes(s.id))
                     ? "⬜ Deselect All" 

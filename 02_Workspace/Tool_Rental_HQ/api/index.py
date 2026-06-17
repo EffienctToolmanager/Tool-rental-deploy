@@ -488,7 +488,9 @@ async def create_rental_record(rental: BulkRentalRequest):
             "toolCode": item.toolCode,
             "model": model,
             "sequenceOrder": new_seq,
-            "stage": "active_rental",
+            # Smart Rental starts in On Going as an approval-pending request.
+            # Approval promotes it into Active Rental, which then feeds the Dashboard CASE ID card.
+            "stage": "ongoing",
             "destination": rental.projectName,
             "startDate": datetime.now().strftime("%Y-%m-%d"),
             "endDate": rental.returnDate,
@@ -714,6 +716,10 @@ async def approve_schedule_case(schedule_id: str):
     target = None
     for s in schedules:
         if s["id"] == schedule_id:
+            if s.get("status") == "Pending_Approval":
+                s["stage"] = "active_rental"
+                if s.get("handoverPhoto"):
+                    s["handoverPhoto"] = f"OneDrive/ToolRental_Photos/{s.get('caseId') or s['id']}_{s['toolCode']}_{s['handoverPhoto']}"
             s["status"] = "In_Progress"
             target = s
             break
@@ -737,6 +743,9 @@ async def approve_schedule_cases_bulk(schedule_ids: List[str]):
     approved_count = 0
     for s in schedules:
         if s["id"] in schedule_ids and s["status"] == "Pending_Approval":
+            s["stage"] = "active_rental"
+            if s.get("handoverPhoto"):
+                s["handoverPhoto"] = f"OneDrive/ToolRental_Photos/{s.get('caseId') or s['id']}_{s['toolCode']}_{s['handoverPhoto']}"
             s["status"] = "In_Progress"
             eq_codes_to_sync.add(s["toolCode"])
             approved_count += 1
