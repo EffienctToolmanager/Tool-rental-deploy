@@ -658,7 +658,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
         body: JSON.stringify({ reason: reason.trim() })
       });
       if (!res.ok) {
-        const errData = await res.json();
+        const errData = await res.json().catch(() => ({}));
         throw new Error(errData.detail || "Failed to reject request");
       }
       const result = await res.json();
@@ -799,16 +799,18 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
 
     try {
       setIsLoading(true);
-      const responses = await Promise.all(pendingIds.map(id => fetch(`${API_BASE}/reject/${id}`, {
+      const res = await fetch(`${API_BASE}/reject-bulk`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reason: reason.trim() })
-      })));
-      const failed = responses.filter(res => !res.ok);
-      if (failed.length > 0) {
-        throw new Error(`${failed.length} reject request(s) failed`);
+        body: JSON.stringify({ ids: pendingIds, reason: reason.trim() })
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.detail || "Failed to bulk reject rentals");
       }
-      alert(`❌ Bulk rejected ${pendingIds.length} pending request(s).\nEmail/Teams reason queued: ${reason.trim()}`);
+      const result = await res.json();
+      const missingText = result.missing?.length ? `\nNot found/skipped: ${result.missing.join(', ')}` : '';
+      alert(`❌ Bulk rejected ${result.count ?? pendingIds.length} pending request(s).\nEmail/Teams reason queued: ${reason.trim()}${missingText}`);
       setSelectedCardIds([]);
       await fetchSchedules();
       onRefreshAssets();

@@ -688,6 +688,10 @@ class ScheduledCase(BaseModel):
 class RejectScheduleRequest(BaseModel):
     reason: str
 
+class BulkRejectScheduleRequest(BaseModel):
+    ids: List[str]
+    reason: str
+
 from fastapi import Form
 
 @app.post("/api/sharepoint/calibration/clear")
@@ -828,6 +832,81 @@ async def reject_schedule_case(schedule_id: str, request: RejectScheduleRequest)
             "reason": request.reason,
             "message": notification_message
         }
+    }
+
+@app.post("/api/sharepoint/schedule/reject-bulk")
+async def reject_schedule_cases_bulk(request: BulkRejectScheduleRequest):
+    logger.info(f"Bulk rejecting scheduled cases: {request.ids}")
+    if not request.ids:
+        raise HTTPException(status_code=400, detail="No scheduled case IDs provided")
+    if not request.reason.strip():
+        raise HTTPException(status_code=400, detail="Reject reason is required")
+
+    schedules = db_storage.get("schedules", [])
+    rejected = []
+    notifications = []
+    missing = []
+    eq_codes_to_sync = set()
+
+    for schedule_id in request.ids:
+        target = next((s for s in schedules if s.get("id") == schedule_id), None)
+        if not target:
+            missing.append(schedule_id)
+            continue
+
+        eq_code = target.get("toolCode")
+        movement_type = target.get("movementType") or "checkout"
+        previous = target.get("previousSchedule") or {}
+
+        if movement_type in {"return", "extension"} and previous:
+            restored = False
+            for idx, s in enumerate(schedules):
+                if s.get("id") == previous.get("id"):
+                    previous["status"] = "In_Progress"
+                    previous["stage"] = "active_rental"
+                    schedules[idx] = previous
+                    restored = True
+                    break
+            if not restored:
+                previous["status"] = "In_Progress"
+                previous["stage"] = "active_rental"
+                schedules.append(previous)
+
+        schedules = [s for s in schedules if s.get("id") != schedule_id]
+        if eq_code:
+            eq_codes_to_sync.add(eq_code)
+
+        requester = target.get("userEmail") or "requester"
+        notification_message = (
+            f"Your tool rental {movement_type} request for {target.get('toolCode')} was rejected. "
+            f"Reason: {request.reason}"
+        )
+        logger.info(f"Mock email/Teams rejection notice to {requester}: {notification_message}")
+        rejected.append(schedule_id)
+        notifications.append({
+            "scheduleId": schedule_id,
+            "email": requester,
+            "teams": requester,
+            "reason": request.reason,
+            "message": notification_message
+        })
+
+    if missing:
+        logger.warning(f"Bulk reject missing scheduled cases: {missing}")
+    if not rejected:
+        raise HTTPException(status_code=404, detail=f"Scheduled case(s) not found: {', '.join(missing)}")
+
+    db_storage["schedules"] = schedules
+    for code in eq_codes_to_sync:
+        sync_asset_state(code)
+
+    return {
+        "status": "success",
+        "message": f"Rejected {len(rejected)} scheduled case(s).",
+        "count": len(rejected),
+        "rejected": rejected,
+        "missing": missing,
+        "notifications": notifications
     }
 
 @app.post("/api/sharepoint/schedule/approve/{schedule_id}")
