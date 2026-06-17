@@ -536,6 +536,7 @@ async def create_rental_record(rental: BulkRentalRequest):
             "handoverPic": "Renter Checkout",
             "handoverPhoto": item.photoUrl,
             "handoverPhotoWebUrl": item.photoWebUrl,
+            "movementType": "checkout",
             "checklistVerified": True,
             "caseId": rental.caseId
         }
@@ -566,23 +567,41 @@ class BulkExtendRequest(BaseModel):
 
 @app.post("/api/sharepoint/extend")
 async def extend_rental_record(request: BulkExtendRequest):
-    logger.info(f"Extension request received for Case {request.caseId}")
-    extend_map = {item.toolCode: item.newReturnDate for item in request.items}
-    
-    updated_items = []
-    for item in db_storage["items"]:
-        if item["toolCode"] in extend_map:
-            item_copy = item.copy()
-            item_copy["returnDate"] = extend_map[item["toolCode"]]
-            updated_items.append(item_copy)
-        else:
-            updated_items.append(item)
-            
-    db_storage["items"] = updated_items
-    logger.info(f"Extension processed successfully in db. Case {request.caseId} extended.")
+    logger.info(f"Extension approval request received for Case {request.caseId}")
+    from datetime import datetime
+    import random
+    schedules = db_storage.get("schedules", [])
+    created = 0
+    date_str = datetime.now().strftime("%y%m%d")
+
+    for idx, item in enumerate(request.items):
+        active = next((s for s in schedules if s.get("toolCode") == item.toolCode and s.get("caseId") == request.caseId and s.get("stage") == "active_rental" and s.get("status") == "In_Progress"), None)
+        if not active:
+            continue
+        previous_snapshot = active.copy()
+        active["status"] = "Completed"
+        pending = active.copy()
+        pending.update({
+            "id": f"EXT-{date_str}-{random.randint(1000, 9999)}-{idx}",
+            "stage": "ongoing",
+            "status": "Pending_Approval",
+            "sequenceOrder": active.get("sequenceOrder", 0),
+            "destination": active.get("destination") or active.get("projectCode") or "Extension Approval",
+            "notes": f"Extension approval pending for Case ID: {request.caseId}",
+            "movementType": "extension",
+            "requestedEndDate": item.newReturnDate,
+            "previousSchedule": previous_snapshot
+        })
+        schedules.append(pending)
+        sync_asset_state(item.toolCode)
+        created += 1
+
+    db_storage["schedules"] = schedules
+    logger.info(f"Extension approval cards created. Case {request.caseId}, count {created}.")
     return {
-        "status": "success", 
-        "message": f"Case {request.caseId} extended and items new return dates synchronized."
+        "status": "success",
+        "message": f"Case {request.caseId} extension request sent to approval queue.",
+        "count": created
     }
 
 @app.post("/api/sharepoint/upload")
@@ -604,31 +623,41 @@ class BulkReturnRequest(BaseModel):
 
 @app.post("/api/sharepoint/return")
 async def return_rental_record(request: BulkReturnRequest):
-    logger.info(f"Return request received for Case {request.caseId}")
+    logger.info(f"Return approval request received for Case {request.caseId}")
+    from datetime import datetime
+    import random
     returned_codes = {item.toolCode for item in request.items}
-    
-    updated_items = []
-    for item in db_storage["items"]:
-        if item["toolCode"] in returned_codes:
-            # Restore status to Available, clearing out rental metadata while keeping catalog/spec fields
-            item_copy = item.copy()
-            item_copy.update({
-                "projectName": "",
-                "returnDate": "",
-                "status": "Available",
-                "userEmail": "",
-                "pmEmail": "",
-                "caseId": ""
-            })
-            updated_items.append(item_copy)
-        else:
-            updated_items.append(item)
-            
-    db_storage["items"] = updated_items
-    logger.info(f"Return processed successfully in db. Case {request.caseId} returned.")
+    schedules = db_storage.get("schedules", [])
+    created = 0
+    date_str = datetime.now().strftime("%y%m%d")
+
+    for idx, tool_code in enumerate(returned_codes):
+        active = next((s for s in schedules if s.get("toolCode") == tool_code and s.get("caseId") == request.caseId and s.get("stage") == "active_rental" and s.get("status") == "In_Progress"), None)
+        if not active:
+            continue
+        previous_snapshot = active.copy()
+        active["status"] = "Completed"
+        pending = active.copy()
+        pending.update({
+            "id": f"RET-{date_str}-{random.randint(1000, 9999)}-{idx}",
+            "stage": "ongoing",
+            "status": "Pending_Approval",
+            "sequenceOrder": active.get("sequenceOrder", 0),
+            "destination": active.get("destination") or "Return Review",
+            "notes": f"Return approval pending for Case ID: {request.caseId}",
+            "movementType": "return",
+            "previousSchedule": previous_snapshot
+        })
+        schedules.append(pending)
+        sync_asset_state(tool_code)
+        created += 1
+
+    db_storage["schedules"] = schedules
+    logger.info(f"Return approval cards created. Case {request.caseId}, count {created}.")
     return {
-        "status": "success", 
-        "message": f"Case {request.caseId} returned and items status restored to Available."
+        "status": "success",
+        "message": f"Case {request.caseId} return request sent to approval queue.",
+        "count": created
     }
 
 # --- Successive Scheduling Case API Endpoints [NEW] ---
@@ -649,8 +678,15 @@ class ScheduledCase(BaseModel):
     projectCode: Optional[str] = None
     handoverPic: Optional[str] = None
     handoverPhoto: Optional[str] = None
+    handoverPhotoWebUrl: Optional[str] = None
+    movementType: Optional[str] = None
+    requestedEndDate: Optional[str] = None
+    rejectReason: Optional[str] = None
     checklistVerified: Optional[bool] = None
     caseId: Optional[str] = None
+
+class RejectScheduleRequest(BaseModel):
+    reason: str
 
 from fastapi import Form
 
@@ -745,27 +781,105 @@ async def clear_calibration_case(
         "saved_path": target_dir
     }
 
+@app.post("/api/sharepoint/schedule/reject/{schedule_id}")
+async def reject_schedule_case(schedule_id: str, request: RejectScheduleRequest):
+    logger.info(f"Rejecting scheduled case: {schedule_id}")
+    schedules = db_storage.get("schedules", [])
+    target = next((s for s in schedules if s.get("id") == schedule_id), None)
+    if not target:
+        raise HTTPException(status_code=404, detail="Scheduled case not found")
+
+    eq_code = target.get("toolCode")
+    movement_type = target.get("movementType") or "checkout"
+    previous = target.get("previousSchedule") or {}
+
+    if movement_type in {"return", "extension"} and previous:
+        restored = False
+        for idx, s in enumerate(schedules):
+            if s.get("id") == previous.get("id"):
+                previous["status"] = "In_Progress"
+                previous["stage"] = "active_rental"
+                schedules[idx] = previous
+                restored = True
+                break
+        if not restored:
+            previous["status"] = "In_Progress"
+            previous["stage"] = "active_rental"
+            schedules.append(previous)
+
+    # Checkout reject -> remove pending request. Return/extension reject -> remove pending card and restore original active case.
+    schedules = [s for s in schedules if s.get("id") != schedule_id]
+    db_storage["schedules"] = schedules
+    if eq_code:
+        sync_asset_state(eq_code)
+
+    requester = target.get("userEmail") or "requester"
+    notification_message = (
+        f"Your tool rental {movement_type} request for {target.get('toolCode')} was rejected. "
+        f"Reason: {request.reason}"
+    )
+    logger.info(f"Mock email/Teams rejection notice to {requester}: {notification_message}")
+    return {
+        "status": "success",
+        "message": f"Scheduled case {schedule_id} rejected and previous state restored.",
+        "notification": {
+            "email": requester,
+            "teams": requester,
+            "reason": request.reason,
+            "message": notification_message
+        }
+    }
+
 @app.post("/api/sharepoint/schedule/approve/{schedule_id}")
 async def approve_schedule_case(schedule_id: str):
     logger.info(f"Approving scheduled case: {schedule_id}")
     schedules = db_storage.get("schedules", [])
     target = None
+    eq_code = None
+
     for s in schedules:
         if s["id"] == schedule_id:
-            if s.get("status") == "Pending_Approval":
-                s["stage"] = "active_rental"
-                asset = next((item for item in db_storage.get("items", []) if item.get("toolCode") == s.get("toolCode")), None)
-                if s.get("handoverPhoto"):
-                    s["handoverPhoto"] = build_rental_photo_path(s, asset)
-            s["status"] = "In_Progress"
             target = s
+            eq_code = s.get("toolCode")
+            movement_type = s.get("movementType") or "checkout"
+
+            if movement_type == "return":
+                # Return approval clears the pending return card; asset becomes Available after sync.
+                s["status"] = "Completed"
+            elif movement_type == "extension":
+                previous = s.get("previousSchedule") or {}
+                if previous:
+                    previous["endDate"] = s.get("requestedEndDate") or previous.get("endDate")
+                    previous["status"] = "In_Progress"
+                    previous["stage"] = "active_rental"
+                    restored = False
+                    for idx, existing in enumerate(schedules):
+                        if existing.get("id") == previous.get("id"):
+                            schedules[idx] = previous
+                            restored = True
+                            break
+                    if not restored:
+                        schedules.append(previous)
+                s["status"] = "Completed"
+            else:
+                if s.get("status") == "Pending_Approval":
+                    s["stage"] = "active_rental"
+                    asset = next((item for item in db_storage.get("items", []) if item.get("toolCode") == s.get("toolCode")), None)
+                    if s.get("handoverPhoto"):
+                        s["handoverPhoto"] = build_rental_photo_path(s, asset)
+                s["status"] = "In_Progress"
             break
             
     if not target:
         raise HTTPException(status_code=404, detail="Scheduled case not found")
-        
+
+    # Keep completed return/extension approval cards out of the Kanban after approval.
+    if target.get("movementType") in {"return", "extension"}:
+        schedules = [s for s in schedules if s.get("id") != schedule_id]
+
     db_storage["schedules"] = schedules
-    sync_asset_state(target["toolCode"])
+    if eq_code:
+        sync_asset_state(eq_code)
     return {
         "status": "success",
         "message": f"Scheduled case {schedule_id} approved.",
@@ -778,15 +892,39 @@ async def approve_schedule_cases_bulk(schedule_ids: List[str]):
     schedules = db_storage.get("schedules", [])
     eq_codes_to_sync = set()
     approved_count = 0
-    for s in schedules:
+    remove_ids = set()
+
+    for s in list(schedules):
         if s["id"] in schedule_ids and s["status"] == "Pending_Approval":
-            s["stage"] = "active_rental"
-            asset = next((item for item in db_storage.get("items", []) if item.get("toolCode") == s.get("toolCode")), None)
-            if s.get("handoverPhoto"):
-                s["handoverPhoto"] = build_rental_photo_path(s, asset)
-            s["status"] = "In_Progress"
+            movement_type = s.get("movementType") or "checkout"
+            if movement_type == "return":
+                remove_ids.add(s["id"])
+            elif movement_type == "extension":
+                previous = s.get("previousSchedule") or {}
+                if previous:
+                    previous["endDate"] = s.get("requestedEndDate") or previous.get("endDate")
+                    previous["status"] = "In_Progress"
+                    previous["stage"] = "active_rental"
+                    restored = False
+                    for idx, existing in enumerate(schedules):
+                        if existing.get("id") == previous.get("id"):
+                            schedules[idx] = previous
+                            restored = True
+                            break
+                    if not restored:
+                        schedules.append(previous)
+                remove_ids.add(s["id"])
+            else:
+                s["stage"] = "active_rental"
+                asset = next((item for item in db_storage.get("items", []) if item.get("toolCode") == s.get("toolCode")), None)
+                if s.get("handoverPhoto"):
+                    s["handoverPhoto"] = build_rental_photo_path(s, asset)
+                s["status"] = "In_Progress"
             eq_codes_to_sync.add(s["toolCode"])
             approved_count += 1
+
+    if remove_ids:
+        schedules = [s for s in schedules if s.get("id") not in remove_ids]
     db_storage["schedules"] = schedules
     for code in eq_codes_to_sync:
         sync_asset_state(code)
@@ -832,8 +970,11 @@ def sync_asset_state(tool_code: str):
     # Sort active schedules by sequenceOrder to find the first upcoming step
     selected_case = sorted(active_schedules, key=lambda x: x.get("sequenceOrder", 0))[0]
     
-    # If the first active schedule has not started yet (not In_Progress), it is physically in the warehouse
-    if selected_case.get("status") != "In_Progress":
+    # Pending approvals are already picked/requested, so keep inventory blocked as Reserved.
+    if selected_case.get("status") == "Pending_Approval":
+        status = "Reserved"
+        project_name = selected_case.get("destination") or "Approval Pending"
+    elif selected_case.get("status") != "In_Progress":
         status = "Available"
         project_name = "Warehouse"
     else:

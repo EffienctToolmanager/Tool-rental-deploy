@@ -64,6 +64,9 @@ export type ScheduledCase = {
   handoverPic?: string;
   handoverPhoto?: string;
   handoverPhotoWebUrl?: string;
+  movementType?: 'checkout' | 'return' | 'extension' | 'schedule';
+  requestedEndDate?: string;
+  rejectReason?: string;
   checklistVerified?: boolean;
   caseId?: string;
 }

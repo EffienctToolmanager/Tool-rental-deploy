@@ -68,7 +68,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
         }
       }
 
-      // 2. 백엔드 인메모리 DB 상태 원상 복귀(보관중 롤백) API 호출
+      // 2. Create a return approval card instead of making the asset Available immediately.
       const returnResponse = await fetch('/api/sharepoint/return', {
         method: 'POST',
         headers: {
@@ -84,7 +84,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
         throw new Error("Failed to process return on serverless database.");
       }
 
-      alert(`✅ Return request and individual condition photo uploads for ${assetsToReturn.length} assets have been successfully processed in real-time!\n(Asset status has been instantly restored to 'Available'.)`);
+      alert(`✅ Return request submitted for ${assetsToReturn.length} assets.\nAdmin approval is now required before the assets become Available.`);
       setReturnCaseId(null);
       setAssetsToReturn([]);
       onRefresh(); // Refresh data
@@ -115,7 +115,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
 
     setIsSubmitting(true);
     try {
-      // API call to serverless backend to extend the rental period in real-time
+      // Create an extension approval card. The return date changes only after admin approval.
       const extendResponse = await fetch('/api/sharepoint/extend', {
         method: 'POST',
         headers: {
@@ -134,7 +134,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
         throw new Error("Failed to process extension on serverless database.");
       }
 
-      alert(`✅ The rental period for ${assetsToExtend.length} assets has been successfully extended!`);
+      alert(`✅ Extension request submitted for ${assetsToExtend.length} assets.\nAdmin approval is required before the new return date is applied.`);
       setExtendCaseId(null);
       setAssetsToExtend([]);
       setBatchExtendDate('');

@@ -637,6 +637,43 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     }
   };
 
+  const handleRejectRental = async (scheduleId: string) => {
+    if (!isAdmin) return;
+    const schedule = schedules.find(s => s.id === scheduleId);
+    const reason = window.prompt(
+      `Reject reason for ${schedule?.movementType || 'checkout'} request (${schedule?.toolCode || scheduleId}).\nThis message will be sent to the requester by Email and Teams.`,
+      ''
+    );
+    if (reason === null) return;
+    if (!reason.trim()) {
+      alert('Reject reason is required.');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const res = await fetch(`/api/sharepoint/schedule/reject/${scheduleId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: reason.trim() })
+      });
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.detail || "Failed to reject request");
+      }
+      const result = await res.json();
+      alert(`❌ Request rejected.\nEmail/Teams message queued for: ${result.notification?.email || 'requester'}\nReason: ${reason.trim()}`);
+      setSelectedCardIds(prev => prev.filter(id => id !== scheduleId));
+      await fetchSchedules();
+      onRefreshAssets();
+    } catch (err: any) {
+      console.error(err);
+      alert(`Error rejecting request: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Get all currently visible active schedules based on filters/search
   const getVisibleActiveSchedules = () => {
     const schedulesByAsset: Record<string, ScheduledCase[]> = {};
@@ -900,6 +937,8 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                         <div className="card-meta" style={{ backgroundColor: 'rgba(0, 0, 0, 0.02)', padding: '8px', borderRadius: '6px' }}>
                           {activeSched.projectCode && <div>🏷️ <strong>Project Code:</strong> {activeSched.projectCode}</div>}
                           <div>📍 <strong>Current Destination:</strong> {activeSched.destination}</div>
+                          {activeSched.movementType && <div>🔄 <strong>Request Type:</strong> {activeSched.movementType}</div>}
+                          {activeSched.requestedEndDate && <div>📅 <strong>Requested Return Date:</strong> {activeSched.requestedEndDate}</div>}
                           <div>👤 <strong>Renter/User:</strong> {activeSched.userEmail}</div>
                           {activeSched.notes && <div style={{ fontStyle: 'italic', marginTop: '4px' }}>📝 {activeSched.notes}</div>}
                           {activeSched.handoverPhoto && (
@@ -927,26 +966,46 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                               ⏳ Pending Approval
                             </span>
                             {isAdmin && (
-                              <button 
-                                onClick={() => handleApproveRental(activeSched.id)}
-                                className="f-button"
-                                style={{ 
-                                  width: '100%', 
-                                  marginTop: '6px', 
-                                  padding: '4px', 
-                                  fontSize: '11.5px', 
-                                  minHeight: 'auto', 
-                                  height: '28px', 
-                                  backgroundColor: '#2E7D32', 
-                                  color: 'white', 
-                                  border: 'none',
-                                  fontWeight: '600',
-                                  borderRadius: '4px',
-                                  cursor: 'pointer'
-                                }}
-                              >
-                                ✔️ Approve Rental Request
-                              </button>
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginTop: '6px' }}>
+                                <button 
+                                  onClick={() => handleApproveRental(activeSched.id)}
+                                  className="f-button"
+                                  style={{ 
+                                    width: '100%', 
+                                    padding: '4px', 
+                                    fontSize: '11.5px', 
+                                    minHeight: 'auto', 
+                                    height: '28px', 
+                                    backgroundColor: '#2E7D32', 
+                                    color: 'white', 
+                                    border: 'none',
+                                    fontWeight: '600',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                  }}
+                                >
+                                  ✔️ Approve
+                                </button>
+                                <button 
+                                  onClick={() => handleRejectRental(activeSched.id)}
+                                  className="f-button"
+                                  style={{ 
+                                    width: '100%', 
+                                    padding: '4px', 
+                                    fontSize: '11.5px', 
+                                    minHeight: 'auto', 
+                                    height: '28px', 
+                                    backgroundColor: '#C62828', 
+                                    color: 'white', 
+                                    border: 'none',
+                                    fontWeight: '600',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                  }}
+                                >
+                                  ✖️ Reject
+                                </button>
+                              </div>
                             )}
                           </div>
                         )}
