@@ -14,7 +14,7 @@ const App: React.FC = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [rentals, setRentals] = useState<Rental[]>([]);
   const [schedules, setSchedules] = useState<ScheduledCase[]>([]);
-  const [selectedAssetCodes, setSelectedAssetCodes] = useState<string[]>([]);
+  const [selectedToolCodes, setSelectedToolCodes] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined') {
@@ -43,7 +43,7 @@ const App: React.FC = () => {
       const items = dataObj.data || [];
       
       const mappedAssets = items.map((item: any) => ({
-        assetCode: item.equipmentCode,
+        toolCode: item.toolCode,
         brand: item.brand || item.Brand || 'Mock Brand',
         model: item.model || item.name,
         Current_Status: item.status === '보관중' ? 'Available' : 
@@ -59,7 +59,7 @@ const App: React.FC = () => {
       }));
 
       const activeRentals = items.filter((item: any) => item.status === '대여중' || item.status === 'Rented').map((item: any) => ({
-         assetCode: item.equipmentCode,
+         toolCode: item.toolCode,
          projectName: item.projectName,
          expectedReturnDate: item.returnDate,
          caseId: item.caseId,
@@ -198,10 +198,10 @@ const App: React.FC = () => {
             {activeTab === 'checkout' && (
               <RentalForm 
                 assets={assets.filter(a => (a as any).Current_Status === 'Available')} 
-                selectedAssetCodes={selectedAssetCodes}
-                setSelectedAssetCodes={setSelectedAssetCodes}
+                selectedToolCodes={selectedToolCodes}
+                setSelectedToolCodes={setSelectedToolCodes}
                 onSuccess={() => {
-                  setSelectedAssetCodes([]); // Clear selection on success
+                  setSelectedToolCodes([]); // Clear selection on success
                   fetchData();
                 }}
               />
@@ -239,8 +239,8 @@ const App: React.FC = () => {
               <InventoryTable 
                 assets={assets} 
                 schedules={schedules}
-                selectedAssetCodes={selectedAssetCodes}
-                setSelectedAssetCodes={setSelectedAssetCodes}
+                selectedToolCodes={selectedToolCodes}
+                setSelectedToolCodes={setSelectedToolCodes}
                 onNavigateToCheckout={() => setActiveTab('checkout')}
               />
             )}

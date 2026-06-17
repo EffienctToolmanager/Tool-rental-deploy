@@ -71,7 +71,7 @@
 @media (max-width: 768px) {
   .kanban-board {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
   }
 }
 
@@ -83,49 +83,62 @@
   flex-direction: column;
   min-height: 450px;
   overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 @media (max-width: 768px) {
   .kanban-column {
     min-height: auto;
+    border-width: 2px;
   }
 }
 
 .kanban-column.active_rental {
-  border: 2px solid rgba(30, 136, 229, 0.4);
+  border: 2px solid rgba(30, 136, 229, 0.45);
   border-top: 6px solid #1E88E5;
-  background-color: rgba(30, 136, 229, 0.02);
+  background-color: rgba(30, 136, 229, 0.05);
 }
 .kanban-column.active_rental .kanban-column-header {
-  background-color: rgba(30, 136, 229, 0.08);
-  border-bottom: 1px solid rgba(30, 136, 229, 0.2);
+  background-color: rgba(30, 136, 229, 0.12);
+  border-bottom: 1px solid rgba(30, 136, 229, 0.25);
 }
 .kanban-column.active_rental .kanban-column-header h3 {
   color: #1565C0;
 }
+.kanban-column.active_rental .kanban-card {
+  border-left: 5px solid #1E88E5 !important;
+}
+
 .kanban-column.calibration {
-  border: 2px solid rgba(216, 27, 96, 0.4);
+  border: 2px solid rgba(216, 27, 96, 0.45);
   border-top: 6px solid #D81B60;
-  background-color: rgba(216, 27, 96, 0.02);
+  background-color: rgba(216, 27, 96, 0.05);
 }
 .kanban-column.calibration .kanban-column-header {
-  background-color: rgba(216, 27, 96, 0.08);
-  border-bottom: 1px solid rgba(216, 27, 96, 0.2);
+  background-color: rgba(216, 27, 96, 0.12);
+  border-bottom: 1px solid rgba(216, 27, 96, 0.25);
 }
 .kanban-column.calibration .kanban-column-header h3 {
   color: #C2185B;
 }
+.kanban-column.calibration .kanban-card {
+  border-left: 5px solid #D81B60 !important;
+}
+
 .kanban-column.ongoing {
-  border: 2px solid rgba(67, 160, 71, 0.4);
+  border: 2px solid rgba(67, 160, 71, 0.45);
   border-top: 6px solid #43A047;
-  background-color: rgba(67, 160, 71, 0.02);
+  background-color: rgba(67, 160, 71, 0.05);
 }
 .kanban-column.ongoing .kanban-column-header {
-  background-color: rgba(67, 160, 71, 0.08);
-  border-bottom: 1px solid rgba(67, 160, 71, 0.2);
+  background-color: rgba(67, 160, 71, 0.12);
+  border-bottom: 1px solid rgba(67, 160, 71, 0.25);
 }
 .kanban-column.ongoing .kanban-column-header h3 {
   color: #2E7D32;
+}
+.kanban-column.ongoing .kanban-card {
+  border-left: 5px solid #43A047 !important;
 }
 
 .kanban-column-header {
@@ -592,6 +605,86 @@ textarea.f-input {
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+/* Card stage-specific borders and background colors */
+.kanban-card.active_rental {
+  border: 1px solid rgba(30, 136, 229, 0.35) !important;
+  border-left: 5px solid #1E88E5 !important;
+  background: var(--f-bg-white);
+}
+.kanban-card.calibration {
+  border: 1px solid rgba(216, 27, 96, 0.35) !important;
+  border-left: 5px solid #D81B60 !important;
+  background: var(--f-bg-white);
+}
+.kanban-card.ongoing {
+  border: 1px solid rgba(67, 160, 71, 0.35) !important;
+  border-left: 5px solid #43A047 !important;
+  background: var(--f-bg-white);
+}
+
+/* Card status specific styling */
+.kanban-card.delayed {
+  border: 1px solid #EF6C00 !important;
+  border-left: 5px solid #EF6C00 !important;
+  background-color: #FFF3E0 !important;
+}
+.kanban-card.pending_approval {
+  border: 1px solid #FBC02D !important;
+  border-left: 5px solid #FBC02D !important;
+  background-color: #FFFDE7 !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .kanban-board {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 8px;
+  }
+  
+  .kanban-column {
+    min-height: auto;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .kanban-column-body {
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .kanban-card {
+    padding: 10px !important;
+    gap: 6px;
+  }
+  
+  .card-top {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .card-title {
+    font-size: 13px !important;
+    margin-top: 4px !important;
+  }
+  
+  .card-meta {
+    font-size: 11px !important;
+    padding: 6px !important;
+  }
+  
+  .card-stage-selectors select {
+    width: 100% !important;
+    margin-top: 4px;
+  }
+  
+  .card-stage-selectors {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 4px;
   }
 }
 

@@ -4,21 +4,21 @@ import './RentalForm.css';
 
 interface RentalFormProps {
   assets: Asset[];
-  selectedAssetCodes: string[];
-  setSelectedAssetCodes: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedToolCodes: string[];
+  setSelectedToolCodes: React.Dispatch<React.SetStateAction<string[]>>;
   onSuccess: () => void;
 }
 
 type CartItemType = {
-  assetCode: string;
-  assetModel: string;
+  toolCode: string;
+  toolModel: string;
   photo: File | null;
 };
 
 const RentalForm: React.FC<RentalFormProps> = ({ 
   assets, 
-  selectedAssetCodes, 
-  setSelectedAssetCodes, 
+  selectedToolCodes, 
+  setSelectedToolCodes, 
   onSuccess 
 }) => {
   // Catalog & Search State
@@ -35,53 +35,53 @@ const RentalForm: React.FC<RentalFormProps> = ({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Synchronize local cart with global selectedAssetCodes
+  // Synchronize local cart with global selectedToolCodes
   useEffect(() => {
-    const currentCartCodes = cart.map(item => item.assetCode);
+    const currentCartCodes = cart.map(item => item.toolCode);
     
     // Items selected in global state but not in local cart
-    const addedItems = selectedAssetCodes
+    const addedItems = selectedToolCodes
       .filter(code => !currentCartCodes.includes(code))
       .map(code => {
-        const asset = assets.find(a => a.assetCode === code);
+        const asset = assets.find(a => a.toolCode === code);
         return {
-          assetCode: code,
-          assetModel: asset ? asset.model : 'Unknown Model',
+          toolCode: code,
+          toolModel: asset ? asset.model : 'Unknown Model',
           photo: null
         };
       });
 
     // Items that exist in both global state and local cart (preserving file attachment state)
-    const keptItems = cart.filter(item => selectedAssetCodes.includes(item.assetCode));
+    const keptItems = cart.filter(item => selectedToolCodes.includes(item.toolCode));
 
     if (addedItems.length > 0 || keptItems.length !== cart.length) {
       setCart([...keptItems, ...addedItems]);
     }
-  }, [selectedAssetCodes, assets]);
+  }, [selectedToolCodes, assets]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Filter available assets based on search term
+  // Filter available assets based on search term (using serial number index)
   const filteredAssets = assets.filter(asset => 
-    asset.assetCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (asset.serialNumber && asset.serialNumber.toLowerCase().includes(searchTerm.toLowerCase())) ||
     asset.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (asset.brand && asset.brand.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleCheckboxChange = (asset: Asset, checked: boolean) => {
     if (checked) {
-      setSelectedAssetCodes(prev => [...prev, asset.assetCode]);
+      setSelectedToolCodes(prev => [...prev, asset.toolCode]);
     } else {
-      setSelectedAssetCodes(prev => prev.filter(code => code !== asset.assetCode));
+      setSelectedToolCodes(prev => prev.filter(code => code !== asset.toolCode));
     }
   };
 
-  const handleFileChangeForAsset = (assetCode: string, file: File | null) => {
+  const handleFileChangeForAsset = (toolCode: string, file: File | null) => {
     setCart(prev => prev.map(item => 
-      item.assetCode === assetCode ? { ...item, photo: file } : item
+      item.toolCode === toolCode ? { ...item, photo: file } : item
     ));
   };
 
@@ -95,7 +95,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
     // Check if all selected items have a photo attached
     const missingPhotos = cart.filter(item => !item.photo);
     if (missingPhotos.length > 0) {
-      const codes = missingPhotos.map(item => item.assetCode).join(', ');
+      const codes = missingPhotos.map(item => item.toolCode).join(', ');
       alert(`⚠️ The following assets are missing individual condition photos:\n${codes}\n\nPlease attach a 1:1 condition photo for all tools.`);
       return;
     }
@@ -108,7 +108,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
     const caseId = `TR-${dateStr}-${randomSuffix}`;
 
     const mappedItems = cart.map(item => ({
-      equipmentCode: item.assetCode,
+      toolCode: item.toolCode,
       photoUrl: item.photo ? item.photo.name : 'Unknown'
     }));
 
@@ -172,7 +172,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
           <input 
             type="text"
             className="f-input catalog-search-input"
-            placeholder="🔍 Search Code or Model..."
+            placeholder="🔍 Search Serial or Model..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -183,7 +183,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
             <thead className="catalog-table-thead">
               <tr>
                 <th className="catalog-th-select">Select</th>
-                <th className="catalog-th-left">Asset Code</th>
+                <th className="catalog-th-left">Serial Number</th>
                 <th className="catalog-th-left">Brand</th>
                 <th className="catalog-th-left">Model</th>
               </tr>
@@ -191,10 +191,10 @@ const RentalForm: React.FC<RentalFormProps> = ({
             <tbody>
               {filteredAssets.length > 0 ? (
                 filteredAssets.map(asset => {
-                  const isChecked = cart.some(item => item.assetCode === asset.assetCode);
+                  const isChecked = cart.some(item => item.toolCode === asset.toolCode);
                   return (
                     <tr 
-                      key={asset.assetCode} 
+                      key={asset.toolCode} 
                       className={`catalog-tr ${isChecked ? 'selected' : ''}`}
                     >
                       <td className="catalog-td-center">
@@ -205,7 +205,7 @@ const RentalForm: React.FC<RentalFormProps> = ({
                           onChange={(e) => handleCheckboxChange(asset, e.target.checked)}
                         />
                       </td>
-                      <td className="catalog-td-code">{asset.assetCode}</td>
+                      <td className="catalog-td-code">{asset.serialNumber || 'N/A'}</td>
                       <td className="catalog-td-brand">{asset.brand || 'N/A'}</td>
                       <td className="catalog-td-model">{asset.model}</td>
                     </tr>
@@ -233,31 +233,34 @@ const RentalForm: React.FC<RentalFormProps> = ({
             <table className="cart-table">
               <thead className="cart-table-thead">
                 <tr>
-                  <th className="cart-th-code">Asset Code</th>
+                  <th className="cart-th-code">Serial Number</th>
                   <th className="cart-th-model">Model</th>
                   <th className="cart-th-photo">Condition Photo (1:1 Required)</th>
                 </tr>
               </thead>
               <tbody>
-                {cart.map(item => (
-                  <tr key={item.assetCode} className="cart-tr">
-                    <td className="cart-td-code">{item.assetCode}</td>
-                    <td className="cart-td-model">{item.assetModel}</td>
-                    <td className="cart-td-photo">
-                      <input 
-                        type="file" 
-                        accept="image/jpeg, image/png"
-                        className="cart-file-input"
-                        onChange={(e) => handleFileChangeForAsset(item.assetCode, e.target.files ? e.target.files[0] : null)}
-                      />
-                      {item.photo && (
-                        <div className="cart-attached-indicator">
-                          ✓ Attached: {item.photo.name}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                {cart.map(item => {
+                  const asset = assets.find(a => a.toolCode === item.toolCode);
+                  return (
+                    <tr key={item.toolCode} className="cart-tr">
+                      <td className="cart-td-code">{asset?.serialNumber || item.toolCode}</td>
+                      <td className="cart-td-model">{item.toolModel}</td>
+                      <td className="cart-td-photo">
+                        <input 
+                          type="file" 
+                          accept="image/jpeg, image/png"
+                          className="cart-file-input"
+                          onChange={(e) => handleFileChangeForAsset(item.toolCode, e.target.files ? e.target.files[0] : null)}
+                        />
+                        {item.photo && (
+                          <div className="cart-attached-indicator">
+                            ✓ Attached: {item.photo.name}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

@@ -167,3 +167,33 @@
   font-size: 14px;
 }
 
+@media (max-width: 768px) {
+  /* Hide non-critical columns on mobile devices */
+  .f-table th:nth-child(4), /* Zone */
+  .f-table td:nth-child(4),
+  .f-table th:nth-child(5), /* Rack */
+  .f-table td:nth-child(5),
+  .f-table th:nth-child(7), /* Brand */
+  .f-table td:nth-child(7),
+  .f-table th:nth-child(10), /* Calibration Date */
+  .f-table td:nth-child(10) {
+    display: none;
+  }
+
+  .inventory-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .search-input-wrapper {
+    max-width: 100%;
+  }
+
+  .inventory-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+

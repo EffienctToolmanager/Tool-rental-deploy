@@ -6,7 +6,7 @@ import { type Asset } from '../types';
 
 const mockAssets: Asset[] = [
   {
-    assetCode: 'EQ-001',
+    toolCode: 'EQ-001',
     brand: 'GE',
     model: 'Multimeter 90',
     zone: 'A',
@@ -32,19 +32,19 @@ const mockAssets: Asset[] = [
 
 describe('RentalForm Component', () => {
   it('renders form fields correctly', () => {
-    const setSelectedAssetCodes = vi.fn();
+    const setSelectedToolCodes = vi.fn();
     const onSuccess = vi.fn();
 
     render(
       <RentalForm 
         assets={mockAssets}
-        selectedAssetCodes={['EQ-001']}
-        setSelectedAssetCodes={setSelectedAssetCodes}
+        selectedToolCodes={['EQ-001']}
+        setSelectedToolCodes={setSelectedToolCodes}
         onSuccess={onSuccess}
       />
     );
 
-    expect(screen.getByPlaceholderText(/search code or model/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/search serial or model/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/project name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/project code/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/requester email/i)).toBeInTheDocument();
@@ -53,14 +53,14 @@ describe('RentalForm Component', () => {
   });
 
   it('updates form inputs correctly', () => {
-    const setSelectedAssetCodes = vi.fn();
+    const setSelectedToolCodes = vi.fn();
     const onSuccess = vi.fn();
 
     render(
       <RentalForm 
         assets={mockAssets}
-        selectedAssetCodes={['EQ-001']}
-        setSelectedAssetCodes={setSelectedAssetCodes}
+        selectedToolCodes={['EQ-001']}
+        setSelectedToolCodes={setSelectedToolCodes}
         onSuccess={onSuccess}
       />
     );

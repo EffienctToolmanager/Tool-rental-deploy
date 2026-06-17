@@ -4,7 +4,7 @@ import { type Asset } from '../types';
 
 const mockAssets: Asset[] = [
   {
-    assetCode: 'EQ-001',
+    toolCode: 'EQ-001',
     brand: 'GE',
     model: 'Multimeter 90',
     zone: 'A',
@@ -27,7 +27,7 @@ const mockAssets: Asset[] = [
     }
   },
   {
-    assetCode: 'EQ-002',
+    toolCode: 'EQ-002',
     brand: 'Fluke',
     model: 'Clamp Meter 376',
     zone: 'B',
@@ -65,8 +65,8 @@ type Story = StoryObj<typeof RentalForm>;
 export const Default: Story = {
   args: {
     assets: mockAssets,
-    selectedAssetCodes: ['EQ-001'],
-    setSelectedAssetCodes: () => {},
+    selectedToolCodes: ['EQ-001'],
+    setSelectedToolCodes: () => {},
     onSuccess: () => alert('Rental processed successfully!'),
   },
 };
@@ -74,8 +74,8 @@ export const Default: Story = {
 export const BulkRental: Story = {
   args: {
     assets: mockAssets,
-    selectedAssetCodes: ['EQ-001', 'EQ-002'],
-    setSelectedAssetCodes: () => {},
+    selectedToolCodes: ['EQ-001', 'EQ-002'],
+    setSelectedToolCodes: () => {},
     onSuccess: () => alert('Bulk rental processed successfully!'),
   },
 };

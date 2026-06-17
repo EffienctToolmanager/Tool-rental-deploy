@@ -13,7 +13,7 @@ export type SpecSummary = {
 }
 
 export type Asset = {
-  assetCode: string;
+  toolCode: string;
   brand: string;
   model: string;
   zone: string;
@@ -24,7 +24,7 @@ export type Asset = {
   Current_Status?: 'Available' | 'Rented' | 'Calibration' | 'Reserved';
   Brand?: string;
   Asset_Model?: string;
-  Asset_Code?: string;
+  Tool_Code?: string;
   Location_Zone?: string;
   Location_Rack?: string;
   Current_Location?: string;
@@ -37,7 +37,7 @@ export type Asset = {
 
 export type Rental = {
   caseId: string;
-  assetCode: string;
+  toolCode: string;
   model: string;
   user: string;
   projectCode: string;
@@ -51,14 +51,14 @@ export type Rental = {
 
 export type ScheduledCase = {
   id: string;
-  equipmentCode: string;
+  toolCode: string;
   model: string;
   sequenceOrder: number;
   stage: 'active_rental' | 'calibration' | 'ongoing';
   destination: string;
   startDate?: string;
   endDate?: string;
-  status: 'Scheduled' | 'In_Progress' | 'Completed' | 'Delayed';
+  status: 'Scheduled' | 'In_Progress' | 'Completed' | 'Delayed' | 'Pending_Approval';
   userEmail: string;
   pmEmail: string;
   notes?: string;
@@ -66,6 +66,7 @@ export type ScheduledCase = {
   handoverPic?: string;
   handoverPhoto?: string;
   checklistVerified?: boolean;
+  caseId?: string;
 }
 
 

@@ -6,7 +6,7 @@ import { type Asset } from '../types';
 
 const mockAssets: Asset[] = [
   {
-    assetCode: 'EQ-001',
+    toolCode: 'EQ-001',
     brand: 'GE',
     model: 'Multimeter 90',
     zone: 'CCP01',
@@ -33,14 +33,14 @@ const mockAssets: Asset[] = [
 
 describe('InventoryTable Component', () => {
   it('renders table headers and assets correctly', () => {
-    const setSelectedAssetCodes = vi.fn();
+    const setSelectedToolCodes = vi.fn();
     const onNavigateToCheckout = vi.fn();
 
     render(
       <InventoryTable 
         assets={mockAssets}
-        selectedAssetCodes={[]}
-        setSelectedAssetCodes={setSelectedAssetCodes}
+        selectedToolCodes={[]}
+        setSelectedToolCodes={setSelectedToolCodes}
         onNavigateToCheckout={onNavigateToCheckout}
       />
     );
@@ -49,18 +49,19 @@ describe('InventoryTable Component', () => {
     expect(screen.getByText('EQ-001')).toBeInTheDocument();
     expect(screen.getByText('GE')).toBeInTheDocument();
     expect(screen.getByText('SN-001')).toBeInTheDocument();
-    expect(screen.getByText('CCP01/A1')).toBeInTheDocument();
+    expect(screen.getByText('CCP01')).toBeInTheDocument();
+    expect(screen.getByText('A1')).toBeInTheDocument();
   });
 
   it('shows selection bar when assets are selected', () => {
-    const setSelectedAssetCodes = vi.fn();
+    const setSelectedToolCodes = vi.fn();
     const onNavigateToCheckout = vi.fn();
 
     render(
       <InventoryTable 
         assets={mockAssets}
-        selectedAssetCodes={['EQ-001']}
-        setSelectedAssetCodes={setSelectedAssetCodes}
+        selectedToolCodes={['EQ-001']}
+        setSelectedToolCodes={setSelectedToolCodes}
         onNavigateToCheckout={onNavigateToCheckout}
       />
     );
@@ -70,13 +71,13 @@ describe('InventoryTable Component', () => {
   });
 
   it('filters assets by search keyword', async () => {
-    const setSelectedAssetCodes = vi.fn();
+    const setSelectedToolCodes = vi.fn();
     const onNavigateToCheckout = vi.fn();
     
     const doubleAssets: Asset[] = [
       ...mockAssets,
       {
-        assetCode: 'EQ-002',
+        toolCode: 'EQ-002',
         brand: 'Fluke',
         model: '87V',
         zone: 'CCP02',
@@ -91,8 +92,8 @@ describe('InventoryTable Component', () => {
     render(
       <InventoryTable 
         assets={doubleAssets}
-        selectedAssetCodes={[]}
-        setSelectedAssetCodes={setSelectedAssetCodes}
+        selectedToolCodes={[]}
+        setSelectedToolCodes={setSelectedToolCodes}
         onNavigateToCheckout={onNavigateToCheckout}
       />
     );

@@ -12,7 +12,6 @@ console.log('Starting Figma design and token audit for Tool Rental HQ...');
 // Components to scan
 const components = [
   'ActiveRentals',
-  'AnalyticsTab',
   'InventoryTable',
   'RentalForm',
   'SchedulingTab'

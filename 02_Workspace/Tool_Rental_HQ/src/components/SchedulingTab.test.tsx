@@ -6,7 +6,7 @@ import { type Asset } from '../types';
 
 const mockAssets: Asset[] = [
   {
-    assetCode: 'FLK-87V-01',
+    toolCode: 'FLK-87V-01',
     brand: 'Fluke',
     model: '87V',
     zone: 'CCP01',
@@ -22,7 +22,7 @@ const mockAssets: Asset[] = [
 const mockSchedules = [
   {
     id: 'SCH-202606-0001',
-    equipmentCode: 'FLK-87V-01',
+    toolCode: 'FLK-87V-01',
     model: '87V',
     sequenceOrder: 0,
     stage: 'active_rental',
@@ -64,7 +64,7 @@ describe('SchedulingTab Component', () => {
     expect(screen.getAllByText(/Project Site A/)[0]).toBeInTheDocument();
   });
 
-  it('toggles view mode between Kanban and Gantt', async () => {
+  it('toggles Pending Approval Only filter state', async () => {
     const onRefresh = vi.fn();
     render(<SchedulingTab assets={mockAssets} isAdmin={false} onRefreshAssets={onRefresh} />);
 
@@ -72,12 +72,20 @@ describe('SchedulingTab Component', () => {
       expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
     });
 
-    const ganttBtn = screen.getByText(/Gantt Timeline/i);
-    fireEvent.click(ganttBtn);
+    const pendingOnlyBtn = screen.getByText(/Pending Approval Only/i);
+    expect(pendingOnlyBtn).toBeInTheDocument();
 
+    // Toggle filter on
+    fireEvent.click(pendingOnlyBtn);
+    // Since SCH-202606-0001 is In_Progress, it should be filtered out
     await waitFor(() => {
-      expect(screen.getByText('Instrument / Asset')).toBeInTheDocument();
-      expect(screen.getByText('87V')).toBeInTheDocument();
+      expect(screen.queryByText('SCH-202606-0001')).not.toBeInTheDocument();
+    });
+
+    // Toggle filter off
+    fireEvent.click(pendingOnlyBtn);
+    await waitFor(() => {
+      expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
     });
   });
 
@@ -122,24 +130,58 @@ describe('SchedulingTab Component', () => {
     // active_rental is selected, so should show "Handover Record Required Fields"
     expect(screen.getByText(/Handover Record Required Fields/i)).toBeInTheDocument();
     expect(screen.getByText(/Handover PIC Name/i)).toBeInTheDocument();
-    expect(screen.getByText(/Handover Photo File\/Path/i)).toBeInTheDocument();
+    expect(screen.getByText(/Upload Handover Photo/i)).toBeInTheDocument();
   });
 
-  it('prompts the edit modal with target stage when a stage change is requested on card', async () => {
+  it('prompts the edit modal with target stage when an outbound stage change is requested from calibration on card', async () => {
     const onRefresh = vi.fn();
+    const mockCalSchedules = [
+      {
+        id: 'SCH-202606-0002',
+        toolCode: 'FLK-87V-01',
+        model: '87V',
+        sequenceOrder: 0,
+        stage: 'calibration',
+        destination: 'Calibration Lab',
+        startDate: '2026-06-10',
+        endDate: '2026-06-30',
+        status: 'In_Progress',
+        userEmail: 'pm@ge.com',
+        pmEmail: 'pm@ge.com',
+        notes: 'Calibrating unit'
+      }
+    ];
+
+    vi.stubGlobal('fetch', vi.fn().mockImplementation((url: string) => {
+      if (url.endsWith('/list')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ data: mockCalSchedules })
+        });
+      }
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ status: 'success' })
+      });
+    }));
+
     render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
 
     await waitFor(() => {
-      expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
+      expect(screen.getByText('SCH-202606-0002')).toBeInTheDocument();
     });
 
     const moveSelect = screen.getByRole('combobox');
-    fireEvent.change(moveSelect, { target: { value: 'calibration' } });
+    fireEvent.change(moveSelect, { target: { value: 'active_rental' } });
 
     // Should prompt edit modal
-    expect(screen.getByText(/Edit Scheduling Case/i)).toBeInTheDocument();
-    // And stage should be preselected to calibration, thus showing Calibration Record fields
-    expect(screen.getByText(/Calibration Record Required Fields/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/Edit Scheduling Case/i)).toBeInTheDocument();
+    });
+    // And should show Handover Record Required Fields (because it is outbound to active_rental)
+    expect(screen.getByText(/Handover Record Required Fields/i)).toBeInTheDocument();
+    expect(screen.getByText(/Handover PIC Name/i)).toBeInTheDocument();
+    expect(screen.getByText(/Upload Handover Photo/i)).toBeInTheDocument();
   });
 
   it('instantly transitions to ongoing stage when requested (no validation modal)', async () => {
@@ -183,8 +225,8 @@ describe('SchedulingTab Component', () => {
     
     // Verify first schedule step card is rendered
     expect(screen.getByText(/Schedule 1/i)).toBeInTheDocument();
-    expect(screen.getByText(/Case Name \/ Stage Name/i)).toBeInTheDocument();
-    expect(screen.getByText(/Stage Target/i)).toBeInTheDocument();
+    expect(screen.getByText(/Option/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Project Name/i)[0]).toBeInTheDocument();
   });
 
   it('filters schedules based on search term', async () => {
@@ -229,6 +271,64 @@ describe('SchedulingTab Component', () => {
     fireEvent.click(deselectBtn);
     expect(checkbox).not.toBeChecked();
     expect(screen.queryByText(/Selected 1 tool cards/i)).not.toBeInTheDocument();
+  });
+
+  it('renders handover fields when a calibration step status is changed to Completed (to be cleared) in edit modal', async () => {
+    const onRefresh = vi.fn();
+    const mockCalSchedules = [
+      {
+        id: 'SCH-202606-0003',
+        toolCode: 'FLK-87V-01',
+        model: '87V',
+        sequenceOrder: 0,
+        stage: 'calibration',
+        destination: 'Calibration Lab',
+        startDate: '2026-06-10',
+        endDate: '2026-06-30',
+        status: 'In_Progress',
+        userEmail: 'pm@ge.com',
+        pmEmail: 'pm@ge.com',
+        notes: 'Calibrating'
+      }
+    ];
+
+    vi.stubGlobal('fetch', vi.fn().mockImplementation((url: string) => {
+      if (url.endsWith('/list')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ data: mockCalSchedules })
+        });
+      }
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ status: 'success' })
+      });
+    }));
+
+    render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('SCH-202606-0003')).toBeInTheDocument();
+    });
+
+    const editBtn = screen.getByTitle('Edit');
+    fireEvent.click(editBtn);
+
+    // Initial stage is calibration and status is In_Progress. Handover fields should NOT be shown yet.
+    expect(screen.queryByText(/Handover Record Required Fields/i)).not.toBeInTheDocument();
+
+    // Change status to Completed
+    const comboboxes = screen.getAllByRole('combobox');
+    const statusSelect = comboboxes.find(select => select.querySelector('option[value="Completed"]'));
+    if (!statusSelect) throw new Error("Could not find status select");
+    fireEvent.change(statusSelect, { target: { value: 'Completed' } });
+
+    // Now handover fields should be shown
+    await waitFor(() => {
+      expect(screen.getByText(/Handover Record Required Fields/i)).toBeInTheDocument();
+    });
+    expect(screen.getByText(/Handover PIC Name/i)).toBeInTheDocument();
+    expect(screen.getByText(/Upload Handover Photo/i)).toBeInTheDocument();
   });
 });
 

@@ -12,7 +12,7 @@ const API_BASE = "/api/sharepoint/schedule";
 
 export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, onRefreshAssets }) => {
   const [schedules, setSchedules] = useState<ScheduledCase[]>([]);
-  const [viewMode, setViewMode] = useState<'kanban' | 'gantt'>('kanban');
+  const [showPendingOnly, setShowPendingOnly] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCase, setEditingCase] = useState<ScheduledCase | null>(null);
@@ -38,21 +38,21 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   // Inline Add Case state
-  const [inlineAddStage, setInlineAddStage] = useState<'active_rental' | 'calibration' | 'ongoing'>('active_rental');
+  const [inlineAddOption, setInlineAddOption] = useState<'calibration' | 'other_project'>('other_project');
   const [inlineAddDestination, setInlineAddDestination] = useState('');
-  const [activeAddingAssetCode, setActiveAddingAssetCode] = useState<string | null>(null);
+  const [activeAddingToolCode, setActiveAddingToolCode] = useState<string | null>(null);
 
   // Form states
   const [formSelectedAssets, setFormSelectedAssets] = useState<string[]>([]);
   const [formProjectCode, setFormProjectCode] = useState('');
   const [relaySteps, setRelaySteps] = useState<Array<{
-    stage: 'active_rental' | 'calibration' | 'ongoing';
+    option: 'calibration' | 'other_project';
     destination: string;
   }>>([
-    { stage: 'active_rental', destination: '' }
+    { option: 'other_project', destination: '' }
   ]);
 
-  const [formEquipmentCode, setFormEquipmentCode] = useState('');
+  const [formToolCode, setFormToolCode] = useState('');
   const [formStage, setFormStage] = useState<'active_rental' | 'calibration' | 'ongoing'>('active_rental');
   const [formDestination, setFormDestination] = useState('');
   const [formUserEmail, setFormUserEmail] = useState('');
@@ -62,6 +62,12 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   const [formHandoverPic, setFormHandoverPic] = useState('');
   const [formHandoverPhoto, setFormHandoverPhoto] = useState('');
   const [formChecklistVerified, setFormChecklistVerified] = useState(false);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [bulkPhotoFile, setBulkPhotoFile] = useState<File | null>(null);
+
+  const isOutboundFromCalibration = !!editingCase && editingCase.stage === 'calibration' && (formStage === 'active_rental' || formStage === 'ongoing' || formStatus === 'Completed');
+  const isNormalHandover = !!editingCase && editingCase.stage !== 'calibration' && formStage === 'active_rental';
+  const showHandoverFields = !!editingCase && (isOutboundFromCalibration || isNormalHandover);
 
   const fetchSchedules = async () => {
     try {
@@ -98,7 +104,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     setFormHandoverPhoto('');
     setFormChecklistVerified(false);
     setRelaySteps([
-      { stage: 'active_rental', destination: '' }
+      { option: 'other_project', destination: '' }
     ]);
     setIsModalOpen(true);
   };
@@ -106,7 +112,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   const openEditModal = (sc: ScheduledCase) => {
     if (!isAdmin) return;
     setEditingCase(sc);
-    setFormEquipmentCode(sc.equipmentCode);
+    setFormToolCode(sc.toolCode);
     setFormStage(sc.stage);
     setFormDestination(sc.destination);
     setFormProjectCode(sc.projectCode || '');
@@ -123,6 +129,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingCase(null);
+    setPhotoFile(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -130,12 +137,34 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     if (!isAdmin) return;
 
     if (editingCase) {
-      const selectedAsset = assets.find(a => a.assetCode === formEquipmentCode);
+      const selectedAsset = assets.find(a => a.toolCode === formToolCode);
       const model = selectedAsset ? selectedAsset.model : 'Unknown';
+
+      const isOutboundFromCalibration = editingCase.stage === 'calibration' && (formStage === 'active_rental' || formStage === 'ongoing' || formStatus === 'Completed');
+      const isNormalHandover = editingCase.stage !== 'calibration' && formStage === 'active_rental';
+      const showHandoverFields = isOutboundFromCalibration || isNormalHandover;
+
+      let photoUrl = formHandoverPhoto;
+      if (showHandoverFields && photoFile) {
+        const formData = new FormData();
+        formData.append("file", photoFile);
+        formData.append("filename", photoFile.name);
+        try {
+          const uploadRes = await fetch(`/api/sharepoint/upload?filename=${encodeURIComponent(photoFile.name)}`, {
+            method: 'POST',
+            body: formData
+          });
+          if (uploadRes.ok) {
+            photoUrl = photoFile.name;
+          }
+        } catch (err) {
+          console.error("Photo upload failed:", err);
+        }
+      }
 
       const payload = {
         id: editingCase.id,
-        equipmentCode: formEquipmentCode,
+        toolCode: formToolCode,
         model,
         sequenceOrder: editingCase.sequenceOrder,
         stage: formStage,
@@ -147,9 +176,9 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
         pmEmail: formPmEmail,
         notes: formNotes,
         projectCode: formProjectCode,
-        handoverPic: (formStage === 'active_rental' || formStage === 'calibration') ? formHandoverPic : undefined,
-        handoverPhoto: (formStage === 'active_rental' || formStage === 'calibration') ? formHandoverPhoto : undefined,
-        checklistVerified: (formStage === 'active_rental' || formStage === 'calibration') ? formChecklistVerified : undefined
+        handoverPic: showHandoverFields ? formHandoverPic : undefined,
+        handoverPhoto: showHandoverFields ? photoUrl : undefined,
+        checklistVerified: showHandoverFields ? formChecklistVerified : undefined
       };
 
       try {
@@ -180,20 +209,48 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
       const payloads: any[] = [];
       const timestamp = Date.now().toString().slice(-4);
       
-      formSelectedAssets.forEach((assetCode, assetIdx) => {
-        const selectedAsset = assets.find(a => a.assetCode === assetCode);
+      formSelectedAssets.forEach((toolCode, assetIdx) => {
+        const selectedAsset = assets.find(a => a.toolCode === toolCode);
         const model = selectedAsset ? selectedAsset.model : 'Unknown';
         
+        const currentLoc = selectedAsset ? (selectedAsset.currentLocation || selectedAsset.Current_Location || '') : '';
+        const currentStat = selectedAsset ? (selectedAsset.status || selectedAsset.Current_Status || '') : '';
+        
+        const isWarehouse = currentLoc === 'Warehouse' || currentLoc === '';
+        const isAvailable = currentStat === 'Available';
+        
         relaySteps.forEach((step, stepIdx) => {
-          const cleanedAsset = assetCode.replace(/[^a-zA-Z0-9]/g, '');
+          const cleanedAsset = toolCode.replace(/[^a-zA-Z0-9]/g, '');
           const id = `SCH-2026-${timestamp}-${assetIdx}-${stepIdx}-${cleanedAsset}`;
+          
+          let stage: 'active_rental' | 'calibration' | 'ongoing' = 'active_rental';
+          let destination = step.destination;
+          
+          if (step.option === 'calibration') {
+            destination = step.destination || 'Calibration Lab';
+          }
+
+          if (!isWarehouse) {
+            stage = 'active_rental';
+          } else {
+            if (!isAvailable) {
+              stage = 'ongoing';
+            } else {
+              if (step.option === 'calibration') {
+                stage = 'calibration';
+              } else {
+                stage = 'active_rental';
+              }
+            }
+          }
+
           payloads.push({
             id,
-            equipmentCode: assetCode,
+            toolCode: toolCode,
             model,
             sequenceOrder: stepIdx,
-            stage: step.stage,
-            destination: step.destination,
+            stage,
+            destination,
             startDate: '',
             endDate: '',
             status: 'Scheduled',
@@ -242,14 +299,15 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   };
 
   const handleBulkMoveTrigger = (targetStage: 'active_rental' | 'calibration' | 'ongoing') => {
-    if (targetStage === 'ongoing') {
-      executeBulkMove(targetStage);
-    } else {
+    if (targetStage === 'active_rental') {
       setBulkTargetStage(targetStage);
       setBulkHandoverPic('');
       setBulkHandoverPhoto('');
       setBulkChecklistVerified(false);
+      setBulkPhotoFile(null);
       setIsBulkTransitionModalOpen(true);
+    } else {
+      executeBulkMove(targetStage);
     }
   };
 
@@ -259,14 +317,32 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     handoverPhoto?: string,
     checklistVerified?: boolean
   ) => {
+    let photoUrl = handoverPhoto;
+    if (targetStage === 'active_rental' && bulkPhotoFile) {
+      const formData = new FormData();
+      formData.append("file", bulkPhotoFile);
+      formData.append("filename", bulkPhotoFile.name);
+      try {
+        const uploadRes = await fetch(`/api/sharepoint/upload?filename=${encodeURIComponent(bulkPhotoFile.name)}`, {
+          method: 'POST',
+          body: formData
+        });
+        if (uploadRes.ok) {
+          photoUrl = bulkPhotoFile.name;
+        }
+      } catch (err) {
+        console.error("Bulk photo upload failed:", err);
+      }
+    }
+
     const selectedSchedules = schedules.filter(s => selectedCardIds.includes(s.id));
     const payloads = selectedSchedules.map(s => ({
       ...s,
       stage: targetStage,
       status: targetStage === 'ongoing' ? 'Scheduled' : 'In_Progress',
-      handoverPic: targetStage !== 'ongoing' ? handoverPic : undefined,
-      handoverPhoto: targetStage !== 'ongoing' ? handoverPhoto : undefined,
-      checklistVerified: targetStage !== 'ongoing' ? checklistVerified : undefined
+      handoverPic: targetStage === 'active_rental' ? handoverPic : undefined,
+      handoverPhoto: targetStage === 'active_rental' ? photoUrl : undefined,
+      checklistVerified: targetStage === 'active_rental' ? checklistVerified : undefined
     }));
 
     try {
@@ -317,10 +393,14 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   const handleMoveStage = async (sc: ScheduledCase, nextStage: 'active_rental' | 'calibration' | 'ongoing') => {
     if (!isAdmin) return;
     
-    if (nextStage === 'ongoing') {
+    const isOutboundFromCalibration = sc.stage === 'calibration' && (nextStage === 'active_rental' || nextStage === 'ongoing');
+    const isNormalHandover = sc.stage !== 'calibration' && nextStage === 'active_rental';
+    const isOutbound = isOutboundFromCalibration || isNormalHandover;
+
+    if (!isOutbound) {
       const payload: ScheduledCase = {
         ...sc,
-        stage: 'ongoing',
+        stage: nextStage,
         handoverPic: undefined,
         handoverPhoto: undefined,
         checklistVerified: undefined
@@ -342,7 +422,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     } else {
       // Open edit modal with target stage to enforce entering checkout photo/checklist details
       setEditingCase(sc);
-      setFormEquipmentCode(sc.equipmentCode);
+      setFormToolCode(sc.toolCode);
       setFormStage(nextStage);
       setFormDestination(sc.destination);
       setFormProjectCode(sc.projectCode || '');
@@ -361,56 +441,87 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   const isConflict = (sc: ScheduledCase) => {
     if (sc.status === 'Completed') return false;
     const sameToolSchedules = schedules.filter(other => 
-      other.equipmentCode === sc.equipmentCode && 
+      other.toolCode === sc.toolCode && 
       other.status !== 'Completed'
     );
     
-    // Conflict 1: More than one schedule in progress for this tool
-    const inProgressCount = sameToolSchedules.filter(s => s.status === 'In_Progress').length;
-    if (inProgressCount > 1) return true;
+    // Conflict 1: More than one schedule in progress, pending, or delayed for this tool
+    const activeStatuses = ['In_Progress', 'Pending_Approval', 'Delayed'];
+    const activeCount = sameToolSchedules.filter(s => activeStatuses.includes(s.status)).length;
+    if (activeCount > 1) return true;
     
     // Conflict 2: More than one schedule in the same stage
     const sameStageCount = sameToolSchedules.filter(s => s.stage === sc.stage).length;
     if (sameStageCount > 1) return true;
+
+    // Conflict 3: Duplicate sequence orders
+    const seqOrders = sameToolSchedules.map(s => s.sequenceOrder);
+    const hasDuplicateSeq = seqOrders.some((val, i) => seqOrders.indexOf(val) !== i);
+    if (hasDuplicateSeq) return true;
     
     return false;
   };
 
   // Inline Add Case Handler
-  const handleInlineAddCase = async (e: React.FormEvent, assetCode: string) => {
+  const handleInlineAddCase = async (e: React.FormEvent, toolCode: string) => {
     e.preventDefault();
     if (!isAdmin) return;
-    if (!inlineAddDestination.trim()) {
-      alert("Please enter a case name / destination.");
-      return;
-    }
 
-    const selectedAsset = assets.find(a => a.assetCode === assetCode);
+    const selectedAsset = assets.find(a => a.toolCode === toolCode);
     const model = selectedAsset ? selectedAsset.model : 'Unknown';
 
+    let stage: 'active_rental' | 'calibration' | 'ongoing' = 'active_rental';
+    let destination = '';
+
+    if (inlineAddOption === 'calibration') {
+      destination = 'Calibration Lab';
+    } else {
+      if (!inlineAddDestination.trim()) {
+        alert("Please enter a project name.");
+        return;
+      }
+      destination = inlineAddDestination;
+    }
+
+    const currentLoc = selectedAsset ? (selectedAsset.currentLocation || selectedAsset.Current_Location || '') : '';
+    const currentStat = selectedAsset ? (selectedAsset.status || selectedAsset.Current_Status || '') : '';
+    
+    const isWarehouse = currentLoc === 'Warehouse' || currentLoc === '';
+    const isAvailable = currentStat === 'Available';
+
+    if (isWarehouse) {
+      if (isAvailable) {
+        stage = 'active_rental';
+      } else {
+        stage = 'ongoing';
+      }
+    } else {
+      stage = 'active_rental';
+    }
+
     // Find the next sequenceOrder for this asset
-    const assetSchedules = schedules.filter(s => s.equipmentCode === assetCode);
+    const assetSchedules = schedules.filter(s => s.toolCode === toolCode);
     const nextSeq = assetSchedules.length > 0 
       ? Math.max(...assetSchedules.map(s => s.sequenceOrder)) + 1 
       : 0;
 
     const timestamp = Date.now().toString().slice(-4);
-    const cleanedAsset = assetCode.replace(/[^a-zA-Z0-9]/g, '');
+    const cleanedAsset = toolCode.replace(/[^a-zA-Z0-9]/g, '');
     const id = `SCH-2026-${timestamp}-${nextSeq}-${cleanedAsset}`;
 
     const newCase = {
       id,
-      equipmentCode: assetCode,
+      toolCode: toolCode,
       model,
       sequenceOrder: nextSeq,
-      stage: inlineAddStage,
-      destination: inlineAddDestination,
+      stage,
+      destination,
       startDate: '',
       endDate: '',
       status: 'Scheduled',
       userEmail: formUserEmail || 'admin@ge.com',
       pmEmail: formPmEmail || 'pm@ge.com',
-      notes: 'Added from Scheduler card'
+      notes: inlineAddOption === 'calibration' ? 'Scheduled calibration step' : 'Added from Scheduler card'
     };
 
     try {
@@ -422,7 +533,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
       if (!res.ok) throw new Error("Failed to add expected case");
       
       setInlineAddDestination('');
-      setActiveAddingAssetCode(null);
+      setActiveAddingToolCode(null);
       await fetchSchedules();
       onRefreshAssets();
     } catch (err) {
@@ -494,6 +605,91 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     }
   };
 
+  const handleSelectAllPending = () => {
+    const schedulesByAsset: Record<string, ScheduledCase[]> = {};
+    schedules.forEach(s => {
+      if (!schedulesByAsset[s.toolCode]) {
+        schedulesByAsset[s.toolCode] = [];
+      }
+      schedulesByAsset[s.toolCode].push(s);
+    });
+
+    const matchingIds: string[] = [];
+    Object.keys(schedulesByAsset).forEach(code => {
+      const assetScheds = schedulesByAsset[code];
+      const activeSched = assetScheds.find(s => s.status !== 'Completed');
+      if (!activeSched) return;
+      if (activeSched.status !== 'Pending_Approval') return;
+
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        const asset = assets.find(a => a.toolCode === code);
+        const model = asset ? asset.model : '';
+        const match = 
+          (code || '').toLowerCase().includes(term) ||
+          (model || '').toLowerCase().includes(term) ||
+          (activeSched.destination || '').toLowerCase().includes(term) ||
+          (activeSched.projectCode || '').toLowerCase().includes(term) ||
+          (activeSched.userEmail || '').toLowerCase().includes(term) ||
+          (activeSched.pmEmail || '').toLowerCase().includes(term) ||
+          (activeSched.notes || '').toLowerCase().includes(term) ||
+          (activeSched.caseId || '').toLowerCase().includes(term) ||
+          activeSched.id.toLowerCase().includes(term);
+        if (!match) return;
+      }
+
+      matchingIds.push(activeSched.id);
+    });
+
+    setSelectedCardIds(prev => {
+      const newIds = [...prev];
+      matchingIds.forEach(id => {
+        if (!newIds.includes(id)) {
+          newIds.push(id);
+        }
+      });
+      return newIds;
+    });
+  };
+
+  const handleBulkApproveRentals = async () => {
+    if (!isAdmin) return;
+    const pendingIds = selectedCardIds.filter(id => {
+      const card = schedules.find(s => s.id === id);
+      return card && card.status === 'Pending_Approval';
+    });
+
+    if (pendingIds.length === 0) {
+      alert("No pending approval cards selected.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${API_BASE}/approve-bulk`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(pendingIds)
+      });
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.detail || "Failed to bulk approve rentals");
+      }
+      const result = await res.json();
+      alert(`✅ Bulk approved ${result.count} rental requests successfully!`);
+      setSelectedCardIds([]);
+      await fetchSchedules();
+      onRefreshAssets();
+    } catch (err: any) {
+      console.error(err);
+      alert(`Error bulk approving rentals: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Kanban view helper columns
   const getStageTitle = (stage: string) => {
     switch (stage) {
@@ -511,10 +707,10 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     // Group schedules by asset
     const schedulesByAsset: Record<string, ScheduledCase[]> = {};
     schedules.forEach(s => {
-      if (!schedulesByAsset[s.equipmentCode]) {
-        schedulesByAsset[s.equipmentCode] = [];
+      if (!schedulesByAsset[s.toolCode]) {
+        schedulesByAsset[s.toolCode] = [];
       }
-      schedulesByAsset[s.equipmentCode].push(s);
+      schedulesByAsset[s.toolCode].push(s);
     });
 
     // Sort schedules by sequenceOrder for each asset
@@ -531,22 +727,22 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
             const activeSched = assetScheds.find(s => s.status !== 'Completed');
             if (!activeSched) return false;
             if (activeSched.stage !== col) return false;
+            if (showPendingOnly && activeSched.status !== 'Pending_Approval') return false;
             
             if (!searchTerm) return true;
             const term = searchTerm.toLowerCase();
-            const asset = assets.find(a => a.assetCode === code);
+            const asset = assets.find(a => a.toolCode === code);
             const model = asset ? asset.model : '';
-            const name = asset ? asset.name : '';
             
             return (
               (code || '').toLowerCase().includes(term) ||
               (model || '').toLowerCase().includes(term) ||
-              (name || '').toLowerCase().includes(term) ||
               (activeSched.destination || '').toLowerCase().includes(term) ||
               (activeSched.projectCode || '').toLowerCase().includes(term) ||
               (activeSched.userEmail || '').toLowerCase().includes(term) ||
               (activeSched.pmEmail || '').toLowerCase().includes(term) ||
               (activeSched.notes || '').toLowerCase().includes(term) ||
+              (activeSched.caseId || '').toLowerCase().includes(term) ||
               activeSched.id.toLowerCase().includes(term)
             );
           });
@@ -586,7 +782,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                     const activeSched = assetScheds.find(s => s.status !== 'Completed')!;
                     const hasConflict = isConflict(activeSched);
                     const isSelected = selectedCardIds.includes(activeSched.id);
-                    const asset = assets.find(a => a.assetCode === code);
+                    const asset = assets.find(a => a.toolCode === code);
                     const serial = asset ? asset.serialNumber : 'Unknown';
 
                     return (
@@ -602,7 +798,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                         onDragEnd={(e) => {
                           e.currentTarget.classList.remove("dragging");
                         }}
-                        className={`kanban-card ${activeSched.status.toLowerCase()} ${hasConflict ? 'conflict-warning' : ''}`}
+                        className={`kanban-card ${activeSched.stage} ${activeSched.status.toLowerCase()} ${hasConflict ? 'conflict-warning' : ''}`}
                         style={{ padding: '16px', borderRadius: '12px' }}
                       >
                         <div className="card-top">
@@ -727,31 +923,32 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                         </div>
 
                         {/* Inline Add Expected Case Form */}
-                        {activeAddingAssetCode === code ? (
+                        {activeAddingToolCode === code ? (
                           <form onSubmit={(e) => handleInlineAddCase(e, code)} style={{ marginTop: '12px', padding: '8px', border: '1px solid var(--f-primary)', borderRadius: '6px', backgroundColor: 'var(--f-bg-white)' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '6px' }}>
                               <select 
-                                value={inlineAddStage}
-                                onChange={(e) => setInlineAddStage(e.target.value as any)}
+                                value={inlineAddOption}
+                                onChange={(e) => setInlineAddOption(e.target.value as any)}
                                 className="f-input"
                                 style={{ padding: '4px 6px', fontSize: '11px', height: '26px' }}
                               >
-                                <option value="active_rental">📢 Active Rental</option>
-                                <option value="calibration">🔬 Calibration Lab</option>
-                                <option value="ongoing">🚚 On Going</option>
+                                <option value="calibration">1. Calibration</option>
+                                <option value="other_project">2. Other Project</option>
                               </select>
-                              <input 
-                                type="text" 
-                                placeholder="Destination / Case Name" 
-                                value={inlineAddDestination}
-                                onChange={(e) => setInlineAddDestination(e.target.value)}
-                                className="f-input"
-                                style={{ padding: '4px 6px', fontSize: '11px', height: '26px' }}
-                                required
-                              />
+                              {inlineAddOption === 'other_project' && (
+                                <input 
+                                  type="text" 
+                                  placeholder="Project Name" 
+                                  value={inlineAddDestination}
+                                  onChange={(e) => setInlineAddDestination(e.target.value)}
+                                  className="f-input"
+                                  style={{ padding: '4px 6px', fontSize: '11px', height: '26px' }}
+                                  required
+                                />
+                              )}
                             </div>
                             <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
-                              <button type="button" onClick={() => setActiveAddingAssetCode(null)} className="f-button" style={{ padding: '2px 6px', fontSize: '10px', minHeight: 'auto', height: '22px' }}>Cancel</button>
+                              <button type="button" onClick={() => setActiveAddingToolCode(null)} className="f-button" style={{ padding: '2px 6px', fontSize: '10px', minHeight: 'auto', height: '22px' }}>Cancel</button>
                               <button type="submit" className="f-button f-button-primary" style={{ padding: '2px 6px', fontSize: '10px', minHeight: 'auto', height: '22px' }}>Confirm</button>
                             </div>
                           </form>
@@ -759,8 +956,8 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                           isAdmin && (
                             <button 
                               onClick={() => {
-                                setActiveAddingAssetCode(code);
-                                setInlineAddStage('active_rental');
+                                setActiveAddingToolCode(code);
+                                setInlineAddOption('other_project');
                                 setInlineAddDestination('');
                               }}
                               className="f-button"
@@ -772,7 +969,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                         )}
 
                         {/* Cleared Button for Calibration Step */}
-                        {activeSched.stage === 'calibration' && isAdmin && (
+                        {(activeSched.stage === 'calibration' || (activeSched.destination && (activeSched.destination.toLowerCase().includes('calibration') || activeSched.destination.toLowerCase().includes('cal') || activeSched.destination.toLowerCase().includes('검교정')))) && isAdmin && (
                           <button 
                             onClick={() => {
                               setActiveClearSchedule(activeSched);
@@ -808,105 +1005,6 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
             </div>
           );
         })}
-      </div>
-    );
-  };
-
-  const renderGantt = () => {
-    // 10 sequence columns instead of month calendar days
-    const casesArray = Array.from({ length: 10 }, (_, i) => i + 1);
-
-    // Apply search filter to Gantt data
-    const filteredSchedules = schedules.filter(s => {
-      if (!searchTerm) return true;
-      const term = searchTerm.toLowerCase();
-      return (
-        (s.equipmentCode || '').toLowerCase().includes(term) ||
-        (s.model || '').toLowerCase().includes(term) ||
-        (s.destination || '').toLowerCase().includes(term) ||
-        (s.projectCode || '').toLowerCase().includes(term) ||
-        (s.userEmail || '').toLowerCase().includes(term) ||
-        (s.pmEmail || '').toLowerCase().includes(term) ||
-        (s.notes || '').toLowerCase().includes(term) ||
-        (s.id || '').toLowerCase().includes(term)
-      );
-    });
-
-    // Group schedules by equipment code
-    const uniqueAssets = Array.from(new Set(filteredSchedules.map(s => s.equipmentCode)));
-
-    return (
-      <div className="gantt-container f-card">
-        <div className="gantt-timeline-header">
-          <div className="gantt-asset-col-header">Instrument / Asset</div>
-          <div className="gantt-days-scroll-wrapper">
-            <div className="gantt-days-header-grid">
-              {casesArray.map(c => (
-                <div key={c} className="gantt-day-header-cell">
-                  <div className="day-number" style={{ fontSize: '13px' }}>Case {c}</div>
-                  <div className="day-month-short" style={{ fontSize: '9px' }}>Expected Case</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="gantt-timeline-rows">
-          {uniqueAssets.length > 0 ? (
-            uniqueAssets.map(code => {
-              // Get asset schedules sorted by sequenceOrder
-              const assetSchedules = filteredSchedules
-                .filter(s => s.equipmentCode === code)
-                .sort((a, b) => a.sequenceOrder - b.sequenceOrder);
-              const assetModel = assetSchedules[0]?.model || 'Unknown';
-              return (
-                <div key={code} className="gantt-row">
-                  <div className="gantt-asset-col">
-                    <div className="asset-title">{assetModel}</div>
-                    <div className="asset-sub">{code}</div>
-                  </div>
-                  <div className="gantt-days-scroll-wrapper">
-                    <div className="gantt-days-row-grid">
-                      {casesArray.map(c => (
-                        <div key={c} className="gantt-bg-cell" />
-                      ))}
-                      {/* Render scheduled block overlays sequentially by sequenceOrder */}
-                      {assetSchedules.map((sc, idx) => {
-                        const colStart = idx + 1;
-                        if (colStart > 10) return null; // restrict to Case 1-10 columns
-                        const hasConflict = isConflict(sc);
-                        const isCompleted = sc.status === 'Completed';
-
-                        return (
-                          <div 
-                            key={sc.id} 
-                            onClick={() => openEditModal(sc)}
-                            className={`gantt-schedule-bar ${sc.stage} ${hasConflict ? 'bar-conflict' : ''} ${sc.status.toLowerCase()}`}
-                            style={{
-                              gridColumnStart: colStart,
-                              gridColumnEnd: `span 1`,
-                              opacity: isCompleted ? 0.55 : 1,
-                              border: isCompleted ? '1px dashed var(--f-border)' : undefined,
-                              backgroundColor: isCompleted ? '#e0e0e0' : undefined,
-                              color: isCompleted ? 'var(--f-text-muted)' : undefined,
-                            }}
-                            title={`${sc.id}: ${sc.destination} (${sc.status})`}
-                          >
-                            <span className="bar-label">{isCompleted ? '✓ ' : ''}{sc.destination}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div style={{ textAlign: 'center', padding: '40px', color: 'var(--f-text-secondary)' }}>
-              No active schedules registered. Click "Add Schedule Case" to create one.
-            </div>
-          )}
-        </div>
       </div>
     );
   };
@@ -952,19 +1050,48 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
             )}
           </div>
 
-          <div className="view-mode-toggles">
+          <div className="scheduler-filter-controls" style={{ display: 'flex', gap: '8px' }}>
             <button 
-              className={`f-button ${viewMode === 'kanban' ? 'active' : ''}`}
-              onClick={() => setViewMode('kanban')}
+              type="button"
+              className={`f-button ${showPendingOnly ? 'active' : ''}`}
+              style={{
+                backgroundColor: showPendingOnly ? '#E65100' : 'transparent',
+                color: showPendingOnly ? 'white' : 'var(--f-text-secondary)',
+                border: '1px solid var(--f-border)',
+                fontWeight: showPendingOnly ? '600' : 'normal',
+                height: '38px'
+              }}
+              onClick={() => setShowPendingOnly(!showPendingOnly)}
             >
-              📋 Kanban Board
+              ⏳ Pending Approval Only
             </button>
-            <button 
-              className={`f-button ${viewMode === 'gantt' ? 'active' : ''}`}
-              onClick={() => setViewMode('gantt')}
-            >
-              📅 Gantt Timeline
-            </button>
+            {isAdmin && (
+              <>
+                <button 
+                  type="button"
+                  className="f-button"
+                  style={{ border: '1px solid var(--f-border)', height: '38px' }}
+                  onClick={handleSelectAllPending}
+                >
+                  ☑️ Select All Pending
+                </button>
+                <button 
+                  type="button"
+                  className="f-button"
+                  style={{
+                    backgroundColor: '#2E7D32',
+                    color: 'white',
+                    border: 'none',
+                    fontWeight: '600',
+                    height: '38px'
+                  }}
+                  onClick={handleBulkApproveRentals}
+                  disabled={selectedCardIds.filter(id => schedules.find(s => s.id === id)?.status === 'Pending_Approval').length === 0}
+                >
+                  ✔️ Bulk Approve Selected
+                </button>
+              </>
+            )}
           </div>
           {isAdmin && (
             <button 
@@ -1037,7 +1164,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
       {isLoading ? (
         <div style={{ textAlign: 'center', padding: '50px' }}>Loading tool schedules...</div>
       ) : (
-        viewMode === 'kanban' ? renderKanban() : renderGantt()
+        renderKanban()
       )}
 
       {/* BULK TRANSITION VERIFICATION MODAL */}
@@ -1045,7 +1172,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
         <div className="modal-overlay">
           <div className="f-card modal-content" style={{ maxWidth: '480px' }}>
             <div className="modal-header">
-              <h3>📋 Bulk {bulkTargetStage === 'calibration' ? 'Calibration' : 'Handover'} Verification</h3>
+              <h3>📋 Bulk Handover Verification</h3>
               <button className="modal-close" onClick={() => setIsBulkTransitionModalOpen(false)}>&times;</button>
             </div>
             <form onSubmit={(e) => {
@@ -1054,11 +1181,11 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
             }}>
               <div className="modal-scrollable-body" style={{ padding: '16px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--f-text-secondary)', marginBottom: '16px' }}>
-                  You are transitioning <strong>{selectedCardIds.length}</strong> items to <strong>{bulkTargetStage === 'calibration' ? 'Calibration' : 'Active Rental'}</strong> in bulk.
+                  You are transitioning <strong>{selectedCardIds.length}</strong> items to <strong>Active Rental</strong> in bulk.
                 </p>
                 
                 <div className="f-form-group">
-                  <label className="f-label">{bulkTargetStage === 'calibration' ? 'Calibration Specialist' : 'Handover PIC Name'}</label>
+                  <label className="f-label">Handover PIC Name</label>
                   <input 
                     type="text" 
                     className="f-input"
@@ -1070,15 +1197,26 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                 </div>
                 
                 <div className="f-form-group">
-                  <label className="f-label">{bulkTargetStage === 'calibration' ? 'Certificate Photo / ID' : 'Handover Photo File/Path'}</label>
+                  <label className="f-label">Upload Handover Photo (Required)</label>
                   <input 
-                    type="text" 
+                    type="file" 
+                    accept="image/*"
                     className="f-input"
-                    value={bulkHandoverPhoto}
-                    onChange={(e) => setBulkHandoverPhoto(e.target.value)}
-                    required
-                    placeholder="e.g. inspection-photo.png"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setBulkPhotoFile(file);
+                        setBulkHandoverPhoto(file.name);
+                      }
+                    }}
+                    required={!bulkHandoverPhoto}
+                    style={{ padding: '4px' }}
                   />
+                  {bulkHandoverPhoto && (
+                    <div style={{ fontSize: '11px', color: 'var(--f-success)', marginTop: '4px' }}>
+                      ✓ Selected: {bulkHandoverPhoto}
+                    </div>
+                  )}
                 </div>
                 
                 <div className="f-form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
@@ -1091,9 +1229,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                     style={{ cursor: 'pointer' }}
                   />
                   <label htmlFor="bulkChecklistVerified" className="f-label" style={{ margin: 0, cursor: 'pointer', fontSize: '12px', color: 'var(--f-text-primary)' }}>
-                    {bulkTargetStage === 'calibration' 
-                      ? 'Confirm calibration standard verified & sticker attached' 
-                      : 'Confirm physical inspection complete & safety checklist verified'}
+                    Confirm physical inspection complete & safety checklist verified
                   </label>
                 </div>
               </div>
@@ -1126,13 +1262,13 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                       <label className="f-label">Select Equipment</label>
                       <select 
                         className="f-input"
-                        value={formEquipmentCode} 
-                        onChange={(e) => setFormEquipmentCode(e.target.value)}
+                        value={formToolCode} 
+                        onChange={(e) => setFormToolCode(e.target.value)}
                         required
                       >
                         {assets.map(a => (
-                          <option key={a.assetCode} value={a.assetCode}>
-                            {a.model} - {a.assetCode} ({a.serialNumber})
+                          <option key={a.toolCode} value={a.toolCode}>
+                            ({a.model} _ {a.serialNumber || 'N/A'})
                           </option>
                         ))}
                       </select>
@@ -1219,14 +1355,14 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                     </div>
 
                     {/* Handover / Calibration Data Enforcement Section */}
-                    {(formStage === 'active_rental' || formStage === 'calibration') && (
+                    {showHandoverFields && (
                       <div className="handover-enforcement-section f-card" style={{ padding: '12px', marginBottom: '15px', backgroundColor: 'var(--f-bg-secondary)', border: '1px solid var(--f-border)', borderRadius: '4px' }}>
                         <h4 style={{ margin: '0 0 10px 0', fontSize: '13px', color: 'var(--f-text-primary)', fontWeight: 600 }}>
-                          📋 {formStage === 'calibration' ? 'Calibration Record' : 'Handover Record'} Required Fields
+                          📋 Handover Record Required Fields
                         </h4>
                         <div className="form-row" style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
                           <div className="f-form-group" style={{ flex: 1 }}>
-                            <label className="f-label" style={{ fontSize: '11px', color: 'var(--f-text-secondary)' }}>{formStage === 'calibration' ? 'Calibration Specialist' : 'Handover PIC Name'}</label>
+                            <label className="f-label" style={{ fontSize: '11px', color: 'var(--f-text-secondary)' }}>Handover PIC Name</label>
                             <input 
                               type="text" 
                               className="f-input"
@@ -1237,15 +1373,26 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                             />
                           </div>
                           <div className="f-form-group" style={{ flex: 1 }}>
-                            <label className="f-label" style={{ fontSize: '11px', color: 'var(--f-text-secondary)' }}>{formStage === 'calibration' ? 'Certificate Photo / ID' : 'Handover Photo File/Path'}</label>
+                            <label className="f-label" style={{ fontSize: '11px', color: 'var(--f-text-secondary)' }}>Upload Handover Photo (Required)</label>
                             <input 
-                              type="text" 
+                              type="file" 
+                              accept="image/*"
                               className="f-input"
-                              value={formHandoverPhoto}
-                              onChange={(e) => setFormHandoverPhoto(e.target.value)}
-                              required
-                              placeholder="e.g. inspection-photo-01.png"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  setPhotoFile(file);
+                                  setFormHandoverPhoto(file.name);
+                                }
+                              }}
+                              required={!formHandoverPhoto}
+                              style={{ padding: '4px' }}
                             />
+                            {formHandoverPhoto && (
+                              <div style={{ fontSize: '11px', color: 'var(--f-success)', marginTop: '4px' }}>
+                                ✓ Selected: {formHandoverPhoto}
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div className="f-form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '5px' }}>
@@ -1258,9 +1405,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                             style={{ cursor: 'pointer' }}
                           />
                           <label htmlFor="checklistVerified" className="f-label" style={{ margin: 0, cursor: 'pointer', fontSize: '11px', color: 'var(--f-text-primary)' }}>
-                            {formStage === 'calibration' 
-                              ? 'Confirm calibration standard verified & sticker attached' 
-                              : 'Confirm physical inspection complete & safety checklist verified'}
+                            Confirm physical inspection complete & safety checklist verified
                           </label>
                         </div>
                       </div>
@@ -1273,21 +1418,21 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                       <label className="f-label">Select Equipment (Select Multiple)</label>
                       <div className="asset-checkbox-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', maxHeight: '120px', overflowY: 'auto', border: '1px solid var(--f-border)', padding: '8px', borderRadius: '4px' }}>
                         {assets.map(a => {
-                          const isChecked = formSelectedAssets.includes(a.assetCode);
+                          const isChecked = formSelectedAssets.includes(a.toolCode);
                           return (
-                            <label key={a.assetCode} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', cursor: 'pointer', color: 'var(--f-text-primary)' }}>
+                            <label key={a.toolCode} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', cursor: 'pointer', color: 'var(--f-text-primary)' }}>
                               <input 
                                 type="checkbox"
                                 checked={isChecked}
                                 onChange={(e) => {
                                   if (e.target.checked) {
-                                    setFormSelectedAssets([...formSelectedAssets, a.assetCode]);
+                                    setFormSelectedAssets([...formSelectedAssets, a.toolCode]);
                                   } else {
-                                    setFormSelectedAssets(formSelectedAssets.filter(code => code !== a.assetCode));
+                                    setFormSelectedAssets(formSelectedAssets.filter(code => code !== a.toolCode));
                                   }
                                 }}
                               />
-                              <span>{a.model} - {a.assetCode}</span>
+                              <span>({a.model} _ {a.serialNumber || 'N/A'})</span>
                             </label>
                           );
                         })}
@@ -1360,7 +1505,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                           type="button" 
                           className="f-button" 
                           style={{ padding: '4px 8px', fontSize: '11px', minHeight: 'auto', height: '24px' }}
-                          onClick={() => setRelaySteps([...relaySteps, { stage: 'active_rental', destination: '' }])}
+                          onClick={() => setRelaySteps([...relaySteps, { option: 'other_project', destination: '' }])}
                         >
                           ➕ Add Relay Step
                         </button>
@@ -1383,38 +1528,45 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
 
                           <div className="form-row" style={{ display: 'flex', gap: '10px', marginBottom: '8px' }}>
                             <div className="f-form-group" style={{ flex: 1, marginBottom: 0 }}>
-                              <label className="f-label" style={{ fontSize: '11px' }}>Case Name / Stage Name</label>
-                              <input 
-                                type="text" 
-                                className="f-input"
-                                style={{ padding: '6px 10px', fontSize: '13px' }}
-                                value={step.destination}
-                                onChange={(e) => {
-                                  const updated = [...relaySteps];
-                                  updated[index].destination = e.target.value;
-                                  setRelaySteps(updated);
-                                }}
-                                required
-                                placeholder="ex) Calibration, Site B, ect..."
-                              />
-                            </div>
-                            <div className="f-form-group" style={{ flex: 1, marginBottom: 0 }}>
-                              <label className="f-label" style={{ fontSize: '11px' }}>Stage Target</label>
+                              <label className="f-label" style={{ fontSize: '11px' }}>Option</label>
                               <select 
                                 className="f-input"
                                 style={{ padding: '6px 10px', fontSize: '13px' }}
-                                value={step.stage}
+                                value={step.option}
                                 onChange={(e) => {
                                   const updated = [...relaySteps];
-                                  updated[index].stage = e.target.value as any;
+                                  const val = e.target.value as 'calibration' | 'other_project';
+                                  updated[index].option = val;
+                                  if (val === 'calibration') {
+                                    updated[index].destination = 'Calibration Lab';
+                                  } else {
+                                    updated[index].destination = '';
+                                  }
                                   setRelaySteps(updated);
                                 }}
                               >
-                                <option value="active_rental">Active Rental</option>
-                                <option value="calibration">Calibration Lab</option>
-                                <option value="ongoing">On Going</option>
+                                <option value="calibration">1. Calibration</option>
+                                <option value="other_project">2. Other Project</option>
                               </select>
                             </div>
+                            {step.option === 'other_project' && (
+                              <div className="f-form-group" style={{ flex: 1, marginBottom: 0 }}>
+                                <label className="f-label" style={{ fontSize: '11px' }}>Project Name</label>
+                                <input 
+                                  type="text" 
+                                  className="f-input"
+                                  style={{ padding: '6px 10px', fontSize: '13px' }}
+                                  value={step.destination}
+                                  onChange={(e) => {
+                                    const updated = [...relaySteps];
+                                    updated[index].destination = e.target.value;
+                                    setRelaySteps(updated);
+                                  }}
+                                  required
+                                  placeholder="Enter project name..."
+                                />
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -1457,7 +1609,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
             <form onSubmit={handleClearCalibration}>
               <div className="modal-scrollable-body" style={{ padding: '20px' }}>
                 <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: 'var(--f-bg-secondary)', borderRadius: '6px', border: '1px solid var(--f-border)', fontSize: '13px' }}>
-                  <strong>Asset:</strong> {activeClearSchedule.model} ({activeClearSchedule.equipmentCode})<br />
+                  <strong>Asset:</strong> {activeClearSchedule.model} ({activeClearSchedule.toolCode})<br />
                   <strong>Current Destination:</strong> {activeClearSchedule.destination}
                 </div>
 

@@ -14,7 +14,7 @@ checks = [
     (ROOT / "src" / "components" / "InventoryTable.tsx", [
         "Spec Summary",
         "Export Spec CSV",
-        "selectedAssetCodes.length",
+        "selectedToolCodes.length",
         "detailsAsset",
         "datasheet-summary-card",
         "downloadSelectedCsv",

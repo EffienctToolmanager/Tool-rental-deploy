@@ -32,7 +32,7 @@ def get_msal_token():
 # In-memory mock database to allow seamless serverless state updates
 INITIAL_ITEMS = [
     {
-        "id": "1", "equipmentCode": "FLK-87V-01", "brand": "Fluke", "model": "87V",
+        "id": "1", "toolCode": "FLK-87V-01", "brand": "Fluke", "model": "87V",
         "name": "Fluke 87V Industrial Multimeter", "equipmentType": "Industrial Digital Multimeter",
         "projectName": "Project Site A", "returnDate": "2026-06-30", "status": "Rented",
         "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0001",
@@ -57,7 +57,7 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "2", "equipmentCode": "FLK-1738-01", "brand": "Fluke", "model": "1738",
+        "id": "2", "toolCode": "FLK-1738-01", "brand": "Fluke", "model": "1738",
         "name": "Fluke 1738 Power Logger", "equipmentType": "Power Quality Logger",
         "projectName": "Project Site A", "returnDate": "2026-06-30", "status": "Rented",
         "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0001",
@@ -82,7 +82,7 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "3", "equipmentCode": "KEY-U1282A-01", "brand": "Keysight", "model": "U1282A",
+        "id": "3", "toolCode": "KEY-U1282A-01", "brand": "Keysight", "model": "U1282A",
         "name": "Keysight U1282A Handheld Digital Multimeter", "equipmentType": "Handheld Digital Multimeter",
         "projectName": "Project Site B", "returnDate": "2026-07-05", "status": "Rented",
         "userEmail": "tech@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0002",
@@ -107,7 +107,7 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "4", "equipmentCode": "KEY-U1461A-01", "brand": "Keysight", "model": "U1461A",
+        "id": "4", "toolCode": "KEY-U1461A-01", "brand": "Keysight", "model": "U1461A",
         "name": "Keysight U1461A Insulation Resistance Tester", "equipmentType": "Insulation Resistance Tester",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/keysight-u1461a.pdf",
@@ -127,7 +127,7 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "5", "equipmentCode": "HIO-IR4056-01", "brand": "Hioki", "model": "IR4056",
+        "id": "5", "toolCode": "HIO-IR4056-01", "brand": "Hioki", "model": "IR4056",
         "name": "Hioki IR4056 Insulation Tester", "equipmentType": "Insulation Tester",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/hioki-ir4056.pdf",
@@ -147,7 +147,7 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "6", "equipmentCode": "HIO-CM4375-01", "brand": "Hioki", "model": "CM4375",
+        "id": "6", "toolCode": "HIO-CM4375-01", "brand": "Hioki", "model": "CM4375",
         "name": "Hioki CM4375 AC/DC Clamp Meter", "equipmentType": "AC/DC Clamp Meter",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/hioki-cm4375.pdf",
@@ -167,7 +167,7 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "7", "equipmentCode": "MEG-MIT525-01", "brand": "Megger", "model": "MIT525",
+        "id": "7", "toolCode": "MEG-MIT525-01", "brand": "Megger", "model": "MIT525",
         "name": "Megger MIT525 Insulation Resistance Tester", "equipmentType": "High Voltage Insulation Tester",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/megger-mit525.pdf",
@@ -187,7 +187,7 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "8", "equipmentCode": "MEG-DLRO10HD-01", "brand": "Megger", "model": "DLRO10HD",
+        "id": "8", "toolCode": "MEG-DLRO10HD-01", "brand": "Megger", "model": "DLRO10HD",
         "name": "Megger DLRO10HD Low Resistance Ohmmeter", "equipmentType": "Low Resistance Ohmmeter",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/megger-dlro10hd.pdf",
@@ -330,7 +330,7 @@ for idx, (prefix, brand, model, product_name, equipment_type) in enumerate(ADDIT
     code_model = model.upper().replace(" ", "").replace("+", "P").replace("-", "")
     INITIAL_ITEMS.append({
         "id": str(idx),
-        "equipmentCode": f"{prefix}-{code_model}-01",
+        "toolCode": f"{prefix}-{code_model}-01",
         "brand": brand,
         "model": model,
         "name": f"{brand} {model} {product_name}",
@@ -352,7 +352,7 @@ for idx, (prefix, brand, model, product_name, equipment_type) in enumerate(ADDIT
 INITIAL_SCHEDULED_CASES = [
     {
         "id": "SCH-202606-0001",
-        "equipmentCode": "FLK-87V-01",
+        "toolCode": "FLK-87V-01",
         "model": "87V",
         "sequenceOrder": 0,
         "stage": "active_rental",
@@ -369,7 +369,7 @@ INITIAL_SCHEDULED_CASES = [
     },
     {
         "id": "SCH-202606-0002",
-        "equipmentCode": "FLK-87V-01",
+        "toolCode": "FLK-87V-01",
         "model": "87V",
         "sequenceOrder": 1,
         "stage": "calibration",
@@ -386,7 +386,7 @@ INITIAL_SCHEDULED_CASES = [
     },
     {
         "id": "SCH-202606-0003",
-        "equipmentCode": "FLK-87V-01",
+        "toolCode": "FLK-87V-01",
         "model": "87V",
         "sequenceOrder": 2,
         "stage": "ongoing",
@@ -400,7 +400,7 @@ INITIAL_SCHEDULED_CASES = [
     },
     {
         "id": "SCH-202606-0004",
-        "equipmentCode": "FLK-1738-01",
+        "toolCode": "FLK-1738-01",
         "model": "1738",
         "sequenceOrder": 0,
         "stage": "active_rental",
@@ -433,7 +433,7 @@ async def get_sharepoint_list():
     }
 
 class CartItem(BaseModel):
-    equipmentCode: str
+    toolCode: str
     photoUrl: Optional[str] = None
 
 class BulkRentalRequest(BaseModel):
@@ -458,12 +458,12 @@ async def create_rental_record(rental: BulkRentalRequest):
         # find model
         model = "Unknown Model"
         for i in db_storage.get("items", []):
-            if i["equipmentCode"] == item.equipmentCode:
+            if i["toolCode"] == item.toolCode:
                 model = i.get("model", "Unknown Model")
                 break
                 
         # find max sequence
-        item_schedules = [s for s in schedules if s["equipmentCode"] == item.equipmentCode]
+        item_schedules = [s for s in schedules if s["toolCode"] == item.toolCode]
         max_seq = -1
         for s in item_schedules:
             if s.get("sequenceOrder", 0) > max_seq:
@@ -476,7 +476,7 @@ async def create_rental_record(rental: BulkRentalRequest):
         
         new_case = {
             "id": new_id,
-            "equipmentCode": item.equipmentCode,
+            "toolCode": item.toolCode,
             "model": model,
             "sequenceOrder": new_seq,
             "stage": "active_rental",
@@ -490,7 +490,8 @@ async def create_rental_record(rental: BulkRentalRequest):
             "projectCode": rental.projectCode,
             "handoverPic": "Renter Checkout",
             "handoverPhoto": item.photoUrl,
-            "checklistVerified": True
+            "checklistVerified": True,
+            "caseId": rental.caseId
         }
         schedules.append(new_case)
         
@@ -498,7 +499,7 @@ async def create_rental_record(rental: BulkRentalRequest):
     
     # Sync states for all items
     for item in rental.items:
-        sync_asset_state(item.equipmentCode)
+        sync_asset_state(item.toolCode)
         
     logger.info(f"Database updated. Case {rental.caseId} schedules loaded as Pending_Approval.")
     
@@ -510,7 +511,7 @@ async def create_rental_record(rental: BulkRentalRequest):
 
 
 class ExtendItem(BaseModel):
-    equipmentCode: str
+    toolCode: str
     newReturnDate: str
 
 class BulkExtendRequest(BaseModel):
@@ -520,13 +521,13 @@ class BulkExtendRequest(BaseModel):
 @app.post("/api/sharepoint/extend")
 async def extend_rental_record(request: BulkExtendRequest):
     logger.info(f"Extension request received for Case {request.caseId}")
-    extend_map = {item.equipmentCode: item.newReturnDate for item in request.items}
+    extend_map = {item.toolCode: item.newReturnDate for item in request.items}
     
     updated_items = []
     for item in db_storage["items"]:
-        if item["equipmentCode"] in extend_map:
+        if item["toolCode"] in extend_map:
             item_copy = item.copy()
-            item_copy["returnDate"] = extend_map[item["equipmentCode"]]
+            item_copy["returnDate"] = extend_map[item["toolCode"]]
             updated_items.append(item_copy)
         else:
             updated_items.append(item)
@@ -548,7 +549,7 @@ async def upload_file_to_sharepoint(filename: str, file: UploadFile = File(...))
     }
 
 class ReturnItem(BaseModel):
-    equipmentCode: str
+    toolCode: str
 
 class BulkReturnRequest(BaseModel):
     caseId: str
@@ -557,11 +558,11 @@ class BulkReturnRequest(BaseModel):
 @app.post("/api/sharepoint/return")
 async def return_rental_record(request: BulkReturnRequest):
     logger.info(f"Return request received for Case {request.caseId}")
-    returned_codes = {item.equipmentCode for item in request.items}
+    returned_codes = {item.toolCode for item in request.items}
     
     updated_items = []
     for item in db_storage["items"]:
-        if item["equipmentCode"] in returned_codes:
+        if item["toolCode"] in returned_codes:
             # Restore status to Available, clearing out rental metadata while keeping catalog/spec fields
             item_copy = item.copy()
             item_copy.update({
@@ -583,58 +584,11 @@ async def return_rental_record(request: BulkReturnRequest):
         "message": f"Case {request.caseId} returned and items status restored to Available."
     }
 
-# --- Analytics & Compliance Dashboard API Mocking [NEW] ---
-# 차트가 Loading에서 평생 멈추지 않고 미려하게 표현되도록 분석 통계 라우트 추가
-
-@app.get("/api/reports/analytics")
-async def get_analytics_data():
-    # Dynamic calculations based on current status (Rented vs Available)
-    rented_count = sum(1 for x in db_storage["items"] if x["status"] == "Rented")
-    available_count = sum(1 for x in db_storage["items"] if x["status"] == "Available")
-    
-    project_map = {}
-    for item in db_storage["items"]:
-        if item["status"] == "Rented" and item["projectName"]:
-            proj = item["projectName"]
-            project_map[proj] = project_map.get(proj, 0) + 1
-            
-    rentals_by_project = [{"name": proj, "count": count} for proj, count in project_map.items()]
-    if not rentals_by_project:
-        rentals_by_project = [{"name": "Project Site A", "count": 2}, {"name": "Project Site B", "count": 1}]
-        
-    return {
-        "rentals_by_project": rentals_by_project,
-        "calibration_status": [
-            {"name": "Safe", "value": available_count + 1, "color": "#4CAF50"},
-            {"name": "Warning", "value": 2, "color": "#FFC107"},
-            {"name": "Expired", "value": 1, "color": "#F44336"}
-        ]
-    }
-
-@app.get("/api/reports/export")
-async def export_monthly_report():
-    # 실시간 모크 CSV 다운로드 내보내기 스트림 구현
-    from fastapi.responses import StreamingResponse
-    import io
-    
-    output = io.StringIO()
-    output.write("Asset Code,Asset Name,Project Name,Status,User Email,Return Date\n")
-    for item in db_storage["items"]:
-        output.write(f"{item['equipmentCode']},{item['name']},{item['projectName']},{item['status']},{item['userEmail']},{item['returnDate']}\n")
-        
-    response = StreamingResponse(
-        iter([output.getvalue()]),
-        media_type="text/csv"
-    )
-    response.headers["Content-Disposition"] = "attachment; filename=AssetFlow_Report_Staging.csv"
-    return response
-
-
 # --- Successive Scheduling Case API Endpoints [NEW] ---
 
 class ScheduledCase(BaseModel):
     id: str
-    equipmentCode: str
+    toolCode: str
     model: str
     sequenceOrder: int
     stage: str
@@ -649,6 +603,7 @@ class ScheduledCase(BaseModel):
     handoverPic: Optional[str] = None
     handoverPhoto: Optional[str] = None
     checklistVerified: Optional[bool] = None
+    caseId: Optional[str] = None
 
 from fastapi import Form
 
@@ -674,13 +629,13 @@ async def clear_calibration_case(
     if not target_schedule:
         raise HTTPException(status_code=404, detail="Scheduled case not found")
         
-    equipment_code = target_schedule["equipmentCode"]
+    tool_code = target_schedule["toolCode"]
     model = target_schedule["model"]
     
     # Find serial number of the asset and update calibration date in database
     serial_number = "UNKNOWN"
     for item in db_storage.get("items", []):
-        if item.get("equipmentCode") == equipment_code:
+        if item.get("toolCode") == tool_code:
             serial_number = item.get("serialNumber") or item.get("Serial_Number") or "UNKNOWN"
             item["calDate"] = calibration_date
             if "Calibration_Date" in item:
@@ -703,7 +658,7 @@ async def clear_calibration_case(
         
     sanitized_model = sanitize(model)
     sanitized_serial = sanitize(serial_number)
-    sanitized_code = sanitize(equipment_code)
+    sanitized_code = sanitize(tool_code)
     
     pdf_filename = f"{calibration_date}_{sanitized_code}_{sanitized_model}_{sanitized_serial}.pdf"
     
@@ -731,10 +686,9 @@ async def clear_calibration_case(
             s["handoverPic"] = "System Calibration"
             s["handoverPhoto"] = f"{pdf_filename}; {image_filename}"
             s["checklistVerified"] = True
-            break
             
     db_storage["schedules"] = schedules
-    sync_asset_state(equipment_code)
+    sync_asset_state(tool_code)
     
     return {
         "status": "success",
@@ -759,18 +713,38 @@ async def approve_schedule_case(schedule_id: str):
         raise HTTPException(status_code=404, detail="Scheduled case not found")
         
     db_storage["schedules"] = schedules
-    sync_asset_state(target["equipmentCode"])
+    sync_asset_state(target["toolCode"])
     return {
         "status": "success",
         "message": f"Scheduled case {schedule_id} approved.",
         "data": target
     }
 
-def sync_asset_state(equipment_code: str):
-    schedules = [s for s in db_storage.get("schedules", []) if s["equipmentCode"] == equipment_code]
+@app.post("/api/sharepoint/schedule/approve-bulk")
+async def approve_schedule_cases_bulk(schedule_ids: List[str]):
+    logger.info(f"Bulk approving {len(schedule_ids)} scheduled cases.")
+    schedules = db_storage.get("schedules", [])
+    eq_codes_to_sync = set()
+    approved_count = 0
+    for s in schedules:
+        if s["id"] in schedule_ids and s["status"] == "Pending_Approval":
+            s["status"] = "In_Progress"
+            eq_codes_to_sync.add(s["toolCode"])
+            approved_count += 1
+    db_storage["schedules"] = schedules
+    for code in eq_codes_to_sync:
+        sync_asset_state(code)
+    return {
+        "status": "success",
+        "message": f"Successfully approved {approved_count} scheduled cases.",
+        "count": approved_count
+    }
+
+def sync_asset_state(tool_code: str):
+    schedules = [s for s in db_storage.get("schedules", []) if s["toolCode"] == tool_code]
     if not schedules:
         for item in db_storage["items"]:
-            if item["equipmentCode"] == equipment_code:
+            if item["toolCode"] == tool_code:
                 case_id = item.get("caseId", "")
                 if item.get("status") == "Rented" and case_id and not case_id.startswith("SCH-"):
                     return
@@ -788,7 +762,7 @@ def sync_asset_state(equipment_code: str):
     active_schedules = [s for s in schedules if s.get("status") != "Completed"]
     if not active_schedules:
         for item in db_storage["items"]:
-            if item["equipmentCode"] == equipment_code:
+            if item["toolCode"] == tool_code:
                 item.update({
                     "projectName": "Warehouse",
                     "returnDate": "",
@@ -802,31 +776,42 @@ def sync_asset_state(equipment_code: str):
     # Sort active schedules by sequenceOrder to find the first upcoming step
     selected_case = sorted(active_schedules, key=lambda x: x.get("sequenceOrder", 0))[0]
     
-    stage = selected_case["stage"]
-    if stage == "active_rental":
-        # If it's a rental request but not approved/active yet, mark as Reserved
-        if selected_case.get("status") == "In_Progress":
+    # If the first active schedule has not started yet (not In_Progress), it is physically in the warehouse
+    if selected_case.get("status") != "In_Progress":
+        status = "Available"
+        project_name = "Warehouse"
+    else:
+        stage = selected_case["stage"]
+        if stage == "active_rental":
             status = "Rented"
-        else:
+            project_name = selected_case["destination"]
+        elif stage == "calibration":
+            status = "Calibration"
+            project_name = selected_case.get("destination") or "Calibration Lab"
+        else:  # ongoing
             status = "Reserved"
-        project_name = selected_case["destination"]
-    elif stage == "calibration":
-        status = "Calibration"
-        project_name = selected_case.get("destination") or "Calibration Lab"
-    else:  # ongoing
-        status = "Reserved"
-        project_name = selected_case.get("destination") or "Warehouse"
+            project_name = selected_case.get("destination") or "Warehouse"
 
     for item in db_storage["items"]:
-        if item["equipmentCode"] == equipment_code:
-            item.update({
-                "status": status,
-                "projectName": project_name,
-                "returnDate": selected_case.get("endDate") or "",
-                "userEmail": selected_case.get("userEmail") or "",
-                "pmEmail": selected_case.get("pmEmail") or "",
-                "caseId": selected_case["id"]
-            })
+        if item["toolCode"] == tool_code:
+            if status == "Available":
+                item.update({
+                    "status": "Available",
+                    "projectName": "Warehouse",
+                    "returnDate": "",
+                    "userEmail": "",
+                    "pmEmail": "",
+                    "caseId": ""
+                })
+            else:
+                item.update({
+                    "status": status,
+                    "projectName": project_name,
+                    "returnDate": selected_case.get("endDate") or "",
+                    "userEmail": selected_case.get("userEmail") or "",
+                    "pmEmail": selected_case.get("pmEmail") or "",
+                    "caseId": selected_case.get("caseId") or selected_case["id"]
+                })
             break
 
 @app.get("/api/sharepoint/schedule/list")
@@ -844,7 +829,7 @@ async def create_schedule_cases_bulk(cases: List[ScheduledCase]):
     eq_codes_to_sync = set()
     for case in cases:
         schedules.append(case.dict())
-        eq_codes_to_sync.add(case.equipmentCode)
+        eq_codes_to_sync.add(case.toolCode)
     db_storage["schedules"] = schedules
     for code in eq_codes_to_sync:
         sync_asset_state(code)
@@ -860,7 +845,7 @@ async def create_schedule_case(case: ScheduledCase):
     schedules = db_storage.get("schedules", [])
     schedules.append(case.dict())
     db_storage["schedules"] = schedules
-    sync_asset_state(case.equipmentCode)
+    sync_asset_state(case.toolCode)
     return {
         "status": "success",
         "message": f"Scheduled case {case.id} created.",
@@ -878,7 +863,7 @@ async def update_schedule_cases_bulk(cases: List[ScheduledCase]):
         if s["id"] in updated_ids:
             case_data = updated_ids[s["id"]].dict()
             schedules[idx] = case_data
-            eq_codes_to_sync.add(case_data["equipmentCode"])
+            eq_codes_to_sync.add(case_data["toolCode"])
             
     db_storage["schedules"] = schedules
     for code in eq_codes_to_sync:
@@ -897,7 +882,7 @@ async def delete_schedule_cases_bulk(case_ids: List[str]):
     eq_codes_to_sync = set()
     for s in schedules:
         if s["id"] in case_ids:
-            eq_codes_to_sync.add(s["equipmentCode"])
+            eq_codes_to_sync.add(s["toolCode"])
             
     filtered = [s for s in schedules if s["id"] not in case_ids]
     db_storage["schedules"] = filtered
@@ -926,7 +911,7 @@ async def update_schedule_case(case: ScheduledCase):
         raise HTTPException(status_code=404, detail="Scheduled case not found")
         
     db_storage["schedules"] = schedules
-    sync_asset_state(case.equipmentCode)
+    sync_asset_state(case.toolCode)
     return {
         "status": "success",
         "message": f"Scheduled case {case.id} updated and assets synced.",
@@ -951,7 +936,7 @@ async def delete_schedule_case(case_id: str):
         
     db_storage["schedules"] = filtered
     if deleted_case:
-        sync_asset_state(deleted_case["equipmentCode"])
+        sync_asset_state(deleted_case["toolCode"])
         
     return {
         "status": "success",

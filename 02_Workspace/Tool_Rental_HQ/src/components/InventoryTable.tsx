@@ -5,8 +5,8 @@ import './InventoryTable.css';
 interface InventoryTableProps {
   assets: Asset[];
   schedules?: ScheduledCase[];
-  selectedAssetCodes: string[];
-  setSelectedAssetCodes: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedToolCodes: string[];
+  setSelectedToolCodes: React.Dispatch<React.SetStateAction<string[]>>;
   onNavigateToCheckout: () => void;
 }
 
@@ -15,7 +15,7 @@ const csvEscape = (value: unknown) => {
   return `"${raw.replace(/"/g, '""')}"`;
 };
 
-const getAssetCode = (asset: any) => asset.Asset_Code || asset.assetCode;
+const getToolCode = (asset: any) => asset.Tool_Code || asset.toolCode;
 const getBrand = (asset: any) => asset.Brand || asset.brand || '—';
 const getModel = (asset: any) => asset.Asset_Model || asset.model || '—';
 
@@ -79,8 +79,8 @@ const SpecSummaryCard: React.FC<{ asset: Asset; compact?: boolean }> = ({ asset,
 const InventoryTable: React.FC<InventoryTableProps> = ({ 
   assets: initialAssets, 
   schedules = [],
-  selectedAssetCodes, 
-  setSelectedAssetCodes, 
+  selectedToolCodes, 
+  setSelectedToolCodes, 
   onNavigateToCheckout 
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -103,11 +103,11 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
     setSortConfig({ key, direction });
   };
 
-  const handleCheckboxChange = (assetCode: string, checked: boolean) => {
+  const handleCheckboxChange = (toolCode: string, checked: boolean) => {
     if (checked) {
-      setSelectedAssetCodes(prev => [...prev, assetCode]);
+      setSelectedToolCodes(prev => [...prev, toolCode]);
     } else {
-      setSelectedAssetCodes(prev => prev.filter(code => code !== assetCode));
+      setSelectedToolCodes(prev => prev.filter(code => code !== toolCode));
     }
   };
 
@@ -118,7 +118,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(asset => {
-        const code = (asset.Asset_Code || asset.assetCode || '').toLowerCase();
+        const code = (asset.Tool_Code || asset.toolCode || '').toLowerCase();
         const brand = (asset.Brand || asset.brand || '').toLowerCase();
         const model = (asset.Asset_Model || asset.model || '').toLowerCase();
         const type = (asset.specSummary?.equipmentType || '').toLowerCase();
@@ -142,7 +142,13 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
         let av = a[key] || a[key.replace(/^[A-Z]/, (c) => c.toLowerCase())] || '';
         let bv = b[key] || b[key.replace(/^[A-Z]/, (c) => c.toLowerCase())] || '';
 
-        if (key === 'Location_Zone' || key === 'Location' || key === 'location') {
+        if (key === 'zone') {
+          av = a.Location_Zone || a.zone || '';
+          bv = b.Location_Zone || b.zone || '';
+        } else if (key === 'rack') {
+          av = a.Location_Rack || a.rack || '';
+          bv = b.Location_Rack || b.rack || '';
+        } else if (key === 'Location_Zone' || key === 'Location' || key === 'location') {
           av = `${a.Location_Zone || a.zone || ''}/${a.Location_Rack || a.rack || ''}`;
           bv = `${b.Location_Zone || b.zone || ''}/${b.Location_Rack || b.rack || ''}`;
         } else if (key === 'serialNumber' || key === 'Serial_Number') {
@@ -154,9 +160,9 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
         } else if (key === 'Current_Location' || key === 'currentLocation') {
           av = a.Current_Location || a.currentLocation || '';
           bv = b.Current_Location || b.currentLocation || '';
-        } else if (key === 'Asset_Code' || key === 'assetCode') {
-          av = a.Asset_Code || a.assetCode || '';
-          bv = b.Asset_Code || b.assetCode || '';
+        } else if (key === 'Tool_Code' || key === 'toolCode') {
+          av = a.Tool_Code || a.toolCode || '';
+          bv = b.Tool_Code || b.toolCode || '';
         } else if (key === 'Brand' || key === 'brand') {
           av = a.Brand || a.brand || '';
           bv = b.Brand || b.brand || '';
@@ -178,11 +184,11 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
   };
 
   const displayAssets = getSortedAndFilteredAssets();
-  const selectedAssets = initialAssets.filter(asset => selectedAssetCodes.includes(getAssetCode(asset)));
+  const selectedAssets = initialAssets.filter(asset => selectedToolCodes.includes(getToolCode(asset)));
 
   const downloadSelectedCsv = () => {
     const headers = [
-      'Asset Code', 'Brand', 'Model', 'Serial Number', 'Location', 'Equipment Type', 'Measurement Range', 'Accuracy',
+      'Tool Code', 'Brand', 'Model', 'Serial Number', 'Zone', 'Rack', 'Equipment Type', 'Measurement Range', 'Accuracy',
       'Voltage Rating', 'Current Rating', 'Safety Category', 'Connectivity', 'Power Source',
       'Calibration Cycle', 'Key Features', 'Typical Use', 'Datasheet PDF URL'
     ];
@@ -190,9 +196,10 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
     const rows = selectedAssets.map(asset => {
       const spec = asset.specSummary;
       const serial = asset.serialNumber || asset.Serial_Number || '';
-      const loc = `${asset.Location_Zone || asset.zone || ''}/${asset.Location_Rack || asset.rack || ''}`;
+      const zoneVal = asset.Location_Zone || asset.zone || '';
+      const rackVal = asset.Location_Rack || asset.rack || '';
       return [
-        getAssetCode(asset), getBrand(asset), getModel(asset), serial, loc, spec?.equipmentType, spec?.measurementRange,
+        getToolCode(asset), getBrand(asset), getModel(asset), serial, zoneVal, rackVal, spec?.equipmentType, spec?.measurementRange,
         spec?.accuracy, spec?.voltageRating, spec?.currentRating, spec?.safetyCategory, spec?.connectivity,
         spec?.powerSource, spec?.calibrationCycle, spec?.keyFeatures.join('; '), spec?.typicalUse, asset.datasheetUrl
       ].map(csvEscape).join(',');
@@ -210,12 +217,12 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
 
   return (
     <div>
-      {selectedAssetCodes.length > 0 && (
+      {selectedToolCodes.length > 0 && (
         <div className="inventory-selection-bar">
           <div className="selection-bar-info">
             <span style={{ fontSize: '18px' }}>🛒</span>
             <span className="selection-bar-text">
-              <strong>{selectedAssetCodes.length}</strong> planned rental assets selected.
+              <strong>{selectedToolCodes.length}</strong> planned rental assets selected.
             </span>
           </div>
           <div className="selection-bar-actions">
@@ -281,9 +288,10 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
             <tr>
               <th className="table-th-select">Select</th>
               <th onClick={() => handleSort('Current_Status')}>Status</th>
-              <th onClick={() => handleSort('Location_Zone')}>Toolcode/Rack</th>
+              <th onClick={() => handleSort('Tool_Code')}>Tool Code</th>
+              <th onClick={() => handleSort('zone')}>Zone</th>
+              <th onClick={() => handleSort('rack')}>Rack</th>
               <th onClick={() => handleSort('Current_Location')}>Current location</th>
-              <th onClick={() => handleSort('Asset_Code')}>Asset Code</th>
               <th onClick={() => handleSort('Brand')}>Brand</th>
               <th onClick={() => handleSort('Asset_Model')}>Model</th>
               <th onClick={() => handleSort('serialNumber')}>Serial Number</th>
@@ -296,14 +304,15 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
             {displayAssets.map((asset: any, index) => {
               const daysLeft = calculateDaysUntilCal(asset.Calibration_Date || asset.calDate);
               const status = asset.Current_Status || asset.status;
-              const location = `${asset.Location_Zone || asset.zone}/${asset.Location_Rack || asset.rack}`;
+              const zone = asset.Location_Zone || asset.zone || '';
+              const rack = asset.Location_Rack || asset.rack || '';
               const currentLocation = asset.Current_Location || asset.currentLocation;
-              const assetCode = getAssetCode(asset);
-              const isSelected = selectedAssetCodes.includes(assetCode);
+              const toolCode = getToolCode(asset);
+              const isSelected = selectedToolCodes.includes(toolCode);
               const isAvailable = status === 'Available';
               const serialNumber = asset.serialNumber || asset.Serial_Number || '—';
               
-              const assetSchedules = schedules.filter((s: any) => s.equipmentCode === assetCode);
+              const assetSchedules = schedules.filter((s: any) => s.toolCode === toolCode);
               const sortedSchedules = [...assetSchedules].sort((a: any, b: any) => {
                 if (a.sequenceOrder !== b.sequenceOrder) {
                   return a.sequenceOrder - b.sequenceOrder;
@@ -322,7 +331,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
               if (isSelected) rowClass += (rowClass ? ' ' : '') + 'row-selected';
 
               return (
-                <tr key={assetCode || index} className={rowClass}>
+                <tr key={toolCode || index} className={rowClass}>
                   <td className="table-td-select">
                     <input 
                       type="checkbox"
@@ -334,14 +343,14 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                         status === 'Reserved' ? 'reserved' : 
                         'rented'
                       }`}
-                      onChange={(e) => handleCheckboxChange(assetCode, e.target.checked)}
+                      onChange={(e) => handleCheckboxChange(toolCode, e.target.checked)}
                       title={
                         isAvailable ? 'Add to rental cart' : 
                         status === 'Calibration' ? 'Equipment in Calibration cannot be rented.' :
                         status === 'Reserved' ? 'Reserved equipment cannot be rented.' :
                         'Rented assets cannot be selected.'
                       }
-                      data-agent-id={`select-${assetCode}`}
+                      data-agent-id={`select-${toolCode}`}
                       data-agent-action="select-asset"
                     />
                   </td>
@@ -355,7 +364,9 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                       {status?.toUpperCase()}
                     </span>
                   </td>
-                  <td>{location}</td>
+                  <td className="table-td-code">{toolCode}</td>
+                  <td>{zone}</td>
+                  <td>{rack}</td>
                   <td className={`table-td-location ${currentLocation === 'Warehouse' ? 'warehouse' : 'field'}`}>
                     <div className="location-cell-content">
                       <span className="location-name">{currentLocation}</span>
@@ -371,7 +382,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                           
                           {/* Rich Tooltip Card */}
                           <div className="next-use-tooltip">
-                            <div className="tooltip-header">Upcoming Schedules for {assetCode}</div>
+                            <div className="tooltip-header">Upcoming Schedules for {toolCode}</div>
                             <div className="tooltip-timeline">
                               {nextSchedules.map((s: any, idx: number) => (
                                 <div key={s.id || idx} className="tooltip-timeline-item">
@@ -405,7 +416,6 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                       )}
                     </div>
                   </td>
-                  <td className="table-td-code">{assetCode}</td>
                   <td>{getBrand(asset)}</td>
                   <td>
                     <span className="model-hover-target">
@@ -421,8 +431,8 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                       className="row-more-button" 
                       type="button" 
                       onClick={() => setDetailsAsset(asset)} 
-                      aria-label={`Open details for ${assetCode}`}
-                      data-agent-id={`more-details-${assetCode}`}
+                      aria-label={`Open details for ${toolCode}`}
+                      data-agent-id={`more-details-${toolCode}`}
                       data-agent-action="open-details"
                     >
                       ⋯
@@ -441,7 +451,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
             <div className="details-modal-header">
               <div>
                 <h3>{getBrand(detailsAsset)} {getModel(detailsAsset)}</h3>
-                <p>{getAssetCode(detailsAsset)} · standardized mock datasheet template</p>
+                <p>{getToolCode(detailsAsset)} · standardized mock datasheet template</p>
               </div>
               <button 
                 type="button" 

@@ -7,7 +7,7 @@ import { type Rental } from '../types';
 const mockRentals: Rental[] = [
   {
     caseId: 'CASE-001',
-    assetCode: 'EQ-001',
+    toolCode: 'EQ-001',
     model: 'Multimeter 90',
     user: 'renter@ge.com',
     projectCode: 'PRJ-101',

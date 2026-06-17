@@ -8,13 +8,13 @@ interface ActiveRentalsProps {
 }
 
 type ReturnAssetItem = {
-  assetCode: string;
+  toolCode: string;
   model: string;
   photo: File | null;
 };
 
 type ExtendAssetItem = {
-  assetCode: string;
+  toolCode: string;
   model: string;
   currentReturnDate: string;
   newReturnDate: string;
@@ -48,7 +48,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
     // Check if all selected items have a photo attached
     const missingPhotos = assetsToReturn.filter(item => !item.photo);
     if (missingPhotos.length > 0) {
-      const codes = missingPhotos.map(item => item.assetCode).join(', ');
+      const codes = missingPhotos.map(item => item.toolCode).join(', ');
       alert(`⚠️ The following assets are missing individual return condition photos:\n${codes}\n\nPlease upload a 1:1 photo for all assets being returned.`);
       return;
     }
@@ -61,7 +61,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
         if (item.photo) {
           const uploadPayload = new FormData();
           uploadPayload.append('file', item.photo);
-          await fetch(`/api/sharepoint/upload?filename=${item.assetCode}_return.jpg`, {
+          await fetch(`/api/sharepoint/upload?filename=${item.toolCode}_return.jpg`, {
             method: 'POST',
             body: uploadPayload
           });
@@ -76,7 +76,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
         },
         body: JSON.stringify({
           caseId: returnCaseId,
-          items: assetsToReturn.map(item => ({ equipmentCode: item.assetCode }))
+          items: assetsToReturn.map(item => ({ toolCode: item.toolCode }))
         })
       });
 
@@ -108,7 +108,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
     });
 
     if (invalidDates.length > 0) {
-      const codes = invalidDates.map(item => item.assetCode).join(', ');
+      const codes = invalidDates.map(item => item.toolCode).join(', ');
       alert(`⚠️ The extension return date for the following assets is equal to or prior to the current return date:\n${codes}\n\nThe new expected return date must be after the current return date.`);
       return;
     }
@@ -124,7 +124,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
         body: JSON.stringify({
           caseId: extendCaseId,
           items: assetsToExtend.map(item => ({
-            equipmentCode: item.assetCode,
+            toolCode: item.toolCode,
             newReturnDate: item.newReturnDate
           }))
         })
@@ -271,9 +271,9 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                 <h4 className="assets-list-title">Rented Assets ({items.length})</h4>
                 <ul className="assets-list">
                   {items.map(item => (
-                    <li key={item.assetCode} className="asset-item">
+                    <li key={item.toolCode} className="asset-item">
                       <span className="asset-info">
-                        {item.assetCode} <span className="asset-info-model">- {(item as any).model || 'Unknown Model'}</span>
+                        {item.toolCode} <span className="asset-info-model">- {(item as any).model || 'Unknown Model'}</span>
                       </span>
                       <div className="asset-item-actions">
                         <button 
@@ -281,7 +281,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                           onClick={() => {
                             setExtendCaseId(caseId);
                             setAssetsToExtend([{
-                              assetCode: item.assetCode,
+                              toolCode: item.toolCode,
                               model: (item as any).model || 'Unknown Model',
                               currentReturnDate: expectedDate,
                               newReturnDate: expectedDate
@@ -296,7 +296,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                           onClick={() => {
                             setReturnCaseId(caseId);
                             setAssetsToReturn([{
-                              assetCode: item.assetCode,
+                              toolCode: item.toolCode,
                               model: (item as any).model || 'Unknown Model',
                               photo: null
                             }]);
@@ -318,7 +318,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                   onClick={() => {
                     setExtendCaseId(caseId);
                     setAssetsToExtend(items.map(item => ({
-                      assetCode: item.assetCode,
+                      toolCode: item.toolCode,
                       model: (item as any).model || 'Unknown Model',
                       currentReturnDate: expectedDate,
                       newReturnDate: expectedDate
@@ -332,7 +332,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                   onClick={() => {
                     setReturnCaseId(caseId);
                     setAssetsToReturn(items.map(item => ({
-                      assetCode: item.assetCode,
+                      toolCode: item.toolCode,
                       model: (item as any).model || 'Unknown Model',
                       photo: null
                     })));
@@ -362,15 +362,15 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                 <table className="modal-table">
                   <thead className="modal-thead">
                     <tr>
-                      <th className="modal-th">Asset Code</th>
+                      <th className="modal-th">Tool Code</th>
                       <th className="modal-th">Model</th>
                       <th className="modal-th-photo">Return Photo (1:1 Required)</th>
                     </tr>
                   </thead>
                   <tbody>
                     {assetsToReturn.map(item => (
-                      <tr key={item.assetCode} className="modal-tr">
-                        <td className="modal-td-code">{item.assetCode}</td>
+                      <tr key={item.toolCode} className="modal-tr">
+                        <td className="modal-td-code">{item.toolCode}</td>
                         <td className="modal-td-model">{item.model}</td>
                         <td className="modal-td">
                           <input 
@@ -380,7 +380,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                             onChange={(e) => {
                               const file = e.target.files ? e.target.files[0] : null;
                               setAssetsToReturn(prev => prev.map(a => 
-                                a.assetCode === item.assetCode ? { ...a, photo: file } : a
+                                a.toolCode === item.toolCode ? { ...a, photo: file } : a
                               ));
                             }}
                             required
@@ -461,16 +461,16 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                 <table className="modal-table">
                   <thead className="modal-thead">
                     <tr>
-                      <th className="modal-th">Asset Code</th>
+                      <th className="modal-th">Tool Code</th>
                       <th className="modal-th">Current Return</th>
                       <th className="modal-th-photo extend-table-th-new-date">New Return Date</th>
                     </tr>
                   </thead>
                   <tbody>
                     {assetsToExtend.map(item => (
-                      <tr key={item.assetCode} className="modal-tr">
+                      <tr key={item.toolCode} className="modal-tr">
                         <td className="modal-td-code">
-                          {item.assetCode}
+                          {item.toolCode}
                           <div className="extend-td-code-sub">{item.model}</div>
                         </td>
                         <td className="extend-td-current-date">{item.currentReturnDate}</td>
@@ -483,7 +483,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                             onChange={(e) => {
                               const date = e.target.value;
                               setAssetsToExtend(prev => prev.map(a => 
-                                a.assetCode === item.assetCode ? { ...a, newReturnDate: date } : a
+                                a.toolCode === item.toolCode ? { ...a, newReturnDate: date } : a
                               ));
                             }}
                             required

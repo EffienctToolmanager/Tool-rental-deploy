@@ -4,7 +4,7 @@ import { type Asset } from '../types';
 
 const mockAssets: Asset[] = [
   {
-    assetCode: 'FLK-87V-01',
+    toolCode: 'FLK-87V-01',
     brand: 'Fluke',
     model: '87V',
     zone: 'CCP01',
@@ -16,7 +16,7 @@ const mockAssets: Asset[] = [
     serialNumber: 'SN-FLK87V-0001'
   },
   {
-    assetCode: 'FLK-1738-01',
+    toolCode: 'FLK-1738-01',
     brand: 'Fluke',
     model: '1738',
     zone: 'CCP02',
@@ -32,7 +32,7 @@ const mockAssets: Asset[] = [
 const mockSchedules = [
   {
     id: 'SCH-202606-0001',
-    equipmentCode: 'FLK-87V-01',
+    toolCode: 'FLK-87V-01',
     model: '87V',
     sequenceOrder: 0,
     stage: 'active_rental',
@@ -46,7 +46,7 @@ const mockSchedules = [
   },
   {
     id: 'SCH-202606-0002',
-    equipmentCode: 'FLK-87V-01',
+    toolCode: 'FLK-87V-01',
     model: '87V',
     sequenceOrder: 1,
     stage: 'calibration',
