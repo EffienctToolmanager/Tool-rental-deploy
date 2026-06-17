@@ -791,7 +791,22 @@ async def reject_schedule_case(schedule_id: str, request: RejectScheduleRequest)
     schedules = db_storage.get("schedules", [])
     target = next((s for s in schedules if s.get("id") == schedule_id), None)
     if not target:
-        raise HTTPException(status_code=404, detail="Scheduled case not found")
+        # Idempotent for demo/serverless safety: stale browser tabs, repeated clicks,
+        # or old cached bundles can submit a reject for a card that was already
+        # removed by another request/instance. Treat it as already handled instead
+        # of surfacing a blocking 404 to the admin.
+        logger.warning(f"Scheduled case already missing during reject, treating as skipped: {schedule_id}")
+        return {
+            "status": "success",
+            "message": f"Scheduled case {schedule_id} was already rejected or no longer exists.",
+            "skipped": True,
+            "notification": {
+                "email": "requester",
+                "teams": "requester",
+                "reason": request.reason,
+                "message": f"Reject skipped because scheduled case {schedule_id} no longer exists. Reason: {request.reason}"
+            }
+        }
 
     eq_code = target.get("toolCode")
     movement_type = target.get("movementType") or "checkout"
@@ -892,9 +907,17 @@ async def reject_schedule_cases_bulk(request: BulkRejectScheduleRequest):
         })
 
     if missing:
-        logger.warning(f"Bulk reject missing scheduled cases: {missing}")
+        logger.warning(f"Bulk reject missing scheduled cases, treating as already handled: {missing}")
     if not rejected:
-        raise HTTPException(status_code=404, detail=f"Scheduled case(s) not found: {', '.join(missing)}")
+        db_storage["schedules"] = schedules
+        return {
+            "status": "success",
+            "message": "No matching scheduled cases found; request treated as already handled.",
+            "count": 0,
+            "rejected": [],
+            "missing": missing,
+            "notifications": []
+        }
 
     db_storage["schedules"] = schedules
     for code in eq_codes_to_sync:
