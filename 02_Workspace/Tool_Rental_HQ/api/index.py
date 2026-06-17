@@ -32,12 +32,12 @@ def get_msal_token():
 # In-memory mock database to allow seamless serverless state updates
 INITIAL_ITEMS = [
     {
-        "id": "1", "toolCode": "FLK-87V-01", "brand": "Fluke", "model": "87V",
+        "id": "1", "toolCode": "CCP01", "brand": "Fluke", "model": "87V",
         "name": "Fluke 87V Industrial Multimeter", "equipmentType": "Industrial Digital Multimeter",
         "projectName": "Project Site A", "returnDate": "2026-06-30", "status": "Rented",
         "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0001",
         "datasheetUrl": "https://www.fluke.com/en-us/product/electrical-testing/digital-multimeters/fluke-87v",
-        "serialNumber": "SN-FLK87V-93812", "zone": "CCP01", "rack": "A1",
+        "serialNumber": "SN-FLK87V-93812", "rack": "A1",
         "specSummary": {
             "equipmentType": "Industrial Digital Multimeter",
             "measurementRange": "DC/AC Voltage: 1000V, Current: 10A (20A for 30s max), Resistance: 50 MΩ, Capacitance: 9,999 µF, Frequency: 200 kHz",
@@ -57,12 +57,12 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "2", "toolCode": "FLK-1738-01", "brand": "Fluke", "model": "1738",
+        "id": "2", "toolCode": "CCP02", "brand": "Fluke", "model": "1738",
         "name": "Fluke 1738 Power Logger", "equipmentType": "Power Quality Logger",
         "projectName": "Project Site A", "returnDate": "2026-06-30", "status": "Rented",
         "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0001",
         "datasheetUrl": "https://example.com/mock-datasheets/fluke-1738.pdf",
-        "serialNumber": "SN-FLK1738-48291", "zone": "CCP02", "rack": "A1",
+        "serialNumber": "SN-FLK1738-48291", "rack": "A1",
         "specSummary": {
             "equipmentType": "Power Quality Logger",
             "measurementRange": "Voltage: 1000 V, Current Range: 4 A to 6000 A (sensor dependent), Power/Energy Trend",
@@ -82,12 +82,12 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "3", "toolCode": "KEY-U1282A-01", "brand": "Keysight", "model": "U1282A",
+        "id": "3", "toolCode": "PSU01", "brand": "Keysight", "model": "U1282A",
         "name": "Keysight U1282A Handheld Digital Multimeter", "equipmentType": "Handheld Digital Multimeter",
         "projectName": "Project Site B", "returnDate": "2026-07-05", "status": "Rented",
         "userEmail": "tech@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0002",
         "datasheetUrl": "https://example.com/mock-datasheets/keysight-u1282a.pdf",
-        "serialNumber": "SN-KEYU1282A-39128", "zone": "PSU01", "rack": "B2",
+        "serialNumber": "SN-KEYU1282A-39128", "rack": "B2",
         "specSummary": {
             "equipmentType": "Handheld Digital Multimeter",
             "measurementRange": "DC/AC Voltage: 1000V, Current: 10A, Resistance: 600 MΩ, Capacitance: 10 mF, Frequency: 20 MHz",
@@ -107,11 +107,11 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "4", "toolCode": "KEY-U1461A-01", "brand": "Keysight", "model": "U1461A",
+        "id": "4", "toolCode": "PSU02", "brand": "Keysight", "model": "U1461A",
         "name": "Keysight U1461A Insulation Resistance Tester", "equipmentType": "Insulation Resistance Tester",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/keysight-u1461a.pdf",
-        "serialNumber": "SN-KEYU1461A-28491", "zone": "PSU02", "rack": "B2",
+        "serialNumber": "SN-KEYU1461A-28491", "rack": "B2",
         "specSummary": {
             "equipmentType": "Insulation Resistance Tester",
             "measurementRange": "Test Voltage: 50V to 1000V, Resistance range up to 200 GΩ",
@@ -127,11 +127,11 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "5", "toolCode": "HIO-IR4056-01", "brand": "Hioki", "model": "IR4056",
+        "id": "5", "toolCode": "CCP03", "brand": "Hioki", "model": "IR4056",
         "name": "Hioki IR4056 Insulation Tester", "equipmentType": "Insulation Tester",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/hioki-ir4056.pdf",
-        "serialNumber": "SN-HIOIR4056-59102", "zone": "CCP03", "rack": "B1",
+        "serialNumber": "SN-HIOIR4056-59102", "rack": "B1",
         "specSummary": {
             "equipmentType": "Insulation Tester",
             "measurementRange": "Test Voltage: 50V to 1000V, Resistance range up to 4000 MΩ",
@@ -147,11 +147,11 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "6", "toolCode": "HIO-CM4375-01", "brand": "Hioki", "model": "CM4375",
+        "id": "6", "toolCode": "CCP04", "brand": "Hioki", "model": "CM4375",
         "name": "Hioki CM4375 AC/DC Clamp Meter", "equipmentType": "AC/DC Clamp Meter",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/hioki-cm4375.pdf",
-        "serialNumber": "SN-HIOCM4375-72819", "zone": "CCP04", "rack": "C2",
+        "serialNumber": "SN-HIOCM4375-72819", "rack": "C2",
         "specSummary": {
             "equipmentType": "AC/DC Clamp Meter",
             "measurementRange": "AC/DC Current: 1000 A, AC/DC Voltage: 1000 V",
@@ -167,11 +167,11 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "7", "toolCode": "MEG-MIT525-01", "brand": "Megger", "model": "MIT525",
+        "id": "7", "toolCode": "MEG01", "brand": "Megger", "model": "MIT525",
         "name": "Megger MIT525 Insulation Resistance Tester", "equipmentType": "High Voltage Insulation Tester",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/megger-mit525.pdf",
-        "serialNumber": "SN-MEGMIT525-48291", "zone": "MEG01", "rack": "D1",
+        "serialNumber": "SN-MEGMIT525-48291", "rack": "D1",
         "specSummary": {
             "equipmentType": "High Voltage Insulation Tester",
             "measurementRange": "Test Voltage: up to 5 kV, Resistance range up to 10 TΩ",
@@ -187,11 +187,11 @@ INITIAL_ITEMS = [
         },
     },
     {
-        "id": "8", "toolCode": "MEG-DLRO10HD-01", "brand": "Megger", "model": "DLRO10HD",
+        "id": "8", "toolCode": "MEG02", "brand": "Megger", "model": "DLRO10HD",
         "name": "Megger DLRO10HD Low Resistance Ohmmeter", "equipmentType": "Low Resistance Ohmmeter",
         "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
         "datasheetUrl": "https://example.com/mock-datasheets/megger-dlro10hd.pdf",
-        "serialNumber": "SN-MEGDLRO10HD-28190", "zone": "MEG02", "rack": "D2",
+        "serialNumber": "SN-MEGDLRO10HD-28190", "rack": "D2",
         "specSummary": {
             "equipmentType": "Low Resistance Ohmmeter",
             "measurementRange": "micro-ohm to low-ohm resistance checks",
@@ -327,10 +327,20 @@ def build_mock_spec(brand: str, model: str, product_name: str, equipment_type: s
 
 
 for idx, (prefix, brand, model, product_name, equipment_type) in enumerate(ADDITIONAL_MOCK_MODELS, start=len(INITIAL_ITEMS) + 1):
+    if brand == "Megger":
+        tool_prefix = "MEG"
+    elif any(kw in equipment_type for kw in ["Multimeter", "Clamp", "Logger", "Analyzer", "Meter"]):
+        tool_prefix = "CCP"
+    elif any(kw in equipment_type for kw in ["Insulation", "Tester", "Power", "Calibrator"]):
+        tool_prefix = "PSU"
+    else:
+        tool_prefix = "GEN"
+    tool_code_val = f"{tool_prefix}{idx:02d}"
+
     code_model = model.upper().replace(" ", "").replace("+", "P").replace("-", "")
     INITIAL_ITEMS.append({
         "id": str(idx),
-        "toolCode": f"{prefix}-{code_model}-01",
+        "toolCode": tool_code_val,
         "brand": brand,
         "model": model,
         "name": f"{brand} {model} {product_name}",
@@ -343,7 +353,6 @@ for idx, (prefix, brand, model, product_name, equipment_type) in enumerate(ADDIT
         "caseId": "",
         "datasheetUrl": f"https://example.com/mock-datasheets/{brand.lower().replace(' ', '-')}-{model.lower().replace(' ', '-').replace('+', 'p')}.pdf",
         "serialNumber": f"SN-{prefix}{code_model}-{idx:04d}",
-        "zone": f"CCP{idx % 5 + 1:02d}" if idx % 2 == 0 else f"PSU{idx % 3 + 1:02d}",
         "rack": f"A{idx % 4 + 1}" if idx % 2 == 0 else f"B{idx % 3 + 1}",
         "specSummary": build_mock_spec(brand, model, product_name, equipment_type),
     })
@@ -352,7 +361,7 @@ for idx, (prefix, brand, model, product_name, equipment_type) in enumerate(ADDIT
 INITIAL_SCHEDULED_CASES = [
     {
         "id": "SCH-202606-0001",
-        "toolCode": "FLK-87V-01",
+        "toolCode": "CCP01",
         "model": "87V",
         "sequenceOrder": 0,
         "stage": "active_rental",
@@ -369,7 +378,7 @@ INITIAL_SCHEDULED_CASES = [
     },
     {
         "id": "SCH-202606-0002",
-        "toolCode": "FLK-87V-01",
+        "toolCode": "CCP01",
         "model": "87V",
         "sequenceOrder": 1,
         "stage": "calibration",
@@ -386,7 +395,7 @@ INITIAL_SCHEDULED_CASES = [
     },
     {
         "id": "SCH-202606-0003",
-        "toolCode": "FLK-87V-01",
+        "toolCode": "CCP01",
         "model": "87V",
         "sequenceOrder": 2,
         "stage": "ongoing",
@@ -400,7 +409,7 @@ INITIAL_SCHEDULED_CASES = [
     },
     {
         "id": "SCH-202606-0004",
-        "toolCode": "FLK-1738-01",
+        "toolCode": "CCP02",
         "model": "1738",
         "sequenceOrder": 0,
         "stage": "active_rental",

@@ -27,6 +27,7 @@
   --f-selected-bg: rgba(0, 94, 96, 0.08);
   --f-success: #10B981;
   --f-logo-fill: var(--f-primary);
+  --f-primary-light: #E0F2F1;
 }
 
 :root[data-theme="dark"] {
@@ -57,6 +58,7 @@
   --f-selected-bg: rgba(0, 141, 144, 0.2);
   --f-success: #81C784;
   --f-logo-fill: #FFFFFF;
+  --f-primary-light: rgba(0, 141, 144, 0.25);
 }
 
 * {

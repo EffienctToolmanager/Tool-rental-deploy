@@ -9,7 +9,6 @@ const mockAssets: Asset[] = [
     toolCode: 'FLK-87V-01',
     brand: 'Fluke',
     model: '87V',
-    zone: 'CCP01',
     rack: 'A1',
     currentLocation: 'Warehouse',
     calDate: '2026-12-31',
@@ -64,7 +63,7 @@ describe('SchedulingTab Component', () => {
     expect(screen.getAllByText(/Project Site A/)[0]).toBeInTheDocument();
   });
 
-  it('toggles Pending Approval Only filter state', async () => {
+  it('filters schedules based on status search keywords (Pending/Approval)', async () => {
     const onRefresh = vi.fn();
     render(<SchedulingTab assets={mockAssets} isAdmin={false} onRefreshAssets={onRefresh} />);
 
@@ -72,18 +71,16 @@ describe('SchedulingTab Component', () => {
       expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
     });
 
-    const pendingOnlyBtn = screen.getByText(/Pending Approval Only/i);
-    expect(pendingOnlyBtn).toBeInTheDocument();
-
-    // Toggle filter on
-    fireEvent.click(pendingOnlyBtn);
-    // Since SCH-202606-0001 is In_Progress, it should be filtered out
+    const searchInput = screen.getByPlaceholderText(/Search schedules.../i);
+    
+    // Search for 'Pending' - since the only card is 'In_Progress', it should disappear
+    fireEvent.change(searchInput, { target: { value: 'Pending' } });
     await waitFor(() => {
       expect(screen.queryByText('SCH-202606-0001')).not.toBeInTheDocument();
     });
 
-    // Toggle filter off
-    fireEvent.click(pendingOnlyBtn);
+    // Search for 'In_Progress' - it should appear back
+    fireEvent.change(searchInput, { target: { value: 'In_Progress' } });
     await waitFor(() => {
       expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
     });
@@ -250,7 +247,7 @@ describe('SchedulingTab Component', () => {
 
   it('supports selecting cards and showing bulk actions panel', async () => {
     const onRefresh = vi.fn();
-    render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
+    const { container } = render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
 
     await waitFor(() => {
       expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
@@ -266,8 +263,8 @@ describe('SchedulingTab Component', () => {
     // Bulk actions panel should now be visible
     expect(screen.getByText(/Selected 1 tool cards/i)).toBeInTheDocument();
 
-    // Click "Deselect All"
-    const deselectBtn = screen.getByText(/Deselect All/i);
+    // Click "Deselect All" in bulk actions panel
+    const deselectBtn = container.querySelector('.bulk-actions-bar button') as HTMLButtonElement;
     fireEvent.click(deselectBtn);
     expect(checkbox).not.toBeChecked();
     expect(screen.queryByText(/Selected 1 tool cards/i)).not.toBeInTheDocument();

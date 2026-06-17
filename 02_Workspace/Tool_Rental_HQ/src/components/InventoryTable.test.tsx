@@ -9,7 +9,6 @@ const mockAssets: Asset[] = [
     toolCode: 'EQ-001',
     brand: 'GE',
     model: 'Multimeter 90',
-    zone: 'CCP01',
     rack: 'A1',
     serialNumber: 'SN-001',
     currentLocation: 'Warehouse',
@@ -49,7 +48,6 @@ describe('InventoryTable Component', () => {
     expect(screen.getByText('EQ-001')).toBeInTheDocument();
     expect(screen.getByText('GE')).toBeInTheDocument();
     expect(screen.getByText('SN-001')).toBeInTheDocument();
-    expect(screen.getByText('CCP01')).toBeInTheDocument();
     expect(screen.getByText('A1')).toBeInTheDocument();
   });
 
@@ -80,7 +78,6 @@ describe('InventoryTable Component', () => {
         toolCode: 'EQ-002',
         brand: 'Fluke',
         model: '87V',
-        zone: 'CCP02',
         rack: 'B1',
         serialNumber: 'SN-FLK87V-999',
         currentLocation: 'Field Site',

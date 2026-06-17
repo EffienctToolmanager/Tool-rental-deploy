@@ -123,7 +123,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
         const model = (asset.Asset_Model || asset.model || '').toLowerCase();
         const type = (asset.specSummary?.equipmentType || '').toLowerCase();
         const serial = (asset.serialNumber || asset.Serial_Number || '').toLowerCase();
-        const location = `${asset.Location_Zone || asset.zone || ''}/${asset.Location_Rack || asset.rack || ''}`.toLowerCase();
+        const location = (asset.Location_Rack || asset.rack || '').toLowerCase();
         const currentLocation = (asset.Current_Location || asset.currentLocation || '').toLowerCase();
 
         return code.includes(query) ||
@@ -142,15 +142,12 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
         let av = a[key] || a[key.replace(/^[A-Z]/, (c) => c.toLowerCase())] || '';
         let bv = b[key] || b[key.replace(/^[A-Z]/, (c) => c.toLowerCase())] || '';
 
-        if (key === 'zone') {
-          av = a.Location_Zone || a.zone || '';
-          bv = b.Location_Zone || b.zone || '';
-        } else if (key === 'rack') {
+        if (key === 'rack') {
           av = a.Location_Rack || a.rack || '';
           bv = b.Location_Rack || b.rack || '';
-        } else if (key === 'Location_Zone' || key === 'Location' || key === 'location') {
-          av = `${a.Location_Zone || a.zone || ''}/${a.Location_Rack || a.rack || ''}`;
-          bv = `${b.Location_Zone || b.zone || ''}/${b.Location_Rack || b.rack || ''}`;
+        } else if (key === 'Location' || key === 'location') {
+          av = a.Location_Rack || a.rack || '';
+          bv = b.Location_Rack || b.rack || '';
         } else if (key === 'serialNumber' || key === 'Serial_Number') {
           av = a.serialNumber || a.Serial_Number || '';
           bv = b.serialNumber || b.Serial_Number || '';
@@ -188,7 +185,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
 
   const downloadSelectedCsv = () => {
     const headers = [
-      'Tool Code', 'Brand', 'Model', 'Serial Number', 'Zone', 'Rack', 'Equipment Type', 'Measurement Range', 'Accuracy',
+      'Tool Code', 'Brand', 'Model', 'Serial Number', 'Rack', 'Equipment Type', 'Measurement Range', 'Accuracy',
       'Voltage Rating', 'Current Rating', 'Safety Category', 'Connectivity', 'Power Source',
       'Calibration Cycle', 'Key Features', 'Typical Use', 'Datasheet PDF URL'
     ];
@@ -196,10 +193,9 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
     const rows = selectedAssets.map(asset => {
       const spec = asset.specSummary;
       const serial = asset.serialNumber || asset.Serial_Number || '';
-      const zoneVal = asset.Location_Zone || asset.zone || '';
       const rackVal = asset.Location_Rack || asset.rack || '';
       return [
-        getToolCode(asset), getBrand(asset), getModel(asset), serial, zoneVal, rackVal, spec?.equipmentType, spec?.measurementRange,
+        getToolCode(asset), getBrand(asset), getModel(asset), serial, rackVal, spec?.equipmentType, spec?.measurementRange,
         spec?.accuracy, spec?.voltageRating, spec?.currentRating, spec?.safetyCategory, spec?.connectivity,
         spec?.powerSource, spec?.calibrationCycle, spec?.keyFeatures.join('; '), spec?.typicalUse, asset.datasheetUrl
       ].map(csvEscape).join(',');
@@ -289,7 +285,6 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
               <th className="table-th-select">Select</th>
               <th onClick={() => handleSort('Current_Status')}>Status</th>
               <th onClick={() => handleSort('Tool_Code')}>Tool Code</th>
-              <th onClick={() => handleSort('zone')}>Zone</th>
               <th onClick={() => handleSort('rack')}>Rack</th>
               <th onClick={() => handleSort('Current_Location')}>Current location</th>
               <th onClick={() => handleSort('Brand')}>Brand</th>
@@ -304,7 +299,6 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
             {displayAssets.map((asset: any, index) => {
               const daysLeft = calculateDaysUntilCal(asset.Calibration_Date || asset.calDate);
               const status = asset.Current_Status || asset.status;
-              const zone = asset.Location_Zone || asset.zone || '';
               const rack = asset.Location_Rack || asset.rack || '';
               const currentLocation = asset.Current_Location || asset.currentLocation;
               const toolCode = getToolCode(asset);
@@ -365,7 +359,6 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
                     </span>
                   </td>
                   <td className="table-td-code">{toolCode}</td>
-                  <td>{zone}</td>
                   <td>{rack}</td>
                   <td className={`table-td-location ${currentLocation === 'Warehouse' ? 'warehouse' : 'field'}`}>
                     <div className="location-cell-content">

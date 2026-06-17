@@ -144,6 +144,21 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
       const isNormalHandover = editingCase.stage !== 'calibration' && formStage === 'active_rental';
       const showHandoverFields = isOutboundFromCalibration || isNormalHandover;
 
+      if (showHandoverFields) {
+        if (!formHandoverPic || !formHandoverPic.trim()) {
+          alert("Error: Handover PIC Name (인수 확인자) is required.");
+          return;
+        }
+        if (!photoFile && !formHandoverPhoto) {
+          alert("Error: Handover Photo (인수 확인 사진) is required. Please upload an image file.");
+          return;
+        }
+        if (!formChecklistVerified) {
+          alert("Error: You must check the checklist box to verify physical inspection and safety checklist.");
+          return;
+        }
+      }
+
       let photoUrl = formHandoverPhoto;
       if (showHandoverFields && photoFile) {
         const formData = new FormData();
@@ -299,7 +314,13 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   };
 
   const handleBulkMoveTrigger = (targetStage: 'active_rental' | 'calibration' | 'ongoing') => {
-    if (targetStage === 'active_rental') {
+    const selectedSchedules = schedules.filter(s => selectedCardIds.includes(s.id));
+    const anyFromCalibration = selectedSchedules.some(s => s.stage === 'calibration');
+    const isOutbound = anyFromCalibration && (targetStage === 'active_rental' || targetStage === 'ongoing');
+    const isNormalHandover = !anyFromCalibration && targetStage === 'active_rental';
+    const requiresHandover = isOutbound || isNormalHandover;
+
+    if (requiresHandover) {
       setBulkTargetStage(targetStage);
       setBulkHandoverPic('');
       setBulkHandoverPhoto('');
@@ -317,8 +338,14 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     handoverPhoto?: string,
     checklistVerified?: boolean
   ) => {
+    const selectedSchedules = schedules.filter(s => selectedCardIds.includes(s.id));
+    const anyFromCalibration = selectedSchedules.some(s => s.stage === 'calibration');
+    const isOutbound = anyFromCalibration && (targetStage === 'active_rental' || targetStage === 'ongoing');
+    const isNormalHandover = !anyFromCalibration && targetStage === 'active_rental';
+    const requiresHandover = isOutbound || isNormalHandover;
+
     let photoUrl = handoverPhoto;
-    if (targetStage === 'active_rental' && bulkPhotoFile) {
+    if (requiresHandover && bulkPhotoFile) {
       const formData = new FormData();
       formData.append("file", bulkPhotoFile);
       formData.append("filename", bulkPhotoFile.name);
@@ -335,15 +362,20 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
       }
     }
 
-    const selectedSchedules = schedules.filter(s => selectedCardIds.includes(s.id));
-    const payloads = selectedSchedules.map(s => ({
-      ...s,
-      stage: targetStage,
-      status: targetStage === 'ongoing' ? 'Scheduled' : 'In_Progress',
-      handoverPic: targetStage === 'active_rental' ? handoverPic : undefined,
-      handoverPhoto: targetStage === 'active_rental' ? photoUrl : undefined,
-      checklistVerified: targetStage === 'active_rental' ? checklistVerified : undefined
-    }));
+    const payloads = selectedSchedules.map(s => {
+      const isCardOutbound = s.stage === 'calibration' && (targetStage === 'active_rental' || targetStage === 'ongoing');
+      const isCardNormalHandover = s.stage !== 'calibration' && targetStage === 'active_rental';
+      const cardRequiresHandover = isCardOutbound || isCardNormalHandover;
+
+      return {
+        ...s,
+        stage: targetStage,
+        status: targetStage === 'ongoing' ? 'Scheduled' : 'In_Progress',
+        handoverPic: cardRequiresHandover ? handoverPic : undefined,
+        handoverPhoto: cardRequiresHandover ? photoUrl : undefined,
+        checklistVerified: cardRequiresHandover ? checklistVerified : undefined
+      };
+    });
 
     try {
       setIsLoading(true);
@@ -605,7 +637,8 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     }
   };
 
-  const handleSelectAllPending = () => {
+  // Get all currently visible active schedules based on filters/search
+  const getVisibleActiveSchedules = () => {
     const schedulesByAsset: Record<string, ScheduledCase[]> = {};
     schedules.forEach(s => {
       if (!schedulesByAsset[s.toolCode]) {
@@ -614,18 +647,17 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
       schedulesByAsset[s.toolCode].push(s);
     });
 
-    const matchingIds: string[] = [];
+    const visibleList: ScheduledCase[] = [];
     Object.keys(schedulesByAsset).forEach(code => {
       const assetScheds = schedulesByAsset[code];
       const activeSched = assetScheds.find(s => s.status !== 'Completed');
       if (!activeSched) return;
-      if (activeSched.status !== 'Pending_Approval') return;
 
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
         const asset = assets.find(a => a.toolCode === code);
         const model = asset ? asset.model : '';
-        const match = 
+        const matches = 
           (code || '').toLowerCase().includes(term) ||
           (model || '').toLowerCase().includes(term) ||
           (activeSched.destination || '').toLowerCase().includes(term) ||
@@ -634,22 +666,39 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
           (activeSched.pmEmail || '').toLowerCase().includes(term) ||
           (activeSched.notes || '').toLowerCase().includes(term) ||
           (activeSched.caseId || '').toLowerCase().includes(term) ||
+          (activeSched.status || '').toLowerCase().includes(term) ||
           activeSched.id.toLowerCase().includes(term);
-        if (!match) return;
+        
+        if (!matches) return;
       }
-
-      matchingIds.push(activeSched.id);
+      visibleList.push(activeSched);
     });
+    return visibleList;
+  };
 
-    setSelectedCardIds(prev => {
-      const newIds = [...prev];
-      matchingIds.forEach(id => {
-        if (!newIds.includes(id)) {
-          newIds.push(id);
-        }
+  const handleSelectAll = () => {
+    const visibleSchedules = getVisibleActiveSchedules();
+    const visibleIds = visibleSchedules.map(s => s.id);
+    if (visibleIds.length === 0) return;
+    
+    // If all visible ones are already selected, deselect them (선택취소)
+    const allVisibleSelected = visibleIds.every(id => selectedCardIds.includes(id));
+    
+    if (allVisibleSelected) {
+      // Remove all visible ids from selection
+      setSelectedCardIds(prev => prev.filter(id => !visibleIds.includes(id)));
+    } else {
+      // Add all visible ids to selection (avoiding duplicates)
+      setSelectedCardIds(prev => {
+        const next = [...prev];
+        visibleIds.forEach(id => {
+          if (!next.includes(id)) {
+            next.push(id);
+          }
+        });
+        return next;
       });
-      return newIds;
-    });
+    }
   };
 
   const handleBulkApproveRentals = async () => {
@@ -727,7 +776,6 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
             const activeSched = assetScheds.find(s => s.status !== 'Completed');
             if (!activeSched) return false;
             if (activeSched.stage !== col) return false;
-            if (showPendingOnly && activeSched.status !== 'Pending_Approval') return false;
             
             if (!searchTerm) return true;
             const term = searchTerm.toLowerCase();
@@ -743,6 +791,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
               (activeSched.pmEmail || '').toLowerCase().includes(term) ||
               (activeSched.notes || '').toLowerCase().includes(term) ||
               (activeSched.caseId || '').toLowerCase().includes(term) ||
+              (activeSched.status || '').toLowerCase().includes(term) ||
               activeSched.id.toLowerCase().includes(term)
             );
           });
@@ -900,9 +949,16 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                                   fontSize: '11.5px', 
                                   padding: '4px 6px',
                                   borderRadius: '4px',
-                                  backgroundColor: s.status === 'Completed' ? 'var(--f-bg-th)' : s.id === activeSched.id ? 'rgba(0, 94, 96, 0.08)' : 'transparent',
-                                  borderLeft: s.id === activeSched.id ? '3px solid var(--f-primary)' : 'none',
-                                  color: s.status === 'Completed' ? 'var(--f-text-muted)' : 'var(--f-text-primary)'
+                                  backgroundColor: s.status === 'Completed' 
+                                    ? 'var(--f-bg-th)' 
+                                    : s.status === 'In_Progress' 
+                                      ? 'var(--f-primary-light)' 
+                                      : 'transparent',
+                                  borderLeft: s.status === 'In_Progress' 
+                                    ? '3px solid var(--f-primary)' 
+                                    : 'none',
+                                  color: s.status === 'Completed' ? 'var(--f-text-muted)' : 'var(--f-text-primary)',
+                                  fontWeight: s.status === 'In_Progress' ? 'bold' : 'normal'
                                 }}>
                                   <span style={{ textDecoration: s.status === 'Completed' ? 'line-through' : 'none' }}>
                                     Case {idx + 1}: {icon} {s.destination} ({label})
@@ -1051,29 +1107,17 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
           </div>
 
           <div className="scheduler-filter-controls" style={{ display: 'flex', gap: '8px' }}>
-            <button 
-              type="button"
-              className={`f-button ${showPendingOnly ? 'active' : ''}`}
-              style={{
-                backgroundColor: showPendingOnly ? '#E65100' : 'transparent',
-                color: showPendingOnly ? 'white' : 'var(--f-text-secondary)',
-                border: '1px solid var(--f-border)',
-                fontWeight: showPendingOnly ? '600' : 'normal',
-                height: '38px'
-              }}
-              onClick={() => setShowPendingOnly(!showPendingOnly)}
-            >
-              ⏳ Pending Approval Only
-            </button>
             {isAdmin && (
               <>
                 <button 
                   type="button"
                   className="f-button"
                   style={{ border: '1px solid var(--f-border)', height: '38px' }}
-                  onClick={handleSelectAllPending}
+                  onClick={handleSelectAll}
                 >
-                  ☑️ Select All Pending
+                  {getVisibleActiveSchedules().length > 0 && getVisibleActiveSchedules().every(s => selectedCardIds.includes(s.id))
+                    ? "⬜ Deselect All" 
+                    : "☑️ Select All"}
                 </button>
                 <button 
                   type="button"
@@ -1088,7 +1132,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                   onClick={handleBulkApproveRentals}
                   disabled={selectedCardIds.filter(id => schedules.find(s => s.id === id)?.status === 'Pending_Approval').length === 0}
                 >
-                  ✔️ Bulk Approve Selected
+                  ✔️ Approve Selected
                 </button>
               </>
             )}

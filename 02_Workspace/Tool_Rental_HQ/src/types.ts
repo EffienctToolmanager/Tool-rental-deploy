@@ -16,7 +16,6 @@ export type Asset = {
   toolCode: string;
   brand: string;
   model: string;
-  zone: string;
   rack: string;
   currentLocation: string;
   calDate: string;
@@ -25,7 +24,6 @@ export type Asset = {
   Brand?: string;
   Asset_Model?: string;
   Tool_Code?: string;
-  Location_Zone?: string;
   Location_Rack?: string;
   Current_Location?: string;
   Calibration_Date?: string;

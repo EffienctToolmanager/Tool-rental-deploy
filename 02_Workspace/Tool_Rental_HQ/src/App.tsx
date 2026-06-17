@@ -51,7 +51,6 @@ const App: React.FC = () => {
                         (item.status || 'Available'),
         currentLocation: item.projectName || 'Warehouse',
         calDate: '2026-12-31',
-        zone: item.zone || 'HQ',
         rack: item.rack || 'A1',
         serialNumber: item.serialNumber || item.Serial_Number || 'N/A',
         datasheetUrl: item.datasheetUrl,

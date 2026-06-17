@@ -9,7 +9,6 @@ const mockAssets: Asset[] = [
     toolCode: 'EQ-001',
     brand: 'GE',
     model: 'Multimeter 90',
-    zone: 'A',
     rack: '3',
     currentLocation: 'Warehouse',
     calDate: '2026-08-01',
