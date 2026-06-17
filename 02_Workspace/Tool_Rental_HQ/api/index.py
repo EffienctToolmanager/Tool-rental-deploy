@@ -431,6 +431,39 @@ db_storage = {
     "schedules": INITIAL_SCHEDULED_CASES
 }
 
+ONEDRIVE_RENTAL_PHOTO_FOLDER = os.getenv(
+    "ONEDRIVE_RENTAL_PHOTO_FOLDER",
+    "OneDrive/ToolRental_Photos"
+)
+
+
+def sanitize_filename_part(value: Optional[str]) -> str:
+    import re
+    text = (value or "Unknown").strip()
+    text = re.sub(r"[^0-9A-Za-z가-힣._-]+", "_", text)
+    return text.strip("_") or "Unknown"
+
+
+def build_rental_photo_path(schedule: dict, asset: Optional[dict] = None) -> str:
+    """Mock OneDrive naming path until Entra ID Graph approval is available.
+
+    Naming format requested by business:
+    대여날짜_모델_시리얼넘버_프로젝트명_대여자이름
+    """
+    original_photo = schedule.get("handoverPhoto") or "checkout_photo"
+    if str(original_photo).startswith(f"{ONEDRIVE_RENTAL_PHOTO_FOLDER}/"):
+        return original_photo
+
+    rental_date = sanitize_filename_part(schedule.get("startDate"))
+    model = sanitize_filename_part(schedule.get("model") or (asset or {}).get("model"))
+    serial = sanitize_filename_part((asset or {}).get("serialNumber") or (asset or {}).get("Serial_Number"))
+    project = sanitize_filename_part(schedule.get("destination") or schedule.get("projectCode"))
+    renter = sanitize_filename_part((schedule.get("userEmail") or "").split("@")[0])
+    _, ext = os.path.splitext(str(original_photo))
+    ext = ext or ".jpg"
+    filename = f"{rental_date}_{model}_{serial}_{project}_{renter}{ext}"
+    return f"{ONEDRIVE_RENTAL_PHOTO_FOLDER}/{filename}"
+
 # --- API Routes ---
 
 @app.get("/api/sharepoint/list")
@@ -718,8 +751,9 @@ async def approve_schedule_case(schedule_id: str):
         if s["id"] == schedule_id:
             if s.get("status") == "Pending_Approval":
                 s["stage"] = "active_rental"
+                asset = next((item for item in db_storage.get("items", []) if item.get("toolCode") == s.get("toolCode")), None)
                 if s.get("handoverPhoto"):
-                    s["handoverPhoto"] = f"OneDrive/ToolRental_Photos/{s.get('caseId') or s['id']}_{s['toolCode']}_{s['handoverPhoto']}"
+                    s["handoverPhoto"] = build_rental_photo_path(s, asset)
             s["status"] = "In_Progress"
             target = s
             break
@@ -744,8 +778,9 @@ async def approve_schedule_cases_bulk(schedule_ids: List[str]):
     for s in schedules:
         if s["id"] in schedule_ids and s["status"] == "Pending_Approval":
             s["stage"] = "active_rental"
+            asset = next((item for item in db_storage.get("items", []) if item.get("toolCode") == s.get("toolCode")), None)
             if s.get("handoverPhoto"):
-                s["handoverPhoto"] = f"OneDrive/ToolRental_Photos/{s.get('caseId') or s['id']}_{s['toolCode']}_{s['handoverPhoto']}"
+                s["handoverPhoto"] = build_rental_photo_path(s, asset)
             s["status"] = "In_Progress"
             eq_codes_to_sync.add(s["toolCode"])
             approved_count += 1

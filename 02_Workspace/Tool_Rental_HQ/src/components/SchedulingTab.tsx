@@ -902,6 +902,11 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                           <div>📍 <strong>Current Destination:</strong> {activeSched.destination}</div>
                           <div>👤 <strong>Renter/User:</strong> {activeSched.userEmail}</div>
                           {activeSched.notes && <div style={{ fontStyle: 'italic', marginTop: '4px' }}>📝 {activeSched.notes}</div>}
+                          {activeSched.handoverPhoto && (
+                            <div style={{ marginTop: '4px' }}>
+                              📷 <strong>{activeSched.status === 'Pending_Approval' ? 'Submitted Photo:' : 'Saved Photo:'}</strong> {activeSched.handoverPhoto}
+                            </div>
+                          )}
                         </div>
 
                         {/* Status / Approval UI */}
