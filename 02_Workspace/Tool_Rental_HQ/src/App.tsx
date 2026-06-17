@@ -49,7 +49,16 @@ const App: React.FC = () => {
         Current_Status: item.status === '보관중' ? 'Available' : 
                         item.status === '대여중' ? 'Rented' : 
                         (item.status || 'Available'),
+        status: item.status === '보관중' ? 'Available' : 
+                item.status === '대여중' ? 'Rented' : 
+                (item.status || 'Available'),
         currentLocation: item.projectName || 'Warehouse',
+        projectName: item.projectName,
+        projectCode: item.projectCode,
+        caseId: item.caseId,
+        userEmail: item.userEmail,
+        pmEmail: item.pmEmail,
+        expectedReturnDate: item.returnDate,
         calDate: '2026-12-31',
         rack: item.rack || 'A1',
         serialNumber: item.serialNumber || item.Serial_Number || 'N/A',
@@ -62,6 +71,7 @@ const App: React.FC = () => {
          projectName: item.projectName,
          expectedReturnDate: item.returnDate,
          caseId: item.caseId,
+         projectCode: item.projectCode,
          userEmail: item.userEmail,
          pmEmail: item.pmEmail,
          model: item.name

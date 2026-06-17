@@ -56,6 +56,7 @@ def test_checkout_approval_moves_asset_to_dashboard_without_active_kanban_duplic
     asset = get_item(tool_code)
     assert asset["status"] == "Rented"
     assert asset["projectName"] == "OTP Project"
+    assert asset["projectCode"] == "OTP"
     assert asset["caseId"] == case_id
 
     # The approved checkout is represented by Dashboard/items only, not by an Active Kanban card.

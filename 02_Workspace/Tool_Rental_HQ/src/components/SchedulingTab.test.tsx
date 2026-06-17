@@ -277,6 +277,9 @@ describe('SchedulingTab Component', () => {
     expect(screen.getByDisplayValue('pm.alpha@ge.com')).toBeInTheDocument();
     expect(screen.getByLabelText(/Power Analyzer/i)).toBeChecked();
     expect(screen.getByLabelText(/Clamp Meter/i)).toBeChecked();
+    const selectedEquipmentLabels = screen.getAllByTestId('schedule-equipment-option').slice(0, 2);
+    expect(selectedEquipmentLabels[0]).toHaveTextContent(/Power Analyzer/i);
+    expect(selectedEquipmentLabels[1]).toHaveTextContent(/Clamp Meter/i);
     expect(screen.queryByText(/Notes & Routing Instructions/i)).not.toBeInTheDocument();
   });
 

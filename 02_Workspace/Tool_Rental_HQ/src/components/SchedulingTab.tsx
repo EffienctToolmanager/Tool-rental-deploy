@@ -113,6 +113,13 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     return matchingAsset?.projectName || schedule.destination;
   };
 
+  const sortedEquipmentAssets = [...assets].sort((a, b) => {
+    const aSelected = formSelectedAssets.includes(a.toolCode);
+    const bSelected = formSelectedAssets.includes(b.toolCode);
+    if (aSelected !== bSelected) return aSelected ? -1 : 1;
+    return a.toolCode.localeCompare(b.toolCode);
+  });
+
   const fetchSchedules = async () => {
     try {
       setIsLoading(true);
@@ -1660,10 +1667,10 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                     <div className="f-form-group">
                       <label className="f-label">Select Equipment (Select Multiple)</label>
                       <div className="asset-checkbox-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', maxHeight: '120px', overflowY: 'auto', border: '1px solid var(--f-border)', padding: '8px', borderRadius: '4px' }}>
-                        {assets.map(a => {
+                        {sortedEquipmentAssets.map(a => {
                           const isChecked = formSelectedAssets.includes(a.toolCode);
                           return (
-                            <label key={a.toolCode} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', cursor: 'pointer', color: 'var(--f-text-primary)' }}>
+                            <label key={a.toolCode} data-testid="schedule-equipment-option" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', cursor: 'pointer', color: 'var(--f-text-primary)' }}>
                               <input 
                                 type="checkbox"
                                 checked={isChecked}

@@ -451,6 +451,7 @@ def set_asset_rented_from_schedule(schedule: dict):
                 "status": "Rented",
                 "userEmail": schedule.get("userEmail") or "",
                 "pmEmail": schedule.get("pmEmail") or "",
+                "projectCode": schedule.get("projectCode") or "",
                 "caseId": schedule.get("caseId") or ""
             })
             break
@@ -465,6 +466,7 @@ def clear_asset_to_available(tool_code: str):
                 "status": "Available",
                 "userEmail": "",
                 "pmEmail": "",
+                "projectCode": "",
                 "caseId": ""
             })
             break
