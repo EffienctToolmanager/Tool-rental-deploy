@@ -15,7 +15,39 @@ const mockAssets: Asset[] = [
     status: 'Available',
     Current_Status: 'Available',
     serialNumber: 'SN-FLK87V-0001'
-  }
+  },
+  {
+    toolCode: 'PWR-001',
+    brand: 'GE',
+    model: 'Power Analyzer',
+    rack: 'B1',
+    currentLocation: 'Project Alpha',
+    calDate: '2026-12-31',
+    status: 'Rented',
+    Current_Status: 'Rented',
+    serialNumber: 'SN-PWR-0001',
+    caseId: 'TR-ALPHA-001',
+    projectName: 'Project Alpha',
+    projectCode: 'ALPHA-77',
+    userEmail: 'tech.alpha@ge.com',
+    pmEmail: 'pm.alpha@ge.com'
+  } as Asset,
+  {
+    toolCode: 'PWR-002',
+    brand: 'GE',
+    model: 'Clamp Meter',
+    rack: 'B2',
+    currentLocation: 'Project Alpha',
+    calDate: '2026-12-31',
+    status: 'Rented',
+    Current_Status: 'Rented',
+    serialNumber: 'SN-PWR-0002',
+    caseId: 'TR-ALPHA-001',
+    projectName: 'Project Alpha',
+    projectCode: 'ALPHA-77',
+    userEmail: 'tech.alpha@ge.com',
+    pmEmail: 'pm.alpha@ge.com'
+  } as Asset
 ];
 
 const mockSchedules = [
@@ -224,6 +256,66 @@ describe('SchedulingTab Component', () => {
     expect(screen.getByText(/Schedule 1/i)).toBeInTheDocument();
     expect(screen.getByText(/Option/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Project Name/i)[0]).toBeInTheDocument();
+  });
+
+  it('prefills create modal from dashboard project and removes notes instructions', async () => {
+    const onRefresh = vi.fn();
+    render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('SCH-202606-0001')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText(/Add Schedule Case/i));
+
+    const projectSelect = screen.getByLabelText(/Dashboard Project/i);
+    fireEvent.change(projectSelect, { target: { value: 'TR-ALPHA-001' } });
+
+    expect(screen.getAllByDisplayValue('Project Alpha').length).toBeGreaterThan(0);
+    expect(screen.getByDisplayValue('ALPHA-77')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('tech.alpha@ge.com')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('pm.alpha@ge.com')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Power Analyzer/i)).toBeChecked();
+    expect(screen.getByLabelText(/Clamp Meter/i)).toBeChecked();
+    expect(screen.queryByText(/Notes & Routing Instructions/i)).not.toBeInTheDocument();
+  });
+
+  it('shows return approval cards with dashboard-style project fields instead of current destination', async () => {
+    const onRefresh = vi.fn();
+    const mockReturnSchedules = [
+      {
+        id: 'SCH-RETURN-001',
+        toolCode: 'PWR-001',
+        model: 'Power Analyzer',
+        sequenceOrder: 0,
+        stage: 'ongoing',
+        destination: 'Project Alpha',
+        status: 'Pending_Approval',
+        userEmail: 'tech.alpha@ge.com',
+        pmEmail: 'pm.alpha@ge.com',
+        movementType: 'return',
+        caseId: 'TR-ALPHA-001',
+        displayCaseId: 'TR-ALPHA-001 (return request)',
+        projectCode: 'ALPHA-77'
+      }
+    ];
+
+    vi.stubGlobal('fetch', vi.fn().mockImplementation((url: string) => {
+      if (url.endsWith('/list')) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve({ data: mockReturnSchedules }) });
+      }
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'success' }) });
+    }));
+
+    render(<SchedulingTab assets={mockAssets} isAdmin={true} onRefreshAssets={onRefresh} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('TR-ALPHA-001 (return request)')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/Project Name:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Project Code:/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Current Destination:/i)).not.toBeInTheDocument();
   });
 
   it('filters schedules based on search term', async () => {

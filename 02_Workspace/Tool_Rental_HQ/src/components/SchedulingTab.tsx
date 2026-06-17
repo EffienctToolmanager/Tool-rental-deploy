@@ -12,7 +12,6 @@ const API_BASE = "/api/sharepoint/schedule";
 
 export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, onRefreshAssets }) => {
   const [schedules, setSchedules] = useState<ScheduledCase[]>([]);
-  const [showPendingOnly, setShowPendingOnly] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCase, setEditingCase] = useState<ScheduledCase | null>(null);
@@ -58,6 +57,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   const [formUserEmail, setFormUserEmail] = useState('');
   const [formPmEmail, setFormPmEmail] = useState('');
   const [formNotes, setFormNotes] = useState('');
+  const [selectedDashboardCaseId, setSelectedDashboardCaseId] = useState('');
   const [formStatus, setFormStatus] = useState<'Scheduled' | 'Pending_Approval' | 'In_Progress' | 'Completed' | 'Delayed'>('Scheduled');
   const [formHandoverPic, setFormHandoverPic] = useState('');
   const [formHandoverPhoto, setFormHandoverPhoto] = useState('');
@@ -68,6 +68,50 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
   const isOutboundFromCalibration = !!editingCase && editingCase.stage === 'calibration' && (formStage === 'active_rental' || formStage === 'ongoing' || formStatus === 'Completed');
   const isNormalHandover = !!editingCase && editingCase.stage !== 'calibration' && formStage === 'active_rental';
   const showHandoverFields = !!editingCase && (isOutboundFromCalibration || isNormalHandover);
+
+  const dashboardProjects = Object.values(
+    assets.reduce<Record<string, {
+      caseId: string;
+      projectName: string;
+      projectCode: string;
+      userEmail: string;
+      pmEmail: string;
+      toolCodes: string[];
+    }>>((acc, asset) => {
+      const caseId = asset.caseId || '';
+      const status = asset.status || asset.Current_Status;
+      if (!caseId || (status !== 'Rented' && status !== 'Reserved')) return acc;
+      if (!acc[caseId]) {
+        acc[caseId] = {
+          caseId,
+          projectName: asset.projectName || asset.currentLocation || asset.Current_Location || '',
+          projectCode: asset.projectCode || '',
+          userEmail: asset.userEmail || '',
+          pmEmail: asset.pmEmail || '',
+          toolCodes: []
+        };
+      }
+      acc[caseId].toolCodes.push(asset.toolCode);
+      return acc;
+    }, {})
+  );
+
+  const applyDashboardProject = (caseId: string) => {
+    setSelectedDashboardCaseId(caseId);
+    const project = dashboardProjects.find(p => p.caseId === caseId);
+    if (!project) return;
+    setFormSelectedAssets(project.toolCodes);
+    setFormDestination(project.projectName);
+    setFormProjectCode(project.projectCode);
+    setFormUserEmail(project.userEmail);
+    setFormPmEmail(project.pmEmail);
+    setRelaySteps([{ option: 'other_project', destination: project.projectName }]);
+  };
+
+  const getScheduleProjectName = (schedule: ScheduledCase) => {
+    const matchingAsset = assets.find(a => a.toolCode === schedule.toolCode);
+    return matchingAsset?.projectName || schedule.destination;
+  };
 
   const fetchSchedules = async () => {
     try {
@@ -94,6 +138,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     if (!isAdmin) return;
     setEditingCase(null);
     setFormSelectedAssets([]);
+    setSelectedDashboardCaseId('');
     setFormProjectCode('');
     setFormDestination('');
     setFormUserEmail('');
@@ -981,8 +1026,17 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                         <div style={{ fontSize: '11px', color: 'var(--f-text-muted)', marginBottom: '8px' }}>Code: {code} | SN: {serial}</div>
                         
                         <div className="card-meta" style={{ backgroundColor: 'rgba(0, 0, 0, 0.02)', padding: '8px', borderRadius: '6px' }}>
-                          {activeSched.projectCode && <div>🏷️ <strong>Project Code:</strong> {activeSched.projectCode}</div>}
-                          <div>📍 <strong>Current Destination:</strong> {activeSched.destination}</div>
+                          {activeSched.movementType === 'return' ? (
+                            <>
+                              <div>🏢 <strong>Project Name:</strong> {getScheduleProjectName(activeSched)}</div>
+                              {activeSched.projectCode && <div>🏷️ <strong>Project Code:</strong> {activeSched.projectCode}</div>}
+                            </>
+                          ) : (
+                            <>
+                              {activeSched.projectCode && <div>🏷️ <strong>Project Code:</strong> {activeSched.projectCode}</div>}
+                              <div>📍 <strong>Current Destination:</strong> {activeSched.destination}</div>
+                            </>
+                          )}
                           {activeSched.movementType && <div>🔄 <strong>Request Type:</strong> {activeSched.movementType === 'return' ? 'return request' : activeSched.movementType === 'checkout' ? 'rental request' : activeSched.movementType}</div>}
                           {activeSched.requestedEndDate && <div>📅 <strong>Requested Return Date:</strong> {activeSched.requestedEndDate}</div>}
                           <div>👤 <strong>Renter/User:</strong> {activeSched.userEmail}</div>
@@ -1587,6 +1641,23 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                   // CREATE MODE
                   <>
                     <div className="f-form-group">
+                      <label className="f-label" htmlFor="dashboard-project-select">Dashboard Project</label>
+                      <select
+                        id="dashboard-project-select"
+                        className="f-input"
+                        value={selectedDashboardCaseId}
+                        onChange={(e) => applyDashboardProject(e.target.value)}
+                      >
+                        <option value="">⌄ Select existing dashboard project...</option>
+                        {dashboardProjects.map(project => (
+                          <option key={project.caseId} value={project.caseId}>
+                            {project.projectName || 'Unnamed Project'} · {project.projectCode || 'No Code'} · {project.caseId}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="f-form-group">
                       <label className="f-label">Select Equipment (Select Multiple)</label>
                       <div className="asset-checkbox-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', maxHeight: '120px', overflowY: 'auto', border: '1px solid var(--f-border)', padding: '8px', borderRadius: '4px' }}>
                         {assets.map(a => {
@@ -1746,16 +1817,18 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                   </>
                 )}
 
-                <div className="f-form-group" style={{ marginTop: '15px' }}>
-                  <label className="f-label">Notes & Routing Instructions</label>
-                  <textarea 
-                    className="f-input"
-                    value={formNotes}
-                    onChange={(e) => setFormNotes(e.target.value)}
-                    placeholder="Special instructions for handover calibration or delivery..."
-                    rows={3}
-                  />
-                </div>
+                {editingCase && (
+                  <div className="f-form-group" style={{ marginTop: '15px' }}>
+                    <label className="f-label">Notes & Routing Instructions</label>
+                    <textarea 
+                      className="f-input"
+                      value={formNotes}
+                      onChange={(e) => setFormNotes(e.target.value)}
+                      placeholder="Special instructions for handover calibration or delivery..."
+                      rows={3}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="modal-footer">

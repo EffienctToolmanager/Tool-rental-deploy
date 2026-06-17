@@ -31,6 +31,12 @@ export type Asset = {
   Serial_Number?: string;
   datasheetUrl?: string;
   specSummary?: SpecSummary;
+  caseId?: string;
+  projectName?: string;
+  projectCode?: string;
+  userEmail?: string;
+  pmEmail?: string;
+  expectedReturnDate?: string;
 }
 
 export type Rental = {

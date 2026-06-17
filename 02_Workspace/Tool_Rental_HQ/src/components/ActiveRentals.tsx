@@ -223,6 +223,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
           const userEmail = (firstItem as any).userEmail || (firstItem as any).User_Email || (firstItem as any).user || 'Unknown Renter';
           const pmEmail = (firstItem as any).pmEmail || (firstItem as any).pm || 'Unknown PM';
           const projectName = firstItem.projectName || 'Unknown Project';
+          const projectCode = (firstItem as any).projectCode || (firstItem as any).Project_Code || 'N/A';
 
           const daysLeft = calculateRemainingDays(expectedDate);
           const isOverdue = daysLeft < 0;
@@ -244,6 +245,7 @@ const ActiveRentals: React.FC<ActiveRentalsProps> = ({ rentals, onRefresh }) => 
                     </div>
                     <div className="case-meta-row-sub">
                       <span>🏢 Project: <strong className="case-meta-value">{projectName}</strong></span>
+                      <span>🏷️ Code: <strong className="case-meta-value">{projectCode}</strong></span>
                     </div>
                   </div>
                 </div>
