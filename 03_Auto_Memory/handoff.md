@@ -1,45 +1,40 @@
 # 🔄 Work Session Handoff & Memory (Vercel Deployment Live Status)
 
-**기록 일시:** 2026-05-27 (GEV Admin ERP 및 엑셀 환율 재설계 완료)
-**현재 상태:** 3단계 GEV Admin ERP 로컬 포터블 아키텍처 완비 ➜ SQLite & Native Python REST API 서버 및 글래스모피즘 대시보드 기동 완료 ➜ DHL & Uni-pass 관부가세 감시 시뮬레이터 및 GEV 엑셀 Dynamic 환율 재설계 완료!
+**기록 일시:** 2026-06-17 (Tool Rental Scheduler 고도화 및 최종 Vercel 배포 완료)
+**현재 상태:** Tool Rental Scheduler 고도화 및 Vercel 프로덕션 배포 완료! 모든 기능 테스트 통과 및 최종 코드 동기화 완료!
 
 ---
 
 ### 🎯 [최종 완료된 핵심 마일스톤 및 성과]
 
-1. **지능형 2단계 장바구니 렌탈 시스템 (Smart 2-Step Rental Flow)**
-   * **Master Inventory:** `Select` 컬럼 신설 및 실시간 연청색 하이라이트. 1개 이상 선택 시 상단에 플로팅 장바구니 배너 등장 및 `[Smart 대여 신청하러 가기 ➜]` 클릭 시 Checkout 탭 자동 전환.
-   * **Checkout:** 인벤토리에서 넘어온 장비 코드들이 local `cart` 및 checklist와 양방향 동기화(Two-way sync)되며, 하단에 개별 1:1 사진 업로더 자동 생성 (파일 첨부 상태 보존).
-   * **기능 보완:** 다중 사진 반납 및 부분/일괄 대여 연장(Extend) 달력 기능 완비.
+1. **원자적 Case ID 그룹화 구현 (Atomic Case ID Grouping)**
+   * Smart Rental 신청 시, 포함된 여러 대의 장비들에 대해 동일한 단일 Case ID를 부여하여 카드 조각화 현상 해결.
+   * 승인 시 Live Dashboard에서 장비 단위가 아닌 Case 단위로 대여 카드가 생성되도록 하여 UI 밀집도 대폭 완화.
 
-2. **Vercel 클라우드 영구 실서버 배포 성공 (100% 완료)**
-   * **도메인 링크:** Vercel에 GitHub 저장소(`Tool-rental-deploy`) 연동 완료.
-   * **구축 상태:** `Root Directory` 경로 설정을 `02_Workspace/Tool_Rental_HQ`로 매핑하여 빌드 오류를 완벽히 해결하고 **최종 클라우드 배포 성공**.
-   * **시연 가이드:** 이제 회사 PC, 모바일 기기 등 어떠한 사내 보안망이나 방화벽도 완전히 우회하여 `https://tool-rental-deploy.vercel.app` (또는 Vercel 대시보드 도메인) 링크 하나만으로 초고성능 즉각 시연 가능.
+2. **Scheduler UI/UX 정형화 및 일괄 처리 고도화**
+   * 불필요한 Gantt timeline 및 "Pending Approval Only" 상태 필터링 버튼 삭제.
+   * 다중 선택 제어를 위한 버튼 이름을 **"Select All" / "Deselect All"**로 수정하고, 검색 필터 상태에 따라 매칭된 대상만 동적으로 전체 선택/선택취소 되도록 보완.
+   * 일괄 승인 버튼을 **"Approve Selected"**로 네이밍 통일 및 기능 최적화.
+   * 대여 상태(Pending, Approval, In_Progress 등) 및 Case ID 키워드 인덱싱을 검색창에 추가하여, 검색창 입력을 통한 일괄 상태 승인 제어 완성.
 
-3. **영문 대조 발표자료 및 GitHub 업로드 완료**
-   * `_company/_shared/Reports/tool_rental_presentation.md` 파일에 6슬라이드 분량의 영문 Pitch-Deck 작성 완료.
-   * 로컬 이미지를 상대 경로(`./images/real_..._layout.png`)로 연결하여 GitHub 및 Obsidian 웹 화면에서 사진들이 깨짐 없이 100% 정상 렌더링되도록 조치.
-   * GitHub 원격 저장소(`https://github.com/EffienctToolmanager/Tool-rental-deploy.git`) `main` 브랜치에 최종 푸시 완료.
+3. **Expected Line Up 액티브 강조 구현**
+   * 예상 대여 라인업 중 현재 상태가 `In_Progress`인 대상을 시각적으로 강력하게 강조.
+   * 적용 스타일: 청록색 배경(`var(--f-primary-light)`), **Bold 폰트**, 왼쪽 테두리 액센트 선(`3px solid var(--f-primary)`).
+   * 액티브 렌탈 또는 교정(Calibration) 상태에 들어간 카드가 실시간 상태 변화에 따라 동적으로 강조 영역이 변경되도록 검증 완료.
 
-4. **GEV Admin ERP & 포터블 가동 최적화**
-   * **SQLite DB 연동:** 드래그앤드롭 서류 보관 시 GEV 표준 네이밍 자동 마킹 및 SHA-256 해시 중복 업로드 원천 차단 탑재.
-   * **1클릭 가동:** 회사 PC 이전을 위해 포트 충돌 가드 및 CP949 한국어 문자셋 크래시 가드가 적용된 `Run_Admin_ERP.bat` 기동 파일 제공.
+4. **테스트 코드 정밀 리팩토링 및 100% 통과**
+   * `SchedulingTab.test.tsx` 파일 내 deprecated된 "Pending Approval Only" 필터 관련 테스트 케이스를 최신 상태 검색 키워드 필터 검증 테스트로 전환.
+   * 벌크 선택 테스트 내 "Deselect All" 셀렉터 충돌 문제를 `.bulk-actions-bar` 내부 엘리먼트 타겟팅을 통해 완벽 차단.
+   * **최종 테스트 결과:** 18개 테스트 모두 정상 패스 (`npx vitest run`).
+   * **최종 빌드 결과:** Vite 프로덕션 빌드 성공 (`npm run build`).
 
-5. **DHL Express & 관세청 Uni-pass 실시간 화물 추적기**
-   * 대시보드 3번 탭 내부에 실시간 타임라인 UI 및 **3호기 AI (DeepSeek-R1) 관부가세 감사 모듈** 결합 완료.
-   * 예시 송장(`DHL-`, `UNIPASS-`) 입력 시 실시간 세부 현황과 관세 면제 검토 및 세관 보류 소명 사유서 자동 매핑 등의 AI 해법 팝업 지원.
-
-6. **GEV Purchasing System 엑셀 환율 재설계 및 GEV_Quote_Master.xlsm 완벽 복구 ([complete_restoration_and_automation.py](file:///C:/Users/cfpcl/OneDrive/Desktop/AI_OS_HQ/05_Scripts/complete_restoration_and_automation.py))**
-   * **원가 DB ([GEV_HQ_Cost_Book.xlsx](file:///C:/Users/cfpcl/OneDrive/Desktop/GEV_Purchasing_System/GEV_HQ_Cost_Book.xlsx))**: `I1:K2` 영역에 골드 환율 설정 칸 구축 및 1,000행 전체의 원화 가격을 dynamic `=E5*$K$1` 수식으로 전면 재설계.
-   * **마스터 분석기 ([GEV_Quote_Master.xlsm](file:///C:/Users/cfpcl/OneDrive/Desktop/GEV_Purchasing_System/GEV_Quote_Master.xlsm))**: 쿼리/테이블/슬라이서가 소실되었던 마스터 파일을 최신 AutoRecover 임시 파일로부터 구조적/기능적으로 100% 완벽 복구하였습니다.
-   * **파워 쿼리 및 환율 연동**: `win32com` COM 자동화를 사용해 로컬 OLEDB 파워 쿼리 소스 경로를 dynamic path-replacement 기법으로 갱신하여 인코딩 크래시 없이 `Order_Sheet (2)` 및 `HQ_Cost_DB`를 연결하였으며, `L1:N2` 골드 환율 설정 칸과 동적으로 매핑된 4개 계산 열(`본사원화원가`, `매출액`, `매출이익액`, `이익률 (%)`), 합계 이중선 스타일링, 그리고 실시간 필터링용 **모델명 슬라이서**까지 무결하게 재건 완료했습니다.
+5. **Vercel 실서버 프로덕션 최종 배포 성공**
+   * **프로덕션 URL**: [https://tool-rental-deploy.vercel.app](https://tool-rental-deploy.vercel.app)
+   * Vercel 배포 시 `02_Workspace/Tool_Rental_HQ` 하위 경로가 올바르게 인출 및 설정되도록 Cwd를 조정하여 무중단 배포를 완료했습니다.
+   * GitHub 원격 저장소(`main` 브랜치)에 최종 수동 커밋 및 푸시 연동 완료.
 
 ---
 
-### 🚀 [다음 세션에서 이어갈 Next Action]
-
-1. **실제 DHL/Uni-pass API 연동 스위칭**
-   * 발급받으신 Open API 인증키가 있을 경우 백엔드에 15줄의 request 모듈을 탑재하여 즉시 실 운영 통관 추적 모드로 스위칭 가능.
-2. **M365 Entra ID 권한 승인 모니터링 및 실서버 연결**
-   * IT 관리자 측의 Entra ID API 승인이 떨어지면, `msal_proxy.py`의 MSAL 환경 변수(Tenant ID, Client ID, Secret)를 로컬 SQLite 모크 테스트 환경에서 실 서버 SharePoint Lists API 환경으로 로드(Reload)하여 프로덕션 최종 런칭.
+### 🚀 [다음 세션에 참고할 사항]
+* **기존 마스터 DB 구조 유지**: FLK-87V-01 등의 Asset Code는 삭제되었으며, `Tool Code`와 `Rack` 기반의 스키마 및 규칙이 유지되고 있습니다.
+* **추가 기능 런칭 준비**: 향후 SharePoint Lists의 실서버 데이터 연동 및 M365 API 연동 시, 로컬 환경과의 라우팅 스위칭만 지원하면 즉시 프로덕션 활성화 가능합니다.
