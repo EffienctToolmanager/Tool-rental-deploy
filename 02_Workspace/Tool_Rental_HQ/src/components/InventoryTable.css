@@ -168,20 +168,7 @@
 }
 
 @media (max-width: 768px) {
-  /* Hide non-critical columns on mobile devices while keeping Brand, Model, and ⋯ Details visible. */
-  .f-table th:nth-child(4), /* Rack */
-  .f-table td:nth-child(4),
-  .f-table th:nth-child(5), /* Current location */
-  .f-table td:nth-child(5),
-  .f-table th:nth-child(8), /* Serial Number */
-  .f-table td:nth-child(8),
-  .f-table th:nth-child(9), /* Calibration Date */
-  .f-table td:nth-child(9),
-  .f-table th:nth-child(10), /* Days Until Cal */
-  .f-table td:nth-child(10) {
-    display: none;
-  }
-
+  /* Preserve the full inventory schema on mobile; the table container handles horizontal scroll. */
   .inventory-controls {
     flex-direction: column;
     align-items: stretch;
