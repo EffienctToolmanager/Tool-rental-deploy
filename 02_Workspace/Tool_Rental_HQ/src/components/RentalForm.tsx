@@ -107,9 +107,34 @@ const RentalForm: React.FC<RentalFormProps> = ({
     const randomSuffix = Math.random().toString(36).substring(2, 6).toUpperCase();
     const caseId = `TR-${dateStr}-${randomSuffix}`;
 
-    const mappedItems = cart.map(item => ({
-      toolCode: item.toolCode,
-      photoUrl: item.photo ? item.photo.name : 'Unknown'
+    const mappedItems = await Promise.all(cart.map(async (item) => {
+      let photoWebUrl = '';
+
+      if (item.photo) {
+        const uploadData = new FormData();
+        uploadData.append('file', item.photo);
+
+        try {
+          const uploadResponse = await fetch(`/api/sharepoint/upload?filename=${encodeURIComponent(item.photo.name)}`, {
+            method: 'POST',
+            body: uploadData,
+          });
+          if (uploadResponse.ok) {
+            const uploadResult = await uploadResponse.json();
+            photoWebUrl = uploadResult.webUrl || '';
+          }
+        } catch (uploadError) {
+          console.error(`Photo preview upload failed for ${item.toolCode}:`, uploadError);
+        }
+      }
+
+      return {
+        toolCode: item.toolCode,
+        // Keep the original file name for the later OneDrive/SharePoint naming-format conversion.
+        photoUrl: item.photo ? item.photo.name : 'Unknown',
+        // Demo-only openable URL. In production this becomes the Graph/SharePoint/OneDrive webUrl.
+        photoWebUrl,
+      };
     }));
 
     const payload = {

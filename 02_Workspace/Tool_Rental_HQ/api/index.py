@@ -477,6 +477,7 @@ async def get_sharepoint_list():
 class CartItem(BaseModel):
     toolCode: str
     photoUrl: Optional[str] = None
+    photoWebUrl: Optional[str] = None
 
 class BulkRentalRequest(BaseModel):
     caseId: str
@@ -534,6 +535,7 @@ async def create_rental_record(rental: BulkRentalRequest):
             "projectCode": rental.projectCode,
             "handoverPic": "Renter Checkout",
             "handoverPhoto": item.photoUrl,
+            "handoverPhotoWebUrl": item.photoWebUrl,
             "checklistVerified": True,
             "caseId": rental.caseId
         }
@@ -589,7 +591,8 @@ async def upload_file_to_sharepoint(filename: str, file: UploadFile = File(...))
     logger.info(f"Mocking upload of image: {filename}")
     return {
         "status": "success", 
-        "webUrl": f"https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=300"
+        "webUrl": f"https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=900",
+        "originalFilename": filename
     }
 
 class ReturnItem(BaseModel):

@@ -63,6 +63,7 @@ export type ScheduledCase = {
   projectCode?: string;
   handoverPic?: string;
   handoverPhoto?: string;
+  handoverPhotoWebUrl?: string;
   checklistVerified?: boolean;
   caseId?: string;
 }

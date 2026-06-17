@@ -905,6 +905,17 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                           {activeSched.handoverPhoto && (
                             <div style={{ marginTop: '4px' }}>
                               📷 <strong>{activeSched.status === 'Pending_Approval' ? 'Submitted Photo:' : 'Saved Photo:'}</strong> {activeSched.handoverPhoto}
+                              {activeSched.handoverPhotoWebUrl && (
+                                <a
+                                  href={activeSched.handoverPhotoWebUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="f-button"
+                                  style={{ display: 'inline-block', marginLeft: '6px', padding: '2px 6px', fontSize: '10.5px', minHeight: 'auto', height: '22px', lineHeight: '16px' }}
+                                >
+                                  Open Photo
+                                </a>
+                              )}
                             </div>
                           )}
                         </div>
