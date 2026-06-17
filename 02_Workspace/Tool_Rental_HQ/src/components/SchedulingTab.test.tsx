@@ -55,7 +55,7 @@ describe('SchedulingTab Component', () => {
     const onRefresh = vi.fn();
     render(<SchedulingTab assets={mockAssets} isAdmin={false} onRefreshAssets={onRefresh} />);
 
-    expect(screen.getByText(/Successive Tool scheduling & Routing/i)).toBeInTheDocument();
+    expect(screen.getByText(/Tool Scheduling/i)).toBeInTheDocument();
     
     await waitFor(() => {
       expect(screen.getByText(/SCH-202606-0001/)).toBeInTheDocument();

@@ -967,7 +967,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                               }}
                             />
                           )}
-                          <span className="card-id" style={{ flex: 1 }}>{activeSched.id}</span>
+                          <span className="card-id" style={{ flex: 1 }}>{activeSched.displayCaseId || activeSched.caseId || activeSched.id}</span>
                           {hasConflict && <span className="warning-pill" style={{ marginRight: '8px' }}>⚠️ Overlap</span>}
                           {isAdmin && (
                             <div className="card-edit-actions">
@@ -983,7 +983,7 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
                         <div className="card-meta" style={{ backgroundColor: 'rgba(0, 0, 0, 0.02)', padding: '8px', borderRadius: '6px' }}>
                           {activeSched.projectCode && <div>🏷️ <strong>Project Code:</strong> {activeSched.projectCode}</div>}
                           <div>📍 <strong>Current Destination:</strong> {activeSched.destination}</div>
-                          {activeSched.movementType && <div>🔄 <strong>Request Type:</strong> {activeSched.movementType}</div>}
+                          {activeSched.movementType && <div>🔄 <strong>Request Type:</strong> {activeSched.movementType === 'return' ? 'return request' : activeSched.movementType === 'checkout' ? 'rental request' : activeSched.movementType}</div>}
                           {activeSched.requestedEndDate && <div>📅 <strong>Requested Return Date:</strong> {activeSched.requestedEndDate}</div>}
                           <div>👤 <strong>Renter/User:</strong> {activeSched.userEmail}</div>
                           {activeSched.notes && <div style={{ fontStyle: 'italic', marginTop: '4px' }}>📝 {activeSched.notes}</div>}

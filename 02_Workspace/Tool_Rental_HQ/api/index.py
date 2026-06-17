@@ -437,6 +437,45 @@ ONEDRIVE_RENTAL_PHOTO_FOLDER = os.getenv(
 )
 
 
+def with_request_suffix(case_id: str, movement_type: str) -> str:
+    suffix = "return request" if movement_type == "return" else "rental request"
+    return f"{case_id} ({suffix})"
+
+
+def set_asset_rented_from_schedule(schedule: dict):
+    for item in db_storage.get("items", []):
+        if item.get("toolCode") == schedule.get("toolCode"):
+            item.update({
+                "projectName": schedule.get("destination") or "",
+                "returnDate": schedule.get("endDate") or "",
+                "status": "Rented",
+                "userEmail": schedule.get("userEmail") or "",
+                "pmEmail": schedule.get("pmEmail") or "",
+                "caseId": schedule.get("caseId") or ""
+            })
+            break
+
+
+def clear_asset_to_available(tool_code: str):
+    for item in db_storage.get("items", []):
+        if item.get("toolCode") == tool_code:
+            item.update({
+                "projectName": "Warehouse",
+                "returnDate": "",
+                "status": "Available",
+                "userEmail": "",
+                "pmEmail": "",
+                "caseId": ""
+            })
+            break
+
+
+def visible_schedule_cards():
+    # Inventory next/current hover must mirror the visible Tool Schedule cards only.
+    # Completed approval artifacts are history, not live card state.
+    return [s for s in db_storage.get("schedules", []) if s.get("status") != "Completed"]
+
+
 def sanitize_filename_part(value: Optional[str]) -> str:
     import re
     text = (value or "Unknown").strip()
@@ -538,7 +577,8 @@ async def create_rental_record(rental: BulkRentalRequest):
             "handoverPhotoWebUrl": item.photoWebUrl,
             "movementType": "checkout",
             "checklistVerified": True,
-            "caseId": rental.caseId
+            "caseId": rental.caseId,
+            "displayCaseId": with_request_suffix(rental.caseId, "checkout")
         }
         schedules.append(new_case)
         
@@ -633,23 +673,36 @@ async def return_rental_record(request: BulkReturnRequest):
 
     for idx, tool_code in enumerate(returned_codes):
         active = next((s for s in schedules if s.get("toolCode") == tool_code and s.get("caseId") == request.caseId and s.get("stage") == "active_rental" and s.get("status") == "In_Progress"), None)
-        if not active:
+        asset = next((i for i in db_storage.get("items", []) if i.get("toolCode") == tool_code and i.get("caseId") == request.caseId and i.get("status") == "Rented"), None)
+        if not active and not asset:
             continue
-        previous_snapshot = active.copy()
-        active["status"] = "Completed"
-        pending = active.copy()
+        previous_snapshot = active.copy() if active else {}
+        if active:
+            active["status"] = "Completed"
+        asset_data = asset or {}
+        pending = active.copy() if active else {
+            "toolCode": tool_code,
+            "model": asset_data.get("model") or asset_data.get("name") or "Unknown Model",
+            "destination": asset_data.get("projectName") or "Return Review",
+            "endDate": asset_data.get("returnDate") or "",
+            "userEmail": asset_data.get("userEmail") or "",
+            "pmEmail": asset_data.get("pmEmail") or "",
+            "caseId": request.caseId,
+        }
         pending.update({
             "id": f"RET-{date_str}-{random.randint(1000, 9999)}-{idx}",
             "stage": "ongoing",
             "status": "Pending_Approval",
-            "sequenceOrder": active.get("sequenceOrder", 0),
-            "destination": active.get("destination") or "Return Review",
+            "sequenceOrder": active.get("sequenceOrder", 0) if active else 0,
+            "destination": pending.get("destination") or "Return Review",
             "notes": f"Return approval pending for Case ID: {request.caseId}",
             "movementType": "return",
+            "displayCaseId": with_request_suffix(request.caseId, "return"),
             "previousSchedule": previous_snapshot
         })
         schedules.append(pending)
-        sync_asset_state(tool_code)
+        # Do not mutate Dashboard/item rental state while a return request is only pending.
+        # The asset becomes Available only after the return card is approved.
         created += 1
 
     db_storage["schedules"] = schedules
@@ -684,6 +737,7 @@ class ScheduledCase(BaseModel):
     rejectReason: Optional[str] = None
     checklistVerified: Optional[bool] = None
     caseId: Optional[str] = None
+    displayCaseId: Optional[str] = None
 
 class RejectScheduleRequest(BaseModel):
     reason: str
@@ -946,8 +1000,10 @@ async def approve_schedule_case(schedule_id: str):
             movement_type = s.get("movementType") or "checkout"
 
             if movement_type == "return":
-                # Return approval clears the pending return card; asset becomes Available after sync.
+                # Return approval clears the pending return card; Dashboard/item state becomes Available.
                 s["status"] = "Completed"
+                if eq_code:
+                    clear_asset_to_available(eq_code)
             elif movement_type == "extension":
                 previous = s.get("previousSchedule") or {}
                 if previous:
@@ -965,11 +1021,11 @@ async def approve_schedule_case(schedule_id: str):
                 s["status"] = "Completed"
             else:
                 if s.get("status") == "Pending_Approval":
-                    s["stage"] = "active_rental"
                     asset = next((item for item in db_storage.get("items", []) if item.get("toolCode") == s.get("toolCode")), None)
                     if s.get("handoverPhoto"):
                         s["handoverPhoto"] = build_rental_photo_path(s, asset)
-                s["status"] = "In_Progress"
+                    set_asset_rented_from_schedule(s)
+                s["status"] = "Completed"
             break
             
     if not target:
@@ -1000,6 +1056,7 @@ async def approve_schedule_cases_bulk(schedule_ids: List[str]):
         if s["id"] in schedule_ids and s["status"] == "Pending_Approval":
             movement_type = s.get("movementType") or "checkout"
             if movement_type == "return":
+                clear_asset_to_available(s["toolCode"])
                 remove_ids.add(s["id"])
             elif movement_type == "extension":
                 previous = s.get("previousSchedule") or {}
@@ -1017,11 +1074,12 @@ async def approve_schedule_cases_bulk(schedule_ids: List[str]):
                         schedules.append(previous)
                 remove_ids.add(s["id"])
             else:
-                s["stage"] = "active_rental"
                 asset = next((item for item in db_storage.get("items", []) if item.get("toolCode") == s.get("toolCode")), None)
                 if s.get("handoverPhoto"):
                     s["handoverPhoto"] = build_rental_photo_path(s, asset)
-                s["status"] = "In_Progress"
+                set_asset_rented_from_schedule(s)
+                s["status"] = "Completed"
+                remove_ids.add(s["id"])
             eq_codes_to_sync.add(s["toolCode"])
             approved_count += 1
 
@@ -1059,6 +1117,9 @@ def sync_asset_state(tool_code: str):
     if not active_schedules:
         for item in db_storage["items"]:
             if item["toolCode"] == tool_code:
+                case_id = item.get("caseId", "")
+                if item.get("status") == "Rented" and case_id and not case_id.startswith("SCH-"):
+                    return
                 item.update({
                     "projectName": "Warehouse",
                     "returnDate": "",
@@ -1071,6 +1132,13 @@ def sync_asset_state(tool_code: str):
 
     # Sort active schedules by sequenceOrder to find the first upcoming step
     selected_case = sorted(active_schedules, key=lambda x: x.get("sequenceOrder", 0))[0]
+    if selected_case.get("status") == "Scheduled":
+        for item in db_storage["items"]:
+            if item["toolCode"] == tool_code:
+                case_id = item.get("caseId", "")
+                if item.get("status") == "Rented" and case_id and not case_id.startswith("SCH-"):
+                    return
+                break
     
     # Pending approvals are already picked/requested, so keep inventory blocked as Reserved.
     if selected_case.get("status") == "Pending_Approval":
@@ -1118,7 +1186,7 @@ async def get_schedule_list():
     logger.info("Fetching scheduling cases list.")
     return {
         "status": "success",
-        "data": db_storage.get("schedules", [])
+        "data": visible_schedule_cards()
     }
 
 @app.post("/api/sharepoint/schedule/create-bulk")

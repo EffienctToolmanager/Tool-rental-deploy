@@ -306,7 +306,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
               const isAvailable = status === 'Available';
               const serialNumber = asset.serialNumber || asset.Serial_Number || '—';
               
-              const assetSchedules = schedules.filter((s: any) => s.toolCode === toolCode);
+              const assetSchedules = schedules.filter((s: any) => s.toolCode === toolCode && s.status !== 'Completed');
               const sortedSchedules = [...assetSchedules].sort((a: any, b: any) => {
                 if (a.sequenceOrder !== b.sequenceOrder) {
                   return a.sequenceOrder - b.sequenceOrder;

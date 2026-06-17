@@ -69,6 +69,7 @@ export type ScheduledCase = {
   rejectReason?: string;
   checklistVerified?: boolean;
   caseId?: string;
+  displayCaseId?: string;
 }
 
 
