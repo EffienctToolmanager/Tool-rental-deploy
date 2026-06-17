@@ -73,7 +73,15 @@
   font-weight: 600;
 }
 
-.scheduler-approve-btn:disabled {
+.scheduler-reject-btn {
+  background-color: #C62828;
+  color: white;
+  border: none;
+  font-weight: 600;
+}
+
+.scheduler-approve-btn:disabled,
+.scheduler-reject-btn:disabled {
   opacity: 0.55;
 }
 

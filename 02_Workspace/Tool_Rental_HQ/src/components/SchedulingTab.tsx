@@ -738,12 +738,14 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     }
   };
 
+  const getSelectedPendingIds = () => selectedCardIds.filter(id => {
+    const card = schedules.find(s => s.id === id);
+    return card && card.status === 'Pending_Approval';
+  });
+
   const handleBulkApproveRentals = async () => {
     if (!isAdmin) return;
-    const pendingIds = selectedCardIds.filter(id => {
-      const card = schedules.find(s => s.id === id);
-      return card && card.status === 'Pending_Approval';
-    });
+    const pendingIds = getSelectedPendingIds();
 
     if (pendingIds.length === 0) {
       alert("No pending approval cards selected.");
@@ -771,6 +773,48 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
     } catch (err: any) {
       console.error(err);
       alert(`Error bulk approving rentals: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleBulkRejectRentals = async () => {
+    if (!isAdmin) return;
+    const pendingIds = getSelectedPendingIds();
+
+    if (pendingIds.length === 0) {
+      alert("No pending approval cards selected.");
+      return;
+    }
+
+    const reason = window.prompt(
+      `Reject reason for ${pendingIds.length} selected pending request(s).\nThis message will be sent to each requester by Email and Teams.`,
+      ''
+    );
+    if (reason === null) return;
+    if (!reason.trim()) {
+      alert('Reject reason is required.');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const responses = await Promise.all(pendingIds.map(id => fetch(`${API_BASE}/reject/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: reason.trim() })
+      })));
+      const failed = responses.filter(res => !res.ok);
+      if (failed.length > 0) {
+        throw new Error(`${failed.length} reject request(s) failed`);
+      }
+      alert(`❌ Bulk rejected ${pendingIds.length} pending request(s).\nEmail/Teams reason queued: ${reason.trim()}`);
+      setSelectedCardIds([]);
+      await fetchSchedules();
+      onRefreshAssets();
+    } catch (err: any) {
+      console.error(err);
+      alert(`Error bulk rejecting rentals: ${err.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -1202,18 +1246,17 @@ export const SchedulingTab: React.FC<SchedulingTabProps> = ({ assets, isAdmin, o
               <>
                 <button 
                   type="button"
-                  className="f-button scheduler-action-btn scheduler-action-secondary"
-                  onClick={() => handleSelectAll()}
+                  className="f-button scheduler-action-btn scheduler-reject-btn"
+                  onClick={handleBulkRejectRentals}
+                  disabled={getSelectedPendingIds().length === 0}
                 >
-                  {getVisibleActiveSchedules().length > 0 && getVisibleActiveSchedules().every(s => selectedCardIds.includes(s.id))
-                    ? "Deselect All" 
-                    : "Select All"}
+                  Reject Selected
                 </button>
                 <button 
                   type="button"
                   className="f-button scheduler-action-btn scheduler-approve-btn"
                   onClick={handleBulkApproveRentals}
-                  disabled={selectedCardIds.filter(id => schedules.find(s => s.id === id)?.status === 'Pending_Approval').length === 0}
+                  disabled={getSelectedPendingIds().length === 0}
                 >
                   Approve Selected
                 </button>
