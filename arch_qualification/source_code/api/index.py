@@ -1,0 +1,1313 @@
+import os
+import time
+from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import List, Optional
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("vercel_serverless_backend")
+
+app = FastAPI(title="Staging Tool Rental Serverless Backend")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+TENANT_ID = os.getenv("MS_TENANT_ID", "dummy_tenant_id")
+CLIENT_ID = os.getenv("MS_CLIENT_ID", "dummy_client_id")
+CLIENT_SECRET = os.getenv("MS_CLIENT_SECRET", "dummy_client_secret")
+
+def get_msal_token():
+    if TENANT_ID == "dummy_tenant_id":
+        return "dummy_access_token_12345"
+    return "real_token"
+
+# --- In-Memory Persistent Database for Premium Staging Demo ---
+# In-memory mock database to allow seamless serverless state updates
+INITIAL_ITEMS = [
+    {
+        "id": "1", "toolCode": "CCP01", "brand": "Fluke", "model": "87V",
+        "name": "Fluke 87V Industrial Multimeter", "equipmentType": "Industrial Digital Multimeter",
+        "projectName": "Project Site A", "returnDate": "2026-06-30", "status": "Rented",
+        "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0001",
+        "datasheetUrl": "https://www.fluke.com/en-us/product/electrical-testing/digital-multimeters/fluke-87v",
+        "serialNumber": "SN-FLK87V-93812", "rack": "A1",
+        "specSummary": {
+            "equipmentType": "Industrial Digital Multimeter",
+            "measurementRange": "DC/AC Voltage: 1000V, Current: 10A (20A for 30s max), Resistance: 50 MΩ, Capacitance: 9,999 µF, Frequency: 200 kHz",
+            "accuracy": "DC Voltage: ±0.05% + 1 digit, AC Voltage: ±0.7% + 2 digits (True-RMS)",
+            "voltageRating": "1000 V AC/DC",
+            "currentRating": "10 A continuous (20 A overload protection for 30s max)",
+            "safetyCategory": "CAT III 1000 V, CAT IV 600 V",
+            "connectivity": "None (Optical-to-USB optional adapter)",
+            "powerSource": "9V Alkaline battery (approx. 400 hours continuous without backlight)",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": [
+                "Unique low-pass filter for accurate voltage and frequency measurements on adjustable speed motor drives (VFDs)",
+                "Peak capture for intermittent signals and glitches as short as 250 µs",
+                "Large, high-contrast two-level backlit display with analog bar graph"
+            ],
+            "typicalUse": "General industrial troubleshooting, motor drive and power distribution cabinet maintenance"
+        },
+    },
+    {
+        "id": "2", "toolCode": "CCP02", "brand": "Fluke", "model": "1738",
+        "name": "Fluke 1738 Power Logger", "equipmentType": "Power Quality Logger",
+        "projectName": "Project Site A", "returnDate": "2026-06-30", "status": "Rented",
+        "userEmail": "pm@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0001",
+        "datasheetUrl": "https://example.com/mock-datasheets/fluke-1738.pdf",
+        "serialNumber": "SN-FLK1738-48291", "rack": "A1",
+        "specSummary": {
+            "equipmentType": "Power Quality Logger",
+            "measurementRange": "Voltage: 1000 V, Current Range: 4 A to 6000 A (sensor dependent), Power/Energy Trend",
+            "accuracy": "Voltage: ±0.1% of nominal, Current: ±0.2% of range, Power: ±0.2% of range",
+            "voltageRating": "1000 V CAT III / 600 V CAT IV",
+            "currentRating": "Supports flexible current probes up to 6000 A",
+            "safetyCategory": "CAT III 1000 V, CAT IV 600 V",
+            "connectivity": "USB, Wi-Fi, Ethernet, Bluetooth",
+            "powerSource": "100 V to 500 V line power or rechargeable Li-ion battery backup",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": [
+                "Automatically measure and log voltage, current, power, harmonics, and associated values",
+                "Power instrument directly from the measured circuit",
+                "Convenient in-field setup through touch screen and wireless download link"
+            ],
+            "typicalUse": "Load studies, energy assessments, and power quality analysis in distribution boards"
+        },
+    },
+    {
+        "id": "3", "toolCode": "PSU01", "brand": "Keysight", "model": "U1282A",
+        "name": "Keysight U1282A Handheld Digital Multimeter", "equipmentType": "Handheld Digital Multimeter",
+        "projectName": "Project Site B", "returnDate": "2026-07-05", "status": "Rented",
+        "userEmail": "tech@ge.com", "pmEmail": "pm@ge.com", "caseId": "TR-20260613-0002",
+        "datasheetUrl": "https://example.com/mock-datasheets/keysight-u1282a.pdf",
+        "serialNumber": "SN-KEYU1282A-39128", "rack": "B2",
+        "specSummary": {
+            "equipmentType": "Handheld Digital Multimeter",
+            "measurementRange": "DC/AC Voltage: 1000V, Current: 10A, Resistance: 600 MΩ, Capacitance: 10 mF, Frequency: 20 MHz",
+            "accuracy": "DC Voltage: ±0.025% + 5 digits, AC Voltage: ±0.3% + 25 digits (True-RMS)",
+            "voltageRating": "1000 V AC/DC",
+            "currentRating": "10 A continuous",
+            "safetyCategory": "CAT III 1000 V, CAT IV 600 V",
+            "connectivity": "IR-to-USB / Bluetooth optional adapter",
+            "powerSource": "4 x AAA batteries (approx. 800 hours battery life)",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": [
+                "60,000 counts dual display with analog bar graph",
+                "Built-in frequency counter and square wave generator",
+                "IP67 certified water and dust protection with rugged shell design"
+            ],
+            "typicalUse": "Precision bench and field electrical measurements and device tuning"
+        },
+    },
+    {
+        "id": "4", "toolCode": "PSU02", "brand": "Keysight", "model": "U1461A",
+        "name": "Keysight U1461A Insulation Resistance Tester", "equipmentType": "Insulation Resistance Tester",
+        "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
+        "datasheetUrl": "https://example.com/mock-datasheets/keysight-u1461a.pdf",
+        "serialNumber": "SN-KEYU1461A-28491", "rack": "B2",
+        "specSummary": {
+            "equipmentType": "Insulation Resistance Tester",
+            "measurementRange": "Test Voltage: 50V to 1000V, Resistance range up to 200 GΩ",
+            "accuracy": "Insulation Resistance: ±5% of reading, Test Voltage: +20% / -0%",
+            "voltageRating": "1000 V insulation class",
+            "currentRating": "Leakage current: 1 nA to 2 mA",
+            "safetyCategory": "CAT III 1000V, CAT IV 600V",
+            "connectivity": "USB style mock export",
+            "powerSource": "Battery powered",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": ["PI/DAR style test", "Timed insulation test", "Continuity check"],
+            "typicalUse": "Motor, cable, and panel insulation condition check"
+        },
+    },
+    {
+        "id": "5", "toolCode": "CCP03", "brand": "Hioki", "model": "IR4056",
+        "name": "Hioki IR4056 Insulation Tester", "equipmentType": "Insulation Tester",
+        "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
+        "datasheetUrl": "https://example.com/mock-datasheets/hioki-ir4056.pdf",
+        "serialNumber": "SN-HIOIR4056-59102", "rack": "B1",
+        "specSummary": {
+            "equipmentType": "Insulation Tester",
+            "measurementRange": "Test Voltage: 50V to 1000V, Resistance range up to 4000 MΩ",
+            "accuracy": "Insulation Resistance: ±4% of reading, Test Voltage: ±10%",
+            "voltageRating": "1000 V insulation class",
+            "currentRating": "Continuity current function",
+            "safetyCategory": "CAT III 600V",
+            "connectivity": "No connectivity in mock profile",
+            "powerSource": "Battery powered",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": ["Fast comparator style judgement", "Bright indication", "Continuity test"],
+            "typicalUse": "Routine electrical insulation screening"
+        },
+    },
+    {
+        "id": "6", "toolCode": "CCP04", "brand": "Hioki", "model": "CM4375",
+        "name": "Hioki CM4375 AC/DC Clamp Meter", "equipmentType": "AC/DC Clamp Meter",
+        "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
+        "datasheetUrl": "https://example.com/mock-datasheets/hioki-cm4375.pdf",
+        "serialNumber": "SN-HIOCM4375-72819", "rack": "C2",
+        "specSummary": {
+            "equipmentType": "AC/DC Clamp Meter",
+            "measurementRange": "AC/DC Current: 1000 A, AC/DC Voltage: 1000 V",
+            "accuracy": "Current: ±1.3% rdg + 3 dgt, Voltage: ±0.9% rdg + 3 dgt",
+            "voltageRating": "1000 V AC/DC",
+            "currentRating": "1000 A clamp jaw rating",
+            "safetyCategory": "CAT III 1000 V, CAT IV 600 V",
+            "connectivity": "Bluetooth-style mock connectivity",
+            "powerSource": "Battery powered",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": ["Clamp current measurement", "Inrush style capture", "Rugged jaw design"],
+            "typicalUse": "Current measurement without circuit interruption"
+        },
+    },
+    {
+        "id": "7", "toolCode": "MEG01", "brand": "Megger", "model": "MIT525",
+        "name": "Megger MIT525 Insulation Resistance Tester", "equipmentType": "High Voltage Insulation Tester",
+        "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
+        "datasheetUrl": "https://example.com/mock-datasheets/megger-mit525.pdf",
+        "serialNumber": "SN-MEGMIT525-48291", "rack": "D1",
+        "specSummary": {
+            "equipmentType": "High Voltage Insulation Tester",
+            "measurementRange": "Test Voltage: up to 5 kV, Resistance range up to 10 TΩ",
+            "accuracy": "Insulation Resistance: ±5% of reading, Test Voltage: +20% / -0%",
+            "voltageRating": "5000 V high-voltage class",
+            "currentRating": "Leakage current display",
+            "safetyCategory": "CAT IV 600V",
+            "connectivity": "USB style mock result transfer",
+            "powerSource": "Rechargeable battery / mains",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": ["PI/DAR/DD style tests", "Guard terminal", "Large asset diagnostics"],
+            "typicalUse": "Generator, transformer, cable insulation verification"
+        },
+    },
+    {
+        "id": "8", "toolCode": "MEG02", "brand": "Megger", "model": "DLRO10HD",
+        "name": "Megger DLRO10HD Low Resistance Ohmmeter", "equipmentType": "Low Resistance Ohmmeter",
+        "projectName": "", "returnDate": "", "status": "Available", "userEmail": "", "pmEmail": "", "caseId": "",
+        "datasheetUrl": "https://example.com/mock-datasheets/megger-dlro10hd.pdf",
+        "serialNumber": "SN-MEGDLRO10HD-28190", "rack": "D2",
+        "specSummary": {
+            "equipmentType": "Low Resistance Ohmmeter",
+            "measurementRange": "micro-ohm to low-ohm resistance checks",
+            "accuracy": "bonding/contact resistance grade",
+            "voltageRating": "low-voltage resistance test output",
+            "currentRating": "10 A class test current",
+            "safetyCategory": "CAT III 300 V",
+            "connectivity": "No connectivity in mock profile",
+            "powerSource": "Rechargeable battery / mains",
+            "calibrationCycle": "12 Months",
+            "keyFeatures": ["High current continuity test", "Bidirectional measurement", "Rugged field case"],
+            "typicalUse": "Grounding, bonding, breaker contact, and busbar resistance checks"
+        },
+    },
+]
+
+ADDITIONAL_MOCK_MODELS = [
+    ("FLK", "Fluke", "179", "True-RMS Digital Multimeter", "Industrial Digital Multimeter"),
+    ("FLK", "Fluke", "289", "Logging Multimeter", "Advanced Logging Multimeter"),
+    ("FLK", "Fluke", "376 FC", "AC/DC Clamp Meter", "AC/DC Clamp Meter"),
+    ("FLK", "Fluke", "1507", "Insulation Resistance Tester", "Insulation Tester"),
+    ("FLK", "Fluke", "1587 FC", "Insulation Multimeter", "Insulation Multimeter"),
+    ("FLK", "Fluke", "435-II", "Power Quality Analyzer", "Power Quality Analyzer"),
+    ("FLK", "Fluke", "1625-2", "Earth Ground Tester", "Earth Ground Tester"),
+    ("FLK", "Fluke", "TiS75+", "Thermal Camera", "Thermal Imaging Camera"),
+    ("FLK", "Fluke", "BT521", "Battery Analyzer", "Battery Analyzer"),
+    ("FLK", "Fluke", "754", "Documenting Process Calibrator", "Process Calibrator"),
+    ("KEY", "Keysight", "U1273A", "Handheld Digital Multimeter", "Handheld Digital Multimeter"),
+    ("KEY", "Keysight", "U1242C", "Handheld Digital Multimeter", "Handheld Digital Multimeter"),
+    ("KEY", "Keysight", "U1213A", "Clamp Meter", "Clamp Meter"),
+    ("KEY", "Keysight", "U1453A", "Insulation Resistance Tester", "Insulation Tester"),
+    ("KEY", "Keysight", "34465A", "Bench Digital Multimeter", "Bench Digital Multimeter"),
+    ("KEY", "Keysight", "E4980AL", "Precision LCR Meter", "LCR Meter"),
+    ("KEY", "Keysight", "N6705C", "DC Power Analyzer", "DC Power Analyzer"),
+    ("KEY", "Keysight", "U5855A", "TrueIR Thermal Imager", "Thermal Imaging Camera"),
+    ("KEY", "Keysight", "U8903B", "Audio Analyzer", "Signal Analyzer"),
+    ("KEY", "Keysight", "DAQ970A", "Data Acquisition System", "Data Acquisition Unit"),
+    ("HIO", "Hioki", "DT4282", "Digital Multimeter", "Industrial Digital Multimeter"),
+    ("HIO", "Hioki", "DT4256", "Digital Multimeter", "Field Digital Multimeter"),
+    ("HIO", "Hioki", "CM3289", "AC Clamp Meter", "AC Clamp Meter"),
+    ("HIO", "Hioki", "CM7290", "Display Unit", "Clamp Sensor Display Unit"),
+    ("HIO", "Hioki", "IR4057", "Insulation Tester", "Insulation Tester"),
+    ("HIO", "Hioki", "BT3554", "Battery Tester", "Battery Tester"),
+    ("HIO", "Hioki", "PQ3198", "Power Quality Analyzer", "Power Quality Analyzer"),
+    ("HIO", "Hioki", "PW3360", "Clamp Power Logger", "Power Logger"),
+    ("HIO", "Hioki", "LR8450", "Memory HiLogger", "Data Logger"),
+    ("HIO", "Hioki", "IM3536", "LCR Meter", "LCR Meter"),
+    ("MEG", "Megger", "MIT1025", "Insulation Resistance Tester", "High Voltage Insulation Tester"),
+    ("MEG", "Megger", "MIT1525", "Insulation Resistance Tester", "High Voltage Insulation Tester"),
+    ("MEG", "Megger", "MFT1845+", "Multifunction Tester", "Multifunction Installation Tester"),
+    ("MEG", "Megger", "DET4TC2", "Earth Tester", "Earth Ground Tester"),
+    ("MEG", "Megger", "TDR2050", "Cable Fault Locator", "Cable Fault Locator"),
+    ("MEG", "Megger", "BITE5", "Battery Tester", "Battery Impedance Tester"),
+    ("MEG", "Megger", "MPQ1000", "Power Quality Analyzer", "Power Quality Analyzer"),
+    ("MEG", "Megger", "MOM2", "Micro-ohmmeter", "Low Resistance Ohmmeter"),
+    ("MEG", "Megger", "S1-568", "Insulation Resistance Tester", "Insulation Tester"),
+    ("MEG", "Megger", "PAT450", "Portable Appliance Tester", "Appliance Safety Tester"),
+    ("YOK", "Yokogawa", "WT3000E", "Precision Power Analyzer", "Power Analyzer"),
+    ("YOK", "Yokogawa", "WT5000", "Precision Power Analyzer", "Power Analyzer"),
+    ("YOK", "Yokogawa", "CW500", "Power Quality Analyzer", "Power Quality Analyzer"),
+    ("YOK", "Yokogawa", "CA500", "Multifunction Process Calibrator", "Process Calibrator"),
+    ("YOK", "Yokogawa", "MY600", "Digital Insulation Tester", "Insulation Tester"),
+    ("YOK", "Yokogawa", "TY720", "Digital Multimeter", "Digital Multimeter"),
+    ("GOS", "GW Instek", "GDM-9061", "Bench Digital Multimeter", "Bench Digital Multimeter"),
+    ("GOS", "GW Instek", "GPT-15012", "Electrical Safety Analyzer", "Electrical Safety Tester"),
+    ("BK", "B&K Precision", "5493C", "Bench Digital Multimeter", "Bench Digital Multimeter"),
+    ("AM", "Amprobe", "AMP-330", "Clamp Meter", "Clamp Meter"),
+]
+
+
+def build_mock_spec(brand: str, model: str, product_name: str, equipment_type: str):
+    # Determine typical ranges and accuracies based on type
+    if "Multimeter" in equipment_type:
+        range_val = "DC/AC Voltage: 1000V, Current: 10A, Resistance: 50 MΩ, Frequency: 100 kHz"
+        acc_val = "DC Voltage: ±0.09% + 2 digits, AC Voltage: ±1.0% + 3 digits (True-RMS)"
+        volt_rating = "1000 V AC/DC"
+        curr_rating = "10 A fused protection"
+        safety = "CAT III 1000 V, CAT IV 600 V"
+        power = "9V Battery or AAA battery powered"
+        features = ["True-RMS measurement class", "Auto/Manual range selectable", "Backlit digital display"]
+        typical_use = f"General electrical troubleshooting and circuit analysis for {product_name}."
+    elif "Insulation" in equipment_type or "Tester" in equipment_type:
+        range_val = "Test Voltage: 50V to 1000V, Resistance range up to 200 GΩ" if "High Voltage" not in equipment_type else "Test Voltage: up to 5 kV, Resistance range up to 10 TΩ"
+        acc_val = "Insulation Resistance: ±5% of reading, Test Voltage: +20% / -0%"
+        volt_rating = "1000 V insulation class" if "High Voltage" not in equipment_type else "5000 V high-voltage class"
+        curr_rating = "Leakage current: 1 nA to 2 mA"
+        safety = "CAT IV 600 V"
+        power = "Battery powered or rechargeable cells"
+        features = ["Polarization Index (PI) and Dielectric Absorption Ratio (DAR) tests", "Auto-discharge safety function", "Guard terminal to minimize surface leakage"]
+        typical_use = f"Insulation testing and motor winding diagnostics for {product_name}."
+    elif "Clamp" in equipment_type:
+        range_val = "AC/DC Current: 600 A or 2000 A, AC/DC Voltage: 1000 V"
+        acc_val = "Current: ±1.5% rdg + 5 dgt, Voltage: ±0.9% rdg + 3 dgt"
+        volt_rating = "1000 V AC/DC"
+        curr_rating = "600 A / 2000 A clamp jaw rating"
+        safety = "CAT III 1000 V, CAT IV 600 V"
+        power = "AAA battery powered (approx. 45 hours continuous use)"
+        features = ["Non-contact voltage detection (NCV)", "True-RMS AC current measurement", "Inrush current capture for motor start-ups"]
+        typical_use = f"High-current testing and cable current surveys for {product_name} without breaking circuits."
+    elif "Analyzer" in equipment_type or "Logger" in equipment_type:
+        range_val = "Voltage: 1000 V, Current Range: up to 6000 A with sensors, 3-phase logging"
+        acc_val = "Voltage: ±0.1% of nominal voltage, Harmonic Accuracy: ±1.0% of reading"
+        volt_rating = "1000 V CAT III / 600 V CAT IV"
+        curr_rating = "Supports active and flexible current probes"
+        safety = "CAT III 1000 V, CAT IV 600 V"
+        power = "Rechargeable Li-ion battery or auxiliary mains power"
+        features = ["Harmonic distortion and power factor analysis", "In-field setup wizard with wiring error detection", "Event waveform capture for voltage sags and swells"]
+        typical_use = f"Energy studies, load profiling, and power quality diagnostics for {product_name}."
+    else:
+        # Fallback to realistic generic specifications
+        range_val = f"Custom range tailored for {equipment_type} standard field application."
+        acc_val = "Standard industrial accuracy class (±1.5% of reading)"
+        volt_rating = "600 V AC/DC electrical rating"
+        curr_rating = "Standard sensor input or fused terminal protection"
+        safety = "CAT III 600 V safety standard"
+        power = "Battery powered (rechargeable or dry cells)"
+        features = ["Rugged protective case for field operations", "Data logging capability with built-in memory", "LCD high-visibility backlit display"]
+        typical_use = f"Field calibration, verification, and diagnostics for {product_name}."
+
+    return {
+        "equipmentType": equipment_type,
+        "measurementRange": range_val,
+        "accuracy": acc_val,
+        "voltageRating": volt_rating,
+        "currentRating": curr_rating,
+        "safetyCategory": safety,
+        "connectivity": "USB, Wi-Fi or Bluetooth (class-specific)" if "FC" in model or "BT" in model or "CM" in model or "PQ" in model else "None or USB data cable connection",
+        "powerSource": power,
+        "calibrationCycle": "12 Months",
+        "keyFeatures": features,
+        "typicalUse": typical_use,
+    }
+
+
+for idx, (prefix, brand, model, product_name, equipment_type) in enumerate(ADDITIONAL_MOCK_MODELS, start=len(INITIAL_ITEMS) + 1):
+    if brand == "Megger":
+        tool_prefix = "MEG"
+    elif any(kw in equipment_type for kw in ["Multimeter", "Clamp", "Logger", "Analyzer", "Meter"]):
+        tool_prefix = "CCP"
+    elif any(kw in equipment_type for kw in ["Insulation", "Tester", "Power", "Calibrator"]):
+        tool_prefix = "PSU"
+    else:
+        tool_prefix = "GEN"
+    tool_code_val = f"{tool_prefix}{idx:02d}"
+
+    code_model = model.upper().replace(" ", "").replace("+", "P").replace("-", "")
+    INITIAL_ITEMS.append({
+        "id": str(idx),
+        "toolCode": tool_code_val,
+        "brand": brand,
+        "model": model,
+        "name": f"{brand} {model} {product_name}",
+        "equipmentType": equipment_type,
+        "projectName": "",
+        "returnDate": "",
+        "status": "Available",
+        "userEmail": "",
+        "pmEmail": "",
+        "caseId": "",
+        "datasheetUrl": f"https://example.com/mock-datasheets/{brand.lower().replace(' ', '-')}-{model.lower().replace(' ', '-').replace('+', 'p')}.pdf",
+        "serialNumber": f"SN-{prefix}{code_model}-{idx:04d}",
+        "rack": f"A{idx % 4 + 1}" if idx % 2 == 0 else f"B{idx % 3 + 1}",
+        "specSummary": build_mock_spec(brand, model, product_name, equipment_type),
+    })
+
+
+INITIAL_SCHEDULED_CASES = [
+    {
+        "id": "SCH-202606-0001",
+        "toolCode": "CCP01",
+        "model": "87V",
+        "sequenceOrder": 0,
+        "stage": "active_rental",
+        "destination": "Project Site A",
+        "startDate": "2026-06-10",
+        "endDate": "2026-06-30",
+        "status": "In_Progress",
+        "userEmail": "pm@ge.com",
+        "pmEmail": "pm@ge.com",
+        "notes": "Current active checkout on Project Site A",
+        "handoverPic": "John Doe",
+        "handoverPhoto": "inspection-flk87-siteA.png",
+        "checklistVerified": True
+    },
+    {
+        "id": "SCH-202606-0002",
+        "toolCode": "CCP01",
+        "model": "87V",
+        "sequenceOrder": 1,
+        "stage": "calibration",
+        "destination": "Fluke Cal Lab",
+        "startDate": "2026-07-01",
+        "endDate": "2026-07-03",
+        "status": "Scheduled",
+        "userEmail": "cal-specialist@ge.com",
+        "pmEmail": "pm@ge.com",
+        "notes": "Annual calibration checkup scheduled immediately after Site A return",
+        "handoverPic": "Cal Specialist Lead",
+        "handoverPhoto": "cal-cert-pending.png",
+        "checklistVerified": True
+    },
+    {
+        "id": "SCH-202606-0003",
+        "toolCode": "CCP01",
+        "model": "87V",
+        "sequenceOrder": 2,
+        "stage": "ongoing",
+        "destination": "Samsung Austin Site",
+        "startDate": "2026-07-04",
+        "endDate": "2026-07-25",
+        "status": "Scheduled",
+        "userEmail": "samsung-lead@ge.com",
+        "pmEmail": "pm@ge.com",
+        "notes": "Next project deployment scheduled to ship post-calibration"
+    },
+    {
+        "id": "SCH-202606-0004",
+        "toolCode": "CCP02",
+        "model": "1738",
+        "sequenceOrder": 0,
+        "stage": "active_rental",
+        "destination": "Project Site A",
+        "startDate": "2026-06-10",
+        "endDate": "2026-06-30",
+        "status": "In_Progress",
+        "userEmail": "pm@ge.com",
+        "pmEmail": "pm@ge.com",
+        "notes": "Running load studies",
+        "handoverPic": "Jane Smith",
+        "handoverPhoto": "pre-checkout-calibration-1738.png",
+        "checklistVerified": True
+    }
+]
+
+db_storage = {
+    "items": INITIAL_ITEMS,
+    "schedules": INITIAL_SCHEDULED_CASES
+}
+
+ONEDRIVE_RENTAL_PHOTO_FOLDER = os.getenv(
+    "ONEDRIVE_RENTAL_PHOTO_FOLDER",
+    "OneDrive/ToolRental_Photos"
+)
+
+
+def with_request_suffix(case_id: str, movement_type: str) -> str:
+    suffix = "return request" if movement_type == "return" else "rental request"
+    return f"{case_id} ({suffix})"
+
+
+def set_asset_rented_from_schedule(schedule: dict):
+    for item in db_storage.get("items", []):
+        if item.get("toolCode") == schedule.get("toolCode"):
+            item.update({
+                "projectName": schedule.get("destination") or "",
+                "returnDate": schedule.get("endDate") or "",
+                "status": "Rented",
+                "userEmail": schedule.get("userEmail") or "",
+                "pmEmail": schedule.get("pmEmail") or "",
+                "projectCode": schedule.get("projectCode") or "",
+                "caseId": schedule.get("caseId") or ""
+            })
+            break
+
+
+def clear_asset_to_available(tool_code: str):
+    for item in db_storage.get("items", []):
+        if item.get("toolCode") == tool_code:
+            item.update({
+                "projectName": "Warehouse",
+                "returnDate": "",
+                "status": "Available",
+                "userEmail": "",
+                "pmEmail": "",
+                "projectCode": "",
+                "caseId": ""
+            })
+            break
+
+
+def visible_schedule_cards():
+    # Inventory next/current hover must mirror the visible Tool Schedule cards only.
+    # Completed approval artifacts are history, not live card state.
+    return [s for s in db_storage.get("schedules", []) if s.get("status") != "Completed"]
+
+
+def sanitize_filename_part(value: Optional[str]) -> str:
+    import re
+    text = (value or "Unknown").strip()
+    text = re.sub(r"[^0-9A-Za-z가-힣._-]+", "_", text)
+    return text.strip("_") or "Unknown"
+
+
+def build_rental_photo_path(schedule: dict, asset: Optional[dict] = None) -> str:
+    """Mock OneDrive naming path until Entra ID Graph approval is available.
+
+    Naming format requested by business:
+    대여날짜_모델_시리얼넘버_프로젝트명_대여자이름
+    """
+    original_photo = schedule.get("handoverPhoto") or "checkout_photo"
+    if str(original_photo).startswith(f"{ONEDRIVE_RENTAL_PHOTO_FOLDER}/"):
+        return original_photo
+
+    rental_date = sanitize_filename_part(schedule.get("startDate"))
+    model = sanitize_filename_part(schedule.get("model") or (asset or {}).get("model"))
+    serial = sanitize_filename_part((asset or {}).get("serialNumber") or (asset or {}).get("Serial_Number"))
+    project = sanitize_filename_part(schedule.get("destination") or schedule.get("projectCode"))
+    renter = sanitize_filename_part((schedule.get("userEmail") or "").split("@")[0])
+    _, ext = os.path.splitext(str(original_photo))
+    ext = ext or ".jpg"
+    filename = f"{rental_date}_{model}_{serial}_{project}_{renter}{ext}"
+    return f"{ONEDRIVE_RENTAL_PHOTO_FOLDER}/{filename}"
+
+# --- API Routes ---
+
+@app.get("/api/sharepoint/list")
+async def get_sharepoint_list():
+    logger.info("Fetching SharePoint items list.")
+    return {
+        "status": "success", 
+        "data": db_storage["items"]
+    }
+
+class CartItem(BaseModel):
+    toolCode: str
+    photoUrl: Optional[str] = None
+    photoWebUrl: Optional[str] = None
+
+class BulkRentalRequest(BaseModel):
+    caseId: str
+    items: List[CartItem]
+    projectName: str
+    projectCode: Optional[str] = None
+    returnDate: str
+    pmEmail: str
+    userEmail: str
+
+@app.post("/api/sharepoint/rental")
+async def create_rental_record(rental: BulkRentalRequest):
+    logger.info(f"Rental request received for Case {rental.caseId}")
+    
+    import random
+    from datetime import datetime
+    date_str = datetime.now().strftime("%y%m%d")
+    schedules = db_storage.get("schedules", [])
+    
+    for idx, item in enumerate(rental.items):
+        # find model
+        model = "Unknown Model"
+        for i in db_storage.get("items", []):
+            if i["toolCode"] == item.toolCode:
+                model = i.get("model", "Unknown Model")
+                break
+                
+        # find max sequence
+        item_schedules = [s for s in schedules if s["toolCode"] == item.toolCode]
+        max_seq = -1
+        for s in item_schedules:
+            if s.get("sequenceOrder", 0) > max_seq:
+                max_seq = s["sequenceOrder"]
+        new_seq = max_seq + 1
+        
+        # generate id
+        rand_num = random.randint(1000, 9999)
+        new_id = f"SCH-{date_str}-{rand_num}-{idx}"
+        
+        new_case = {
+            "id": new_id,
+            "toolCode": item.toolCode,
+            "model": model,
+            "sequenceOrder": new_seq,
+            # Smart Rental starts in On Going as an approval-pending request.
+            # Approval promotes it into Active Rental, which then feeds the Dashboard CASE ID card.
+            "stage": "ongoing",
+            "destination": rental.projectName,
+            "startDate": datetime.now().strftime("%Y-%m-%d"),
+            "endDate": rental.returnDate,
+            "status": "Pending_Approval",
+            "userEmail": rental.userEmail,
+            "pmEmail": rental.pmEmail,
+            "notes": f"Checkout Case ID: {rental.caseId}",
+            "projectCode": rental.projectCode,
+            "handoverPic": "Renter Checkout",
+            "handoverPhoto": item.photoUrl,
+            "handoverPhotoWebUrl": item.photoWebUrl,
+            "movementType": "checkout",
+            "checklistVerified": True,
+            "caseId": rental.caseId,
+            "displayCaseId": with_request_suffix(rental.caseId, "checkout")
+        }
+        schedules.append(new_case)
+        
+    db_storage["schedules"] = schedules
+    
+    # Sync states for all items
+    for item in rental.items:
+        sync_asset_state(item.toolCode)
+        
+    logger.info(f"Database updated. Case {rental.caseId} schedules loaded as Pending_Approval.")
+    
+    return {
+        "status": "success", 
+        "message": f"Bulk Rental schedules created dynamically for Case {rental.caseId}", 
+        "caseId": rental.caseId
+    }
+
+
+class ExtendItem(BaseModel):
+    toolCode: str
+    newReturnDate: str
+
+class BulkExtendRequest(BaseModel):
+    caseId: str
+    items: List[ExtendItem]
+
+@app.post("/api/sharepoint/extend")
+async def extend_rental_record(request: BulkExtendRequest):
+    logger.info(f"Extension approval request received for Case {request.caseId}")
+    from datetime import datetime
+    import random
+    schedules = db_storage.get("schedules", [])
+    created = 0
+    date_str = datetime.now().strftime("%y%m%d")
+
+    for idx, item in enumerate(request.items):
+        active = next((s for s in schedules if s.get("toolCode") == item.toolCode and s.get("caseId") == request.caseId and s.get("stage") == "active_rental" and s.get("status") == "In_Progress"), None)
+        if not active:
+            continue
+        previous_snapshot = active.copy()
+        active["status"] = "Completed"
+        pending = active.copy()
+        pending.update({
+            "id": f"EXT-{date_str}-{random.randint(1000, 9999)}-{idx}",
+            "stage": "ongoing",
+            "status": "Pending_Approval",
+            "sequenceOrder": active.get("sequenceOrder", 0),
+            "destination": active.get("destination") or active.get("projectCode") or "Extension Approval",
+            "notes": f"Extension approval pending for Case ID: {request.caseId}",
+            "movementType": "extension",
+            "requestedEndDate": item.newReturnDate,
+            "previousSchedule": previous_snapshot
+        })
+        schedules.append(pending)
+        sync_asset_state(item.toolCode)
+        created += 1
+
+    db_storage["schedules"] = schedules
+    logger.info(f"Extension approval cards created. Case {request.caseId}, count {created}.")
+    return {
+        "status": "success",
+        "message": f"Case {request.caseId} extension request sent to approval queue.",
+        "count": created
+    }
+
+@app.post("/api/sharepoint/upload")
+async def upload_file_to_sharepoint(filename: str, file: UploadFile = File(...)):
+    # 파일 이미지 모크 업로드 지원
+    logger.info(f"Mocking upload of image: {filename}")
+    return {
+        "status": "success", 
+        "webUrl": f"https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=900",
+        "originalFilename": filename
+    }
+
+class ReturnItem(BaseModel):
+    toolCode: str
+
+class BulkReturnRequest(BaseModel):
+    caseId: str
+    items: List[ReturnItem]
+
+@app.post("/api/sharepoint/return")
+async def return_rental_record(request: BulkReturnRequest):
+    logger.info(f"Return approval request received for Case {request.caseId}")
+    from datetime import datetime
+    import random
+    returned_codes = {item.toolCode for item in request.items}
+    schedules = db_storage.get("schedules", [])
+    created = 0
+    date_str = datetime.now().strftime("%y%m%d")
+
+    for idx, tool_code in enumerate(returned_codes):
+        active = next((s for s in schedules if s.get("toolCode") == tool_code and s.get("caseId") == request.caseId and s.get("stage") == "active_rental" and s.get("status") == "In_Progress"), None)
+        asset = next((i for i in db_storage.get("items", []) if i.get("toolCode") == tool_code and i.get("caseId") == request.caseId and i.get("status") == "Rented"), None)
+        if not active and not asset:
+            continue
+        previous_snapshot = active.copy() if active else {}
+        if active:
+            active["status"] = "Completed"
+        asset_data = asset or {}
+        pending = active.copy() if active else {
+            "toolCode": tool_code,
+            "model": asset_data.get("model") or asset_data.get("name") or "Unknown Model",
+            "destination": asset_data.get("projectName") or "Return Review",
+            "endDate": asset_data.get("returnDate") or "",
+            "userEmail": asset_data.get("userEmail") or "",
+            "pmEmail": asset_data.get("pmEmail") or "",
+            "caseId": request.caseId,
+        }
+        pending.update({
+            "id": f"RET-{date_str}-{random.randint(1000, 9999)}-{idx}",
+            "stage": "ongoing",
+            "status": "Pending_Approval",
+            "sequenceOrder": active.get("sequenceOrder", 0) if active else 0,
+            "destination": pending.get("destination") or "Return Review",
+            "notes": f"Return approval pending for Case ID: {request.caseId}",
+            "movementType": "return",
+            "displayCaseId": with_request_suffix(request.caseId, "return"),
+            "previousSchedule": previous_snapshot
+        })
+        schedules.append(pending)
+        # Do not mutate Dashboard/item rental state while a return request is only pending.
+        # The asset becomes Available only after the return card is approved.
+        created += 1
+
+    db_storage["schedules"] = schedules
+    logger.info(f"Return approval cards created. Case {request.caseId}, count {created}.")
+    return {
+        "status": "success",
+        "message": f"Case {request.caseId} return request sent to approval queue.",
+        "count": created
+    }
+
+# --- Successive Scheduling Case API Endpoints [NEW] ---
+
+class ScheduledCase(BaseModel):
+    id: str
+    toolCode: str
+    model: str
+    sequenceOrder: int
+    stage: str
+    destination: str
+    startDate: Optional[str] = None
+    endDate: Optional[str] = None
+    status: str
+    userEmail: str
+    pmEmail: str
+    notes: Optional[str] = None
+    projectCode: Optional[str] = None
+    handoverPic: Optional[str] = None
+    handoverPhoto: Optional[str] = None
+    handoverPhotoWebUrl: Optional[str] = None
+    movementType: Optional[str] = None
+    requestedEndDate: Optional[str] = None
+    rejectReason: Optional[str] = None
+    checklistVerified: Optional[bool] = None
+    caseId: Optional[str] = None
+    displayCaseId: Optional[str] = None
+
+class RejectScheduleRequest(BaseModel):
+    reason: str
+
+class BulkRejectScheduleRequest(BaseModel):
+    ids: List[str]
+    reason: str
+
+from fastapi import Form
+
+@app.post("/api/sharepoint/calibration/clear")
+async def clear_calibration_case(
+    schedule_id: str = Form(...),
+    calibration_date: str = Form(...),
+    pdf_file: UploadFile = File(...),
+    image_file: UploadFile = File(...)
+):
+    import shutil
+    import re
+    logger.info(f"Clearing calibration for schedule: {schedule_id} with date {calibration_date}")
+    schedules = db_storage.get("schedules", [])
+    
+    # Find the target schedule
+    target_schedule = None
+    for s in schedules:
+        if s["id"] == schedule_id:
+            target_schedule = s
+            break
+            
+    if not target_schedule:
+        raise HTTPException(status_code=404, detail="Scheduled case not found")
+        
+    tool_code = target_schedule["toolCode"]
+    model = target_schedule["model"]
+    
+    # Find serial number of the asset and update calibration date in database
+    serial_number = "UNKNOWN"
+    for item in db_storage.get("items", []):
+        if item.get("toolCode") == tool_code:
+            serial_number = item.get("serialNumber") or item.get("Serial_Number") or "UNKNOWN"
+            item["calDate"] = calibration_date
+            if "Calibration_Date" in item:
+                item["Calibration_Date"] = calibration_date
+            break
+
+    # Determine OneDrive save directory
+    onedrive_base = "C:\\Users\\cfpcl\\OneDrive"
+    target_dir = os.path.join(onedrive_base, "Calibration_Reports")
+    
+    if not os.path.exists(onedrive_base):
+        # Fallback to local workspace folder
+        target_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "OneDrive_Calibration_Reports"))
+        
+    os.makedirs(target_dir, exist_ok=True)
+    
+    # Naming template: (검교정날짜_툴코드_툴모델명_시리얼넘버.pdf)
+    def sanitize(val):
+        return re.sub(r'[^a-zA-Z0-9_\-]', '_', val)
+        
+    sanitized_model = sanitize(model)
+    sanitized_serial = sanitize(serial_number)
+    sanitized_code = sanitize(tool_code)
+    
+    pdf_filename = f"{calibration_date}_{sanitized_code}_{sanitized_model}_{sanitized_serial}.pdf"
+    
+    _, ext = os.path.splitext(image_file.filename or "")
+    if not ext:
+        ext = ".jpg"
+    image_filename = f"{calibration_date}_{sanitized_code}_{sanitized_model}_{sanitized_serial}_photo{ext}"
+    
+    pdf_path = os.path.join(target_dir, pdf_filename)
+    image_path = os.path.join(target_dir, image_filename)
+    
+    try:
+        with open(pdf_path, "wb") as buffer:
+            shutil.copyfileobj(pdf_file.file, buffer)
+        with open(image_path, "wb") as buffer:
+            shutil.copyfileobj(image_file.file, buffer)
+    except Exception as e:
+        logger.error(f"Failed to save files: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to save certificate files: {str(e)}")
+        
+    # Mark this calibration schedule as Completed
+    for s in schedules:
+        if s["id"] == schedule_id:
+            s["status"] = "Completed"
+            s["handoverPic"] = "System Calibration"
+            s["handoverPhoto"] = f"{pdf_filename}; {image_filename}"
+            s["checklistVerified"] = True
+            
+    db_storage["schedules"] = schedules
+    sync_asset_state(tool_code)
+    
+    return {
+        "status": "success",
+        "message": "Calibration successfully cleared and certificate files saved.",
+        "pdf_filename": pdf_filename,
+        "image_filename": image_filename,
+        "saved_path": target_dir
+    }
+
+@app.post("/api/sharepoint/schedule/reject/{schedule_id}")
+async def reject_schedule_case(schedule_id: str, request: RejectScheduleRequest):
+    logger.info(f"Rejecting scheduled case: {schedule_id}")
+    schedules = db_storage.get("schedules", [])
+    target = next((s for s in schedules if s.get("id") == schedule_id), None)
+    if not target:
+        # Idempotent for demo/serverless safety: stale browser tabs, repeated clicks,
+        # or old cached bundles can submit a reject for a card that was already
+        # removed by another request/instance. Treat it as already handled instead
+        # of surfacing a blocking 404 to the admin.
+        logger.warning(f"Scheduled case already missing during reject, treating as skipped: {schedule_id}")
+        return {
+            "status": "success",
+            "message": f"Scheduled case {schedule_id} was already rejected or no longer exists.",
+            "skipped": True,
+            "notification": {
+                "email": "requester",
+                "teams": "requester",
+                "reason": request.reason,
+                "message": f"Reject skipped because scheduled case {schedule_id} no longer exists. Reason: {request.reason}"
+            }
+        }
+
+    eq_code = target.get("toolCode")
+    movement_type = target.get("movementType") or "checkout"
+    previous = target.get("previousSchedule") or {}
+
+    if movement_type in {"return", "extension"} and previous:
+        restored = False
+        for idx, s in enumerate(schedules):
+            if s.get("id") == previous.get("id"):
+                previous["status"] = "In_Progress"
+                previous["stage"] = "active_rental"
+                schedules[idx] = previous
+                restored = True
+                break
+        if not restored:
+            previous["status"] = "In_Progress"
+            previous["stage"] = "active_rental"
+            schedules.append(previous)
+
+    # Checkout reject -> remove pending request. Return/extension reject -> remove pending card and restore original active case.
+    schedules = [s for s in schedules if s.get("id") != schedule_id]
+    db_storage["schedules"] = schedules
+    if eq_code:
+        sync_asset_state(eq_code)
+
+    requester = target.get("userEmail") or "requester"
+    notification_message = (
+        f"Your tool rental {movement_type} request for {target.get('toolCode')} was rejected. "
+        f"Reason: {request.reason}"
+    )
+    logger.info(f"Mock email/Teams rejection notice to {requester}: {notification_message}")
+    return {
+        "status": "success",
+        "message": f"Scheduled case {schedule_id} rejected and previous state restored.",
+        "notification": {
+            "email": requester,
+            "teams": requester,
+            "reason": request.reason,
+            "message": notification_message
+        }
+    }
+
+@app.post("/api/sharepoint/schedule/reject-bulk")
+async def reject_schedule_cases_bulk(request: BulkRejectScheduleRequest):
+    logger.info(f"Bulk rejecting scheduled cases: {request.ids}")
+    if not request.ids:
+        raise HTTPException(status_code=400, detail="No scheduled case IDs provided")
+    if not request.reason.strip():
+        raise HTTPException(status_code=400, detail="Reject reason is required")
+
+    schedules = db_storage.get("schedules", [])
+    rejected = []
+    notifications = []
+    missing = []
+    eq_codes_to_sync = set()
+
+    for schedule_id in request.ids:
+        target = next((s for s in schedules if s.get("id") == schedule_id), None)
+        if not target:
+            missing.append(schedule_id)
+            continue
+
+        eq_code = target.get("toolCode")
+        movement_type = target.get("movementType") or "checkout"
+        previous = target.get("previousSchedule") or {}
+
+        if movement_type in {"return", "extension"} and previous:
+            restored = False
+            for idx, s in enumerate(schedules):
+                if s.get("id") == previous.get("id"):
+                    previous["status"] = "In_Progress"
+                    previous["stage"] = "active_rental"
+                    schedules[idx] = previous
+                    restored = True
+                    break
+            if not restored:
+                previous["status"] = "In_Progress"
+                previous["stage"] = "active_rental"
+                schedules.append(previous)
+
+        schedules = [s for s in schedules if s.get("id") != schedule_id]
+        if eq_code:
+            eq_codes_to_sync.add(eq_code)
+
+        requester = target.get("userEmail") or "requester"
+        notification_message = (
+            f"Your tool rental {movement_type} request for {target.get('toolCode')} was rejected. "
+            f"Reason: {request.reason}"
+        )
+        logger.info(f"Mock email/Teams rejection notice to {requester}: {notification_message}")
+        rejected.append(schedule_id)
+        notifications.append({
+            "scheduleId": schedule_id,
+            "email": requester,
+            "teams": requester,
+            "reason": request.reason,
+            "message": notification_message
+        })
+
+    if missing:
+        logger.warning(f"Bulk reject missing scheduled cases, treating as already handled: {missing}")
+    if not rejected:
+        db_storage["schedules"] = schedules
+        return {
+            "status": "success",
+            "message": "No matching scheduled cases found; request treated as already handled.",
+            "count": 0,
+            "rejected": [],
+            "missing": missing,
+            "notifications": []
+        }
+
+    db_storage["schedules"] = schedules
+    for code in eq_codes_to_sync:
+        sync_asset_state(code)
+
+    return {
+        "status": "success",
+        "message": f"Rejected {len(rejected)} scheduled case(s).",
+        "count": len(rejected),
+        "rejected": rejected,
+        "missing": missing,
+        "notifications": notifications
+    }
+
+@app.post("/api/sharepoint/schedule/approve/{schedule_id}")
+async def approve_schedule_case(schedule_id: str):
+    logger.info(f"Approving scheduled case: {schedule_id}")
+    schedules = db_storage.get("schedules", [])
+    target = None
+    eq_code = None
+
+    for s in schedules:
+        if s["id"] == schedule_id:
+            target = s
+            eq_code = s.get("toolCode")
+            movement_type = s.get("movementType") or "checkout"
+
+            if movement_type == "return":
+                # Return approval clears the pending return card; Dashboard/item state becomes Available.
+                s["status"] = "Completed"
+                if eq_code:
+                    clear_asset_to_available(eq_code)
+            elif movement_type == "extension":
+                previous = s.get("previousSchedule") or {}
+                if previous:
+                    previous["endDate"] = s.get("requestedEndDate") or previous.get("endDate")
+                    previous["status"] = "In_Progress"
+                    previous["stage"] = "active_rental"
+                    restored = False
+                    for idx, existing in enumerate(schedules):
+                        if existing.get("id") == previous.get("id"):
+                            schedules[idx] = previous
+                            restored = True
+                            break
+                    if not restored:
+                        schedules.append(previous)
+                s["status"] = "Completed"
+            else:
+                if s.get("status") == "Pending_Approval":
+                    asset = next((item for item in db_storage.get("items", []) if item.get("toolCode") == s.get("toolCode")), None)
+                    if s.get("handoverPhoto"):
+                        s["handoverPhoto"] = build_rental_photo_path(s, asset)
+                    set_asset_rented_from_schedule(s)
+                s["status"] = "Completed"
+            break
+            
+    if not target:
+        raise HTTPException(status_code=404, detail="Scheduled case not found")
+
+    # Keep completed return/extension approval cards out of the Kanban after approval.
+    if target.get("movementType") in {"return", "extension"}:
+        schedules = [s for s in schedules if s.get("id") != schedule_id]
+
+    db_storage["schedules"] = schedules
+    if eq_code:
+        sync_asset_state(eq_code)
+    return {
+        "status": "success",
+        "message": f"Scheduled case {schedule_id} approved.",
+        "data": target
+    }
+
+@app.post("/api/sharepoint/schedule/approve-bulk")
+async def approve_schedule_cases_bulk(schedule_ids: List[str]):
+    logger.info(f"Bulk approving {len(schedule_ids)} scheduled cases.")
+    schedules = db_storage.get("schedules", [])
+    eq_codes_to_sync = set()
+    approved_count = 0
+    remove_ids = set()
+
+    for s in list(schedules):
+        if s["id"] in schedule_ids and s["status"] == "Pending_Approval":
+            movement_type = s.get("movementType") or "checkout"
+            if movement_type == "return":
+                clear_asset_to_available(s["toolCode"])
+                remove_ids.add(s["id"])
+            elif movement_type == "extension":
+                previous = s.get("previousSchedule") or {}
+                if previous:
+                    previous["endDate"] = s.get("requestedEndDate") or previous.get("endDate")
+                    previous["status"] = "In_Progress"
+                    previous["stage"] = "active_rental"
+                    restored = False
+                    for idx, existing in enumerate(schedules):
+                        if existing.get("id") == previous.get("id"):
+                            schedules[idx] = previous
+                            restored = True
+                            break
+                    if not restored:
+                        schedules.append(previous)
+                remove_ids.add(s["id"])
+            else:
+                asset = next((item for item in db_storage.get("items", []) if item.get("toolCode") == s.get("toolCode")), None)
+                if s.get("handoverPhoto"):
+                    s["handoverPhoto"] = build_rental_photo_path(s, asset)
+                set_asset_rented_from_schedule(s)
+                s["status"] = "Completed"
+                remove_ids.add(s["id"])
+            eq_codes_to_sync.add(s["toolCode"])
+            approved_count += 1
+
+    if remove_ids:
+        schedules = [s for s in schedules if s.get("id") not in remove_ids]
+    db_storage["schedules"] = schedules
+    for code in eq_codes_to_sync:
+        sync_asset_state(code)
+    return {
+        "status": "success",
+        "message": f"Successfully approved {approved_count} scheduled cases.",
+        "count": approved_count
+    }
+
+def sync_asset_state(tool_code: str):
+    schedules = [s for s in db_storage.get("schedules", []) if s["toolCode"] == tool_code]
+    if not schedules:
+        for item in db_storage["items"]:
+            if item["toolCode"] == tool_code:
+                case_id = item.get("caseId", "")
+                if item.get("status") == "Rented" and case_id and not case_id.startswith("SCH-"):
+                    return
+                item.update({
+                    "projectName": "Warehouse",
+                    "returnDate": "",
+                    "status": "Available",
+                    "userEmail": "",
+                    "pmEmail": "",
+                    "caseId": ""
+                })
+        return
+
+    # Filter out completed cases to find active scheduling
+    active_schedules = [s for s in schedules if s.get("status") != "Completed"]
+    if not active_schedules:
+        for item in db_storage["items"]:
+            if item["toolCode"] == tool_code:
+                case_id = item.get("caseId", "")
+                if item.get("status") == "Rented" and case_id and not case_id.startswith("SCH-"):
+                    return
+                item.update({
+                    "projectName": "Warehouse",
+                    "returnDate": "",
+                    "status": "Available",
+                    "userEmail": "",
+                    "pmEmail": "",
+                    "caseId": ""
+                })
+        return
+
+    # Sort active schedules by sequenceOrder to find the first upcoming step
+    selected_case = sorted(active_schedules, key=lambda x: x.get("sequenceOrder", 0))[0]
+    if selected_case.get("status") == "Scheduled":
+        for item in db_storage["items"]:
+            if item["toolCode"] == tool_code:
+                case_id = item.get("caseId", "")
+                if item.get("status") == "Rented" and case_id and not case_id.startswith("SCH-"):
+                    return
+                break
+    
+    # Pending approvals are already picked/requested, so keep inventory blocked as Reserved.
+    if selected_case.get("status") == "Pending_Approval":
+        status = "Reserved"
+        project_name = selected_case.get("destination") or "Approval Pending"
+    elif selected_case.get("status") != "In_Progress":
+        status = "Available"
+        project_name = "Warehouse"
+    else:
+        stage = selected_case["stage"]
+        if stage == "active_rental":
+            status = "Rented"
+            project_name = selected_case["destination"]
+        elif stage == "calibration":
+            status = "Calibration"
+            project_name = selected_case.get("destination") or "Calibration Lab"
+        else:  # ongoing
+            status = "Reserved"
+            project_name = selected_case.get("destination") or "Warehouse"
+
+    for item in db_storage["items"]:
+        if item["toolCode"] == tool_code:
+            if status == "Available":
+                item.update({
+                    "status": "Available",
+                    "projectName": "Warehouse",
+                    "returnDate": "",
+                    "userEmail": "",
+                    "pmEmail": "",
+                    "caseId": ""
+                })
+            else:
+                item.update({
+                    "status": status,
+                    "projectName": project_name,
+                    "returnDate": selected_case.get("endDate") or "",
+                    "userEmail": selected_case.get("userEmail") or "",
+                    "pmEmail": selected_case.get("pmEmail") or "",
+                    "caseId": selected_case.get("caseId") or selected_case["id"]
+                })
+            break
+
+@app.get("/api/sharepoint/schedule/list")
+async def get_schedule_list():
+    logger.info("Fetching scheduling cases list.")
+    return {
+        "status": "success",
+        "data": visible_schedule_cards()
+    }
+
+@app.post("/api/sharepoint/schedule/create-bulk")
+async def create_schedule_cases_bulk(cases: List[ScheduledCase]):
+    logger.info(f"Bulk creating {len(cases)} scheduled cases.")
+    schedules = db_storage.get("schedules", [])
+    eq_codes_to_sync = set()
+    for case in cases:
+        schedules.append(case.dict())
+        eq_codes_to_sync.add(case.toolCode)
+    db_storage["schedules"] = schedules
+    for code in eq_codes_to_sync:
+        sync_asset_state(code)
+    return {
+        "status": "success",
+        "message": f"Successfully created {len(cases)} scheduled cases.",
+        "count": len(cases)
+    }
+
+@app.post("/api/sharepoint/schedule/create")
+async def create_schedule_case(case: ScheduledCase):
+    logger.info(f"Creating scheduled case: {case.id}")
+    schedules = db_storage.get("schedules", [])
+    schedules.append(case.dict())
+    db_storage["schedules"] = schedules
+    sync_asset_state(case.toolCode)
+    return {
+        "status": "success",
+        "message": f"Scheduled case {case.id} created.",
+        "data": case
+    }
+
+@app.put("/api/sharepoint/schedule/update-bulk")
+async def update_schedule_cases_bulk(cases: List[ScheduledCase]):
+    logger.info(f"Bulk updating {len(cases)} scheduled cases.")
+    schedules = db_storage.get("schedules", [])
+    updated_ids = {c.id: c for c in cases}
+    
+    eq_codes_to_sync = set()
+    for idx, s in enumerate(schedules):
+        if s["id"] in updated_ids:
+            case_data = updated_ids[s["id"]].dict()
+            schedules[idx] = case_data
+            eq_codes_to_sync.add(case_data["toolCode"])
+            
+    db_storage["schedules"] = schedules
+    for code in eq_codes_to_sync:
+        sync_asset_state(code)
+        
+    return {
+        "status": "success",
+        "message": f"Successfully updated {len(cases)} scheduled cases."
+    }
+
+@app.post("/api/sharepoint/schedule/delete-bulk")
+async def delete_schedule_cases_bulk(case_ids: List[str]):
+    logger.info(f"Bulk deleting {len(case_ids)} scheduled cases.")
+    schedules = db_storage.get("schedules", [])
+    
+    eq_codes_to_sync = set()
+    for s in schedules:
+        if s["id"] in case_ids:
+            eq_codes_to_sync.add(s["toolCode"])
+            
+    filtered = [s for s in schedules if s["id"] not in case_ids]
+    db_storage["schedules"] = filtered
+    
+    for code in eq_codes_to_sync:
+        sync_asset_state(code)
+        
+    return {
+        "status": "success",
+        "message": f"Successfully deleted {len(case_ids)} scheduled cases."
+    }
+
+@app.put("/api/sharepoint/schedule/update")
+async def update_schedule_case(case: ScheduledCase):
+    logger.info(f"Updating scheduled case: {case.id}")
+    schedules = db_storage.get("schedules", [])
+    updated = False
+    
+    for idx, s in enumerate(schedules):
+        if s["id"] == case.id:
+            schedules[idx] = case.dict()
+            updated = True
+            break
+            
+    if not updated:
+        raise HTTPException(status_code=404, detail="Scheduled case not found")
+        
+    db_storage["schedules"] = schedules
+    sync_asset_state(case.toolCode)
+    return {
+        "status": "success",
+        "message": f"Scheduled case {case.id} updated and assets synced.",
+        "data": case
+    }
+
+
+@app.delete("/api/sharepoint/schedule/delete/{case_id}")
+async def delete_schedule_case(case_id: str):
+    logger.info(f"Deleting scheduled case: {case_id}")
+    schedules = db_storage.get("schedules", [])
+    
+    deleted_case = None
+    for s in schedules:
+        if s["id"] == case_id:
+            deleted_case = s
+            break
+            
+    filtered = [s for s in schedules if s["id"] != case_id]
+    if len(filtered) == len(schedules):
+        raise HTTPException(status_code=404, detail="Scheduled case not found")
+        
+    db_storage["schedules"] = filtered
+    if deleted_case:
+        sync_asset_state(deleted_case["toolCode"])
+        
+    return {
+        "status": "success",
+        "message": f"Scheduled case {case_id} deleted."
+    }

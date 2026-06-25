@@ -1,0 +1,188 @@
+.selection-bar-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selection-bar-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--f-primary);
+}
+
+.selection-bar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.inventory-title {
+  font-size: 18px;
+}
+
+.inventory-subtitle {
+  font-size: 12px;
+  color: var(--f-text-secondary);
+}
+
+.legend-container {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-color-box {
+  width: 12px;
+  height: 12px;
+}
+
+.legend-color-box.warning {
+  background: var(--f-warning);
+  border: 1px solid var(--f-warning-border);
+}
+
+.legend-color-box.expired {
+  background: var(--f-danger-bg);
+  border: 1px solid var(--f-error);
+}
+
+.table-th-select {
+  width: 60px;
+  text-align: center;
+}
+
+.table-th-more {
+  width: 72px;
+  text-align: center;
+}
+
+.table-td-select {
+  text-align: center;
+}
+
+.select-checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+.select-checkbox.available {
+  cursor: pointer;
+}
+
+.select-checkbox.rented {
+  cursor: not-allowed;
+}
+
+.table-td-location {
+  fontWeight: 600;
+}
+
+.table-td-location.warehouse {
+  color: var(--f-text-secondary);
+}
+
+.table-td-location.field {
+  color: var(--f-primary);
+}
+
+.table-td-code {
+  font-weight: 600;
+}
+
+.table-td-cal-days {
+  font-weight: bold;
+}
+
+.cal-expired-text {
+  color: var(--f-error);
+}
+
+.table-td-more {
+  text-align: center;
+}
+
+/* Row states based on tokens */
+.row-calibration-expired {
+  background-color: var(--f-danger-bg);
+}
+
+.row-calibration-warning {
+  background-color: var(--f-warning);
+}
+
+.row-selected {
+  background-color: var(--f-selected-bg);
+}
+
+.inventory-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  font-size: 14px;
+  border: 1px solid var(--f-border);
+  border-radius: 6px;
+  background-color: var(--f-bg-white);
+  color: var(--f-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--f-primary);
+  box-shadow: 0 0 0 2px var(--f-selected-bg);
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--f-text-secondary);
+  pointer-events: none;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  /* Preserve the full inventory schema on mobile; the table container handles horizontal scroll. */
+  .inventory-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .search-input-wrapper {
+    max-width: 100%;
+  }
+
+  .inventory-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
