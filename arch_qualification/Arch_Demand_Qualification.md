@@ -158,3 +158,167 @@
 2. **M365 연동 구조**: `Auto_Admin_Workflow_Blueprint.md`에 Power Automate 흐름 1, 흐름 2의 구조와 JSON 스키마, Outlook Actionable Message 개발자 대시보드 등록 방법이 상세 기술됨.
 3. **아키텍처 스키마**: `api/index.py` 내의 `INITIAL_ITEMS` 및 `INITIAL_SCHEDULED_CASES` 모델링을 통해 검증.
 4. **품질 검증 로그**: `walkthrough.md` 및 `handoff.md`에서 스토리북 샌드박스, 단위 테스트 통과 내역 확인 가능.
+
+---
+
+# Arch Demand Qualification - Tool Rental Scheduler (GEV Tool App) [English Version]
+
+This document is a detailed architectural specification compiled to ensure that the on-premise/workspace AI can fully comprehend this system and accurately answer each input item in the `Arch Demand Qualification.xlsx` file.
+
+---
+
+## 1. Basic Information
+
+* **Application CI**: `Tool Rental Scheduler (GEV Tool App)`
+* **Sponsoring CIO**: `GE Vernova CIO (Gevernova Portfolio Lead)`
+* **Expected Delivery Date**: `2026-06-17` (Enhancements and final Vercel deployment completed)
+* **Requirement Summary**: A web-based integrated tool rental scheduling and calibration management platform for GE Vernova engineers and project managers. It provides real-time equipment reservation, calibration schedule control, conflict detection, and bulk status updates (Approve, Release).
+* **Requirement Description**:
+  * This system tracks the real-time status of equipment (Available, Rented, Calibration, In-Progress) by linking field tool rental demands with annual calibration schedules.
+  * It integrates with Microsoft M365 (Outlook Adaptive Cards & Power Automate) to automate document issuance within emails, utilizes SharePoint Online Lists as the data store, and operates with a Vercel Serverless backend (FastAPI) and a React (Vite/TypeScript) frontend.
+* **Business Impact of Non-Compliance**:
+  * Quality defects and safety regulation violation risks arising from the use of non-compliant equipment whose calibration validity period has expired on site project locations.
+  * Equipment supply delays and project schedule delays due to duplicate bookings.
+* **Expected Benefit**:
+  * 80% reduction in manual equipment management overhead (automated document exchange via Outlook Actionable Cards).
+  * Maximization of equipment utilization rate and achievement of 0% duplicate booking rate (equipped with a real-time conflict calculation algorithm).
+* **App Governance Leader**: `Tae-gyu Kim (taegyu.kim@gevernova.com)`
+* **Technical Contact**: `Tae-gyu Kim (taegyu@gevernova.com)`
+
+---
+
+## 2. Business Qualification
+
+### Business Value
+* **Regulatory/Compliance Reason**: Yes
+* **Details of Regulatory/Compliance Relevance**:
+  * Compliance with ISO 9001 / ISO 17025 measuring equipment calibration traceability.
+  * Compliance with user tool history data processing and privacy regulations in accordance with Works Council rules (Germany/France Works Council).
+  * Tracking export control classification status for strategic equipment.
+* **Financial Benefit Defined with High Confidence**: Yes
+* **Benefit Quantification Information**: Savings of approximately $50,000 in annual CapEx by preventing duplicate purchases, alongside reduced management overhead costs.
+* **Alignment with Strategic Priorities**: Yes - Aligned with GE Vernova's LEAN Operations and digital transformation strategy.
+* **Impacted Hoshin KPI or TTI**: Cost Avoidance, Asset Utilization Rate, Compliance Audit Pass Rate.
+* **Broad User Benefit**: Yes
+* **Estimated Number of Impacted Users**: 100+ field technicians, 15 project managers, and warehouse administrators.
+* **Application Roadmap State**: `Invest` (Functional refinement and expansion phase)
+
+### Execution Risk
+* **Budget Approved**: Yes
+* **Strategic Initiative Name**: `GE Vernova Lean Operations Digitalization`
+* **Existing Infrastructure or New Infrastructure Required**: Utilization of existing cloud infrastructure (M365 Tenant and Vercel Enterprise Subscription).
+* **Dependency on Critical Resources**: No - Uses React/Python standard technology stack, making resources easily replaceable.
+* **Key Resources Needed and Availability**: M365 Global Administrator (to support app authorization approvals and token issuance).
+* **Dependency on Other Projects/Demands**: Yes - Dependent on the service status of M365 Power Automate and SharePoint List APIs.
+* **Dependent Project ID and Relationships**: M365 Graph Integration Portal.
+* **Experience in Similar Projects**: Yes - Experience in building SharePoint-based enterprise systems.
+* **Prior Project Reference / Project ID**: `GEV-OUTLOOK-AUTOADMIN-V1`
+
+### Technical Risk
+* **Confidence Level in Standard Solution**: High
+* **Standard Pattern Reference or Custom Reason**: GE Vernova Web Standard Pattern (React Frontend + FastAPI Serverless Backend).
+* **Non-Core Services Required**: No
+* **Team Providing the Service**: N/A
+* **Integration with Other Systems**: Yes
+* **Target App CI List and External Integration**: Microsoft SharePoint Lists, MS Graph API (Outlook, OneDrive). No external network integration (internal integration within GEV Tenant).
+* **Obsolete/Vulnerable Technology Issues**: No - Newly developed in 2026 with the latest technology stack.
+* **OBS/VUL Issue Description**: None.
+* **Mitigation Plan or Reason for Not Having One**: Regular dependency vulnerability scans executed during Vercel and GitHub Actions stages.
+
+---
+
+## 3. Governance
+
+* **Personal Information Classification Changed**: No
+* **Germany/France Usage or Germany/France Employee Personal Information Processed**: Yes - Planned for use in European branches. (Processes only company email addresses, falling within the scope of general data).
+* **New Regulatory Requirements on Employee Location**: No
+* **Internet-Facing**: Yes - External access allowed via Vercel Edge Network (SSO login required).
+* **Export Control Information Processed**: Yes - Contains control classification identification data for calibration targets (e.g., Fluke, Megger models).
+* **SOX Application**: No - Does not directly modify financial/accounting ledgers.
+* **Third-Party Vendor Processing Confidential/Highly Sensitive/Controlled Data**: No - Operates within the GE Vernova dedicated tenant.
+* **RSAM ID for Completed 3PS**: `RSAM-GEV-2026-89102`
+* **AI Used**: Yes - Local ReAct inference agent and pre-commit static validation audit system.
+* **GenAI Used**: Yes
+* **GenAI Use Case ID**: `GEV-GENAI-2026-TR`
+* **European Usage Planned**: Yes
+* **Expected Actions Already Completed**: Yes
+
+---
+
+## 4. Technical Qualification
+
+### Pre-requisite Branching Questions
+* **Infrastructure Deployment Needed**: No - Serverless architecture utilized.
+* **Platform or Landing Zone Change Needed**: No.
+* **Are the Technical Questions Below Not Applicable**: No.
+* **N/A / Exception Reason**: N/A
+* **Relevant Agreement Artifact**: `Auto_Admin_Workflow_Blueprint.md` (M365 Adaptive Cards API Outlook approval artifact).
+
+### Access & Authentication
+* **Who Accesses the Application**:
+  * Internal Users: GE Vernova field technicians and engineers.
+  * Developers / Admins: Warehouse managers, IT operators.
+  * Others: N/A.
+* **Authentication Method**: GE SSO/MFA (OIDC/SAML) - Integrated with Microsoft Azure AD (Entra ID) via `@azure/msal-browser`.
+* **Custom Authentication Details**: N/A
+* **Access Model**: OneIDM role-group-based access control (separation of Admin and Renter groups).
+
+### Internet Exposure & Integrations
+* **Externally Exposed**: Yes - Vercel web hosting.
+* **External/Internal Integration**: Internal Integration (SharePoint Lists API, MS Graph API).
+* **Integration Methods Used**:
+  * M365 (OneDrive, Outlook Adaptive Card API integration).
+  * Custom Integrations (FastAPI obtains MSAL tokens to call MS Graph REST API).
+* **Required API Permissions & Delegation App for M365**:
+  * `Sites.ReadWrite.All` (Read/write SharePoint list data)
+  * `Files.ReadWrite.All` (Upload calibration report PDFs and photos to OneDrive)
+  * `Mail.Send` (Outlook automatic notifications and email replies with attachments)
+* **Custom Integration Explanation**: The FastAPI backend utilizes the OAuth 2.0 Client Credentials Flow to issue a Bearer token from Azure AD, then calls the SharePoint List and OneDrive REST APIs in the background.
+
+### Data & Migration
+* **Data Migration Included**: No - New SharePoint list infrastructure structure is used.
+* **Data Types**: Equipment metadata (serial number, storage rack location, model name), rental history schedule data, calibration certificate PDFs, and site photos.
+* **Data Volume**: Small-scale (< 10,000 items).
+* **Data Source**: SharePoint Online List.
+* **Data Classification**: GEV Restricted / Internal.
+
+### Platform & Infrastructure
+* **Target hosting environment**: `SaaS` and `Others` (Vercel Serverless + M365 Cloud).
+* **Primary User Regions**: North America (NA), Europe (EU), Asia-Pacific (APAC).
+* **Non-Standard Infrastructure Components Needed**: No.
+* **Non-Standard Item Details**: N/A
+* **Required Cloud Services/Resources List**: Vercel Serverless Backend (Python runtime), Azure AD Entra ID App Registration, SharePoint Online.
+* **Containers Used**: No.
+* **HPC/VDI Infrastructure Needed**: No.
+* **App Team Possession of Smartcards**: Yes - All GEV developers possess corporate Smartcards with secondary authentication enforced.
+
+### Availability Requirements
+* **DR Configuration Needed**: No - Relies on Vercel's global Multi-Region Edge deployment and Microsoft SaaS built-in DR/high availability capabilities.
+* **Defined RPO / RTO**: RPO = 0 (Real-time synchronization), RTO < 1 hour.
+
+### Delivery Readiness & Risk Flags
+* **CI/CD Uses GitHub Runners**: Yes - Automatic build and deployment upon commits via GitHub repository integration with Vercel Git Integration.
+* **Other CI/CD Details**: Vercel Direct CI.
+* **Team Has Installation/Configuration Experience**: Yes.
+* **POC Completed for New App**: Yes - Production POC operational at `https://tool-rental-deploy.vercel.app/`.
+* **Gaps/Risks in Existing App**: None.
+* **ENV Required for SNOW App CI Exists**: Yes - Registered in CMDB.
+* **Restricted or High-Risk Tech/Entity Used**: No.
+
+### Application Artifacts
+* **Existing Account / Subscription Information**: GE Vernova M365 Enterprise Tenant.
+* **AWS/Azure Subscription or Account ID**: Azure Entra ID Tenant ID and Client ID.
+* **Confluence URL or Prior Project Number Shared**: Yes.
+* **Architecture Diagram Link Attached**: Yes.
+* **Additional Artifacts Attached**: Yes.
+* **Details of Attached Artifacts**: `Auto_Admin_Workflow_Blueprint.md` (Outlook Actionable Message integration diagram and setup guide), `03_Auto_Memory/handoff.md` (final release status log).
+
+---
+
+## 5. Evidence & Reference
+
+1. **Calibration and Regulatory Evidence**: ISO 17025 calibration schema and 12-month cycle data structure are implemented via the `calibrationCycle` field in `api/index.py` (lines 33-209).
+2. **M365 Integration Structure**: The structure and JSON schemas for Power Automate Flow 1 and Flow 2, as well as instructions for registering on the Outlook Actionable Message Developer Dashboard, are detailed in `Auto_Admin_Workflow_Blueprint.md`.
+3. **Architecture Schema**: Validated through the modeling of `INITIAL_ITEMS` and `INITIAL_SCHEDULED_CASES` in `api/index.py`.
+4. **Quality Verification Log**: Storybook sandbox and unit test pass records can be verified in `walkthrough.md` and `handoff.md`.
+
